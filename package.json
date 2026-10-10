@@ -1,0 +1,18 @@
+{
+  "name": "token-efficient-coding-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent terminal coding agent with auditable token accounting and benchmarks",
+  "bin": {
+    "tea": "./src/cli.mjs"
+  },
+  "scripts": {
+    "tea": "node src/cli.mjs",
+    "test": "node --test",
+    "benchmark:replay": "node src/cli.mjs benchmark run --suite core --mode replay"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+import path from 'node:path';
+import { runTask } from './agent.mjs';
+import { loadConfig, ConfigError } from './config.mjs';
+import { compareRuns, loadRun, renderComparisonReport, renderRunReport, runReplayBenchmark, RESULT_ROOT } from './benchmark.mjs';
+
+const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://www.packyapi.ai'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.\n`;
+
+function parseOptions(args) {
+  const options = {};
+  const positional = [];
+  for (let i = 0; i < args.length; i += 1) {
+    const value = args[i];
+    if (value === '--help' || value === '-h') options.help = true;
+    else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--base-run', '--candidate-run', '--run'].includes(value)) {
+      const next = args[i + 1];
+      if (next === undefined || next.startsWith('--')) throw new Error(`Missing value after ${value}`);
+      i += 1;
+      const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
+      options[key] = next;
+    } else if (value.startsWith('-')) throw new Error(`Unknown option: ${value}`);
+    else positional.push(value);
+  }
+  options.positional = positional;
+  return options;
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  if (!args.length || args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); return; }
+  const group = args[0];
+  if (group === 'benchmark') { await benchmarkCommand(args.slice(1)); return; }
+
+  const parsed = parseOptions(args);
+  const task = parsed.positional.join(' ').trim();
+  if (!task) throw new Error('Provide a task in quotes.');
+  const config = loadConfig(parsed);
+  const result = await runTask(task, config, { onText: (text) => process.stdout.write(`${text}\n`) });
+  process.stdout.write(`\nRun status: ${result.status}\nToken ledger: ${path.relative(process.cwd(), result.runDirectory)}\n`);
+  process.stdout.write(`Provider tokens: input=${result.summary.inputTokens}, output=${result.summary.outputTokens}, cached=${result.summary.cachedInputTokens}\n`);
+  process.stdout.write(`Heuristic input estimate: ${result.summary.estimatedInputTokens} (diagnostic only)\n`);
+  if (result.status !== 'completed') process.exitCode = 2;
+}
+
+async function benchmarkCommand(args) {
+  const subcommand = args[0];
+  const parsed = parseOptions(args.slice(1));
+  if (subcommand === 'run') {
+    const mode = parsed.mode || 'replay';
+    if (mode !== 'replay') throw new Error('Live suite execution is not implemented yet. Replay mode is controlled, offline, and explicitly not a live-model result.');
+    const result = await runReplayBenchmark({ suite: parsed.suite || 'core', runId: parsed.runId });
+    process.stdout.write(`Replay run saved: ${result.outputDir}\n`);
+    process.stdout.write(renderRunReport(result.run));
+    return;
+  }
+  if (subcommand === 'compare') {
+    if (!parsed.baseRun || !parsed.candidateRun) throw new Error('Use --base-run ID --candidate-run ID (or paths to run.json files).');
+    const result = await compareRuns(parsed.baseRun, parsed.candidateRun);
+    const outputDir = path.join(RESULT_ROOT, `compare-${Date.now()}`);
+    await import('node:fs/promises').then(({ mkdir, writeFile }) => mkdir(outputDir, { recursive: true }).then(() => writeFile(path.join(outputDir, 'comparison.json'), `${JSON.stringify(result, null, 2)}\n`, 'utf8')).then(() => writeFile(path.join(outputDir, 'report.md'), renderComparisonReport(result), 'utf8')));
+    process.stdout.write(`Comparison saved: ${outputDir}\n${renderComparisonReport(result)}`);
+    return;
+  }
+  if (subcommand === 'report') {
+    if (!parsed.run) throw new Error('Use --run ID.');
+    const run = await loadRun(parsed.run);
+    process.stdout.write(renderRunReport(run));
+    return;
+  }
+  throw new Error('Unknown benchmark command. Use run, compare, or report.');
+}
+
+main().catch((error) => {
+  const message = error instanceof ConfigError ? error.message : error.message;
+  process.stderr.write(`tea: ${message}\n`);
+  if (process.argv.includes('--help') || process.argv.includes('-h')) process.stdout.write(HELP);
+  process.exitCode = 1;
+});

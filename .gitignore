@@ -1,0 +1,12 @@
+node_modules/
+.tea/
+.env
+.env.*
+!.env.example
+benchmarks/results/**
+!benchmarks/results/.gitkeep
+coverage/
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
