@@ -107,7 +107,7 @@ npm run tea -- sessions delete work
 npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
 ```
 
-Resume uses the original workspace/model/endpoint and preserves spending; `/new` preserves outstanding edits too. `/memory` explains the last request projection. `--memory-policy full-history` disables selection; `--session` still enables persistence. The soft target uses UTF-8 request bytes, not provider tokens. See the [architecture](docs/CONTEXTOS_ARCHITECTURE.md), [benchmark protocol](docs/CONTEXTOS_BENCHMARK.md) and [Chinese usage guide](docs/CONTEXTOS.zh-CN.md). Live evidence is being evaluated; no ContextOS token gain is claimed until the frozen gate passes.
+Resume uses the original workspace/model/endpoint and preserves spending; `/new` preserves outstanding edits too. `/memory` explains the last request projection. `--memory-policy full-history` disables selection; `--session` still enables persistence. The soft target uses UTF-8 request bytes, not provider tokens. See the [architecture](docs/CONTEXTOS_ARCHITECTURE.md), [benchmark protocol](docs/CONTEXTOS_BENCHMARK.md) and [Chinese usage guide](docs/CONTEXTOS.zh-CN.md). [Candidates A/B were rejected](benchmarks/reports/contextos-glm-20261011/README.md); [C has offline evidence only](benchmarks/reports/contextos-c-offline-20261011/README.md). ContextOS remains experimental without a passed provider-token gate.
 
 Run offline experiments without a provider connection:
 

@@ -70,7 +70,7 @@ npm run tea -- sessions delete work
 npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
 ```
 
-恢复保留累计费用，不能提高原预算；`/new` 保留费用和待验证修改。`/memory` 查看上次上下文选择的原因；`--memory-policy full-history` 可关闭选择并保留持久化。目标大小使用 UTF-8 字节，不是服务商 Token。真实收益正在按冻结门槛验证。详见[中文指南](docs/CONTEXTOS.zh-CN.md)、[架构](docs/CONTEXTOS_ARCHITECTURE.md)和[实验协议](docs/CONTEXTOS_BENCHMARK.md)。
+恢复保留累计费用，不能提高原预算；`/new` 保留费用和待验证修改。`/memory` 查看上次上下文选择的原因；`--memory-policy full-history` 可关闭选择并保留持久化。目标大小使用 UTF-8 字节，不是服务商 Token。[A/B 已淘汰](benchmarks/reports/contextos-glm-20261011/README.zh-CN.md)，[C 目前仅有离线验证](benchmarks/reports/contextos-c-offline-20261011/README.zh-CN.md)；尚未通过真实 Token 门槛，保持实验状态。详见[中文指南](docs/CONTEXTOS.zh-CN.md)、[架构](docs/CONTEXTOS_ARCHITECTURE.md)和[实验协议](docs/CONTEXTOS_BENCHMARK.md)。
 
 ## 会话压缩
 
