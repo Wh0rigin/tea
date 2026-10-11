@@ -75,7 +75,13 @@ test('actual tools form paired long histories without counting scripted diagnost
     assert.equal(row.full.messagesJsonUtf8Bytes, row.compact.messagesJsonUtf8Bytes);
   }
   const quiet = run.tasks.find((row) => row.taskId === 'memory-quiet-success-long');
-  assert.equal(quiet.full.messagesJsonUtf8Bytes, quiet.compact.messagesJsonUtf8Bytes);
+  // Node's test reporter can make even a quiet success longer than its recovery
+  // record. Assert preservation and measured non-growth, not a fixed log size.
+  assert.ok(quiet.compact.messagesJsonUtf8Bytes <= quiet.full.messagesJsonUtf8Bytes);
+  assert.equal(quiet.fixtureEvidence.successfulValidations, 10);
+  assert.equal(quiet.finalPreservation.failureResults, 0);
+  assert.equal(quiet.finalPreservation.resultCount, 10);
+  assert.equal(quiet.finalPreservation.checkedRecentRounds, 2);
   const verbose = run.tasks.find((row) => row.taskId === 'memory-success-long');
   assert.ok(verbose.reductionPercent.messagesJsonUtf8Bytes > 0);
   const failures = run.tasks.find((row) => row.taskId === 'memory-failure-preservation');

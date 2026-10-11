@@ -103,3 +103,4 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 - 公开英文/中文解释、逐请求脱敏 JSON、验收、源哈希和 PNG/SVG：[报告](benchmarks/reports/tea-vs-pi-glm-20261011/README.zh-CN.md)。样本均自编 JavaScript，各配置只跑一轮；不是多语言真实仓库或正式父版本优化门禁。
 - 完善双语 `CONTRIBUTING`、PR/issue 模板、无付费 API 的跨平台 CI，以及 `AGENTS.md` / `.cursor/rules/pull-requests.mdc`。用户要求之后全部通过主题分支 PR 交付。
 - 后续优化调查：大仓库发现与额外工具循环；应通过直接父版本配对和重复试验验证因果，当前没有据此修改排序或路由规则。
+- 首轮跨平台 CI 暴露 Node 22 的静默成功日志长度差异：旧测试将“不发生压缩”当作固定结果。修正为不增加体积、保留全部 10 次验证和最近两轮；固定短日志与失败/源码保护测试继续保留，相关 18/18 通过。该修改只影响测试断言，不改变已测 agent 行为或用量。
