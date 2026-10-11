@@ -136,9 +136,15 @@ test('oversized ordinary user requirements are never truncated to fit', async ()
   assert.equal(outcome.status, 'unavailable'); assert.equal(requests.length, 0); assert.equal(s.compaction, null);
 });
 test('historical Unicode tool excerpts contain no broken UTF-8 characters', () => {
-  const s = session(); s.messages[2].content[0].content = '🚀中文'.repeat(3000);
-  const plan = prepareCompaction(s, cfg());
-  assert.equal(plan.status, 'prepared'); assert.doesNotMatch(plan.request.messages[0].content, /\uFFFD/);
+  const s = session();
+  for (const text of ['🚀中文'.repeat(3000), '🚀'.repeat(3000) + 'x']) {
+    s.messages[2].content[0].content = text;
+    const plan = prepareCompaction(s, cfg());
+    assert.equal(plan.status, 'prepared'); assert.doesNotMatch(plan.request.messages[0].content, /\uFFFD/);
+  }
+  // A valid literal replacement character is source data, not a broken boundary.
+  s.messages[2].content[0].content = 'A'.repeat(997) + '\uFFFD' + 'B'.repeat(3000);
+  assert.ok(prepareCompaction(s, cfg()).request.messages[0].content.includes('A'.repeat(997) + '\uFFFD'));
 });
 const invalid = {
   empty: done(''), missing: done(summary.replace('## Constraints', '## Other')),

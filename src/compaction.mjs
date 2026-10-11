@@ -23,8 +23,13 @@ function boundedToolText(text, limit = 2000) {
   const value = String(text);
   const buffer = Buffer.from(value, 'utf8');
   if (buffer.length <= limit) return value;
-  const head = buffer.subarray(0, Math.floor(limit / 2)).toString('utf8').replace(/\uFFFD$/, '');
-  const tail = buffer.subarray(buffer.length - Math.floor(limit / 2)).toString('utf8').replace(/^\uFFFD/, '');
+  let headEnd = Math.floor(limit / 2), tailStart = buffer.length - Math.floor(limit / 2);
+  // Align to code-point boundaries before decoding. A split astral character
+  // can produce multiple replacement characters; real U+FFFD must survive.
+  while (headEnd > 0 && (buffer[headEnd] & 0xc0) === 0x80) headEnd -= 1;
+  while (tailStart < buffer.length && (buffer[tailStart] & 0xc0) === 0x80) tailStart += 1;
+  const head = buffer.subarray(0, headEnd).toString('utf8');
+  const tail = buffer.subarray(tailStart).toString('utf8');
   return `${head}\n[historical tool details omitted; original_bytes=${buffer.length}; sha256=${hash(value)}]\n${tail}`;
 }
 
