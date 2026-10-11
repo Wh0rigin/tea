@@ -128,7 +128,9 @@ These results do **not establish consistent token savings**. Each profile has on
 
 Use `/compact [retention instructions]` in the terminal to summarize older conversation. Enable automatic compaction with `tea --interactive --compaction auto --max-cost-usd 0.10`. It sends a structured checkpoint plus recent complete messages, preserves the original in-memory transcript, and keeps outstanding validation in authoritative runtime state.
 
-Summary requests share the session model, usage ledger and hard budget. Automatic compaction is opt-in; default ledgers retain hashes rather than raw summaries. This feature has no measured provider-token savings result yet. See [the design and configuration](docs/COMPACTION.md).
+Summary requests share the session model, usage ledger and hard budget. Automatic compaction is opt-in; default ledgers retain hashes rather than raw summaries. In paired GLM-5.3-flash experiments on self-authored JavaScript fixtures, the tested 35% trigger reduced total provider tokens by **72.33%** in scripted seed stress and **63.14%** in model-generated inspection/repair workflows, including all summaries. All 16 re-run tasks passed acceptance. These are small-sample results for an experimental profile, not measured savings for the default 80% trigger. See [the report and chart](benchmarks/reports/compaction-glm-20261011/README.md) and [the design and configuration](docs/COMPACTION.md).
+
+![Paired compaction off/auto provider token usage, including summaries](benchmarks/reports/compaction-glm-20261011/tokens.png)
 
 ## Usage records and budgets
 
