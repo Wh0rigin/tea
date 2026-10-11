@@ -41,13 +41,35 @@ npm run tea -- "Fix the session expiration bug" --workspace ../my-project --max-
 
 Use your credential manager or a secure environment injection mechanism for real keys. The selected endpoint and model must support the configured thinking mode and effort settings. TEA currently accepts `low`, `high`, and `max` effort, and `adaptive` or `enabled` thinking.
 
+## Interactive terminal
+
+Start a continuous conversation:
+
+```sh
+npm run tea -- --interactive --workspace ../my-project --max-cost-usd 0.10
+```
+
+With the CLI linked locally (`npm link`), running `tea` without a task opens the same interface. A quoted task keeps the original single-task mode; `--interactive "task"` starts a conversation with that task.
+
+Preview the interface without credentials or API calls:
+
+```sh
+npm run tea -- --demo
+```
+
+The terminal shows TEA branding, streamed answer lines, tool progress, small patch previews, and session token/budget status. Use `/tools` or `/tools N` to expand retained tool results, `/diff` for a Git diff preview, `/status` for usage, and `/help` for all commands. End an input line with a backslash to compose a multi-line task.
+
+Press **Esc** or **Ctrl+C** to stop a running turn. Completed edits are retained, and outstanding validation remains required. `/new` clears the conversation and learned vocabulary while retaining spending and outstanding edits; `/clear` only clears the display. The configured cost and input budgets cover the entire terminal session. `/exit` closes it.
+
+The demo uses scripted responses and read-only local tools. It does not solve coding tasks or provide model usage measurements. Conversation state is currently kept in memory; sessions cannot yet be resumed after exiting. See the [terminal guide](docs/TERMINAL.md).
+
 ## How TEA works
 
 Give TEA a task and a workspace. It discovers files, reads source evidence, applies exact local patches, and runs validation commands. After an edit, the runtime requires successful validation before reporting completion.
 
 - **Progressive discovery.** Start with a small ranked file inventory, then expand through paginated listings and scoped searches. A partial search result is not proof of repository-wide absence.
 - **Evidence reuse.** Repeated reads can return a short reference when the same complete source range was already shown and its hash is unchanged.
-- **Session vocabulary.** After a failed search, the task model can discover a real corresponding code name and save a mapping backed by source it has read. The runtime checks current evidence and name presence; the model judges semantic relevance. Mappings stay within one run.
+- **Session vocabulary.** After a failed search, the task model can discover a real corresponding code name and save a mapping backed by source it has read. The runtime checks current evidence and name presence; the model judges semantic relevance. Mappings stay within the current in-memory conversation, including follow-up turns.
 - **Text discovery across languages.** Unknown suffixes are checked for valid UTF-8 text without NUL bytes. Ordinary excluded folders can be explored explicitly. File size and scan limits still apply.
 - **Bounded command output.** Long logs retain their beginning, end, and full stream hash. Omitted middle content may still need further diagnosis.
 - **Accountable usage.** Request usage, costs, and experiment diagnostics are recorded locally. Missing provider usage remains unknown rather than being reported as zero.
@@ -87,7 +109,20 @@ Current recorded results:
 - **V2:** an artificial verbose-log stress experiment reduced cumulative prepared input bytes by **20.90%**, with **12/12** scripted acceptance checks on both sides. Ordinary traces showed **0%** reduction. See the [V2 report](benchmarks/reports/v2.md).
 - **V3:** reasoning-effort routing and request-budget checks are local candidates. Routing has not been integrated into the live agent loop. See the [V3 report](benchmarks/reports/v3.md).
 
-These are offline character/byte measurements, not verified provider token savings or model task success rates. Live paired evaluation, broader language coverage, and independent holdout evaluation remain unfinished. Recent session-vocabulary and discovery changes have no measured savings yet.
+These are offline character/byte measurements, not verified provider token savings or model task success rates. Direct-parent TEA live evaluation, broader language coverage, and independent holdout evaluation remain unfinished. Recent session-vocabulary and discovery changes have no isolated provider-token savings measurement.
+
+### TEA / Pi comparison
+
+Measured on **2026-10-11**, using **GLM-5.3-flash**, **enabled/low** thinking and a shared **4,096-token** output cap. Pi was **0.87.1**. Every pair started from identical Git snapshots; a shared gateway recorded actual provider input, output and cache tokens.
+
+- **64,000-byte request guard, nine task pairs:** TEA **168,282** tokens; Pi **161,046**. TEA used **4.49% more**. Acceptance was **9/9** for TEA and **7/9** for Pi; two Pi runs stopped at the input guard. Failed runs remain in the totals, so this ratio does not compare equal completion.
+- **80,000-byte guard, separate rerun of all three large tasks:** TEA **117,126** tokens; Pi **107,674**. TEA used **8.78% more**, with **3/3** acceptance on both sides.
+
+These results do **not establish consistent token savings**. Each profile has one repetition and uses self-authored JavaScript fixtures across 12-, 120- and 1,200-file repositories. Larger fixtures add unrelated modules. The two profiles are reported separately; an earlier pilot with changing ancestor instructions was excluded. See the [measured report](benchmarks/reports/tea-vs-pi-glm-20261011/README.md) and [comparison guide](docs/PI_COMPARISON.md).
+
+![TEA and Pi provider token usage with a 64,000-byte request guard](benchmarks/reports/tea-vs-pi-glm-20261011/tea-vs-pi.png)
+
+![Separate large-task rerun with an 80,000-byte request guard](benchmarks/reports/tea-vs-pi-glm-large-80k-20261011/tea-vs-pi.png)
 
 ## Usage records and budgets
 
@@ -96,6 +131,8 @@ Runs write their ledger to `.tea/runs/<run-id>/`. By default, records contain ha
 TEA reserves request costs against your configured budget before sending a request. It does not guess provider prices. Failed transmissions retain their reservation; missing or invalid usage leaves the complete actual token total unknown. Estimates, serialized bytes, and provider-reported tokens are recorded as separate measurements.
 
 ## Development
+
+All changes are submitted through pull requests targeting `main`. See [Contributing](CONTRIBUTING.md) for setup, verification and experiment evidence requirements.
 
 Run the project's tests when working on an implementation change:
 

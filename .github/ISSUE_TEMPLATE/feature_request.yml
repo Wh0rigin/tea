@@ -1,0 +1,26 @@
+name: Improvement proposal
+description: Propose a focused TEA improvement or experiment
+title: "[Proposal] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe a concrete limitation and affected workflows.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed approach
+    validations:
+      required: true
+  - type: textarea
+    id: evaluation
+    attributes:
+      label: Evaluation and generalization
+      description: How will correctness and performance be measured beyond the motivating example?
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Tradeoffs and alternatives

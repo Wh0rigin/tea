@@ -1,0 +1,12 @@
+---
+description: Deliver TEA repository changes through pull requests
+alwaysApply: true
+---
+
+# Pull request workflow
+
+Follow the repository's AGENTS.md and CONTRIBUTING.md.
+Use a topic branch and a PR targeting main for every change, including documentation.
+Push the topic branch, then create or update its PR; do not push directly to main.
+Do not merge, enable auto-merge or rewrite published history without explicit user authorization.
+Record the checks actually run and distinguish measured provider tokens from estimates or scripted data.
