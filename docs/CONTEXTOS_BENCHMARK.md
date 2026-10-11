@@ -58,3 +58,9 @@ On continuation, the user delegated budget choice. Combined cap is now **USD 16*
 ## C completed evidence
 
 Frozen at `454b09b` with assembler `66b3350`. [Complete comparison](../benchmarks/reports/contextos-c-glm-20261011/README.md): all 63 known attempts, frozen gate passed; individual repeats, 270 inspection hashes, a full-history fresh-read omission, cache-price sensitivity and the unadopted offline prefix probe remain visible. Combined A/B/C conservative spend is USD 13.7331992 within USD 16. Future gate revisions must be versioned separately; no retrospective edit to the frozen report.
+
+## Acceptance v2 — subsequent freezes
+
+The harness now records report version 2 and `settled-source-read-v2`. Each inspection turn must have a successful settled `read_file` output whose SHA256 matches the expected complete fixture source. Inspection controls forbid patching, tests and shell execution; discovery/source tools remain allowed. The second resumed turn must read the complete externally updated checkpoint. The expected-output reader is separate from the agent and does not populate its evidence cache or reveal hidden checks.
+
+A failed requirement ends that run at the current turn. Independent acceptance also requires these checks, and a candidate failure stops future submissions. Missing ledgers, failed reads, old/range-only output and model claims cannot satisfy a complete-read requirement. This intentionally stricter fixture criterion is part of future frozen controls, not a retroactive change to the C gate. No new paid experiment is claimed for v2; C's runtime assembler and measured source identity remain `66b3350` / `454b09b`.

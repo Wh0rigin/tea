@@ -52,3 +52,9 @@ B's first three native requests were reconstructed and their hashes matched the 
 - Offline relocation of the reference directory reconstructs 60 original requests exactly but saves only about 0.07% wire bytes; no live improvement or D experiment is claimed. The speculative runtime change is not adopted.
 - A USD 0.5767008 + B USD 6.4853088 + C USD 6.6711896 = **USD 13.7331992** conservative spend/reservation, within the delegated USD 16 cap. Unknown A reservation remains included.
 - [B diagnosis](../benchmarks/reports/contextos-b-diagnosis-20261011/README.md) and [C report, audits and plots](../benchmarks/reports/contextos-c-glm-20261011/README.md) preserve all failures. Self-authored fixtures and three repeats do not prove unseen-repository generalization. Default is full history; no main merge.
+
+## Subsequent benchmark repair — settled-read acceptance v2
+
+After closing C, the benchmark adds independent complete-source inspection and fresh resumed-checkpoint reads to acceptance. Read-only fixtures reject patches, tests and shell execution; missing/failed/stale output fails immediately. Report version 2 records the stronger checks, and original A/B/C evidence is unchanged. Two regression tests cover missing, failed, wrong-version and non-read evidence plus forbidden inspection execution. This changes the experiment harness, not the measured runtime assembler; no additional paid calls or performance percentage is claimed.
+
+V2 verification: **232/232** full deterministic tests, 279 actual settled ledgers rechecked (270 accepted inspection reads, eight accepted freshness reads, one correctly rejected omission), and all seven fixture preflights with source/task hashes identical to C. No provider calls. The paid runtime implementation is unchanged; stronger acceptance is reserved for subsequent freezes.

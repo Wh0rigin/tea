@@ -32,6 +32,16 @@ export function orderedContextosCases(order = '') {
   }
   return ids.map(id => CONTEXTOS_CASES.find(item => item.id === id));
 }
+
+export function contextosReadAcceptance(rows, expectedOutputSha256, readOnly = false) {
+  if (!Array.isArray(rows) || !/^[a-f0-9]{64}$/.test(expectedOutputSha256 || '')) throw new Error('Invalid settled source-read evidence');
+  const calls = rows.filter(row => row.type === 'tool_call');
+  const fullSourceRead = calls.some(row => row.name === 'read_file' && !row.error && row.outputSha256 === expectedOutputSha256);
+  // Inspection fixtures allow discovery/source tools only. A shell command
+  // could edit or test without using apply_patch/run_tests, so reject it too.
+  const readOnlyHonored = !readOnly || !calls.some(row => ['apply_patch', 'run_tests', 'run_shell'].includes(row.name));
+  return { expectedOutputSha256, fullSourceRead, readOnlyHonored, passed: fullSourceRead && readOnlyHonored };
+}
 const hash = value => createHash('sha256').update(value).digest('hex');
 const git = async (root, args) => (await execute('git', args, { cwd: root, windowsHide: true,
   env: { ...process.env, GIT_AUTHOR_DATE: '2000-01-01T00:00:00Z', GIT_COMMITTER_DATE: '2000-01-01T00:00:00Z' } })).stdout.trim();
@@ -191,7 +201,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
   }
   const engines={ legacy:await import(pathToFileURL(path.join(legacy,'src/agent.mjs'))), current:await import('./agent.mjs') };
   const models={ legacy:await import(pathToFileURL(path.join(legacy,'src/model.mjs'))), current:await import('./model.mjs') };
-  const report={version:1,mode,startedAt:new Date().toISOString(), baselineCommit:CONTEXTOS_BASELINE,
+  const report={version:2,acceptanceVersion:'settled-source-read-v2',mode,startedAt:new Date().toISOString(), baselineCommit:CONTEXTOS_BASELINE,
     candidateCommit:await git(root,['rev-parse','HEAD']), engineSha256:await sourceSnapshot(root), complete:false,repeat,plannedCaseOrder:orderedCases.map(item=>item.id),cases:[],runs:[],
     profile:{model:config.model,thinkingMode:config.thinkingMode,effort:config.effort,maxOutputTokens:config.maxOutputTokens,
       maxRequestWireBytes:config.maxRequestInputTokens,contextosTargetBytes:config.contextosTargetBytes,maxRequestsPerRun:100,
@@ -203,7 +213,8 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
       'full shares persistence with contextos; legacy is frozen original source without persistence.',
       'stale-resume rehydrates current variants through native journal in a new session object; legacy preserves its equivalent live object. Real two-process crash/resume is tested separately offline.',
       'Provider input includes all cache; output includes reasoning without double-counting. All recovery, summary, failed paid requests and conservative unknown reservations are counted.',
-      'Costs use conservative undiscounted rates and are estimates, not invoices. Wire bytes are not tokens.']};
+      'Costs use conservative undiscounted rates and are estimates, not invoices. Wire bytes are not tokens.',
+      'Acceptance v2 requires complete settled source reads in inspection turns and a fresh resumed checkpoint read; read-only inspections exclude patches, tests and shell commands. Frozen A/B/C version-1 evidence is not rewritten.']};
   let saving=Promise.resolve();
   const save=async()=>{saving=saving.then(async()=>{report.analysis=analyzeContextos(report.runs);if(mode==='live')report.gate=contextosGate(report);await writeFile(path.join(outputDir,'comparison.json'),JSON.stringify(report,null,2)+'\n');});await saving;};
   await save();let halted=false;
@@ -234,6 +245,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
           await attachSessionJournal(session,turnConfig);for(const message of seed)await appendSessionMessage(session,message);await closeSessionJournal(session);
         }
         const run={caseId:item.id,group:item.group,repeat:repetition,variant,allocatedCapUsd:allocatedCap,running:true,accepted:false,usageComplete:false,totalTokens:null,conservativeSpendUsd:0,requests:[],turns:[],recoveryCalls:0,staleNotices:0};report.runs.push(run);await save();
+        const expectedTools=new WorkspaceTools({workspace,deduplicateReads:false});await expectedTools.init();
         const started=Date.now();let attempts=0, adapter;
         const installAdapter=()=>{
           const effective=session.restoredBudget?{...turnConfig,maxCostUsd:session.restoredBudget.maxCostUsd,maxInputTokens:session.restoredBudget.maxInputTokens}:turnConfig;
@@ -260,6 +272,8 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
               await attachSessionJournal(session,turnConfig);await closeSessionJournal(session);installAdapter();
             }
           }
+          const requiredPath=item.rounds&&phase<item.rounds ? paths[phase] : item.resume&&phase===1 ? 'src/generated/checkpoint.mjs' : null;
+          const expectedReadSha256=requiredPath ? hash(await expectedTools.readFile({path:requiredPath})) : null;
           let result;
           try{result=await engine.runTask(prompts[phase],{...turnConfig,runId:`phase-${phase+1}`},{session,signal:AbortSignal.timeout(180000),onEvent:event=>{
             if(event.type==='tool_start'&&['recall_context','search_history'].includes(event.name))run.recoveryCalls++;
@@ -268,18 +282,23 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
           }});}catch(error){run.failure=String(error.message).replace(/(?:sk|pk)-[A-Za-z0-9_-]{12,}/g,'[REDACTED]').replaceAll(workspace,'[WORKSPACE]').slice(0,500);}
           const directory=path.join(workspace,'.tea','runs',`phase-${phase+1}`), rows=await readFile(path.join(directory,'ledger.jsonl'),'utf8').then(text=>text.trim().split('\n').map(JSON.parse),()=>[]);
           run.requests.push(...rows.filter(r=>r.type==='model_request').map(({purpose,usage,usageComplete,usageStatus,estimatedUsd,costBasis,requestSha256,responseSha256,stopReason,elapsedMs})=>({purpose,usage,usageComplete,usageStatus,estimatedUsd,costBasis,requestSha256,responseSha256,stopReason,elapsedMs})));
-          run.turns.push({phase:phase+1,status:result?.status||'failed',validationPassed:result?.validationPassed||false,summary:result?.summary||null,
+          const requirements=requiredPath ? contextosReadAcceptance(rows,expectedReadSha256,Boolean(item.rounds&&phase<item.rounds)) : null;
+          run.turns.push({phase:phase+1,status:result?.status||'failed',validationPassed:result?.validationPassed||false,summary:result?.summary||null,requirements,
             context:session.memoryDiagnostics?{fullWireBytes:session.memoryDiagnostics.fullWireBytes,sentWireBytes:session.memoryDiagnostics.sentWireBytes,evictedUnits:session.memoryDiagnostics.evictedUnits,staleUnits:session.memoryDiagnostics.staleUnits}:null});
           run.staleNotices+=session.memoryDiagnostics?.staleUnits||0;
-          await save();if(!result||result.status!=='completed')break;
+          await save();
+          if(requirements&&!requirements.passed){run.requirementFailurePhase=phase+1;break;}
+          if(!result||result.status!=='completed')break;
           if(item.rounds&&phase%5===4)onProgress(`  ${item.id}/${repetition}/${variant}: ${phase+1}/${prompts.length} turns`);
         }
         const scopedDefinition=item.resume ? {...definition,allowed:[...definition.allowed,'src/generated/checkpoint.mjs']} : definition;
         const acceptance=await contextosAcceptance(workspace,scopedDefinition,path.join(scratch,'acceptance',item.id,`${repetition}-${variant}`));
+        acceptance.readRequirementsPassed=run.turns.every(turn=>!turn.requirements||turn.requirements.passed);
+        acceptance.passed&&=acceptance.readRequirementsPassed;
         if(item.resume){
           const exactExternal=await readFile(path.join(workspace,'src/generated/checkpoint.mjs'),'utf8');
           acceptance.scopePassed &&=exactExternal==='export const marker = 19;\n// external version update\n';
-          acceptance.passed=acceptance.publicPassed&&acceptance.hiddenPassed&&acceptance.scopePassed;
+          acceptance.passed=acceptance.publicPassed&&acceptance.hiddenPassed&&acceptance.scopePassed&&acceptance.readRequirementsPassed;
         }
         if(item.receipt){acceptance.historyConstraintPassed=!run.historyConstraintViolation;acceptance.passed&&=acceptance.historyConstraintPassed;}
         const known=run.requests.length>0&&run.requests.every(r=>r.usageComplete)&&run.turns.every(t=>t.summary?.ledgerIntegrity);

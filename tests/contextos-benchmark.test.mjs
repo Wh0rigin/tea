@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { analyzeContextos, CONTEXTOS_CASES, orderedContextosCases } from '../src/contextos-benchmark.mjs';
+import { analyzeContextos, CONTEXTOS_CASES, orderedContextosCases, contextosReadAcceptance } from '../src/contextos-benchmark.mjs';
 const run = (variant, tokens, accepted=true, known=true) => ({caseId:'case',repeat:1,variant,totalTokens:known?tokens:null,
   inputTokens:known?tokens-10:null,outputTokens:known?10:null,cacheInputTokens:0,accepted,usageComplete:known,conservativeSpendUsd:.1,elapsedMs:1,requests:[{}]});
 test('ContextOS comparison counts failed paid runs and keeps acceptance-matched savings separate',()=>{
@@ -28,5 +28,24 @@ test('risk-first case order retains every case and cannot silently narrow the ga
   assert.equal(orderedContextosCases(), CONTEXTOS_CASES);
   for (const invalid of ['crossfile-ts', [...order.slice(1), 'short-js'].join(','), order.join(',') + ',unknown']) {
     assert.throws(() => orderedContextosCases(invalid), /complete matrix/);
+  }
+});
+
+test('source-read acceptance requires a settled successful complete read of the current version', () => {
+  const sha='a'.repeat(64),read={type:'tool_call',name:'read_file',outputSha256:sha};
+  assert.equal(contextosReadAcceptance([read],sha).passed,true);
+  for(const rows of [[],[{...read,type:'tool_start'}],[{...read,error:'failed'}],[{...read,name:'search_code'}],[{...read,outputSha256:'b'.repeat(64)}]]){
+    assert.equal(contextosReadAcceptance(rows,sha).passed,false);
+  }
+  assert.throws(()=>contextosReadAcceptance([],null),/source-read evidence/);
+});
+
+test('inspection acceptance rejects edits, tests and shell execution despite a correct source read', () => {
+  const sha='a'.repeat(64),read={type:'tool_call',name:'read_file',outputSha256:sha};
+  assert.equal(contextosReadAcceptance([read,{type:'tool_call',name:'list_files'}],sha,true).passed,true);
+  for(const name of ['apply_patch','run_tests','run_shell']){
+    const rows=[read,{type:'tool_call',name}];
+    assert.equal(contextosReadAcceptance(rows,sha,true).passed,false);
+    assert.equal(contextosReadAcceptance(rows,sha,false).passed,true);
   }
 });
