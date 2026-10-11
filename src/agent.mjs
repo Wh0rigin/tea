@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 import { TokenLedger } from './ledger.mjs';
 import { AnthropicMessagesAdapter, ModelError } from './model.mjs';
 import { WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
@@ -14,7 +15,33 @@ function validationSucceeded(output) {
   return /^exit=0\b/.test(text) && !/(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+(?:tests|pass)\s+0\s*(?:\n|$)/.test(text);
 }
 
-export async function runTask(task, config, { onText = () => {}, adapterFactory } = {}) {
+export function createAgentSession(config) {
+  return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
+    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [] };
+}
+
+export function resetConversation(session) {
+  if (session.running) throw new Error('Stop the current turn before starting a new conversation');
+  session.messages.length = 0;
+  session.tools?.sessionTerms.clear();
+  session.tools?.unresolvedQueries.clear();
+  session.tools?.readEvidence.clear();
+  session.tools?.presentedSource.clear();
+  // Keep adapter spending and outstanding edits across /new.
+}
+
+export async function runTask(task, config, options = {}) {
+  const session = options.session || createAgentSession(config);
+  if (session.running) throw new Error('This session already has a running turn');
+  if (session.workspace !== path.resolve(config.workspace) || session.model !== config.model) throw new Error('A session cannot change workspace or model');
+  session.running = true;
+  try { return await runTurn(task, config, { ...options, session }); }
+  finally { session.running = false; }
+}
+
+async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand } = {}) {
+  // Presentation observers must not change execution or accounting.
+  const emit = (event) => { try { onEvent(event); } catch { /* UI is observational. */ } };
   // Injected adapters are for deterministic integration checks, never live usage evidence.
   const offline = adapterFactory !== undefined;
   if (offline && typeof adapterFactory !== 'function') throw new TypeError('adapterFactory must be a function');
@@ -24,24 +51,39 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
   await ledger.init({ workspace: config.workspace, taskSha256: createTaskHash(task), effort: config.effort,
     runType: offline ? 'offline-runtime' : 'live', usageSource: offline ? 'scripted' : 'provider' });
   const deduplicateReads = ['v1-dedup', 'v1', 'v1-expanded', 'v1-auto'].includes(config.contextStrategy);
-  const tools = new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads });
+  const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads });
   await tools.init();
-  const adapter = offline ? await adapterFactory(config) : new AnthropicMessagesAdapter(config);
+  tools.ledger = ledger;
+  tools.signal = signal;
+  tools.approveCommand = approveCommand;
+  session.tools = tools;
+  if (session.adapter && session.offline !== offline) throw new Error('A session cannot mix scripted and provider adapters');
+  const adapter = session.adapter || (offline ? await adapterFactory(config) : new AnthropicMessagesAdapter(config));
   if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
-  adapter.onRequest = (event) => ledger.request(event);
-  const inventory = await tools.initialInventory({ task, strategy: config.contextStrategy, limit: config.initialFileLimit });
+  session.adapter = adapter;
+  session.offline = offline;
+  adapter.onRequest = async (event) => {
+    await ledger.request(event);
+    emit({ type: 'usage', totals: { ...ledger.totals }, usageComplete: ledger.completeUsageRequests === ledger.totals.requests,
+      spentUsd: adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
+  };
+  const firstTurn = session.messages.length === 0;
+  const inventory = firstTurn ? await tools.initialInventory({ task, strategy: config.contextStrategy, limit: config.initialFileLimit })
+    : { text: '', selectedFiles: [], totalFiles: 0 };
   const selectedHash = createHash('sha256').update(inventory.selectedFiles.join('\n')).digest('hex');
   await ledger.event({
     type: 'initial_inventory', strategy: config.contextStrategy, totalFiles: inventory.totalFiles,
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const userMessage = `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`;
-  const messages = [{ role: 'user', content: userMessage }];
-  let pendingValidation = false;
-  let validationPassed = false;
-  let validationAttempts = 0;
-  let changedFiles = [];
+  const userMessage = firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
+    + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task;
+  const messages = session.messages;
+  messages.push({ role: 'user', content: userMessage });
+  let pendingValidation = session.pendingValidation;
+  let validationPassed = session.validationPassed;
+  let validationAttempts = session.validationAttempts;
+  let changedFiles = [...session.changedFiles];
   let status = 'running';
   let finalText = '';
   let toolCalls = 0;
@@ -51,6 +93,7 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
 
   try {
     while (toolCalls <= config.maxToolCalls) {
+      if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
         let memory = config.historyStrategy === 'compact-tools'
@@ -82,9 +125,18 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
           historyStrategy: config.historyStrategy ?? 'full', fullPayloadBytes: fullBytes, sentPayloadBytes: sentBytes,
           compactedResults: memory.diagnostics.compactedResults, payloadSha256: createHash('sha256').update(sentPayload).digest('hex'),
           metricSource: 'serialized adapter input (system/messages/tools), not provider tokens' });
-        result = await adapter.complete(request);
+        emit({ type: 'model_start', requestIndex: contextDiagnostics.requestCount });
+        let streamed = false;
+        result = await adapter.complete({ ...request, signal, onTextDelta: onDelta ? (text) => {
+          streamed = true;
+          try { onDelta(text); } catch { /* Presentation only. */ }
+        } : undefined });
+        emit({ type: 'model_end', streamed });
+        result = { ...result, displayedAsStream: streamed };
       } catch (error) {
-        status = 'failed';
+        emit({ type: 'model_end', interrupted: true });
+        status = signal?.aborted ? 'cancelled' : 'failed';
+        if (signal?.aborted) break;
         if (error instanceof ModelError) onText(`Agent stopped: ${error.message}`);
         else throw error;
         break;
@@ -93,9 +145,10 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
       const assistantMessage = { role: 'assistant', content };
       messages.push(assistantMessage);
       const textBlocks = content.filter((block) => block.type === 'text').map((block) => block.text || '');
-      if (textBlocks.length) { finalText = textBlocks.join('\n'); onText(finalText); }
+      if (textBlocks.length) { finalText = textBlocks.join('\n'); if (!result.displayedAsStream) onText(finalText); }
       const toolUses = content.filter((block) => block.type === 'tool_use');
       if (!toolUses.length) {
+        if (signal?.aborted) { status = 'cancelled'; break; }
         if (result.stop_reason === 'max_tokens') {
           status = 'incomplete';
           onText('\nAgent stopped because the response reached its output-token limit.');
@@ -112,14 +165,21 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
 
       const toolResults = [];
       for (const call of toolUses) {
+        if (signal?.aborted || status === 'tool_limit_reached') {
+          toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: 'Tool not executed: turn stopped. Do not assume it succeeded.', is_error: true });
+          if (signal?.aborted) status = 'cancelled';
+          continue;
+        }
         toolCalls += 1;
         if (toolCalls > config.maxToolCalls) {
           status = 'tool_limit_reached';
-          break;
+          toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: 'Tool not executed: tool-call limit reached.', is_error: true });
+          continue;
         }
         const started = Date.now();
         let output;
         let isError = false;
+        emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
         try {
           output = await dispatchTool(tools, call.name, call.input || {});
           if (call.name === 'apply_patch') {
@@ -142,18 +202,23 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
           }
         }
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
+        emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, isError });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
       }
       messages.push({ role: 'user', content: toolResults });
-      if (status === 'tool_limit_reached') break;
+      if (signal?.aborted) status = 'cancelled';
+      if (['tool_limit_reached', 'cancelled'].includes(status)) break;
     }
     if (status === 'running') status = pendingValidation ? 'needs_validation' : 'tool_limit_reached';
   } catch (error) {
-    status = 'failed';
+    status = signal?.aborted ? 'cancelled' : 'failed';
     onText(`Agent error: ${error.message}`);
   }
 
+  Object.assign(session, { pendingValidation, validationPassed, validationAttempts, changedFiles });
+  if (status === 'cancelled') messages.push({ role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });
+  emit({ type: 'turn_end', status, summary, spentUsd: adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
   return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
     runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
 }

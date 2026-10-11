@@ -138,7 +138,7 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
   const wallStarted = Date.now();
   const source = await command('git', ['rev-parse', 'HEAD'], PROJECT_ROOT);
   const diff = await command('git', ['diff', 'HEAD', '--', 'src'], PROJECT_ROOT);
-  const sourceFiles = ['agent.mjs', 'benchmark.mjs', 'config.mjs', 'context.mjs', 'memory.mjs', 'tools.mjs', 'output.mjs', 'model.mjs', 'ledger.mjs', 'usage.mjs', 'run-id.mjs', 'runtime-benchmark.mjs'];
+  const sourceFiles = ['agent.mjs', 'cli.mjs', 'terminal.mjs', 'benchmark.mjs', 'config.mjs', 'context.mjs', 'memory.mjs', 'tools.mjs', 'output.mjs', 'model.mjs', 'ledger.mjs', 'usage.mjs', 'run-id.mjs', 'runtime-benchmark.mjs'];
   const snapshot = async () => sha256(JSON.stringify(await Promise.all(sourceFiles.map(async (filename) => [filename, await readFile(path.join(PROJECT_ROOT, 'src', filename), 'utf8')]))));
   const sourceSnapshotSha256 = await snapshot();
   const checkpoint = async () => writeFile(path.join(outputDir, 'checkpoint.json'), `${JSON.stringify({ schemaVersion: 1, runId, mode: mode === 'live' ? 'live-fixture' : 'offline-runtime',

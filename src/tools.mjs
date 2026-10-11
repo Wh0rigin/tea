@@ -47,7 +47,7 @@ function truncate(text, max = MAX_TOOL_OUTPUT) {
   return value.length > max ? `${value.slice(0, max)}\n… [truncated; ${value.length - max} chars omitted]` : value;
 }
 
-function redactText(text) {
+export function redactText(text) {
   return String(text).replace(SECRET_TEXT, '[REDACTED]').replace(SECRET_ASSIGNMENT, '$1$2[REDACTED]');
 }
 
@@ -277,7 +277,7 @@ export class WorkspaceTools {
       this.sessionTerms.set(key, entries);
     }
     this.unresolvedQueries.delete(key);
-    return `Session mapping saved with source occurrence evidence: ${query} -> ${target}; evidence=${relative}#L${line}@${sourceHash.slice(0, 16)}. Applies only to this run.`;
+    return `Session mapping saved with source occurrence evidence: ${query} -> ${target}; evidence=${relative}#L${line}@${sourceHash.slice(0, 16)}. Applies only to this in-memory conversation.`;
   }
 
   async applyPatch({ path: relativePath, search, replace } = {}) {
@@ -320,6 +320,11 @@ export class WorkspaceTools {
       assertWindowsCommand(value);
       return this.#spawnCommand(value, this.maxCommandMs);
     }
+    if (this.approveCommand) {
+      if (!await this.approveCommand(value)) return 'Command denied by user.';
+      this.signal?.throwIfAborted();
+      return this.#spawnCommand(value, this.maxCommandMs);
+    }
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('Unlisted shell commands require an interactive terminal for approval');
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     let answer;
@@ -330,6 +335,8 @@ export class WorkspaceTools {
   }
 
   async #spawnCommand(command, timeoutMs) {
+    this.signal?.throwIfAborted();
+    const signal = this.signal;
     const parts = command.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
     const executable = (parts.shift() || '').replace(/^"|"$/g, '');
     const args = parts.map((part) => part.replace(/^"|"$/g, ''));
@@ -348,9 +355,12 @@ export class WorkspaceTools {
       const stderr = new BoundedOutput();
       let settled = false;
       let timedOut = false;
+      let cancelled = false;
+      let terminating = false;
       let timeoutCleanup = Promise.resolve();
-      const timer = setTimeout(() => {
-        timedOut = true;
+      const terminate = () => {
+        if (terminating) return;
+        terminating = true;
         if (process.platform === 'win32' && child.pid) {
           // Node's Windows kill only ends the parent; test workers can retain the workspace.
           timeoutCleanup = new Promise((done) => {
@@ -361,25 +371,30 @@ export class WorkspaceTools {
             terminator.once('close', done);
           });
         } else child.kill();
-      }, timeoutMs);
+      };
+      const timer = setTimeout(() => { timedOut = true; terminate(); }, timeoutMs);
+      const cancel = () => { cancelled = true; terminate(); };
+      signal?.addEventListener('abort', cancel, { once: true });
+      if (signal?.aborted) cancel();
       for (const [stream, target] of [[child.stdout, 'stdout'], [child.stderr, 'stderr']]) {
         stream.setEncoding('utf8');
         stream.on('data', (chunk) => {
           (target === 'stdout' ? stdout : stderr).append(chunk);
         });
       }
-      child.once('error', (error) => { clearTimeout(timer); if (!settled) { settled = true; reject(error); } });
-      child.once('close', async (code, signal) => {
+      child.once('error', (error) => { clearTimeout(timer); signal?.removeEventListener('abort', cancel); if (!settled) { settled = true; reject(error); } });
+      child.once('close', async (code, processSignal) => {
         clearTimeout(timer);
+        signal?.removeEventListener('abort', cancel);
         if (settled) return;
         settled = true;
-        if (timedOut) {
+        if (timedOut || cancelled) {
           await timeoutCleanup;
-          reject(new Error(`Command timed out after ${timeoutMs} ms`));
+          reject(new Error(cancelled ? 'Command cancelled; completed edits remain in the workspace' : `Command timed out after ${timeoutMs} ms`));
           return;
         }
         const maxChars = code === 0 ? 2_000 : 6_500;
-        const sanitized = redactText(`exit=${code ?? signal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
+        const sanitized = redactText(`exit=${code ?? processSignal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
         // Redaction can expand short assignments, so bound the sanitized result too.
         const finalOutput = new BoundedOutput({ maxChars: MAX_TOOL_OUTPUT });
         finalOutput.append(sanitized);
@@ -401,7 +416,7 @@ export const TOOL_DEFINITIONS = [
 
 export const TERM_MAPPING_TOOL = {
   name: 'remember_term_mapping',
-  description: 'An earlier literal lookup missed. Continue model-led discovery with list_files/search_code/read_file. Once you identify the relevant real code name, save the unresolved query -> identifier mapping for this run. Supply an exact source line already read via read_file. Confirm from code context that this is the real relevant name, not a guess or an incidental mention in comments/strings. Runtime checks unchanged evidence and name presence, not declaration syntax or semantic equivalence; those remain your responsibility.',
+  description: 'An earlier literal lookup missed. Continue model-led discovery with list_files/search_code/read_file. Once you identify the relevant real code name, save the unresolved query -> identifier mapping for this in-memory conversation. Supply an exact source line already read via read_file. Confirm from code context that this is the real relevant name, not a guess or an incidental mention in comments/strings. Runtime checks unchanged evidence and name presence, not declaration syntax or semantic equivalence; those remain your responsibility.',
   input_schema: { type: 'object', properties: { query: { type: 'string', maxLength: 160 }, target: { type: 'string', maxLength: 80 }, path: { type: 'string' }, line: { type: 'integer', minimum: 1 } }, required: ['query', 'target', 'path', 'line'], additionalProperties: false },
 };
 

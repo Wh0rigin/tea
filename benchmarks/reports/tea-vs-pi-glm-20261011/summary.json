@@ -1,0 +1,888 @@
+{
+  "validComparison": true,
+  "issues": [],
+  "expectedControls": {
+    "model": "glm-5.3-flash",
+    "maxTokens": 4096,
+    "thinking": {
+      "type": "enabled",
+      "budget_tokens": 4095
+    },
+    "outputConfig": {
+      "effort": "low"
+    }
+  },
+  "pairs": [
+    {
+      "caseId": "small-cache-key-r1",
+      "taskId": "small-cache-key",
+      "scale": "small",
+      "family": "cache-key",
+      "fileCount": 12,
+      "lines": 112,
+      "tea": {
+        "taskId": "small-cache-key",
+        "caseId": "small-cache-key-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "small",
+        "initialSha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+        "initialCommit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+        "status": "completed",
+        "toolCalls": 4,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "125c6c3ccec2318e6393f1ea0489a8cac5e8ef92f60a148de4fd819b14e97c9c"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "09aabe0aef938fd6b244504dd0a713ecf2733144103d0aea303c69c808955b2d"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 22377,
+        "requests": 4,
+        "usageComplete": true,
+        "totalTokens": 5678,
+        "inputTokens": 5471,
+        "outputTokens": 207,
+        "reportedTokenLowerBound": 5678,
+        "accountedUsd": 0.00446076,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "small-cache-key",
+        "caseId": "small-cache-key-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "small",
+        "initialSha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+        "initialCommit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 4,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "7e4121e925788b84f5be915c60f3f60b0b0deb61e827d788b8263ba1fb66eb3d",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "e92bf4f83c60c81aafacd23848eb7699f48ba5cf6736db22591db4ca5061441a"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "e4c9526dfc73cd1e21d3049965d84a0c421dc6a8f600b45d0b5a1acfef1d2cba"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 23626,
+        "requests": 5,
+        "usageComplete": true,
+        "totalTokens": 10696,
+        "inputTokens": 10490,
+        "outputTokens": 206,
+        "reportedTokenLowerBound": 10696,
+        "accountedUsd": 0.00807192,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": 46.91473448017951
+    },
+    {
+      "caseId": "small-retry-budget-r1",
+      "taskId": "small-retry-budget",
+      "scale": "small",
+      "family": "retry-budget",
+      "fileCount": 12,
+      "lines": 113,
+      "tea": {
+        "taskId": "small-retry-budget",
+        "caseId": "small-retry-budget-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "small",
+        "initialSha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+        "initialCommit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+        "status": "completed",
+        "toolCalls": 5,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "a30c29da9db4c32f8791b46d7dc2dedeb4645bb97c3f82095bf9fa27bd892f9a"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "132ffcd3e2de830572bf52da4a4812e5a5af4b5fd40535dfbc50a3c809d8fec5"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 20942,
+        "requests": 4,
+        "usageComplete": true,
+        "totalTokens": 6448,
+        "inputTokens": 6179,
+        "outputTokens": 269,
+        "reportedTokenLowerBound": 6448,
+        "accountedUsd": 0.00512676,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "small-retry-budget",
+        "caseId": "small-retry-budget-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "small",
+        "initialSha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+        "initialCommit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 5,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "5b5446a4ad00b637fafd8486211c7af0b3c3c21b88221ea03e872437e4a4d788",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "63c449eb8632958b668aee6020050cb4277cfe9ce61d88665d30a525a86f7ad2"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "009ecfd93a1de0369471bbc0df3739e5626c50505ba3efd5c3b870deeba3744b"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 29139,
+        "requests": 5,
+        "usageComplete": true,
+        "totalTokens": 11141,
+        "inputTokens": 10909,
+        "outputTokens": 232,
+        "reportedTokenLowerBound": 11141,
+        "accountedUsd": 0.00843912,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": 42.12368728121354
+    },
+    {
+      "caseId": "small-unicode-r1",
+      "taskId": "small-unicode",
+      "scale": "small",
+      "family": "unicode",
+      "fileCount": 12,
+      "lines": 109,
+      "tea": {
+        "taskId": "small-unicode",
+        "caseId": "small-unicode-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "small",
+        "initialSha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+        "initialCommit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+        "status": "completed",
+        "toolCalls": 13,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "6ac8214cd7f670571395dea73935f6e938feb47bd77bcccbb87819942d0a9c2d"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "fb361facd8117dd3629b4343016d640ab9760a544c5877348615fba06de8c9ca"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 84258,
+        "requests": 14,
+        "usageComplete": true,
+        "totalTokens": 28814,
+        "inputTokens": 27618,
+        "outputTokens": 1196,
+        "reportedTokenLowerBound": 28814,
+        "accountedUsd": 0.02289888,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "small-unicode",
+        "caseId": "small-unicode-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "small",
+        "initialSha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+        "initialCommit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 7,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "6a3ffe9181b81d1bb0d0c3f23a1f0ad3ad1809c6d0314e030993ae1998d67c5b",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "acc44482cf4af1a42a7563aca0ef556f9fe0f43cc349c42a886b827a6a45a289"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "5731c6024f80cb64453a9a9fd6a4de995bbee50147f912eb07323fdaf488fe87"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 40439,
+        "requests": 7,
+        "usageComplete": true,
+        "totalTokens": 17606,
+        "inputTokens": 17250,
+        "outputTokens": 356,
+        "reportedTokenLowerBound": 17606,
+        "accountedUsd": 0.013317119999999998,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": -63.66011586958991
+    },
+    {
+      "caseId": "medium-cache-key-r1",
+      "taskId": "medium-cache-key",
+      "scale": "medium",
+      "family": "cache-key",
+      "fileCount": 120,
+      "lines": 1408,
+      "tea": {
+        "taskId": "medium-cache-key",
+        "caseId": "medium-cache-key-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "medium",
+        "initialSha256": "151ede096639b8215229215d9e836fc66340ca20df5dab32dd16b00aadf45b52",
+        "initialCommit": "81ee31e86dfff14bc79e7e90db514263089221fb",
+        "status": "completed",
+        "toolCalls": 4,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "cf44c6173ccc27446d12edc2dc28129ce1bd552899c9e348cf21f67c90e2399e"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "af46ae5610597e96262d3f89d9c02d822afb04bb3f70eecfaaeb4e1319c7ac29"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 23815,
+        "requests": 4,
+        "usageComplete": true,
+        "totalTokens": 5941,
+        "inputTokens": 5652,
+        "outputTokens": 289,
+        "reportedTokenLowerBound": 5941,
+        "accountedUsd": 0.00479772,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "medium-cache-key",
+        "caseId": "medium-cache-key-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "medium",
+        "initialSha256": "151ede096639b8215229215d9e836fc66340ca20df5dab32dd16b00aadf45b52",
+        "initialCommit": "81ee31e86dfff14bc79e7e90db514263089221fb",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 8,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "3dba9a3df7f96e25ce901614c82bc7264ce5f43e946f547da8a596aa038ed1b8",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "4e68bd67c799c34d9f622fff1e6dc928102d496b985739988a6651253a5e8481"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "7d620e0b84ca8fb52d2e72e98c465cf0f82158df5322c3b03c31e552fdbfedf7"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 43047,
+        "requests": 8,
+        "usageComplete": true,
+        "totalTokens": 21747,
+        "inputTokens": 21472,
+        "outputTokens": 275,
+        "reportedTokenLowerBound": 21747,
+        "accountedUsd": 0.016152839999999998,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": 72.68128937324688
+    },
+    {
+      "caseId": "medium-retry-budget-r1",
+      "taskId": "medium-retry-budget",
+      "scale": "medium",
+      "family": "retry-budget",
+      "fileCount": 120,
+      "lines": 1409,
+      "tea": {
+        "taskId": "medium-retry-budget",
+        "caseId": "medium-retry-budget-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "medium",
+        "initialSha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+        "initialCommit": "3922f549375a05db5fe0ced58685d358f3d14684",
+        "status": "completed",
+        "toolCalls": 4,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "8a4accbb1b9d41db00c56469a89fa50b2837b4d25a61a116d4a667b37aec99ba"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "a7741288edc454b66aa1802e408fdac3989f18dd5d902f3e41750bffe9239bfc"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 17506,
+        "requests": 4,
+        "usageComplete": true,
+        "totalTokens": 5797,
+        "inputTokens": 5561,
+        "outputTokens": 236,
+        "reportedTokenLowerBound": 5797,
+        "accountedUsd": 0.00459864,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "medium-retry-budget",
+        "caseId": "medium-retry-budget-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "medium",
+        "initialSha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+        "initialCommit": "3922f549375a05db5fe0ced58685d358f3d14684",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 4,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "be3eb1ea384b48c0b48b1157471b51452b8c757bff299b5f9ff1d3471a696af5",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "20426a743ba9fdd4e8450e59f2fef395ae241ea6bfbcaa1e8350440e770d537a"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "3230d4d1b0e25717e8b12f8bee3761bbc512ca1579e3fc5c1d20499951acd640"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 26613,
+        "requests": 5,
+        "usageComplete": true,
+        "totalTokens": 31187,
+        "inputTokens": 30881,
+        "outputTokens": 306,
+        "reportedTokenLowerBound": 31187,
+        "accountedUsd": 0.023005440000000002,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": 81.412126847725
+    },
+    {
+      "caseId": "medium-unicode-r1",
+      "taskId": "medium-unicode",
+      "scale": "medium",
+      "family": "unicode",
+      "fileCount": 120,
+      "lines": 1405,
+      "tea": {
+        "taskId": "medium-unicode",
+        "caseId": "medium-unicode-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "medium",
+        "initialSha256": "f9cc2b9a8d91b76434ab73e3b7e152dde06edf452419de692d7dbaddaaca5757",
+        "initialCommit": "eaa9e37575da3bdac2a5aa1b70cbec2676353eef",
+        "status": "completed",
+        "toolCalls": 8,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "4d44c6460406d6b4837d75e67a255c04df7a6b0455da8c0b37aa8b86293be67a"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "2e265f345e8bbfe675db99952e41f2e53c0babcc11d057885abe65ec52544a82"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 45473,
+        "requests": 7,
+        "usageComplete": true,
+        "totalTokens": 12658,
+        "inputTokens": 11979,
+        "outputTokens": 679,
+        "reportedTokenLowerBound": 12658,
+        "accountedUsd": 0.01033596,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "medium-unicode",
+        "caseId": "medium-unicode-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "medium",
+        "initialSha256": "f9cc2b9a8d91b76434ab73e3b7e152dde06edf452419de692d7dbaddaaca5757",
+        "initialCommit": "eaa9e37575da3bdac2a5aa1b70cbec2676353eef",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 5,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "102db2eef95934af190d765b51addc523c94404d3fcb6ba5a8ae3054f88a25dd",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "55c53bf091df6463db3367f8b1c87a552bae0a3d4c21098853567b3e4340a1c5"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "a81bd9eb416bea2ea49490e828874bd8ce745107ed0cce6f7a97b831afa867e4"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 29709,
+        "requests": 5,
+        "usageComplete": true,
+        "totalTokens": 30987,
+        "inputTokens": 30707,
+        "outputTokens": 280,
+        "reportedTokenLowerBound": 30987,
+        "accountedUsd": 0.02281464,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": 59.150611546777675
+    },
+    {
+      "caseId": "large-cache-key-r1",
+      "taskId": "large-cache-key",
+      "scale": "large",
+      "family": "cache-key",
+      "fileCount": 1200,
+      "lines": 14368,
+      "tea": {
+        "taskId": "large-cache-key",
+        "caseId": "large-cache-key-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+        "initialCommit": "d75329958490887933052c1a00a3d56e548766f6",
+        "status": "completed",
+        "toolCalls": 9,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "60042e16207347bdfa3711cd460f0d2b1dc445b441c16d4bba3ebccfa58dcad0"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "91b8a092f1d0136dfb38597926bf6fa9df484487fc4c873a9d88949347ed2b1d"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 41360,
+        "requests": 7,
+        "usageComplete": true,
+        "totalTokens": 32126,
+        "inputTokens": 31871,
+        "outputTokens": 255,
+        "reportedTokenLowerBound": 32126,
+        "accountedUsd": 0.02358972,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "large-cache-key",
+        "caseId": "large-cache-key-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+        "initialCommit": "d75329958490887933052c1a00a3d56e548766f6",
+        "status": "failed",
+        "exitCode": 0,
+        "toolCalls": 2,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "error",
+        "stdoutSha256": "2ac6ec31fa5543366e8d4bfdc4fc9fb316ad5fc1f596561640670a51e727bb20",
+        "accepted": false,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "0b39d2e51234ea69b8663fe6c2d0c8b7a13297522f639bb29670fb6b25658948"
+          },
+          "hidden": {
+            "passed": false,
+            "exitCode": 1,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "048d4128e26fe6c8a156652d8562a440d3574bd980e442884c070f3ef7676693"
+          },
+          "scopePassed": true,
+          "passed": false
+        },
+        "elapsedMs": 7453,
+        "requests": 1,
+        "usageComplete": true,
+        "totalTokens": 1661,
+        "inputTokens": 1570,
+        "outputTokens": 91,
+        "reportedTokenLowerBound": 1661,
+        "accountedUsd": 0.0013597199999999998,
+        "guards": [
+          "Input byte guard reached"
+        ]
+      },
+      "usageComplete": true,
+      "bothAccepted": false,
+      "tokenReductionPercent": -1834.136062612884
+    },
+    {
+      "caseId": "large-retry-budget-r1",
+      "taskId": "large-retry-budget",
+      "scale": "large",
+      "family": "retry-budget",
+      "fileCount": 1200,
+      "lines": 14369,
+      "tea": {
+        "taskId": "large-retry-budget",
+        "caseId": "large-retry-budget-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+        "initialCommit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+        "status": "completed",
+        "toolCalls": 9,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "9e0e2043ccb149f87582ca91d85b8c5c575e8666e415f89a3a34ad1a1bffe169"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "8a934ce4be333f61ee7931932538248ad4673ddd7354195321e98e6679a8053d"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 42294,
+        "requests": 8,
+        "usageComplete": true,
+        "totalTokens": 33243,
+        "inputTokens": 32902,
+        "outputTokens": 341,
+        "reportedTokenLowerBound": 33243,
+        "accountedUsd": 0.02454876,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "large-retry-budget",
+        "caseId": "large-retry-budget-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+        "initialCommit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+        "status": "failed",
+        "exitCode": 0,
+        "toolCalls": 2,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "error",
+        "stdoutSha256": "f3592b8f728106420f38ce9f3fa58e68ad08f8609f81ae8ccb0f9a76b85e3ff2",
+        "accepted": false,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "1acd687abfeb76fe5a55fe3b5d7b8d71ab6de53d2c90317c7a773b1ac54c2deb"
+          },
+          "hidden": {
+            "passed": false,
+            "exitCode": 1,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "0e1236c7eee17208e8e94f95be8d702ef513edb2ad53a8d649d9887611d22425"
+          },
+          "scopePassed": true,
+          "passed": false
+        },
+        "elapsedMs": 9804,
+        "requests": 2,
+        "usageComplete": true,
+        "totalTokens": 21362,
+        "inputTokens": 21270,
+        "outputTokens": 92,
+        "reportedTokenLowerBound": 21362,
+        "accountedUsd": 0.01554624,
+        "guards": [
+          "Input byte guard reached"
+        ]
+      },
+      "usageComplete": true,
+      "bothAccepted": false,
+      "tokenReductionPercent": -55.61745154948039
+    },
+    {
+      "caseId": "large-unicode-r1",
+      "taskId": "large-unicode",
+      "scale": "large",
+      "family": "unicode",
+      "fileCount": 1200,
+      "lines": 14365,
+      "tea": {
+        "taskId": "large-unicode",
+        "caseId": "large-unicode-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "initialCommit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "status": "completed",
+        "toolCalls": 10,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "1d16aef8cab00fdb8947aef3c3534ada594c6cb6ed8833dc6a817f7bfb367a62"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "91e0aeda532025b918295c1fce060868d1594ef59402364c20fb00f9b6b0a7a3"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 46906,
+        "requests": 8,
+        "usageComplete": true,
+        "totalTokens": 37577,
+        "inputTokens": 37132,
+        "outputTokens": 445,
+        "reportedTokenLowerBound": 37577,
+        "accountedUsd": 0.027856440000000003,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "large-unicode",
+        "caseId": "large-unicode-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "initialCommit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 6,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "2bf71179ef5e50ec69ee2199fd21c1f65b40df57a285007b5a4e10de0f47e4c6",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "56c52b1660b7c20c0a121770b10cbc83800e304cede8e930204e7a9fff7780b3"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "09e0c456d0a5073c1dc1daaef5c1c592d20a094f00b51fe6ef6d56044768270e"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 38279,
+        "requests": 7,
+        "usageComplete": true,
+        "totalTokens": 14659,
+        "inputTokens": 14309,
+        "outputTokens": 350,
+        "reportedTokenLowerBound": 14659,
+        "accountedUsd": 0.01118448,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": -156.3408145166792
+    }
+  ],
+  "overall": {
+    "expectedPairs": 9,
+    "measuredPairs": 9,
+    "bothAcceptedPairs": 7,
+    "teaAccepted": 9,
+    "piAccepted": 7,
+    "teaMeasuredTokens": 168282,
+    "piMeasuredTokens": 161046,
+    "allPairsTokenReductionPercent": -4.49312618754889,
+    "bothAcceptedTeaTokens": 102913,
+    "bothAcceptedPiTokens": 138023,
+    "bothAcceptedTokenReductionPercent": 25.437789353948258
+  },
+  "scales": [
+    {
+      "scale": "small",
+      "expectedPairs": 3,
+      "measuredPairs": 3,
+      "bothAcceptedPairs": 3,
+      "teaAccepted": 3,
+      "piAccepted": 3,
+      "teaMeasuredTokens": 40940,
+      "piMeasuredTokens": 39443,
+      "allPairsTokenReductionPercent": -3.7953502522627636,
+      "bothAcceptedTeaTokens": 40940,
+      "bothAcceptedPiTokens": 39443,
+      "bothAcceptedTokenReductionPercent": -3.7953502522627636
+    },
+    {
+      "scale": "medium",
+      "expectedPairs": 3,
+      "measuredPairs": 3,
+      "bothAcceptedPairs": 3,
+      "teaAccepted": 3,
+      "piAccepted": 3,
+      "teaMeasuredTokens": 24396,
+      "piMeasuredTokens": 83921,
+      "allPairsTokenReductionPercent": 70.92980302903922,
+      "bothAcceptedTeaTokens": 24396,
+      "bothAcceptedPiTokens": 83921,
+      "bothAcceptedTokenReductionPercent": 70.92980302903922
+    },
+    {
+      "scale": "large",
+      "expectedPairs": 3,
+      "measuredPairs": 3,
+      "bothAcceptedPairs": 1,
+      "teaAccepted": 3,
+      "piAccepted": 1,
+      "teaMeasuredTokens": 102946,
+      "piMeasuredTokens": 37682,
+      "allPairsTokenReductionPercent": -173.19675176476835,
+      "bothAcceptedTeaTokens": 37577,
+      "bothAcceptedPiTokens": 14659,
+      "bothAcceptedTokenReductionPercent": -156.3408145166792
+    }
+  ]
+}

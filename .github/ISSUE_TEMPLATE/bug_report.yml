@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible TEA problem
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Remove API keys and private source from all examples and logs."
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Include the smallest reproducible example and command.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: TEA commit/version, Node version and operating system.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Relevant logs, run ID or screenshots. No credentials or private source.
