@@ -51,12 +51,16 @@ test('short histories do not submit a summary request', async () => {
   }
 });
 test('commits a smaller checkpoint without rewriting messages or retained thinking', async () => {
-  const s = session(), originals = [...s.messages], snapshot = structuredClone(s.messages);
+  const s = session();
+  s.messages.at(-1).content = [{ type: 'thinking', thinking: 'retained thought', signature: 'recent-signature' },
+    { type: 'text', text: 'recent '.repeat(150) }];
+  const originals = [...s.messages], snapshot = structuredClone(s.messages);
   const { outcome, events, requests } = await compact(s);
   assert.equal(outcome.status, 'compacted'); assert.ok(outcome.afterBytes < outcome.beforeBytes);
   assert.deepEqual(s.messages, snapshot); originals.forEach((m, i) => assert.equal(s.messages[i], m));
   assert.equal(s.compaction.firstKeptIndex, 3); assert.equal(s.compactionCount, 1);
   assert.equal(sessionContext(s)[1], originals[3]);
+  assert.equal(sessionContext(s)[1].content[0].signature, 'recent-signature');
   assert.equal(s.tools.readEvidence.size, 0); assert.equal(s.tools.presentedSource.size, 0);
   assert.equal(s.tools.sessionTerms.get('alias'), 'real'); assert.equal(s.pendingValidation, true);
   assert.equal(s.validationPassed, false); assert.equal(s.validationAttempts, 2);
@@ -154,6 +158,13 @@ test('interruption after provider response prevents commit', async () => {
   await assert.rejects(compact(s, cfg(), { signal: controller.signal,
     adapter: { complete: async () => { controller.abort(); return done(); } } }), /abort/i);
   assert.equal(s.compaction, null); assert.equal(s.tools.readEvidence.size, 1);
+});
+test('a completed ledger commit remains adopted when interruption arrives during its write', async () => {
+  const s = session(), controller = new AbortController();
+  const { outcome } = await compact(s, cfg(), { signal: controller.signal,
+    ledger: { event: async () => { controller.abort(); } } });
+  assert.equal(outcome.status, 'compacted'); assert.equal(s.compactionCount, 1);
+  assert.equal(s.tools.readEvidence.size, 0);
 });
 test('request byte measurement includes exact provider controls', () => {
   const config = liveConfig(), request = { system: 's', tools: [], messages: history(), maxTokens: 1200 };

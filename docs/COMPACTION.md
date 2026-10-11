@@ -71,6 +71,6 @@ Summary requests use the same adapter and hard spending/input caps as coding req
 
 A checkpoint is adopted only when the response has all required sections in order with content, finishes normally, requests no tools, and reduces the next serialized coding request. This size check includes the checkpoint wrapper, latest-user reminder, runtime state and any enabled `compact-tools` projection. It does **not** establish net provider-token savings or semantic completeness.
 
-Cancellation, incomplete summaries, missing sections and non-reducing output preserve the previous projection and original history. Adapter errors stop the current task; unknown usage retains its full reservation. TEA does not retry a provider overflow with uncertain billing. Recovery currently happens before submission through the local byte trigger.
+Cancellation observed before the checkpoint ledger commit, incomplete summaries, missing sections and non-reducing output preserve the previous projection and original history. Once the ledger write succeeds, that checkpoint is adopted even if cancellation arrived during the write, like a completed tool operation. Adapter errors stop the current task; unknown usage retains its full reservation. TEA does not retry a provider overflow with uncertain billing. Recovery currently happens before submission through the local byte trigger.
 
 Paid evaluation must include summary usage, task acceptance, repeated runs, and identical starting snapshots and controls. This capability has no measured provider-token savings result yet.
