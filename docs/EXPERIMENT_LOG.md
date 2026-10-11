@@ -1,5 +1,19 @@
 # 实验日志
 
+## E9 — V3 双向策略与过期验证水位（2026-10-11）
+
+- 候选纯函数支持fixed-strong/fixed-weak/upgrade-only/bidirectional；观察可信runtime证据形状，2个新成功/失败结果与最少2步保持；保留验证预算，缺预算则stop，不追加调用或重试。
+- 审查发现旧attempt可能在源码身份回到旧值时复活；编辑使当前已知attempt过期，源码变化使此前attempt过期，未对齐合法attempt也消费，未来attempt不污染水位。同轮新source+新attempt仍可观察；增加4个正/负控。
+- `v3-policy-replay-verified`与根复测`v3-policy-root-20261011`：13固定轨迹×4策略=240观察步；双向4升5降，low/high/max=22/11/27。所有保护违例0，输入不变，决策/清单/源码完全复现。
+- 专项19/19、全套116/116、diff检查通过。状态是模拟声明，预算单位无Token/美元映射；不测真实代码验收、provider Token或模型成功。V3保持未提交候选，继续actual runtime与合法交接实验，见`benchmarks/reports/v3.md`。
+
+## E8 — V3 动态输出上限与思考预算边界（2026-10-11）
+
+- 观察：maxTokens覆盖0会退回默认值，enabled budget_tokens仍使用配置的旧上限且可等于本次max_tokens；显式覆盖可超过配置上限。
+- 候选：严格校验覆盖/配置，manual预算按本次上限推导，不兼容的小上限提前拒绝，不重试；adaptive默认输入不变。
+- 实际parent/candidate adapter→127.0.0.1严格合约server：9项case，原版非法HTTP提交6次，候选0次，9项候选预期检查通过；本地mock回复仅测解析，无真实LLM。原版源码来自v2 commit，见`benchmarks/reports/v3.md`。
+- 模型专项20/20测试通过。不能把非法请求避免量当真实Token下降，V3仍未提交，也无main/release推进。
+
 ## E7 — V2 请求视图中的选择性旧工具历史（2026-10-11）
 
 - 假设：长发现结果/成功日志被反复重传，旧结果改成可恢复哈希记录能减少后续输入，原史保留；最近两轮、源码、失败、补丁、assistant思考签名不变。
@@ -8,6 +22,7 @@
 - 辅助：7条真实工具固定轨迹79成对输入，短固定system含tools的字节3,797,829→1,746,322（−54.02%）；保留4轮为−37.09%。与集成system/恢复说明口径不同；全部保留检查通过。
 - 测试：94/94 passed；CLI help/report与diff检查通过。见`benchmarks/reports/v2.md`，raw runIDs为`v2-smoke-{full,comp}-20261011`、`v2-stress-{full,comp}-20261011`和`v2-memory-replay-final-keep{2,4}`。
 - 解释：均为离线脚本和人工压力轨迹，provider Token/模型成功率/美元/延迟收益未测；默认full，compact-tools保留为可选实验。用户已要求可接受效果写上百分比commit并继续下一阶段，离线检查点不移动main或release标签。
+- V3复核补充：脚本adapter绕过provider预检。压力full/compact最大输入22,072/13,421字节，60/31个输入超过默认12,000字节guard；该压力验收不证明默认Live配置可完成。
 - 下一点：V3实际验证反馈的升/降/保持与预算预留；发现enabled thinking的请求maxTokens覆盖可能使budget_tokens>=max_tokens，先验证该边界。
 
 ## E0 — 最小可运行基线与 Harness 自测

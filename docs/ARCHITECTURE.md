@@ -14,6 +14,8 @@
 - `src/usage.mjs` / `src/run-id.mjs`：缓存输入归一化、完整 usage 判定和安全运行目录名。
 - `src/memory.mjs`：请求视图中的旧工具结果选择性压缩；完整历史不变，保留源码/失败/补丁/最近两轮/assistant 原始块，重复或无法配对的 ID 不压缩。
 - `src/memory-benchmark.mjs`：真实工具固定轨迹的成对序列化字节诊断与独立保留检查，不调用模型。
+- `src/policy.mjs`（V3未提交候选）：独立纯状态机，按源码身份/验证attempt及工具证据升降effort，保持滞回与验证预留；尚未接入Live runtime。
+- `scripts/policy-experiment.mjs` / `scripts/request-budget-experiment.mjs`：固定状态策略仿真与实际adapter到loopback HTTP的预算合约实验，均不测模型Token或任务质量。
 
 当前 Agent 是单代理、单模型循环。V1 已提交离线检查点，默认发送最多 8 个任务相关路径，优先保留适用的 `AGENTS.md` 和根项目说明；词面重合弱时自动扩展少量领域同义词。完整发送过的文件范围且脱敏后内容未变时回传 evidence ref，内容变化后发送新片段。V2 `compact-tools` 是可选请求历史视图，压缩旧发现结果和成功日志；全请求字节/字符/估算需均下降（含恢复说明），否则回退到原始输入。默认仍为 `full`。V3 双向策略/结构化交接进入下一阶段实验，尚未接入 Live。
 

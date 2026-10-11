@@ -4,7 +4,7 @@
 
 - 阶段：V1 离线检查点已提交；V2 选择性历史实验完成并保存结果，进入 V3 本地策略/请求预算实验。各版 Live 门禁仍未通过。
 - 仓库：`C:\Users\Administrator\Documents\token-efficient-coding-agent`。
-- Git：V1 检查点为 `c2a218d4daada6901038d30d149ee515d44910e7`，V2 从其继续；`baseline-v0`/`main` 为 `17779508744eee1cf986eb123a612be3d957fbee`。用 `git rev-parse v2` 查看 V2 检查点；版本分支冻结各自离线状态，无 release 标签。
+- Git：V1 为 `c2a218d4daada6901038d30d149ee515d44910e7`，V2 为 `c7d73cbf253e7864ab8463920482ad4f44b0015d`，`v3` 从 V2 fast-forward 并有未提交实验。`baseline-v0`/`main` 为 `17779508744eee1cf986eb123a612be3d957fbee`。v1/v2 已冻结各自离线状态，无 release 标签。
 - 运行时：Node.js 原生依赖；Anthropic Messages/SSE、工具调用、工作区安全、测试后置条件、脱敏 Token Ledger、硬预算预检。
 - Offline harness：23 条自编 Replay（13 条大型合成定位）及 12 个固定 commit 的可执行 JavaScript fixture；后者脚本化选择工具、实际修改和运行公开/独立验收。没有模型成功率数据。
 - Live Baseline：`NOT_MEASURED`。未调用付费 API；当前 Token 分组价格、桥接兼容性和 Live 验收尚未完成。
@@ -13,7 +13,7 @@
 
 | 项目 | 结果 |
 |---|---|
-| `npm test` | V2 94/94 passed；明确限定 tests 目录，不扫描旧 benchmark 仓库 |
+| `npm test` | V2 checkpoint 94/94；当前V3工作区116/116 passed；明确限定 tests 目录，不扫描旧 benchmark 仓库 |
 | `git diff --check` | passed |
 | `npm run benchmark:replay` | baseline 23 条；估算 13,431；服务商 Token 未测 |
 | baseline → 默认 V1（cap=8） | 估算 13,431 → 2,106（−84.32%）；标注相关路径召回 1/26 → 26/26；paired bootstrap 95% 差值区间 `[-679.57, -304.78]` |
@@ -55,6 +55,14 @@ npm test
 npm run benchmark:replay
 npm run benchmark:runtime
 node src/cli.mjs benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 8
+node scripts/request-budget-experiment.mjs v3-request-budget-NEW
+node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 ```
 
 参见 [实验恢复说明](docs/EXPERIMENT_RECOVERY.md)。
+
+## V3 当前实验
+
+- 动态输出预算边界已实现候选：显式0/无效上限不被默认值吞掉，请求不能超过配置上限，普通enabled thinking预算与当前请求max_tokens保持有效关系。9项真实adapter→本地HTTP合约实验，非法提交6→0，全部候选预期检查通过；没有provider请求或Token收益结论。
+- 双向effort独立策略候选已实现，19/19专项测试；13条固定轨迹×4策略共240观察步，双向策略4升/5降，保护违例0；源码身份往返/同轮新验证的过期水位已补齐。verified/root两次重放决策和源码快照完全一致。仍是模拟状态，不是代码验收或模型Token结果。
+- 当前全套116/116测试和diff检查通过；V3候选未提交、尚未接入Live，结构化交接未完成。报告：[V3](benchmarks/reports/v3.md)。

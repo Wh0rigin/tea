@@ -2,6 +2,7 @@
   "name": "token-efficient-coding-agent",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Independent terminal coding agent with auditable token accounting and benchmarks",
   "bin": {

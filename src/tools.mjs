@@ -55,6 +55,13 @@ function isSensitivePath(relativePath) {
   return relativePath.split(/[\\/]/).some((part) => SENSITIVE_FILE.test(part)) || /\.(?:pem|key|p12|pfx)$/i.test(relativePath);
 }
 
+// Inspect bytes rather than requiring a language-specific filename suffix.
+function decodeText(buffer) {
+  if (buffer.includes(0)) return null;
+  try { return new TextDecoder('utf-8', { fatal: true }).decode(buffer); }
+  catch { return null; }
+}
+
 export class WorkspaceTools {
   constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true }) {
     this.workspace = path.resolve(workspace);
@@ -62,6 +69,10 @@ export class WorkspaceTools {
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
     this.readEvidence = new Map();
+    // Vocabulary belongs to this run only; never modify the shared hand-written table.
+    this.sessionTerms = new Map();
+    this.unresolvedQueries = new Set();
+    this.presentedSource = new Map();
   }
 
   async init() {
@@ -86,10 +97,12 @@ export class WorkspaceTools {
     return candidate;
   }
 
-  async listFilePaths({ maxFiles = 250, offset = 0 } = {}) {
+  async listFilePaths({ maxFiles = 250, offset = 0, path: scope = '.', includeOmitted = false } = {}) {
     const pageSize = Math.max(1, Math.min(MAX_FILES, Math.floor(Number(maxFiles) || 250)));
     const start = Math.max(0, Math.floor(Number(offset) || 0));
-    const stop = Math.min(MAX_FILES, start + pageSize);
+    const stop = start + pageSize;
+    const root = await this.resolveFile(scope);
+    if (!(await stat(root)).isDirectory() || (isSensitivePath(path.relative(this.workspace, root)) || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part)))) throw new Error('Listing scope must be a non-sensitive workspace directory');
     const rows = [];
     const walk = async (directory, depth) => {
       if (depth > 12 || rows.length >= stop) return;
@@ -97,31 +110,32 @@ export class WorkspaceTools {
       entries.sort((a, b) => a.name.localeCompare(b.name));
       for (const entry of entries) {
         if (rows.length >= stop) break;
-        if (entry.name.startsWith('.') && entry.name !== '.github') continue;
-        if (OMIT.has(entry.name)) continue;
+        if (!includeOmitted && entry.name.startsWith('.') && entry.name !== '.github') continue;
+        if (['.git', '.tea'].includes(entry.name) || (!includeOmitted && OMIT.has(entry.name))) continue;
         const full = path.join(directory, entry.name);
         if (entry.isSymbolicLink()) continue;
         if (entry.isDirectory()) await walk(full, depth + 1);
         else if (entry.isFile()) {
           if (isSensitivePath(path.relative(this.workspace, full))) continue;
           const extension = path.extname(entry.name).toLowerCase();
-          if (TEXT_EXTENSIONS.has(extension) || !extension) rows.push(path.relative(this.workspace, full).replaceAll(path.sep, '/'));
+          const info = await stat(full);
+          if (TEXT_EXTENSIONS.has(extension) || !extension || (info.size <= MAX_READ_BYTES && decodeText(await readFile(full)) !== null)) rows.push(path.relative(this.workspace, full).replaceAll(path.sep, '/'));
         }
       }
     };
-    await walk(this.workspace, 0);
+    await walk(root, 0);
     return rows.slice(start, stop);
   }
 
-  async listFiles({ maxFiles = 250, offset = 0 } = {}) {
-    const files = await this.listFilePaths({ maxFiles, offset });
+  async listFiles({ maxFiles = 250, offset = 0, path: scope = '.', includeOmitted = false } = {}) {
+    const files = await this.listFilePaths({ maxFiles, offset, path: scope, includeOmitted });
     const listing = files.join('\n') || '(no text files found)';
-    return Number(offset) > 0 ? `File listing from 0-based offset ${Math.floor(Number(offset))} (${files.length} paths returned):\n${listing}` : listing;
+    return `Scoped listing: ${scope}; offset=${offset}; ${files.length} paths. Filters/depth limits apply; this is not proof of complete coverage. Use another page or narrower path; includeOmitted enables ordinary excluded folders.\n${listing}`;
   }
 
   async initialInventory({ task, strategy = 'v1', limit = 8 } = {}) {
     const files = await this.listFilePaths({ maxFiles: MAX_FILES });
-    return strategy === 'baseline' || strategy === 'v1-dedup'
+    const inventory = strategy === 'baseline' || strategy === 'v1-dedup'
       ? buildBaselineInventory(files, 160)
       : buildProgressiveInventory(task, files, {
         limit,
@@ -129,6 +143,8 @@ export class WorkspaceTools {
           ? true
           : ['v1', 'v1-inventory-auto', 'v1-auto'].includes(strategy) ? 'auto' : false,
       });
+    inventory.text += '\nInventory covers a bounded default-filter scan (up to 700 paths, depth 12), not necessarily the entire workspace. Use scoped list_files/search_code and includeOmitted when relevant paths are absent.';
+    return inventory;
   }
 
   async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
@@ -137,10 +153,9 @@ export class WorkspaceTools {
     if (isSensitivePath(normalizedPath)) throw new Error('Reading credential and key files is blocked');
     const info = await stat(filename);
     if (!info.isFile() || info.size > MAX_READ_BYTES) throw new Error(`File must be a regular text file smaller than ${MAX_READ_BYTES} bytes`);
-    if (!TEXT_EXTENSIONS.has(path.extname(filename).toLowerCase()) && path.basename(filename).includes('.')) {
-      throw new Error('This file type is not in the text-reading allowlist');
-    }
-    const source = redactText(await readFile(filename, 'utf8'));
+    const decoded = decodeText(await readFile(filename));
+    if (decoded === null) throw new Error('File must be valid UTF-8 text without NUL bytes');
+    const source = redactText(decoded);
     const lines = source.split(/\r?\n/);
     const start = Math.max(1, Number(startLine) || 1);
     const end = Math.min(lines.length, Number(endLine) || lines.length);
@@ -153,6 +168,11 @@ export class WorkspaceTools {
     const complete = fullEvidence.length <= MAX_TOOL_OUTPUT;
     const partialHint = '\nOnly a prefix of the requested lines is shown. Use smaller startLine/endLine ranges to read omitted lines; this range is not cached as complete evidence.';
     const evidence = complete ? fullEvidence : `${truncate(fullEvidence, MAX_TOOL_OUTPUT - partialHint.length - 80)}${partialHint}`;
+    const seen = this.presentedSource.get(relative);
+    const presented = seen?.sourceHash === sourceHash ? seen : { sourceHash, lines: new Map() };
+    for (const match of evidence.matchAll(/^(\d+): (.*)$/gm)) presented.lines.set(Number(match[1]), match[2]);
+    this.presentedSource.set(relative, presented);
+    if (this.presentedSource.size > 32) this.presentedSource.delete(this.presentedSource.keys().next().value);
     if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
       const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
       return reference.length < evidence.length ? reference : evidence;
@@ -164,38 +184,100 @@ export class WorkspaceTools {
     return evidence;
   }
 
-  async searchCode({ query, maxResults = 30 } = {}) {
+  async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false } = {}) {
     if (typeof query !== 'string' || !query) throw new Error('query must be a non-empty string');
     const needle = query.toLowerCase();
+    const learned = [];
+    // Revalidate learned evidence before reuse: edits must not preserve stale names.
+    for (const mapping of this.sessionTerms.get(needle) || []) {
+      try {
+        const currentFile = await this.resolveFile(mapping.path);
+        const info = await stat(currentFile);
+        if (!info.isFile() || info.size > MAX_READ_BYTES || isSensitivePath(mapping.path)) continue;
+        const current = redactText(await readFile(currentFile, 'utf8'));
+        if (createHash('sha256').update(current).digest('hex') === mapping.sourceHash) learned.push(mapping);
+      } catch { /* A removed or inaccessible file invalidates its mapping. */ }
+    }
+    if (this.sessionTerms.has(needle)) {
+      if (learned.length) this.sessionTerms.set(needle, learned);
+      else this.sessionTerms.delete(needle);
+    }
+    const needles = [needle, ...learned.map(mapping => mapping.target.toLowerCase())];
+    const root = await this.resolveFile(scope);
+    if (!(await stat(root)).isDirectory() || (isSensitivePath(path.relative(this.workspace, root)) || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part)))) throw new Error('Search scope must be a non-sensitive workspace directory');
     const results = [];
     let filesScanned = 0;
     let bytesScanned = 0;
     const walk = async (directory, depth) => {
       if (depth > 12 || results.length >= Math.min(Number(maxResults) || 30, 80) || filesScanned >= MAX_FILES || bytesScanned >= 25_000_000) return;
       const entries = await readdir(directory, { withFileTypes: true });
+      entries.sort((a, b) => a.name.localeCompare(b.name));
       for (const entry of entries) {
         if (results.length >= Math.min(Number(maxResults) || 30, 80) || filesScanned >= MAX_FILES || bytesScanned >= 25_000_000) break;
-        if (entry.name.startsWith('.') && entry.name !== '.github') continue;
-        if (OMIT.has(entry.name) || entry.isSymbolicLink()) continue;
+        if (!includeOmitted && entry.name.startsWith('.') && entry.name !== '.github') continue;
+        if (['.git', '.tea'].includes(entry.name) || (!includeOmitted && OMIT.has(entry.name)) || entry.isSymbolicLink()) continue;
         const full = path.join(directory, entry.name);
         if (entry.isDirectory()) { await walk(full, depth + 1); continue; }
         if (isSensitivePath(path.relative(this.workspace, full))) continue;
-        if (!entry.isFile() || !TEXT_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) continue;
+        if (!entry.isFile()) continue;
         const info = await stat(full);
         if (info.size > MAX_READ_BYTES) continue;
         filesScanned += 1;
         bytesScanned += info.size;
-        const lines = (await readFile(full, 'utf8')).split(/\r?\n/);
+        const decoded = decodeText(await readFile(full));
+        if (decoded === null) continue;
+        const lines = decoded.split(/\r?\n/);
         for (let index = 0; index < lines.length; index += 1) {
-          if (lines[index].toLowerCase().includes(needle)) {
+          if (needles.some(term => lines[index].toLowerCase().includes(term))) {
             results.push(redactText(`${path.relative(this.workspace, full).replaceAll(path.sep, '/')}:${index + 1}: ${lines[index].trim()}`));
             if (results.length >= Math.min(Number(maxResults) || 30, 80)) break;
           }
         }
       }
     };
-    await walk(this.workspace, 0);
-    return results.join('\n') || 'No matches.';
+    await walk(root, 0);
+    const coverage = `Search scope=${scope}; scanned=${filesScanned} files/${bytesScanned} bytes. Filters, depth and size limits apply; hitting a result/file/byte cap can omit matches. Narrow path or use includeOmitted to expand discovery.`;
+    if (!results.length) {
+      if (this.unresolvedQueries.size < 32) this.unresolvedQueries.add(needle);
+      return `No matches in the scanned scope. ${coverage}`;
+    }
+    this.unresolvedQueries.delete(needle);
+    const mappingHint = learned.length ? `Session query mapping: ${query} -> ${learned.map(item => item.target).join(', ')}\n` : '';
+    return mappingHint + results.join('\n') + '\n' + coverage;
+  }
+
+  modelToolDefinitions() {
+    return this.unresolvedQueries.size ? [...TOOL_DEFINITIONS, TERM_MAPPING_TOOL] : TOOL_DEFINITIONS;
+  }
+
+  async rememberTermMapping({ query, target, path: relativePath, line } = {}) {
+    if (typeof query !== 'string' || !query.trim() || query.length > 160) throw new Error('Mapping query must be a nonempty string of at most 160 characters');
+    const key = query.toLowerCase();
+    if (!this.unresolvedQueries.has(key)) throw new Error('Only an unresolved query from an actual search can be learned');
+    if (typeof target !== 'string' || target.length > 80 || !/^[\p{L}_$][\p{L}\p{N}_$.:/-]*$/u.test(target)) throw new Error('Mapping target must be a real code name, optionally qualified');
+    if (!Number.isSafeInteger(line) || line < 1) throw new Error('Mapping requires a positive source line number');
+    const filename = await this.resolveFile(relativePath);
+    const relative = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
+    const info = await stat(filename);
+    if (!info.isFile() || info.size > MAX_READ_BYTES || isSensitivePath(relative)) throw new Error('Mapping evidence must be a readable source file');
+    const presented = this.presentedSource.get(relative);
+    if (!presented?.lines.has(line)) throw new Error('Read the evidence line with read_file before learning a mapping');
+    const source = redactText(await readFile(filename, 'utf8'));
+    const sourceHash = createHash('sha256').update(source).digest('hex');
+    if (sourceHash !== presented.sourceHash || source.split(/\r?\n/)[line - 1] !== presented.lines.get(line)) throw new Error('Evidence changed or was truncated; read the current source line again');
+    // Language-neutral occurrence evidence. This proves presence, not a
+    // declaration or semantic match; the discovering model must confirm those.
+    const escaped = target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const occurrence = new RegExp(`(?:^|[^\\p{L}\\p{N}_$])${escaped}(?![\\p{L}\\p{N}_$])`, 'u');
+    if (!occurrence.test(source.split(/\r?\n/)[line - 1] || '')) throw new Error('Target does not occur as a complete name on the observed line');
+    const entries = this.sessionTerms.get(key) || [];
+    if (!entries.some(item => item.target === target && item.path === relative)) {
+      if (entries.length >= 4 || (!this.sessionTerms.has(key) && this.sessionTerms.size >= 32)) throw new Error('Session vocabulary limit reached');
+      entries.push({ target, path: relative, line, sourceHash });
+      this.sessionTerms.set(key, entries);
+    }
+    this.unresolvedQueries.delete(key);
+    return `Session mapping saved with source occurrence evidence: ${query} -> ${target}; evidence=${relative}#L${line}@${sourceHash.slice(0, 16)}. Applies only to this run.`;
   }
 
   async applyPatch({ path: relativePath, search, replace } = {}) {
@@ -309,19 +391,26 @@ export class WorkspaceTools {
 }
 
 export const TOOL_DEFINITIONS = [
-  { name: 'list_files', description: 'List a page of text file paths in the workspace. Use offset to inspect later pages; dependencies and generated folders are omitted.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 700 } }, additionalProperties: false } },
-  { name: 'search_code', description: 'Search for a literal string in text source files.', input_schema: { type: 'object', properties: { query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 } }, required: ['query'], additionalProperties: false } },
+  { name: 'list_files', description: 'List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
+  { name: 'search_code', description: 'Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
   { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
   { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
 ];
 
+export const TERM_MAPPING_TOOL = {
+  name: 'remember_term_mapping',
+  description: 'An earlier literal lookup missed. Continue model-led discovery with list_files/search_code/read_file. Once you identify the relevant real code name, save the unresolved query -> identifier mapping for this run. Supply an exact source line already read via read_file. Confirm from code context that this is the real relevant name, not a guess or an incidental mention in comments/strings. Runtime checks unchanged evidence and name presence, not declaration syntax or semantic equivalence; those remain your responsibility.',
+  input_schema: { type: 'object', properties: { query: { type: 'string', maxLength: 160 }, target: { type: 'string', maxLength: 80 }, path: { type: 'string' }, line: { type: 'integer', minimum: 1 } }, required: ['query', 'target', 'path', 'line'], additionalProperties: false },
+};
+
 export async function dispatchTool(tools, name, input) {
   switch (name) {
     case 'list_files': return tools.listFiles(input);
     case 'search_code': return tools.searchCode(input);
     case 'read_file': return tools.readFile(input);
+    case 'remember_term_mapping': return tools.rememberTermMapping(input);
     case 'apply_patch': return tools.applyPatch(input);
     case 'run_tests': return tools.runTests(input);
     case 'run_shell': return tools.runShell(input);

@@ -78,6 +78,47 @@ function jsonResponse(usage) {
   return Response.json({ content: [{ type: 'text', text: 'Done.' }], stop_reason: 'end_turn', usage });
 }
 
+test('manual thinking budget follows each request output cap and leaves final-response room', async () => {
+  const bodies = [];
+  await withFetch(async (_url, options) => { bodies.push(JSON.parse(options.body)); return jsonResponse({ input_tokens: 3, output_tokens: 2 }); }, async () => {
+    const adapter = new AnthropicMessagesAdapter(config({ thinkingMode: 'enabled', maxOutputTokens: 12000 }));
+    await adapter.complete({ ...request, maxTokens: 1100 });
+    await adapter.complete({ ...request, maxTokens: 1025 });
+    await adapter.complete(request);
+    assert.deepEqual(bodies.map(body => [body.max_tokens, body.thinking.budget_tokens]), [[1100, 1099], [1025, 1024], [12000, 8000]]);
+    assert.equal(adapter.config.maxOutputTokens, 12000);
+    assert.equal(adapter.config.effort, 'low');
+  });
+});
+
+test('invalid output overrides and unsupported thinking are blocked without a request or reservation', async () => {
+  let calls = 0;
+  await withFetch(async () => { calls += 1; throw new Error('must not call'); }, async () => {
+    for (const maxTokens of [0, null, -1, NaN, Infinity, 1.2, '100', 501]) {
+      const adapter = new AnthropicMessagesAdapter(config());
+      await assert.rejects(adapter.complete({ ...request, maxTokens }), /positive integer|configured.*cap/);
+      assert.equal(adapter.spentUsd, 0);
+      assert.equal(adapter.spentInputBound, 0);
+    }
+    for (const maxTokens of [1, 500, 1024]) {
+      const adapter = new AnthropicMessagesAdapter(config({ thinkingMode: 'enabled', maxOutputTokens: 1200 }));
+      await assert.rejects(adapter.complete({ ...request, maxTokens }), /greater than 1024/);
+      assert.equal(adapter.spentUsd, 0);
+    }
+    await assert.rejects(new AnthropicMessagesAdapter(config({ thinkingMode: 'off' })).complete(request), /thinking mode/);
+    await assert.rejects(new AnthropicMessagesAdapter(config({ effort: 'off' })).complete(request), /reasoning effort/);
+    assert.equal(calls, 0);
+  });
+});
+
+test('dynamic output limit still reserves its full possible cost before network access', async () => {
+  await withFetch(async () => { throw new Error('must not call'); }, async () => {
+    const adapter = new AnthropicMessagesAdapter(config({ maxOutputTokens: 12000, maxCostUsd: 0.0405 }));
+    await assert.rejects(adapter.complete({ ...request, maxTokens: 1000 }), /hard cost budget/);
+    assert.equal(adapter.spentUsd, 0);
+  });
+});
+
 test('preserves Chinese split at every UTF-8 byte and consumes a final event without a newline', async () => {
   const stream = [
     event('message_start', { type: 'message_start', message: { role: 'assistant', usage: { input_tokens: 8 } } }),

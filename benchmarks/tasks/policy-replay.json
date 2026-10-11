@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "mode": "policy-simulation",
+  "source": {
+    "origin": "self-authored",
+    "description": "Fixed assumed runtime states and tool-output shapes; no source repository execution, model, or acceptance measurement."
+  },
+  "config": {
+    "minimumHoldSteps": 2,
+    "successesBeforeDowngrade": 2,
+    "failuresBeforeUpgrade": 2,
+    "validationReserve": 20,
+    "requestReserveByEffort": { "low": 8, "high": 20, "max": 40 }
+  },
+  "tasks": [
+    {
+      "taskId": "policy-recovery",
+      "initialEffort": "low",
+      "events": [
+        { "kind": "failure", "attempt": 1, "duration": 1 },
+        { "kind": "failure", "attempt": 2, "duration": 99 },
+        { "kind": "failure", "attempt": 3, "duration": 3 },
+        { "kind": "failure", "attempt": 4, "duration": 142 },
+        { "kind": "pass", "attempt": 5 },
+        { "kind": "pass", "attempt": 6 },
+        { "kind": "pass", "attempt": 7 },
+        { "kind": "pass", "attempt": 8 }
+      ]
+    },
+    {
+      "taskId": "policy-single-failure",
+      "initialEffort": "low",
+      "events": [{ "kind": "failure", "attempt": 1 }, { "kind": "pass", "attempt": 2 }, { "kind": "read" }]
+    },
+    {
+      "taskId": "policy-alternating-results",
+      "initialEffort": "low",
+      "events": [
+        { "kind": "failure", "attempt": 1 }, { "kind": "pass", "attempt": 2 },
+        { "kind": "failure", "attempt": 3 }, { "kind": "pass", "attempt": 4 },
+        { "kind": "failure", "attempt": 5 }, { "kind": "pass", "attempt": 6 },
+        { "kind": "failure", "attempt": 7 }, { "kind": "pass", "attempt": 8 }
+      ]
+    },
+    {
+      "taskId": "policy-diagnostics-no-downgrade",
+      "initialEffort": "max",
+      "events": [
+        { "kind": "git", "validationPassed": true },
+        { "kind": "search", "validationPassed": true },
+        { "kind": "zero", "attempt": 1, "validationPassed": true },
+        { "kind": "help", "validationPassed": true },
+        { "kind": "self-report", "validationPassed": true },
+        { "kind": "read", "validationPassed": true }
+      ]
+    },
+    {
+      "taskId": "policy-edit-invalidates-success",
+      "initialEffort": "max",
+      "events": [
+        { "kind": "pass", "attempt": 1, "sourceRevision": "source-a" },
+        { "kind": "edit", "sourceRevision": "source-b" },
+        { "kind": "pass", "attempt": 1, "sourceRevision": "source-b", "evidenceSourceRevision": "source-a", "validationPassed": true },
+        { "kind": "pass", "attempt": 2 },
+        { "kind": "pass", "attempt": 3 },
+        { "kind": "edit", "sourceRevision": "source-c" },
+        { "kind": "pass", "attempt": 3, "evidenceSourceRevision": "source-b", "validationPassed": true },
+        { "kind": "failure", "attempt": 4 },
+        { "kind": "failure", "attempt": 5 }
+      ]
+    },
+    {
+      "taskId": "policy-duplicate-attempt",
+      "initialEffort": "max",
+      "events": [
+        { "kind": "pass", "attempt": 1 },
+        { "kind": "pass", "attempt": 1 },
+        { "kind": "self-report", "validationPassed": true },
+        { "kind": "pass", "attempt": 2 }
+      ]
+    },
+    {
+      "taskId": "policy-different-commands",
+      "initialEffort": "low",
+      "events": [
+        { "kind": "failure", "attempt": 1, "command": "node --test first.test.mjs" },
+        { "kind": "failure", "attempt": 2, "command": "node --test second.test.mjs" },
+        { "kind": "failure", "attempt": 3, "command": "node --test first.test.mjs" },
+        { "kind": "failure", "attempt": 4, "command": "node --test second.test.mjs" }
+      ]
+    },
+    {
+      "taskId": "policy-source-changes-between-failures",
+      "initialEffort": "low",
+      "events": [
+        { "kind": "failure", "attempt": 1, "sourceRevision": "source-a" },
+        { "kind": "edit", "sourceRevision": "source-b" },
+        { "kind": "failure", "attempt": 2 },
+        { "kind": "failure", "attempt": 3 }
+      ]
+    },
+    {
+      "taskId": "policy-budget-preserves-validation",
+      "initialEffort": "low",
+      "events": [{ "kind": "read", "remainingBudget": 25 }]
+    },
+    {
+      "taskId": "policy-budget-exact-boundary",
+      "initialEffort": "low",
+      "events": [{ "kind": "read", "remainingBudget": 28 }]
+    },
+    {
+      "taskId": "policy-return-to-old-source",
+      "initialEffort": "max",
+      "events": [
+        { "kind": "pass", "attempt": 1, "validationAttempts": 2, "sourceRevision": "source-a", "evidenceSourceRevision": "source-b" },
+        { "kind": "edit", "sourceRevision": "source-b" },
+        { "kind": "pass", "attempt": 2, "sourceRevision": "source-a", "validationPassed": true },
+        { "kind": "pass", "attempt": 2, "sourceRevision": "source-a", "validationPassed": true },
+        { "kind": "pass", "attempt": 3, "sourceRevision": "source-a" }
+      ]
+    },
+    {
+      "taskId": "policy-new-source-same-turn-validation",
+      "initialEffort": "max",
+      "events": [
+        { "kind": "failure", "attempt": 1, "sourceRevision": "source-a" },
+        { "kind": "pass", "attempt": 2, "sourceRevision": "source-b" },
+        { "kind": "pass", "attempt": 3, "sourceRevision": "source-b" }
+      ]
+    },
+    {
+      "taskId": "policy-incomplete-validation-output",
+      "initialEffort": "max",
+      "events": [
+        { "kind": "unknown", "attempt": 1, "validationPassed": true },
+        { "kind": "pass", "attempt": 1, "validationPassed": true },
+        { "kind": "self-report", "validationPassed": true },
+        { "kind": "pass", "attempt": 2 }
+      ]
+    }
+  ]
+}

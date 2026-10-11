@@ -1,78 +1,121 @@
-# Token-Efficient Coding Agent (TEA)
+# TEA
 
-TEA is an independent terminal coding agent built on Node.js. It has its own runtime, workspace tools, Anthropic Messages adapter, token ledger, and benchmark commands. `baseline-v0` records the initial scaffold. The user authorized V1 as an offline experiment checkpoint and continuation into V2; that checkpoint fixes runtime defects found by executable integration checks. No V1–V5 optimization has passed a live model benchmark yet.
+<p align="center">
+  <img src="assets/tea-logo.png" alt="TEA — Token Efficient Agent" width="320">
+</p>
 
-## Requirements
+**English** | [Chinese](README.zh-CN.md)
 
-- Node.js 20 or later
-- Git (needed for source tracking and future paired runs)
-- For live tasks only: an Anthropic Messages compatible provider, an API key in the process environment, the current input/output price for the selected provider group, and a positive cost budget
+**TEA Coding Agent**
 
-There are no npm runtime dependencies.
+> Every optimization serves one goal: save tokens while preserving performance.
 
-## Run locally
+TEA is an independent terminal coding agent built with Node.js. It brings together an agent loop, workspace tools, an Anthropic Messages adapter, token accounting, and reproducible experiments.
 
-```powershell
+Our mission is to reduce token consumption while preserving task correctness, code quality, and execution performance. We measure each change, record failures and tradeoffs, and keep a recovery path when reduced context is insufficient.
+
+## Getting started
+
+TEA requires **Node.js 20 or newer** and **Git**. It has no npm runtime dependencies. Run it from a local checkout:
+
+```sh
 cd token-efficient-coding-agent
-npm test
 npm run tea -- --help
 ```
 
-The agent uses the current directory as its workspace unless `--workspace` is supplied. It lists files, searches and reads text source files, applies unique exact-span patches, and runs approved validation commands. After an edit, the runtime requires a successful test run before it reports `completed`. Workspace writes stay inside the selected repository. Shell commands outside the test/read-only allowlist require explicit interactive approval; destructive commands are blocked.
+Live tasks require a compatible Anthropic Messages endpoint, a model supported by that endpoint, an API key supplied through the process environment, current input/output prices, and a positive spending limit.
 
-The default context strategy (`v1`) starts with up to 8 ranked file paths, pins applicable `AGENTS.md` files plus root README/package manifests, and expands task terms with a small domain synonym list when path overlap is weak. The full file/search tools remain available for discovery. Set `--context-strategy baseline` to compare the original 160-path inventory, or change the candidate cap with `--initial-file-limit N` (1–250). These are still experimental heuristics; synthetic replay does not establish live task correctness.
-
-V2 adds opt-in `--history-strategy compact-tools` with `--history-keep-recent 2` (2–24). It replaces older long discovery results and successful logs with hashed recovery records while preserving source evidence, failures, patch receipts, recent results and assistant thinking/signatures. The original history stays complete. Final request overhead is included; turns with no saving use the unchanged input. Default is `full` pending model quality evidence.
-
-## Configure live model calls
-
-Set credentials and prices in the launching process. Do not store the real API key in this repository, `.env`, benchmark files, or shell history.
+Configure these values before starting TEA. The following PowerShell example uses placeholders; replace them with your provider's settings and USD prices per million tokens:
 
 ```powershell
-$env:ANTHROPIC_API_KEY = 'your-key'
-$env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'
-$env:ANTHROPIC_MODEL = 'glm-5.3-flash'
-$env:TEA_INPUT_PRICE_USD_PER_MTOK = 'price-from-your-token-group'
-$env:TEA_OUTPUT_PRICE_USD_PER_MTOK = 'price-from-your-token-group'
-$env:TEA_MAX_COST_USD = '0.10'
-$env:TEA_MAX_REQUEST_INPUT_TOKENS = '12000'
-$env:TEA_MAX_OUTPUT_TOKENS = '1200'
-$env:TEA_REASONING_EFFORT = 'low' # low, high, or max
+$env:ANTHROPIC_API_KEY = '<API_KEY>'
+$env:ANTHROPIC_BASE_URL = '<MESSAGES_API_BASE_URL>'
+$env:ANTHROPIC_MODEL = '<MODEL_ID>'
+$env:TEA_INPUT_PRICE_USD_PER_MTOK = '<INPUT_PRICE>'
+$env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '<OUTPUT_PRICE>'
+$env:TEA_REASONING_EFFORT = 'low'
 $env:TEA_THINKING_MODE = 'adaptive'
-tea "Fix the session expiration bug" --max-cost-usd 0.10
+
+npm run tea -- "Fix the session expiration bug" --workspace ../my-project --max-cost-usd 0.10
 ```
 
-The provider rates are intentionally not guessed. Before every request TEA reserves a worst-case amount using the configured input/output limits and rates. Canonical input totals include ordinary input, cache reads, and cache writes. Cache reads use the full input rate; cache writes default to twice that rate as a conservative guard based on [Anthropic's cache pricing](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), rather than a measured PackyAPI bill. Failed transport requests retain their reservation. Missing, invalid, or interrupted usage makes the run's complete actual-token total `null`, while known counters remain as a reported lower bound. Live fixture runs share one suite cost/input budget and stop after a failure or unknown usage.
+Use your credential manager or a secure environment injection mechanism for real keys. The selected endpoint and model must support the configured thinking mode and effort settings. TEA currently accepts `low`, `high`, and `max` effort, and `adaptive` or `enabled` thinking.
 
-The Anthropic Messages transport currently requests adaptive thinking plus `output_config.effort`, matching the supplied compatibility hint. Z.AI's GLM-5.3-Flash docs specify `low`, `high`, and `max` as the supported reasoning-effort levels; thinking cannot be disabled. PackyAPI's model-square entry determines whether the selected token group exposes Anthropic Messages for that model. PackyAPI's published Anthropic examples use `https://cf.api.fan` and `/v1/messages`; the supplied `https://www.packyapi.ai` is the product URL and has not been verified as an API endpoint. Read the [GLM-5.3-Flash guide](https://docs.z.ai/guides/vlm/glm-5.3-flash), [GLM Chat Completion parameter reference](https://docs.z.ai/api-reference/llm/chat-completion), and [PackyAPI Anthropic Messages setup](https://docs.packyapi.com/docs/cli/7-kimi-code.html). See [Decisions](docs/DECISIONS.md) and [Benchmark specification](docs/BENCHMARK_SPEC.md).
+## How TEA works
 
-## Benchmarks
+Give TEA a task and a workspace. It discovers files, reads source evidence, applies exact local patches, and runs validation commands. After an edit, the runtime requires successful validation before reporting completion.
 
-```powershell
+- **Progressive discovery.** Start with a small ranked file inventory, then expand through paginated listings and scoped searches. A partial search result is not proof of repository-wide absence.
+- **Evidence reuse.** Repeated reads can return a short reference when the same complete source range was already shown and its hash is unchanged.
+- **Session vocabulary.** After a failed search, the task model can discover a real corresponding code name and save a mapping backed by source it has read. The runtime checks current evidence and name presence; the model judges semantic relevance. Mappings stay within one run.
+- **Text discovery across languages.** Unknown suffixes are checked for valid UTF-8 text without NUL bytes. Ordinary excluded folders can be explored explicitly. File size and scan limits still apply.
+- **Bounded command output.** Long logs retain their beginning, end, and full stream hash. Omitted middle content may still need further diagnosis.
+- **Accountable usage.** Request usage, costs, and experiment diagnostics are recorded locally. Missing provider usage remains unknown rather than being reported as zero.
+
+File edits stay inside the selected workspace. Allowlisted validation and read-only Git commands run directly; other shell commands require interactive approval. These checks do not provide operating-system isolation.
+
+## Context controls
+
+The default `v1` strategy starts with up to eight ranked paths. You can adjust the inventory or compare it with the original listing strategy:
+
+```sh
+npm run tea -- "Fix the pagination bug" --initial-file-limit 16 --max-cost-usd 0.10
+npm run tea -- "Fix the pagination bug" --context-strategy baseline --max-cost-usd 0.10
+```
+
+Optional tool history compaction replaces older, long discovery results and successful logs with recovery records:
+
+```sh
+npm run tea -- "Fix the pagination bug" --history-strategy compact-tools --history-keep-recent 2 --max-cost-usd 0.10
+```
+
+Source evidence, failures, patch receipts, recent results, and original assistant blocks remain available. The authoritative history stays intact. Requests fall back to full history when compaction plus its guidance does not reduce the measured input size. Full history remains the default.
+
+## Experiments
+
+Run offline experiments without a provider connection:
+
+```sh
 npm run benchmark:replay
-tea benchmark run --suite core --mode replay
-tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 8
-tea benchmark report --run replay-YYYY-MM-DDTHH-MM-SS.sssZ
-tea benchmark compare --base-run RUN_A --candidate-run RUN_B
 npm run benchmark:runtime
-tea benchmark run --suite runtime-smoke --mode runtime --strategy baseline
-tea benchmark run --suite runtime-smoke --mode live --max-cost-usd 0.10
-tea benchmark run --suite runtime-smoke --mode runtime --history-strategy compact-tools --fixture-variant extended
-tea benchmark memory --history-keep-recent 2
+npm run tea -- benchmark memory --history-keep-recent 2
 ```
 
-Replay mode screens payload sizes using 23 self-authored traces. Its prior candidate estimate of 13,431 → 2,106 tokens (-84.32%) is diagnostic, not provider usage or correctness evidence.
+Current recorded results:
 
-`runtime` mode executes 12 self-authored JavaScript repositories with reproducible initial commits, scripted tool choices, real patches, public tests, and separate acceptance tests. Both context strategies passed 12/12; returned tool characters fell 15,552 → 11,910 (23.42%). This validates runtime behavior under supplied patches, not model task success. The `baseline` strategy here uses the current engine with original inventory/read settings, rather than executing the historical Git revision. `live` mode runs the same smoke fixtures through the provider only when explicit credentials, current rates, and a total budget are configured. It has not been run. Formal 40–60 core / 100+ holdout sets and paired Git-revision scheduling remain unfinished. These fixtures run without OS isolation; source tests/solutions are in the project manifest, so they are not confidential production acceptance tests. All current runs remain gate-ineligible. See [runtime experiment](benchmarks/reports/v1-runtime.md).
+- **V1:** offline scripted fixtures reduced tool output characters by **23.41%**, with **12/12** acceptance checks on both sides. See the [V1 report](benchmarks/reports/v1-runtime.md).
+- **V2:** an artificial verbose-log stress experiment reduced cumulative prepared input bytes by **20.90%**, with **12/12** scripted acceptance checks on both sides. Ordinary traces showed **0%** reduction. See the [V2 report](benchmarks/reports/v2.md).
+- **V3:** reasoning-effort routing and request-budget checks are local candidates. Routing has not been integrated into the live agent loop. See the [V3 report](benchmarks/reports/v3.md).
 
-Every provider request writes its usage to `.tea/runs/<run-id>/`; default ledgers retain hashes/counts rather than prompts/code. Set `TEA_STORE_RAW=1` only when contents are safe to retain locally. Benchmark task workspaces necessarily retain fixture code and are ignored by Git. Per-task checkpoints preserve charges and failures before acceptance runs. Long command output keeps stream beginnings and endings with a full-stream hash; successful commands use smaller output limits. Output volume no longer terminates tests, while timeouts remain enforced. `npm test` selects project test files explicitly so archived fixture tests do not accumulate in the test scan.
+These are offline character/byte measurements, not verified provider token savings or model task success rates. Live paired evaluation, broader language coverage, and independent holdout evaluation remain unfinished. Recent session-vocabulary and discovery changes have no measured savings yet.
 
-V2 integrated history ablation reduced cumulative adapter-input bytes by **20.90%** on artificial repeated verbose-log trajectories, with 12/12 scripted acceptance on each side. Ordinary trajectories produced **0%** saving and no compaction. Seven auxiliary memory trajectories measured **54.02%** reduction with a different fixed system prompt. These are separate offline size measurements, not provider Token or model success results; see the [V2 report](benchmarks/reports/v2.md).
+## Usage records and budgets
 
-## Current completion state
+Runs write their ledger to `.tea/runs/<run-id>/`. By default, records contain hashes and counts rather than raw prompts or source. `TEA_STORE_RAW=1` enables local raw storage.
 
-- Implemented: independent CLI/runtime, file tools, bounded command output, validation classification, streaming UTF-8 and usage accounting, cost preflight, offline replay and executable smoke harness, ranked initial context, repeat-read references, integration tests.
-- Not measured: first provider-backed baseline, any real task success rate, live input/output token totals, and every V1–V5 gate.
-- Not yet implemented: diverse pinned 40–60 task core and 100+ holdout sets, isolated confidential acceptance, paired A/B over Git revisions, and release reports based on live evidence.
+TEA reserves request costs against your configured budget before sending a request. It does not guess provider prices. Failed transmissions retain their reservation; missing or invalid usage leaves the complete actual token total unknown. Estimates, serialized bytes, and provider-reported tokens are recorded as separate measurements.
 
-See [PROGRESS.md](PROGRESS.md) for exact Git state and continuation steps.
+## Development
+
+Run the project's tests when working on an implementation change:
+
+```sh
+npm test
+```
+
+Optimization work should record its hypothesis, baseline, candidate, quality checks, measurement unit, and limitations. Improvements must be evaluated on tasks beyond the examples used to design them.
+
+## Documentation
+
+Supporting research documents currently include Chinese content.
+
+- [Optimization record and generalization review](docs/TOKEN_OPTIMIZATIONS.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Benchmark specification](docs/BENCHMARK_SPEC.md)
+- [Experiment log](docs/EXPERIMENT_LOG.md)
+- [Version roadmap](docs/VERSION_ROADMAP.md)
+- [Project progress](PROGRESS.md)
+
+## License
+
+[MIT](LICENSE) — Copyright (c) 2026 Wh0rigin.

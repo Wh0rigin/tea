@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { TokenLedger } from './ledger.mjs';
 import { AnthropicMessagesAdapter, ModelError } from './model.mjs';
-import { TOOL_DEFINITIONS, WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
+import { WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
 import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
@@ -56,9 +56,10 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
         let memory = config.historyStrategy === 'compact-tools'
           ? compactToolHistory(messages, { keepRecentRounds: config.historyKeepRecent ?? 2 })
           : { messages, diagnostics: { compactedResults: 0 } };
-        const fullRequest = { system: SYSTEM_PROMPT, messages, tools: TOOL_DEFINITIONS };
+        const requestTools = tools.modelToolDefinitions();
+        const fullRequest = { system: SYSTEM_PROMPT, messages, tools: requestTools };
         const fullPayload = JSON.stringify(fullRequest);
-        let request = { system: SYSTEM_PROMPT + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: TOOL_DEFINITIONS };
+        let request = { system: SYSTEM_PROMPT + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: requestTools };
         let sentPayload = JSON.stringify(request);
         // Include the recovery guidance cost. Small turns fall back to unchanged V1 input.
         if (memory.diagnostics.compactedResults && (Buffer.byteLength(sentPayload, 'utf8') >= Buffer.byteLength(fullPayload, 'utf8')

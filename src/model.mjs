@@ -134,22 +134,33 @@ export class AnthropicMessagesAdapter {
 
   async complete({ system, messages, tools, maxTokens }) {
     const config = this.config;
+    const outputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
     if (this.requestInFlight) throw new ModelError('Concurrent requests are blocked to preserve the hard budget');
     if (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0
       || !Number.isFinite(config.inputRateUsdPerMillion) || config.inputRateUsdPerMillion < 0
       || !Number.isFinite(config.outputRateUsdPerMillion) || config.outputRateUsdPerMillion < 0
       || !Number.isSafeInteger(config.maxRequestInputTokens) || config.maxRequestInputTokens <= 0
-      || !Number.isSafeInteger(maxTokens || config.maxOutputTokens) || (maxTokens || config.maxOutputTokens) <= 0) {
+      || !Number.isSafeInteger(config.maxOutputTokens) || config.maxOutputTokens <= 0
+      || !Number.isSafeInteger(outputLimit) || outputLimit <= 0) {
       throw new ModelError('Live requests require a finite positive cost cap, valid input/output rates, and positive integer token limits');
+    }
+    if (outputLimit > config.maxOutputTokens) throw new ModelError('Request output limit cannot exceed the configured maxOutputTokens cap');
+    if (!['adaptive', 'enabled'].includes(config.thinkingMode)) throw new ModelError('Unsupported thinking mode');
+    if (!['low', 'high', 'max'].includes(config.effort)) throw new ModelError('Unsupported reasoning effort');
+    // No interleaved-thinking beta header is sent. Manual thinking needs a
+    // 1024-token minimum and budget_tokens strictly below this request's limit.
+    // https://platform.claude.com/docs/en/build-with-claude/extended-thinking
+    if (config.thinkingMode === 'enabled' && outputLimit <= 1024) {
+      throw new ModelError('Enabled thinking requires max_tokens greater than 1024; choose a compatible output limit');
     }
     const body = {
       model: config.model,
-      max_tokens: maxTokens || config.maxOutputTokens,
+      max_tokens: outputLimit,
       stream: config.stream,
       system,
       messages,
       tools,
-      thinking: config.thinkingMode === 'adaptive' ? { type: 'adaptive' } : { type: 'enabled', budget_tokens: Math.min(config.maxOutputTokens, 8000) },
+      thinking: config.thinkingMode === 'adaptive' ? { type: 'adaptive' } : { type: 'enabled', budget_tokens: Math.min(outputLimit - 1, 8000) },
       output_config: { effort: config.effort },
     };
     const requestId = randomUUID();
