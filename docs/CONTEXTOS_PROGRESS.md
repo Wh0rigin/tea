@@ -58,3 +58,17 @@ B's first three native requests were reconstructed and their hashes matched the 
 After closing C, the benchmark adds independent complete-source inspection and fresh resumed-checkpoint reads to acceptance. Read-only fixtures reject patches, tests and shell execution; missing/failed/stale output fails immediately. Report version 2 records the stronger checks, and original A/B/C evidence is unchanged. Two regression tests cover missing, failed, wrong-version and non-read evidence plus forbidden inspection execution. This changes the experiment harness, not the measured runtime assembler; no additional paid calls or performance percentage is claimed.
 
 V2 verification: **232/232** full deterministic tests, 279 actual settled ledgers rechecked (270 accepted inspection reads, eight accepted freshness reads, one correctly rejected omission), and all seven fixture preflights with source/task hashes identical to C. No provider calls. The paid runtime implementation is unchanged; stronger acceptance is reserved for subsequent freezes.
+
+## 2026-10-12：当前 ContextOS C / Pi 配对对比
+
+主实验 60 次 + 默认工具额度补测 54 次，合计 114 次运行、57 组配对；两种配置分别统计，不是 57 个独立项目。共同 GLM-5.3-flash、enabled/low、4,096 输出，Pi 0.87.1，相同初始快照，全部用量已知、源哈希未变化。
+
+- 默认 24 次工具短任务：TEA/Pi 708,844/1,080,626 Token，少 **34.40%**；完整验收 26/27 对 25/27。
+- 默认额度小型任务 **多 52.26%**（双方 8/9）；中型/大型少 57.42%/37.64%。双方独立代码/范围检查全部 27/27；完整验收含保守的原生测试检测，不能解释为更高代码正确率。
+- 原 10 次工具真实 30 轮：905,224/1,558,908，少 **41.93%**，双方 3/3，90/90 完整只读检查各自通过；P95 慢 4.84%，没有速度结论。
+- 原 10 次工具短任务验收 16/27 对 27/27，不作为保持性能的收益；先确定全部短任务再补测，不替换失败。
+- 检测到隐藏验收可提前 exit(0) 绕过，加入完成见证；60 + 54 个工作区分别离线复核，验收决定不变。Agent 记忆运行时未更改。237/237 本地测试通过，两套原生客户端合约检查通过。
+- 新实验保守费用 USD 4.8053500 / 8，与旧 A/B/C 费用分开。缓存折扣敏感性下真实长会话可反而贵 10.45%，不是实际账单；不能将 Token 降幅当金额降幅。
+- 自编 JavaScript、三缺陷家族、三次重复，不证明未见项目泛化。ContextOS 主动开启，默认完整历史。通过 feature/contextos 与 PR #3 交付，未合并 main。
+
+[默认额度详细结果](../benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.zh-CN.md) · [主实验与长会话](../benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.zh-CN.md) · [冻结协议](CONTEXTOS_PI_EXPERIMENT.md)。

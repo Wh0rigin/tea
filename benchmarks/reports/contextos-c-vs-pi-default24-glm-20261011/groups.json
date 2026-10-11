@@ -1,0 +1,133 @@
+{
+  "overall": {
+    "expectedPairs": 27,
+    "measuredPairs": 27,
+    "bothAcceptedPairs": 25,
+    "teaAccepted": 26,
+    "piAccepted": 25,
+    "teaMeasuredTokens": 708844,
+    "piMeasuredTokens": 1080626,
+    "allPairsTokenReductionPercent": 34.404317497450556,
+    "bothAcceptedTeaTokens": 642058,
+    "bothAcceptedPiTokens": 1030818,
+    "bothAcceptedTokenReductionPercent": 37.71373802164882
+  },
+  "scales": [
+    {
+      "scale": "small",
+      "expectedPairs": 9,
+      "measuredPairs": 9,
+      "bothAcceptedPairs": 8,
+      "teaAccepted": 8,
+      "piAccepted": 8,
+      "teaMeasuredTokens": 155754,
+      "piMeasuredTokens": 102293,
+      "allPairsTokenReductionPercent": -52.26261816546587,
+      "bothAcceptedTeaTokens": 96295,
+      "bothAcceptedPiTokens": 91286,
+      "bothAcceptedTokenReductionPercent": -5.4871502749600065
+    },
+    {
+      "scale": "medium",
+      "expectedPairs": 9,
+      "measuredPairs": 9,
+      "bothAcceptedPairs": 8,
+      "teaAccepted": 9,
+      "piAccepted": 8,
+      "teaMeasuredTokens": 122691,
+      "piMeasuredTokens": 288137,
+      "allPairsTokenReductionPercent": 57.4192137767798,
+      "bothAcceptedTeaTokens": 115364,
+      "bothAcceptedPiTokens": 249336,
+      "bothAcceptedTokenReductionPercent": 53.731510892931624
+    },
+    {
+      "scale": "large",
+      "expectedPairs": 9,
+      "measuredPairs": 9,
+      "bothAcceptedPairs": 9,
+      "teaAccepted": 9,
+      "piAccepted": 9,
+      "teaMeasuredTokens": 430399,
+      "piMeasuredTokens": 690196,
+      "allPairsTokenReductionPercent": 37.641046891028054,
+      "bothAcceptedTeaTokens": 430399,
+      "bothAcceptedPiTokens": 690196,
+      "bothAcceptedTokenReductionPercent": 37.641046891028054
+    }
+  ],
+  "latency": {
+    "tea": {
+      "medianSeconds": 41.855,
+      "p95Seconds": 90.513
+    },
+    "pi": {
+      "medianSeconds": 32.553,
+      "p95Seconds": 102.607
+    }
+  },
+  "functionalAcceptance": {
+    "tea": 27,
+    "pi": 27
+  },
+  "failures": [
+    {
+      "agent": "pi",
+      "caseId": "medium-unicode-r2",
+      "status": "completed",
+      "totalTokens": 38801,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true,
+        "nativeValidationPassed": false,
+        "readRequirementsPassed": true
+      },
+      "guards": []
+    },
+    {
+      "agent": "tea",
+      "caseId": "small-unicode-r3",
+      "status": "failed",
+      "totalTokens": 59459,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true,
+        "nativeValidationPassed": true,
+        "readRequirementsPassed": true
+      },
+      "guards": []
+    },
+    {
+      "agent": "pi",
+      "caseId": "small-unicode-r3",
+      "status": "completed",
+      "totalTokens": 11007,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true,
+        "nativeValidationPassed": false,
+        "readRequirementsPassed": true
+      },
+      "guards": []
+    }
+  ],
+  "combinedCostUsd": 4.805350000000037
+}

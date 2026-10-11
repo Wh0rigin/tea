@@ -2,6 +2,26 @@
 
 [中文](PI_COMPARISON.zh-CN.md)
 
+## Current ContextOS C comparison
+
+Current opt-in **ContextOS C** versus native **Pi 0.87.1**, measured on October 11–12, 2026: same **GLM-5.3-flash**, **enabled/low** thinking, **4,096** output cap and initial Git contents. Three repeats per configuration; all provider input, cache and reasoning output count.
+
+- **Fresh tasks, existing CLI default of 24 tools/turn:** 27 pairs at 12/120/1,200 files; TEA **708,844** / Pi **1,080,626** tokens, **34.40% fewer** for TEA. Full acceptance **26/27 vs 25/27**. [Default-quota report](../benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.md).
+- **Actual empty-start 30-inspection + repair conversation:** three pairs, TEA **905,224** / Pi **1,558,908**, **41.93% fewer**, both **3/3** accepted. This used the original 10-tool/turn profile. P95 TEA/Pi **485.60/463.18s**; it does not establish a speed benefit. [Long conversation and primary failures](../benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.md).
+- **Original 10-tool fresh profile:** TEA accepted **16/27 vs 27/27**. Quota/validation failures remain recorded; its lower token total does not establish a performance-preserving improvement. The entire fresh matrix was selected for the separate default-quota follow-up before any follow-up paid calls.
+
+Default-quota results differ by size: small tasks use **52.26% more** TEA tokens (both 8/9 fully accepted); medium/large use **57.42%/37.64% fewer**. Both agents pass independent code/scope checks in all 27 follow-up runs; full acceptance also requires native post-edit testing and completion, whose conservative command recognition can produce false negatives. This is not evidence that TEA produces more correct code.
+
+These are self-authored JavaScript bug fixtures; larger repositories add unrelated modules. Three repeats do not prove unseen-project generalization. Native prompts, tool protocols and cache policies differ. ContextOS remains opt-in. Token reductions are not invoice reductions; stronger compression can reduce cache reuse. Earlier full-history TEA/Pi results remain [recorded separately](../benchmarks/reports/tea-vs-pi-glm-20261011/README.md): +4.49% at 64k bytes and +8.78% in the 80k large-only profile. [Protocol and comparison guide](PI_COMPARISON.md).
+
+![Default-24 fresh tasks](../benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
+
+![Actual long conversation](../benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
+
+Use the [frozen protocol](CONTEXTOS_PI_EXPERIMENT.md) for the current multi-turn harness and controls; `npm run benchmark:contextos-pi:check` runs the actual clients without provider calls. The older single-repeat E10 profile below disables auto-compaction and must not be confused with the current experiment.
+
+## Historical E10 profile and reproduction
+
 ## Status
 
 The harness and nine pinned fixtures are prepared. The installed Pi version is **0.87.1**. A local contract check exercised both real clients through the shared gateway: each read instructions and source, applied a patch, ran the public tests and completed. Its responses and usage values were scripted; there were **zero paid provider requests**.

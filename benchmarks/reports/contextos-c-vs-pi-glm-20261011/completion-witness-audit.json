@@ -1,0 +1,1088 @@
+{
+  "runId": "contextos-pi-glm-20261011",
+  "kind": "posthoc independent completion-witness acceptance; zero provider calls; original frozen acceptance is unchanged",
+  "runs": [
+    {
+      "caseId": "small-cache-key-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "3242ed8c29abe6cd7b4ec4831c469863c0b8c0566906f60054364e42c252aa37",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-cache-key-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "d25a4614462f37bd3850b2cbf264ae4784a366f8be751396087541a9b7ea953c",
+      "serviceSha256": "57e2938ff7d2d5e07c7828c749d23865226eda192f99ef1a8c40abb555029afa",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-retry-budget-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "f80f47f1f366061796f19ae55a8f18c9fff9515dee40bffcdbaf1ad55e72a661",
+      "serviceSha256": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-retry-budget-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "733f76655547f6375913a5e4dcb105e3849c691836d681afc8a6923854aa794f",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-unicode-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "00345d2354f707080748d9d8aac0bb5b294ebf738af3fe18dbc474813f6e2f74",
+      "serviceSha256": "553ee01ef4d4d9cda239b6df950e07d8cf1e09050a1b7819dec2b37427ec767c",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-unicode-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "5367063a0dda4a2fe50fd44a5458e5ca0ca45c41596074f04573b4a27787d53d",
+      "serviceSha256": "448f9c01e4128a63af9f2f5178dc3a7e691b55d9009470531e4b7d99d25fb114",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-cache-key-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "91f640f2a741c35f4d25e46edcaf33d64176268045d60cec80a314d5a3686e13",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-cache-key-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "91f640f2a741c35f4d25e46edcaf33d64176268045d60cec80a314d5a3686e13",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-retry-budget-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "93e249801b6c8c407e19ebb0bc87cf2c3a56397bd0583b0ab9dc5692aacf8670",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-retry-budget-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "93e249801b6c8c407e19ebb0bc87cf2c3a56397bd0583b0ab9dc5692aacf8670",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-unicode-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "1f1ecc80b90920c38d1972f3c4e99f36c9c07e585e9aaa15478ca2a30f7bb121",
+      "serviceSha256": "2c1226a9d7ee14a561e48b318906cac94f95c3d558a0fee6c35c581cd68007c4",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-unicode-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "d48588929e01e09beda6f548a16f3574d751e4061ba0da302676d828130df34c",
+      "serviceSha256": "27396dc70e9014222ac113c6d48592a42bd328709c422bc1899beb743a68c850",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-cache-key-r1",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "ae832e161ef002e5b0ef998fde8a1ce62d4b7c7a3ab96ef870a838c2947ad27f",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-cache-key-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "97cfc0b304a5db45e2550738a50b21582d9296560527bb8626fb6afeaa902186",
+      "serviceSha256": "48584ba2533f80e72bec02585ea9c721dadb2da3986eeac93742ddd4b8dc0d94",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-retry-budget-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "3729848df60040a54f28203708d77d8370f53ca95e2d50f7f70da0244b20bc0b",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-retry-budget-r1",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "ad5d524b35bba98e57f6487188c20b8995d15ef18bf1b34982e753ef335509d9",
+      "serviceSha256": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-unicode-r1",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "9ffa68752ee8eecc5305cac303efb1373637e589d80e8487e7ba386a38e2c8e7",
+      "serviceSha256": "b9fbf31ac24b32bad8089bc79bd00776513a7f8e06c799ecab116de62e8cc0c8",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-unicode-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "afdef1d94e5b9ba726507c05fe0b32fe337656b3b48a0e4ef905bf58801db9d3",
+      "serviceSha256": "d8f510ef9c0db04654fc5137cc95470600f54607bc64482003a14a0cd50c0845",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "long-30-r1",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ce5b78a37a400cf86c5719f5a32c2c592ade27868a4e073c25c768d434de8997",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "long-30-r1",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ce5b78a37a400cf86c5719f5a32c2c592ade27868a4e073c25c768d434de8997",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-cache-key-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ed6bac99d1e9e5e079e5a6b768c8f2ed419af301d9555b1ef9e8de61e5980a3b",
+      "serviceSha256": "1130bab1c8856de877fb41dd162eacfbaa54609960f8d702032b2c510f0673dc",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-cache-key-r2",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "3242ed8c29abe6cd7b4ec4831c469863c0b8c0566906f60054364e42c252aa37",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-retry-budget-r2",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "733f76655547f6375913a5e4dcb105e3849c691836d681afc8a6923854aa794f",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-retry-budget-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "733f76655547f6375913a5e4dcb105e3849c691836d681afc8a6923854aa794f",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-unicode-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "35464646e54261003008937bcbc3d6959b5011efe51639c1df667a9847fae903",
+      "serviceSha256": "3cf2bdf7c773cc00a0b17f442beeca6265dffd63e3cebb15eaaf82988ae15672",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-unicode-r2",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "3e8e088503e9ea4eea984d14942e77970e384e6fd8cc30701245569bb980f95f",
+      "serviceSha256": "738145627966d253f5091f80cb603dc0e7a0929afe11d4c41fd74752f131554e",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-cache-key-r2",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "f8804ebf4a8fcd16fd22d861979fddccafad181c82c2ca8d692973e7a1806541",
+      "serviceSha256": "cc249055f8b3186f77d06fd61268494a3368698c0523cf674838f0d0a1f5f996",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-cache-key-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "91f640f2a741c35f4d25e46edcaf33d64176268045d60cec80a314d5a3686e13",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-retry-budget-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "172a52e1e86c36539d70e764493bb94f36596119e8c0151bd1e7c9e429bf0da4",
+      "serviceSha256": "827e13e623b5cf44079a0979f1cc4a56ec5b31843781297be68e1aa6323549e3",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-retry-budget-r2",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "93e249801b6c8c407e19ebb0bc87cf2c3a56397bd0583b0ab9dc5692aacf8670",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-unicode-r2",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "79d3e8f24ff928355aad0ee20dc15d063e2a35859f7f427cceb7b96062d168bc",
+      "serviceSha256": "ff6fe420274b514ad29bc3ce76ac9d4ffff9641ec6e3bd00be503ce63a8b1297",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-unicode-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "0e008c151a32797f25827864c6e1c622bf5ce623ad3afe6501ebecd975bb7c8a",
+      "serviceSha256": "6af8e5a6eade4e702ba957baaab1a2e6c0b2a5d945382be194b30f2507512c23",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-cache-key-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ae832e161ef002e5b0ef998fde8a1ce62d4b7c7a3ab96ef870a838c2947ad27f",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-cache-key-r2",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+      "serviceSha256": "26171d06043266aa4641c1cbc8d286a402940200a2f5754539cff8add123d800",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      }
+    },
+    {
+      "caseId": "large-retry-budget-r2",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "ad5d524b35bba98e57f6487188c20b8995d15ef18bf1b34982e753ef335509d9",
+      "serviceSha256": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-retry-budget-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "b7964b85e7df7806e3327ea124e35f7ed5af4656336609fc07b4cdeb5ce4875e",
+      "serviceSha256": "670d18cc85d08f3fdbdfe82d8568701883fea9df98bde8d1aeaafda1b6959701",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-unicode-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "12c1efcb3aff8d388b4979aef3e4cf31e31846ba12d4499d9e8986b1e7aaede1",
+      "serviceSha256": "9e5da6ef041ee8387e9b88ec4265992107a5b106fe9c99232ba41457e0628c1b",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-unicode-r2",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "df73161e0a1d6e645ec0b414017a8c74ce3b8b885369a3c56434975ccb53a569",
+      "serviceSha256": "3d7ead2cd583c7bc41f3c6af392111b96440e9b76b7eb4b77813764a0ec23846",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "long-30-r2",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ce5b78a37a400cf86c5719f5a32c2c592ade27868a4e073c25c768d434de8997",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "long-30-r2",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ce5b78a37a400cf86c5719f5a32c2c592ade27868a4e073c25c768d434de8997",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-cache-key-r3",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "cc6d9c18bb734215323cead49a3228ab86fbc42280906949d31668227ce1fe6e",
+      "serviceSha256": "10517fb5ee9f999a0d7fa2689e2bfa0bdef7266f80db13b0effdcdf6378865cd",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-cache-key-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "415335380930dedf1249848c115beabbd560c34f978714de724bb005bccd79fd",
+      "serviceSha256": "f2c12935f7056a6689b3161a429fef4f2c0bdc72fb08b4ba0130cbf4dc884b62",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-retry-budget-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "5a5d4b431334203d8bd4725ebd4d425b342877f4015412236327c4d37f396612",
+      "serviceSha256": "8cd1b50bd4be629b5ca325a46dcc30df5663d9c5b4ab4c766ae359745eeec671",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-retry-budget-r3",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "9c7cfe34e222baa229218b9822d05ab76d73d5913b2472d6506d47e322b353d4",
+      "serviceSha256": "fa9967fe0eebb07e23076abc57bf313796659debcc38c9d8c004eea552db099a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-unicode-r3",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "6d39c18fc426a84d559617b15a3401fa76ccd6e182d89f5a89d6c474e8950ee3",
+      "serviceSha256": "a7cfd7b79e8767d92300db29fb11817f44d55e3816ce461e3549bd3d00ba30d0",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "small-unicode-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "e30ac06aa3ba2e9e39d44299668a084eb166c818314001eeea51207d78493536",
+      "serviceSha256": "f5903c8e4dd56131f902f778c6494262230a75b9ea51ebfb7322ca4ed8e7149a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-cache-key-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "e73eb33a62ccac86290135a0180a10e8c54d46ebe684aa56f9ca2e1e02c3ec5c",
+      "serviceSha256": "b3a6427ef9d41acb50afda91297a441033954f197aa471a1adcb45f05b601281",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-cache-key-r3",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "7402c37572ed6a425fd186ab59209443adb4962c8c6b0be840ef4c1d1501a867",
+      "serviceSha256": "fafb63d746caa2cdc34cc703f86269bb04ac1c612e667daaaba6fbf5d3a6b1ff",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-retry-budget-r3",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "93e249801b6c8c407e19ebb0bc87cf2c3a56397bd0583b0ab9dc5692aacf8670",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-retry-budget-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "2f17c45427d5e6149e94bb8e877d56a95732a44570370d7cb1022a2ffa18db3b",
+      "serviceSha256": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-unicode-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "dc2d7403a5b51559784559e3b5b0eadb353514db91204f96d440f1dab4480b29",
+      "serviceSha256": "cec81687934211d7ce27b558be14ef1fbcbc6c52f3d223c9cb7b310cd05ebd3b",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "medium-unicode-r3",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "76e730328f7a846c0fea7f90ee062ca443d168ad2d5efa87788e9403b3f1323c",
+      "serviceSha256": "cf6b1b739912e1909235832c6be857724245015080d5c572fa5ca1d7106b5df6",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-cache-key-r3",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ae832e161ef002e5b0ef998fde8a1ce62d4b7c7a3ab96ef870a838c2947ad27f",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-cache-key-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "ae832e161ef002e5b0ef998fde8a1ce62d4b7c7a3ab96ef870a838c2947ad27f",
+      "serviceSha256": "60c1a9a8332f27bcf9822a69e3e0a164c46fcd214f74352e25fc30cb407a4c97",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/cache-key.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-retry-budget-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "3729848df60040a54f28203708d77d8370f53ca95e2d50f7f70da0244b20bc0b",
+      "serviceSha256": "34d4d6441a87657ac59cc4ce6ec4eb0929c6713eec756aecf65d6c70a8f2085a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-retry-budget-r3",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+      "serviceSha256": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      }
+    },
+    {
+      "caseId": "large-unicode-r3",
+      "agent": "tea",
+      "originalAccepted": false,
+      "strictAccepted": false,
+      "finalWorkspaceSha256": "206585e584672c05ac4314cf58447fa80bd7eaf5bad809ac6f78b843b5d4579a",
+      "serviceSha256": "ab55200fc1db4cc81d48d1b975661fad17e79e09e6b5185d198ae66e4c87a468",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "large-unicode-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "309a3a08e344705761517febc367367f5a58fe4e78bcd85f3945a256b739ffdb",
+      "serviceSha256": "39326478dfbb633979873a56f0a8ffca5db0eb830e66bfa66383cef3c1f4644f",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/text.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "long-30-r3",
+      "agent": "pi",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "4bf29438c790b4e721a74389d798f11a1930304c9f13dc5e87e582f320c78890",
+      "serviceSha256": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    },
+    {
+      "caseId": "long-30-r3",
+      "agent": "tea",
+      "originalAccepted": true,
+      "strictAccepted": true,
+      "finalWorkspaceSha256": "4bf29438c790b4e721a74389d798f11a1930304c9f13dc5e87e582f320c78890",
+      "serviceSha256": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [
+          "src/services/retry-budget.mjs"
+        ],
+        "passed": true
+      }
+    }
+  ],
+  "paidProviderRequests": 0,
+  "acceptanceCounts": {
+    "tea": 19,
+    "pi": 30
+  },
+  "originalDecisionsUnchanged": true
+}

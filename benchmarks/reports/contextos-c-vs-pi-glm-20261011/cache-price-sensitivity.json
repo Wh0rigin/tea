@@ -1,0 +1,29 @@
+{
+  "kind": "Hypothetical fixed-rate cache sensitivity, not a provider invoice",
+  "ratesUsdPerMillion": {
+    "uncachedInput": 0.8,
+    "cacheRead": 0.23,
+    "cacheWrite": 1.6,
+    "output": 2.8
+  },
+  "group": "primary actual 30-turn conversation",
+  "agents": {
+    "tea": {
+      "uncachedInputTokens": 427923,
+      "cacheReadInputTokens": 472192,
+      "cacheWriteInputTokens": 0,
+      "outputTokens": 5109,
+      "cachedInputPercent": 52.45907467379168,
+      "hypotheticalUsd": 0.46524776000000007
+    },
+    "pi": {
+      "uncachedInputTokens": 89308,
+      "cacheReadInputTokens": 1465024,
+      "cacheWriteInputTokens": 0,
+      "outputTokens": 4576,
+      "cachedInputPercent": 94.25425198734891,
+      "hypotheticalUsd": 0.42121472000000004
+    }
+  },
+  "teaHypotheticalCostIncreasePercent": 10.453822696414793
+}

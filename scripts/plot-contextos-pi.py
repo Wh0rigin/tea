@@ -19,7 +19,9 @@ plt.rcParams.update({'font.family': 'DejaVu Sans', 'axes.spines.top': False, 'ax
 
 def save(fig, name):
     fig.savefig(out / f'{name}.png', dpi=180, bbox_inches='tight')
-    fig.savefig(out / f'{name}.svg', bbox_inches='tight')
+    svg = out / f'{name}.svg'
+    fig.savefig(svg, bbox_inches='tight')
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf-8').splitlines()) + '\n', encoding='utf-8')
     plt.close(fig)
 
 groups = [('small', 'Small: 12 files'), ('medium', 'Medium: 120 files'), ('large', 'Large: 1,200 files'), ('long-session', '30 inspections + repair')]
@@ -54,8 +56,9 @@ fig.tight_layout(rect=[0, 0, 1, .86])
 save(fig, 'tea-contextos-vs-pi')
 
 families = [('cache-key', 'Primitive cache keys'), ('retry-budget', 'Retry budgets'), ('unicode', 'Unicode truncation')]
-fig, axes = plt.subplots(1, 3, figsize=(13, 4.7))
+fig, axes = plt.subplots(1, 3, figsize=(13, 5.3))
 for ax, (scale, label) in zip(axes, groups[:3]):
+    labels = []
     for i, (family, name) in enumerate(families):
         for agent, offset in [('tea', -.19), ('pi', .19)]:
             values = [r['totalTokens'] / 1000 for r in runs if r['agent'] == agent and r['taskId'] == f'{scale}-{family}']
@@ -63,8 +66,12 @@ for ax, (scale, label) in zip(axes, groups[:3]):
                 continue
             ax.bar(i + offset, np.mean(values), .34, color=colors[agent], alpha=.88)
             ax.scatter(i + offset + np.linspace(-.06, .06, len(values)), values, c=colors[agent], s=22, edgecolors='white', zorder=3)
+        selected = [r for r in runs if r['taskId'] == f'{scale}-{family}']
+        accepted = [sum(r['accepted'] for r in selected if r['agent'] == a) for a in ['tea', 'pi']]
+        n = max((sum(r['agent'] == a for r in selected) for a in ['tea', 'pi']), default=0)
+        labels.append(f'{name}\nAccepted TEA/Pi: {accepted[0]}/{n} · {accepted[1]}/{n}')
     ax.set_title(label)
-    ax.set_xticks(range(3), [name for _, name in families], rotation=20, ha='right', fontsize=9)
+    ax.set_xticks(range(3), labels, rotation=20, ha='right', fontsize=8)
     ax.set_ylabel('Mean provider tokens / run (thousands)')
     ax.grid(axis='y', alpha=.18); ax.set_axisbelow(True)
 fig.suptitle('Fresh tasks — 3 repeats per task; dots show every measured attempt', fontsize=14)

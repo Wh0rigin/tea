@@ -149,16 +149,19 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 
 ### TEA / Pi 对比
 
-已于 **2026-10-11** 使用 **GLM-5.3-flash、enabled/low 思考、4,096 Token 输出上限**完成真实测试，Pi 为 **0.87.1**。同一组使用相同 Git 快照，共同网关记录服务商输入、输出及缓存 Token。
+2026-10-11 至 12 日完成当前主动开启的 **ContextOS C** 与原生 **Pi 0.87.1** 对比：共同 **GLM-5.3-flash、enabled/low 思考、4,096 输出上限**，相同初始 Git 内容。每配置重复三次；全部服务商输入、缓存和思考输出计入。
 
-- **64,000 字节请求上限，9 组任务**：TEA **168,282** Token，Pi **161,046**；TEA **多消耗 4.49%**。验收 TEA **9/9**、Pi **7/9**，Pi 两组触发输入上限。失败运行仍计入总量，因此这不是相同完成率下的节省比例。
-- **80,000 字节上限，单独重跑全部 3 组大型任务**：TEA **117,126** Token，Pi **107,674**；TEA **多消耗 8.78%**，双方验收均为 **3/3**。
+- **短任务，CLI 已有的默认每轮 24 次工具额度**：12/120/1,200 文件，27 组配对。TEA **708,844** / Pi **1,080,626** Token，TEA **少 34.40%**；完整验收 **26/27 对 25/27**。[默认额度报告](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.zh-CN.md)。
+- **从空会话实际读取 30 轮，再修复和测试**：3 组配对。TEA **905,224** / Pi **1,558,908**，TEA **少 41.93%**，双方 **3/3**。这组使用原每轮 10 次工具配置；P95 TEA/Pi **485.60/463.18 秒**，没有速度提升证据。[长会话及主实验失败记录](benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.zh-CN.md)。
+- **原 10 次额度短任务**：TEA 验收 **16/27 对 27/27**，额度与验证完成问题全部保留，低 Token 不能算保持性能的收益。补测开始前已选定重跑全部短任务，没有只挑失败项。
 
-当前结果**不能证明稳定节省 Token**。每种配置只跑一轮；这些是 12/120/1,200 文件的自编 JavaScript 样本，大仓库主要增加无关模块。两种配置分开报告，受祖先目录指令变化影响的早期试跑已排除。详见 [真实实验报告](benchmarks/reports/tea-vs-pi-glm-20261011/README.zh-CN.md)和 [对比说明](docs/PI_COMPARISON.zh-CN.md)。
+默认额度分规模差异明显：小型任务 TEA **多用 52.26%**（双方完整验收 8/9）；中型、大型分别**少 57.42%、37.64%**。补测双方独立代码与范围检查均为 27/27；完整验收还要求原生测试和正常结束，保守的命令识别可能有假阴性，不能将完整验收率解释成 TEA 代码更正确。
 
-![64,000 字节上限下的 TEA 与 Pi 服务商 Token 对比](benchmarks/reports/tea-vs-pi-glm-20261011/tea-vs-pi.png)
+这些是自编 JavaScript 缺陷，规模增加主要添加无关模块；三次重复不能证明未见项目泛化。保留双方原生提示、工具与缓存策略。ContextOS 仍需主动开启，Token 降幅不等于账单降幅，压缩也可能降低缓存复用。旧完整历史 TEA/Pi 的 64k 多 4.49%、80k 大型多 8.78% 结果[单独保留](benchmarks/reports/tea-vs-pi-glm-20261011/README.zh-CN.md)。[对比说明](docs/PI_COMPARISON.zh-CN.md)。
 
-![80,000 字节上限下的全部大型任务补测](benchmarks/reports/tea-vs-pi-glm-large-80k-20261011/tea-vs-pi.png)
+![默认 24 次额度短任务](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
+
+![真实长会话累计 Token](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
 
 ## 日志与验证
 

@@ -1,0 +1,5 @@
+# Keep published evidence bytes stable so SHA-256 checks work on every platform.
+benchmarks/reports/contextos-c-vs-pi*/*.json text eol=lf
+benchmarks/reports/contextos-c-vs-pi*/*.md text eol=lf
+benchmarks/reports/contextos-c-vs-pi*/*.svg text eol=lf
+benchmarks/reports/contextos-c-vs-pi*/evidence.sha256 text eol=lf
