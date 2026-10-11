@@ -42,6 +42,7 @@ After observing the two input-limit failures, all three large task families were
 - At most 24 provider requests per agent/task; 90-second request timeout and 300-second task timeout. TEA also retains its native 24-tool-call cap. None of the accepted runs hit those caps.
 - Input totals include uncached input, cache reads and cache writes. Output includes reasoning. All submitted requests in both reported profiles have complete provider usage; missing usage is never zero. Provider cache state could not be reset.
 - TEA source SHA-256 before and after both profiles: `fba9a98ced61424549dc4a0a5ed44eaad739fce6555c2007d3a67c444a0df9e6` (the runner hashes `src/*.mjs` and `scripts/*.mjs`). Pi CLI SHA-256: `e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774`.
+- The measured JavaScript engine/harness is preserved in commit `f33ef8a`. A later report-formatting fix only removes extra blank lines at EOF; these measurements were not rerun for that formatting change.
 - Run IDs: `tea-pi-glm-isolated-20261011` (105 provider requests), `tea-pi-glm-large-80k-20261011` (43 requests). Sanitized JSON retains individual counts, request/response hashes, controls and acceptance. Raw conversations and private paths are excluded.
 
 An earlier pilot, `tea-pi-glm-live-20261011`, is excluded from every performance metric because Pi inherited changing instructions from the TEA checkout's ancestors. All nine pairs were rerun after detecting this. The pilot's 111 submitted requests and complete usage remain in local records and budget accounting.

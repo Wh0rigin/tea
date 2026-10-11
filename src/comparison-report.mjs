@@ -84,6 +84,6 @@ export async function writeComparisonReport(report, directory) {
     lines.push('', `TEA token reduction: ${percent(pair.tokenReductionPercent)}.`, '');
   }
   await writeFile(path.join(directory,'summary.json'),JSON.stringify(analysis,null,2)+'\n');
-  await writeFile(path.join(directory,'REPORT.md'),lines.join('\n')+'\n');
+  await writeFile(path.join(directory,'REPORT.md'),lines.join('\n').trimEnd()+'\n');
   return analysis;
 }

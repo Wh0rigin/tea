@@ -18,7 +18,7 @@ if not any(pair[agent] and pair[agent]["usageComplete"] for pair in pairs for ag
     raise SystemExit("No complete provider token measurements")
 
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "axes.spines.top": False,
-                     "axes.spines.right": False, "axes.spines.left": False})
+                     "axes.spines.right": False, "axes.spines.left": False, "svg.hashsalt": report["runId"]})
 fig, ax = plt.subplots(figsize=(14, max(6, len(pairs) * .84 + 2.8)))
 height = fig.get_figheight()
 colors = {"tea": "#246B53", "pi": "#3F6F9F"}
@@ -70,7 +70,8 @@ fig.text(.025, .16/height, f'Acceptance: TEA {overall["teaAccepted"]}/{overall["
 fig.subplots_adjust(left=.24, right=.96, top=1-1.15/height, bottom=1.8/height, hspace=.4)
 for extension in ["png", "svg"]:
     destination = source.parent / f"tea-vs-pi.{extension}"
-    fig.savefig(destination, dpi=180, facecolor="white")
+    metadata = {"Date": report.get("endedAt", report["startedAt"])} if extension == "svg" else None
+    fig.savefig(destination, dpi=180, facecolor="white", metadata=metadata)
     if extension == "svg":
         destination.write_text("\n".join(line.rstrip() for line in destination.read_text(encoding="utf-8").splitlines()) + "\n", encoding="utf-8")
     print(destination)
