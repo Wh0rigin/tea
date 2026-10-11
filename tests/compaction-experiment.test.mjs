@@ -4,7 +4,7 @@ import { analyzeCompaction, historyFingerprint, seedHistory } from '../src/compa
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { prepareFixture, taskDefinitions } from '../src/comparison-fixtures.mjs';
+import { prepareFixture, taskDefinitions, treeFingerprint } from '../src/comparison-fixtures.mjs';
 
 const run = (variant, extra = {}) => ({ caseId: 'case', repeat: 1, category: 'stress', variant,
   totalTokens: variant === 'off' ? 1000 : 800, accepted: true, usageComplete: true, conservativeSpendUsd: 0.01, ...extra });
@@ -29,12 +29,13 @@ test('stress setup is reproducible, executes actual reads, and leaves the pinned
   const root = await mkdtemp(path.join(os.tmpdir(), 'tea-compaction-seed-'));
   try {
     const definition = taskDefinitions().find(d => d.taskId === 'medium-retry-budget');
-    await prepareFixture(root, definition);
+    const pinned = await prepareFixture(root, definition);
     const first = await seedHistory(root, definition, 'reads'), second = await seedHistory(root, definition, 'reads');
     assert.deepEqual(historyFingerprint(first), historyFingerprint(second));
     assert.ok(historyFingerprint(first).bytes > 28000);
     assert.equal(first.filter(m => m.role === 'assistant' && Array.isArray(m.content)).length, 50);
     assert.ok(JSON.stringify(first).includes('Unrelated domain utility'));
     assert.deepEqual(await seedHistory(root, definition, 'empty'), []);
+    assert.equal((await treeFingerprint(root)).sha256, pinned.sha256);
   } finally { await rm(root, { recursive: true, force: true }); }
 });

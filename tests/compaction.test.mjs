@@ -84,12 +84,23 @@ test('latest covered user request is pinned verbatim with authoritative validati
 });
 test('tool batches remain indivisible across the retention boundary', async () => {
   const s = session();
-  s.messages.splice(3, 0, { role: 'user', content: 'Current request must remain in the tail.' });
+  s.messages.pop();
+  s.messages.splice(1, 0, { role: 'user', content: 'Current request must remain verbatim.' });
   const plan = prepareCompaction(s, cfg({ compactionKeepRecentBytes: 2000 }));
-  assert.equal(plan.status, 'prepared'); assert.equal(plan.firstKeptIndex, 1);
+  assert.equal(plan.status, 'prepared'); assert.equal(plan.firstKeptIndex, 2);
   const { outcome } = await compact(s, cfg({ compactionKeepRecentBytes: 2000 }));
   assert.equal(outcome.status, 'compacted');
-  assert.equal(sessionContext(s)[1], s.messages[1]); assert.equal(sessionContext(s)[2], s.messages[2]);
+  assert.equal(sessionContext(s)[1], s.messages[2]); assert.equal(sessionContext(s)[2], s.messages[3]);
+});
+test('an oversized older batch does not force itself into the recent byte budget', async () => {
+  const s = session(); s.messages.push({ role: 'user', content: 'Now repair the code and run tests.' });
+  const config = cfg({ compactionKeepRecentBytes: 2000 });
+  const plan = prepareCompaction(s, config);
+  assert.equal(plan.status, 'prepared'); assert.equal(plan.firstKeptIndex, 3);
+  const { outcome } = await compact(s, config);
+  assert.equal(outcome.status, 'compacted'); assert.equal(sessionContext(s)[1], s.messages[3]);
+  assert.equal(sessionContext(s)[2], s.messages[4]);
+  assert.ok(Buffer.byteLength(JSON.stringify(s.messages.slice(plan.firstKeptIndex)), 'utf8') < 2000);
 });
 const malformed = {
   orphan: [{ role: 'user', content: [{ type: 'tool_result', tool_use_id: 'absent', content: 'no' }] }],

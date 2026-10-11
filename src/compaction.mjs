@@ -126,9 +126,14 @@ export function prepareCompaction(session, config, { state = session, instructio
   const groups = groupsFor(session.messages, start);
   if (!groups) return { status: 'unavailable', detail: 'History has an unresolved or ambiguous tool batch.' };
   if (groups.length < 2) return { status: 'not_needed', detail: 'There is no older complete history to summarize.' };
-  let retainedBytes = 0, keep = groups.length;
-  do { keep -= 1; retainedBytes += groups[keep].bytes; }
-  while (keep > 0 && retainedBytes < (config.compactionKeepRecentBytes ?? 3600));
+  // Always retain the newest complete group, even when it exceeds the target.
+  // Older groups must fit: adding one huge historical batch to reach a minimum
+  // can otherwise keep that batch indefinitely after a new user turn.
+  let keep = groups.length - 1, retainedBytes = groups[keep].bytes;
+  const target = config.compactionKeepRecentBytes ?? 3600;
+  while (keep > 0 && retainedBytes + groups[keep - 1].bytes <= target) {
+    keep -= 1; retainedBytes += groups[keep].bytes;
+  }
   if (!keep) return { status: 'not_needed', detail: 'History fits within the configured recent-message retention.' };
   const maxTokens = Math.min(config.maxOutputTokens, 1200);
   const prefix = `Previous checkpoint:\n${session.compaction?.summary || '(none)'}\nAuthoritative runtime state:\n${runtimeRecord(state)}`

@@ -40,7 +40,7 @@ flowchart LR
 
 - The original `session.messages` array stays intact. A checkpoint records `firstKeptIndex`; the request projection starts with its summary and retains the suffix verbatim.
 - A tool-call batch and its matching results form one indivisible group. Ambiguous IDs, orphan results and unfinished batches prevent compaction.
-- The newest complete group is always retained. Retention is a target, so a large group can exceed it. When the latest user request falls inside the summarized prefix, its original text is also included in the next request.
+- The newest complete group is always retained, even if it exceeds the recent-byte target. Older complete groups are added only while they fit that target; one oversized older batch cannot force itself into the retained suffix. When the latest user request falls inside the summarized prefix, its original text is also included in the next request.
 - Repeated compaction passes the previous checkpoint to the summarizer and summarizes messages after its previous retained boundary. It does not resend already summarized raw history.
 - The summary covers Goal, Constraints, Progress, Decisions, Next steps and Critical context. Runtime changed-file and validation state is inserted separately and is never inferred from the summary.
 - Historical tool output is bounded to approximately 2,000 UTF-8 bytes plus an omission/hash marker per result during summarization. Large patch text is also bounded. Ordinary user text is not truncated to fit the summary request.
