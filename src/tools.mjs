@@ -247,8 +247,9 @@ export class WorkspaceTools {
     return mappingHint + results.join('\n') + '\n' + coverage;
   }
 
-  modelToolDefinitions() {
-    return this.unresolvedQueries.size ? [...TOOL_DEFINITIONS, TERM_MAPPING_TOOL] : TOOL_DEFINITIONS;
+  modelToolDefinitions({ includeMemory = true } = {}) {
+    const definitions = this.unresolvedQueries.size ? [...TOOL_DEFINITIONS, TERM_MAPPING_TOOL] : TOOL_DEFINITIONS;
+    return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
 
   async rememberTermMapping({ query, target, path: relativePath, line } = {}) {
@@ -423,6 +424,10 @@ export const TERM_MAPPING_TOOL = {
 };
 
 export async function dispatchTool(tools, name, input) {
+  if (['recall_context', 'search_history'].includes(name)) {
+    if (!tools.contextMemory) throw new Error('ContextOS retrieval is unavailable in this session');
+    return name === 'recall_context' ? tools.contextMemory.recall(input) : tools.contextMemory.search(input);
+  }
   switch (name) {
     case 'list_files': return tools.listFiles(input);
     case 'search_code': return tools.searchCode(input);

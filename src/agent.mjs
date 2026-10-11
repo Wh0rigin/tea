@@ -9,6 +9,7 @@ import { estimateTextTokens } from './benchmark.mjs';
 import { compactConversation, requestBytes, sessionContext } from './compaction.mjs';
 import { memorySessionFields, attachSessionJournal, appendSessionMessage, restoreToolMemory,
   persistRuntimeState, closeSessionJournal, resetPersistentConversation } from './session-memory.mjs';
+import { ContextMemory } from './context-assembler.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -54,6 +55,9 @@ export function resetConversation(session, config) {
   session.tools?.unresolvedQueries.clear();
   session.tools?.readEvidence.clear();
   session.tools?.presentedSource.clear();
+  session.contextMemory = null;
+  if (session.tools) session.tools.contextMemory = null;
+  session.taskState = null; session.memoryDiagnostics = null;
   // Keep adapter spending and outstanding edits across /new.
 }
 
@@ -92,6 +96,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   tools.approveCommand = approveCommand;
   session.tools = tools;
   restoreToolMemory(session, tools);
+  if (config.memoryPolicy === 'contextos') {
+    session.contextMemory ||= new ContextMemory(tools);
+    session.contextMemory.rebuild(session.messages);
+    for (const unit of session.memoryDiagnostics?.units || []) if (unit.decision === 'reference') session.contextMemory.evicted.add(unit.ref);
+    tools.contextMemory = session.contextMemory;
+  } else tools.contextMemory = null;
   if (session.budgetUnknown && !offline) throw new ModelError('Session has unresolved billing from an interrupted request; no automatic retry is allowed');
   if (session.adapter && session.offline !== offline) throw new Error('A session cannot mix scripted and provider adapters');
   const adapterConfig = session.restoredBudget ? { ...config, maxCostUsd: session.restoredBudget.maxCostUsd,
@@ -124,7 +134,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     try {
       return await compactConversation(session, config, { adapter, ledger, state, reason, instructions,
         system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions(), signal, onEvent: emit,
-        measureContext: context => requestBytes(config, prepareContextRequest(context, config, tools.modelToolDefinitions()).request) });
+        measureContext: async context => {
+          if (config.memoryPolicy !== 'contextos') return requestBytes(config, prepareContextRequest(context, config, tools.modelToolDefinitions()).request);
+          const plan = await session.contextMemory.assemble({ messages: context, canonical: session.messages,
+            system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions({ includeMemory: false }), config, state, goal: task, commit: false });
+          return requestBytes(config, plan.request);
+        } });
     } catch (error) {
       emit({ type: 'compaction_end', reason, status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message });
       await ledger.event({ type: 'compaction_failed', reason, cancelled: Boolean(signal?.aborted),
@@ -164,7 +179,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     await appendSessionMessage(session, { role: 'user', content: session.resumeNotice });
     session.resumeNotice = null;
   }
-  await appendSessionMessage(session, { role: 'user', content: userMessage });
+  const goalEvent = await appendSessionMessage(session, { role: 'user', content: userMessage });
+  session.taskState = { taskId: `task-${goalEvent?.eventId || session.messages.length}`,
+    goal: { text: task, provenance: 'user_confirmed', sourceEventId: goalEvent?.eventId || null }, phase: 'locate',
+    constraints: 'Original user messages remain pinned; read applicable instructions; validate all edits.',
+    active_files: [], confirmed_findings: [], decisions: [], pending_steps: [], failed_attempts: [], evidence_refs: [] };
   let pendingValidation = session.pendingValidation;
   let validationPassed = session.validationPassed;
   let validationAttempts = session.validationAttempts;
@@ -176,10 +195,18 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
     fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
   const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, changedFiles });
-  const prepareRequest = () => {
+  const prepareRequest = async () => {
     const activeMessages = sessionContext(session, runtimeState());
-    const requestTools = tools.modelToolDefinitions();
+    const requestTools = tools.modelToolDefinitions({ includeMemory: false });
     const fullPayload = JSON.stringify({ system: SYSTEM_PROMPT, messages, tools: requestTools });
+    if (config.memoryPolicy === 'contextos') {
+      const plan = await session.contextMemory.assemble({ messages: activeMessages, canonical: messages,
+        system: SYSTEM_PROMPT, tools: requestTools, config, state: runtimeState(), goal: task });
+      session.memoryDiagnostics = plan.diagnostics;
+      await session.journal?.append('memory_assembly', plan.diagnostics);
+      return { memory: { diagnostics: { compactedResults: plan.diagnostics.evictedUnits } },
+        request: plan.request, sentPayload: JSON.stringify(plan.request), fullPayload };
+    }
     return { ...prepareContextRequest(activeMessages, config, requestTools), fullPayload };
   };
   let autoCompactionAttempts = 0;
@@ -190,7 +217,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
-        let prepared = prepareRequest();
+        let prepared = await prepareRequest();
         while (config.compaction === 'auto' && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
           && requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)) {
           const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
@@ -199,7 +226,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           autoCompactionAttempts += 1;
           const outcome = await summarize(runtimeState(), 'threshold');
           if (outcome.status !== 'compacted') break;
-          prepared = prepareRequest();
+          prepared = await prepareRequest();
         }
         const { memory, request, sentPayload, fullPayload } = prepared;
         const fullBytes = Buffer.byteLength(fullPayload, 'utf8');
@@ -235,9 +262,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       }
       const content = Array.isArray(result.content) ? result.content : [];
       const assistantMessage = { role: 'assistant', content };
-      await appendSessionMessage(session, assistantMessage);
+      const assistantEvent = await appendSessionMessage(session, assistantMessage);
       const textBlocks = content.filter((block) => block.type === 'text').map((block) => block.text || '');
       if (textBlocks.length) { finalText = textBlocks.join('\n'); if (!result.displayedAsStream) onText(finalText); }
+      if (textBlocks.length && session.taskState) session.taskState.decisions.push({ text: finalText,
+        provenance: 'inferred', sourceEventId: assistantEvent?.eventId || null });
       const toolUses = content.filter((block) => block.type === 'tool_use');
       if (!toolUses.length) {
         if (signal?.aborted) { status = 'cancelled'; break; }
@@ -295,7 +324,20 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           }
         }
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
-        await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError });
+        const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError });
+        if (session.taskState) {
+          const taskState = session.taskState;
+          taskState.phase = call.name === 'apply_patch' ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
+          if (call.input?.path && !taskState.active_files.includes(call.input.path)) taskState.active_files.push(call.input.path);
+          const finding = { toolId: call.id, tool: call.name, provenance: 'observed', sourceEventId: observedEvent?.eventId || null,
+            outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError };
+          taskState.confirmed_findings.push(finding);
+          if (isError || /^exit=[^0]/.test(output)) taskState.failed_attempts.push(finding);
+          taskState.validation = runtimeState();
+          taskState.pending_steps = pendingValidation ? [{ action: 'Run relevant validation on current source', provenance: 'observed', sourceEventId: observedEvent?.eventId || null }] : [];
+          taskState.budget_remaining = Math.max(0, (adapter.config?.maxCostUsd ?? config.maxCostUsd) - (adapter.spentUsd || 0));
+          taskState.evidence_refs = [...(session.contextMemory?.units.keys() || [])];
+        }
         await persistRuntimeState(session, runtimeState());
         emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, isError });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
@@ -311,6 +353,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   }
 
   Object.assign(session, { pendingValidation, validationPassed, validationAttempts, changedFiles });
+  if (session.taskState) { session.taskState.phase = status === 'completed' ? 'finish' : session.taskState.phase; session.taskState.validation = runtimeState(); }
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });

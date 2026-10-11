@@ -7,11 +7,12 @@ import { renderExecutableReport, runExecutableBenchmark } from './runtime-benchm
 import { runInteractive } from './terminal.mjs';
 import { listSessions, deleteSession } from './session-journal.mjs';
 import { inspectSession } from './session-memory.mjs';
+import { validateRunId } from './run-id.mjs';
 
 const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--context-strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 24\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.`;
 
 const COMPACTION_HELP = '\nConversation compaction:\n  tea --interactive --compaction auto --max-cost-usd USD\n  /compact [retention instructions]   # summarize older conversation\n  --compaction off|auto               # default off; manual remains available\n  --compaction-keep-recent-bytes N     # recent message retention in UTF-8 bytes\nSummary requests share the session model, usage ledger and hard budget.\n';
-const SESSION_HELP = '\nPersistent memory (opt-in):\n  --session ID                       # create a durable session\n  --resume ID                        # continue the original workspace/model/budget\n  --memory-policy full-history|compact-tools|contextos\n  tea sessions list|inspect|delete [ID] [--workspace PATH]\n  /memory                            # explain the last context working set\n';
+const SESSION_HELP = '\nPersistent memory (opt-in):\n  --session ID                       # create a durable session\n  --resume ID                        # continue the original workspace/model/budget\n  --memory-policy full-history|compact-tools|contextos\n  --contextos-target-bytes N          # soft request target; not provider tokens\n  tea sessions list|inspect|delete [ID] [--workspace PATH]\n  tea benchmark contextos --mode preflight|live [--run-id ID]\n  /memory                            # explain the last context working set\n';
 
 function parseOptions(args) {
   const options = {};
@@ -21,12 +22,12 @@ function parseOptions(args) {
     if (value === '--help' || value === '-h') options.help = true;
     else if (value === '--interactive' || value === '-i') options.interactive = true;
     else if (value === '--demo') { options.demo = true; options.interactive = true; }
-    else if (['--session', '--resume', '--memory-policy', '--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--history-strategy', '--history-keep-recent', '--compaction', '--compaction-keep-recent-bytes', '--fixture-variant', '--base-run', '--candidate-run', '--run'].includes(value)) {
+    else if (['--contextos-target-bytes', '--session', '--resume', '--memory-policy', '--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--history-strategy', '--history-keep-recent', '--compaction', '--compaction-keep-recent-bytes', '--fixture-variant', '--base-run', '--candidate-run', '--run'].includes(value)) {
       const next = args[i + 1];
       if (next === undefined || next.startsWith('--')) throw new Error(`Missing value after ${value}`);
       i += 1;
       const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--strategy': 'strategy', '--context-strategy': 'contextStrategy', '--initial-file-limit': 'initialFileLimit', '--history-strategy': 'historyStrategy', '--history-keep-recent': 'historyKeepRecent', '--compaction': 'compaction', '--compaction-keep-recent-bytes': 'compactionKeepRecentBytes', '--fixture-variant': 'fixtureVariant', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
-      const sessionKey = ({ '--session': 'sessionId', '--resume': 'resume', '--memory-policy': 'memoryPolicy' })[value];
+      const sessionKey = ({ '--session': 'sessionId', '--resume': 'resume', '--memory-policy': 'memoryPolicy', '--contextos-target-bytes': 'contextosTargetBytes' })[value];
       options[sessionKey || key] = next;
     } else if (value.startsWith('-')) throw new Error(`Unknown option: ${value}`);
     else positional.push(value);
@@ -67,6 +68,15 @@ async function main() {
 }
 
 async function benchmarkCommand(args) {
+  if (args[0] === 'contextos') {
+    const parsed = parseOptions(args.slice(1));
+    const { runContextosBenchmark } = await import('./contextos-benchmark.mjs');
+    // Live benchmark limits/prices are read from the same environment as normal runs.
+    const result = await runContextosBenchmark({ options: parsed, mode: parsed.mode || 'preflight', output: path.join(RESULT_ROOT, validateRunId(parsed.runId || `contextos-${Date.now()}`)) });
+    console.log(`ContextOS evidence: ${result.outputDir}`);
+    if (!result.report.complete || !result.report.sourceUnchanged) process.exitCode = 2;
+    return;
+  }
   const subcommand = args[0];
   const parsed = parseOptions(args.slice(1));
   if (subcommand === 'run') {

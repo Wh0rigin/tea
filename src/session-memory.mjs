@@ -43,6 +43,8 @@ export async function attachSessionJournal(session, config) {
     if (state) Object.assign(session, { pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
       validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
       compaction: state.compaction, compactionCount: state.compactionCount, restoredTools: state.tools, offline: state.offline });
+    session.taskState = state?.taskState || null;
+    session.memoryDiagnostics = state?.memoryDiagnostics || null;
     for (const intent of inflight.values()) {
       budget = { ...budget, spentUsd: budget.spentUsd + intent.reservedUsd,
         spentInputBound: budget.spentInputBound + intent.inputBound, blockedUnknown: true };
@@ -72,8 +74,9 @@ export async function attachSessionJournal(session, config) {
 }
 
 export async function appendSessionMessage(session, message) {
-  if (session.journal) await session.journal.append('message', message);
+  const event = session.journal ? await session.journal.append('message', message) : null;
   session.messages.push(message);
+  return event;
 }
 
 export function restoreToolMemory(session, tools) {
@@ -95,6 +98,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
     pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
     validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
     compaction: session.compaction, compactionCount: session.compactionCount, offline: session.offline,
+    taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
     identity,
     tools: tools ? { sessionTerms: [...tools.sessionTerms], unresolvedQueries: [...tools.unresolvedQueries],
       readEvidence: [...tools.readEvidence], presentedSource: [...tools.presentedSource].map(([key, value]) =>
@@ -122,6 +126,8 @@ export async function resetPersistentConversation(session, config) {
     session.tools?.sessionTerms.clear(); session.tools?.unresolvedQueries.clear();
     session.tools?.readEvidence.clear(); session.tools?.presentedSource.clear();
     session.contextMemory = null;
+    if (session.tools) session.tools.contextMemory = null;
+    session.taskState = null; session.memoryDiagnostics = null;
     await persistRuntimeState(session);
   } finally { await closeSessionJournal(session); }
 }
@@ -133,6 +139,7 @@ export async function inspectSession(config, id) {
     return { sessionId: id, schema: 1, events: events.length, messages: events.filter(event => event.kind === 'message').length,
       pendingValidation: state?.pendingValidation ?? null, changedFiles: state?.changedFiles || [],
       latestIdentity: state?.identity || null, memoryDiagnostics: state?.memoryDiagnostics || null,
+      taskState: state?.taskState || null,
       requests: events.filter(event => event.kind === 'request_settled').length,
       unresolvedRequestIds: events.filter(event => event.kind === 'request_intent' && !events.some(other => other.kind === 'request_settled' && other.value.requestId === event.value.requestId)).map(event => event.value.requestId) };
   } finally { await journal.close(); }

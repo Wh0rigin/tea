@@ -51,6 +51,9 @@ export function loadConfig(options = {}, env = process.env) {
   const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
   if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
   const maxRequestInputTokens = Math.floor(positiveNumber(env.TEA_MAX_REQUEST_INPUT_TOKENS, 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
+  const contextosTargetBytes = positiveNumber(options.contextosTargetBytes ?? env.TEA_CONTEXTOS_TARGET_BYTES,
+    Math.max(1, Math.floor(maxRequestInputTokens * .5)), 'ContextOS target bytes');
+  if (!Number.isSafeInteger(contextosTargetBytes)) throw new ConfigError('ContextOS target bytes must be a positive safe integer');
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
     Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
@@ -92,6 +95,8 @@ export function loadConfig(options = {}, env = process.env) {
     historyStrategy: options.memoryPolicy || env.TEA_MEMORY_POLICY ? (memoryPolicy === 'compact-tools' ? 'compact-tools' : 'full') : historyStrategy,
     historyKeepRecent,
     memoryPolicy,
+    contextosTargetBytes,
+    contextosKeepRecent: historyKeepRecent,
     sessionId,
     resume,
     compaction,

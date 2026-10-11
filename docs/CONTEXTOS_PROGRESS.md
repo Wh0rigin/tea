@@ -14,8 +14,12 @@
 
 Append-only journal, encrypted content-addressed artifacts, writer exclusion, crash-tail recovery, durable request liability, runtime validation state, source fingerprints and opt-in session CLI are implemented. Original thinking/signatures are restored unchanged. Interrupted tool batches receive explicit uncertainty results; they are not executed again. Resume retains spent budgets, rejects workspace/model/endpoint mismatch and stops unresolved billing. **23 new tests; full suite 192/192 passed**, including actual two-process editing/validation and a synthetic native-adapter billing check (not provider performance data). This foundation has no measured token optimization claim.
 
+## M2/M3 — retrievable working set candidate
+
+Implemented version-checked `recall_context`/`search_history`, observed/inferred task state, a future handoff data contract (no model routing), reversible references and an explainable request inspector. Requirements, recent source, active files, failures, mutation receipts and signed thinking are retained. UTF-8 retrieval is paged; stale source is withheld and requires a fresh read. Non-reducing projections fall back to full history. Current deterministic suite: **218/218**. Six fixture preflights passed with initial public success and independent hidden failure; no API calls used.
+
 ## Remaining gates
 
 - M1: deterministic/protocol and cross-process checks passed; additional edge cases remain part of stabilization.
-- M2/M3: version-checked evidence lookup, structured task state and reversible context assembly with on-demand recovery.
+- M2/M3: implemented; stabilize and freeze candidate before paid measurements.
 - M4: frozen replay and live A/B; retain negative outcomes, remove candidates that regress acceptance or fail the token gate. No performance claims before provider measurements.

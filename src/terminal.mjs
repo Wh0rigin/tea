@@ -12,6 +12,7 @@ import { attachSessionJournal, closeSessionJournal } from './session-memory.mjs'
 const HELP = [
   '/help          Show commands',
   '/status        Show session usage, budget and outstanding validation',
+  '/memory        Explain context references, freshness and retention',
   '/tools         List the last 100 tool records',
   '/tools N       Expand one tool result',
   '/diff          Show the current Git diff (up to 24,000 characters)',
@@ -206,6 +207,9 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     await attachSessionJournal(session, config);
     await closeSessionJournal(session);
     view.spent = session.restoredBudget?.spentUsd || 0;
+    // The budget is restored exactly; old output/cache totals are not inferred
+    // from an input-only counter. Show '?' until a full accounting view exists.
+    if (config.resume) { view.baseUsage.complete = false; view.usage.complete = false; }
     view.write('Persistent session: ' + session.sessionId);
   }
   const adapterFactory = demo ? demoAdapterFactory() : undefined;

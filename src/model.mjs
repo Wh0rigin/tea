@@ -174,7 +174,7 @@ export class AnthropicMessagesAdapter {
     const requestBytes = Buffer.byteLength(JSON.stringify(body), 'utf8');
     const conservativeInputBound = requestBytes;
     if (conservativeInputBound > config.maxRequestInputTokens) {
-      throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request input limit is ${config.maxRequestInputTokens} tokens`);
+      throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`);
     }
     // Cache reads are charged without their discount; unknown write TTL uses
     // the standard Anthropic 1-hour (2x input) rate as a conservative default.
