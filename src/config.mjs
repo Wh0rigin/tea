@@ -27,6 +27,13 @@ export function loadConfig(options = {}, env = process.env) {
     throw new ConfigError('TEA_THINKING_MODE must be adaptive or enabled');
   }
 
+  const contextStrategy = String(options.contextStrategy || env.TEA_CONTEXT_STRATEGY || 'v1').toLowerCase();
+  if (!['baseline', 'v1-dedup', 'v1-inventory', 'v1', 'v1-inventory-expanded', 'v1-expanded', 'v1-inventory-auto', 'v1-auto'].includes(contextStrategy)) {
+    throw new ConfigError('TEA_CONTEXT_STRATEGY must be one of: baseline, v1-dedup, v1-inventory, v1, v1-inventory-expanded, v1-expanded, v1-inventory-auto, v1-auto');
+  }
+  const initialFileLimit = positiveNumber(options.initialFileLimit ?? env.TEA_INITIAL_FILE_LIMIT, 8, '--initial-file-limit / TEA_INITIAL_FILE_LIMIT');
+  if (!Number.isInteger(initialFileLimit) || initialFileLimit < 1 || initialFileLimit > 250) throw new ConfigError('--initial-file-limit / TEA_INITIAL_FILE_LIMIT must be an integer from 1 through 250');
+
   const maxCostUsd = nonNegativeNumber(
     options.maxCostUsd ?? env.TEA_MAX_COST_USD,
     0,
@@ -57,6 +64,8 @@ export function loadConfig(options = {}, env = process.env) {
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
     effort,
     thinkingMode,
+    contextStrategy,
+    initialFileLimit,
     stream: env.TEA_STREAM !== '0',
     storeRaw: env.TEA_STORE_RAW === '1',
     workspace: path.resolve(options.workspace || process.cwd()),
@@ -69,10 +78,17 @@ export function loadConfig(options = {}, env = process.env) {
 
 export function assertLiveConfig(config) {
   if (!config.apiKey) throw new ConfigError('Set ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment');
-  if (!(config.maxCostUsd > 0)) throw new ConfigError('A positive --max-cost-usd or TEA_MAX_COST_USD is required for live calls');
+  if (!Number.isFinite(config.maxCostUsd) || !(config.maxCostUsd > 0)) throw new ConfigError('A positive finite --max-cost-usd or TEA_MAX_COST_USD is required for live calls');
   if (config.inputRateUsdPerMillion === undefined || config.outputRateUsdPerMillion === undefined) {
     throw new ConfigError('Set both TEA_INPUT_PRICE_USD_PER_MTOK and TEA_OUTPUT_PRICE_USD_PER_MTOK to the current provider rates before making live calls');
   }
+  for (const value of [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion, config.cacheCreationRateUsdPerMillion ?? 0]) {
+    if (!Number.isFinite(value) || value < 0) throw new ConfigError('Provider prices must be finite non-negative numbers');
+  }
+  for (const field of ['maxOutputTokens', 'maxRequestInputTokens', 'maxToolCalls', 'timeoutMs']) {
+    if (!Number.isSafeInteger(config[field]) || config[field] <= 0) throw new ConfigError(`${field} must be a positive safe integer`);
+  }
+  if (config.maxInputTokens !== undefined && (!Number.isSafeInteger(config.maxInputTokens) || config.maxInputTokens <= 0)) throw new ConfigError('maxInputTokens must be a positive safe integer');
 }
 
 export function estimateUsd(inputTokens, outputTokens, config) {

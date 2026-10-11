@@ -2,10 +2,12 @@
 
 当前没有任何优化版本通过统一 Live Benchmark 门禁，因此版本分支和 release tag 仅保留用于既定流程；不能提前发布或移动 `main` 来暗示收益。
 
+2026-10-11 用户明确批准按已验证离线指标提交 V1、进入 V2。因此允许离线检查点提交，指标来源必须标注；Live 门禁与 Release 状态仍未通过。
+
 | 版本 | 目标 | 状态 | 通过证据 |
 |---|---|---|---|
-| V1 | Progressive Context 渐进检索 | 未开始 | 无 Live 结果 |
-| V2 | Selective Memory 与工具输出管理 | 未开始 | 无 Live 结果 |
+| V1 | Progressive Context 渐进检索 | 用户批准提交离线检查点：路径筛选、证据引用、日志头尾和运行修复 | 12项可执行验收各12/12，工具字符−23.41%；长成功/失败日志−86.47%/−54.06%；无provider Token结果 |
+| V2 | Selective Memory 与工具输出管理 | 进入实验：压缩旧工具结果，保留源码证据/失败/最新交互及思考签名 | 尚未测量 |
 | V3 | 双向推理预算路由及结构化交接 | 未开始 | 无 Live 结果 |
 | V4 | Context Delta / Retrieval Refinement | 未开始 | 无 Live 结果 |
 | V5 | Feedback policy / Value of Information | 未开始 | 无 Live 结果 |

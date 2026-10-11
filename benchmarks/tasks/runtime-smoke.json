@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "mode": "executable-fixtures",
+  "suite": "runtime-smoke",
+  "seed": 773,
+  "source": {
+    "origin": "self-authored",
+    "license": "MIT"
+  },
+  "tasks": [
+    {
+      "taskId": "session-expiry-boundary",
+      "category": "authentication",
+      "language": "javascript",
+      "difficulty": "easy",
+      "prompt": "Fix session validity at the exact expiration timestamp. A session is valid only while now is strictly earlier than expiresAt. Preserve the existing treatment of missing sessions and sessions without expiration.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/session.mjs": "export function isSessionValid(session, now) {\n  if (!session) return false;\n  if (session.expiresAt == null) return true;\n  return !(now > session.expiresAt);\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/session.mjs';\n\ntest('valid and expired sessions away from the boundary', () => {\n  assert.equal(subject.isSessionValid({ expiresAt: 100 }, 99), true);\n  assert.equal(subject.isSessionValid({ expiresAt: 100 }, 101), false);\n  assert.equal(subject.isSessionValid(null, 99), false);\n  assert.equal(subject.isSessionValid({}, 99), true);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/session.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('expiration is exclusive', () => {\n  for (const expiresAt of [0, 1, 100, 123456]) {\n    assert.equal(subject.isSessionValid({ expiresAt }, expiresAt), false);\n    assert.equal(subject.isSessionValid({ expiresAt }, expiresAt - 1), true);\n    assert.equal(subject.isSessionValid({ expiresAt }, expiresAt + 1), false);\n  }\n});\n",
+      "solution": [
+        {
+          "path": "src/session.mjs",
+          "search": "return !(now > session.expiresAt);",
+          "replace": "return now < session.expiresAt;"
+        }
+      ]
+    },
+    {
+      "taskId": "refresh-window-boundary",
+      "category": "authentication",
+      "language": "javascript",
+      "difficulty": "easy",
+      "prompt": "Fix shouldRefresh so refresh begins when a live session has exactly refreshWindowMs milliseconds remaining. Expired sessions must still refresh, and sessions with no expiration must not refresh.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/refresh.mjs": "export function shouldRefresh(session, now, refreshWindowMs = 30000) {\n  if (!session || session.expiresAt == null) return false;\n  return session.expiresAt - now < refreshWindowMs;\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/refresh.mjs';\n\ntest('refresh decisions inside and outside the window', () => {\n  assert.equal(subject.shouldRefresh({ expiresAt: 100 }, 80, 30), true);\n  assert.equal(subject.shouldRefresh({ expiresAt: 100 }, 50, 30), false);\n  assert.equal(subject.shouldRefresh({ expiresAt: 100 }, 120, 30), true);\n  assert.equal(subject.shouldRefresh({}, 80, 30), false);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/refresh.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('exact refresh-window boundary is included', () => {\n  for (const window of [0, 1, 30, 30000]) {\n    assert.equal(subject.shouldRefresh({ expiresAt: 50000 }, 50000 - window, window), true);\n    assert.equal(subject.shouldRefresh({ expiresAt: 50000 }, 49999 - window, window), false);\n  }\n});\n",
+      "solution": [
+        {
+          "path": "src/refresh.mjs",
+          "search": "return session.expiresAt - now < refreshWindowMs;",
+          "replace": "return session.expiresAt - now <= refreshWindowMs;"
+        }
+      ]
+    },
+    {
+      "taskId": "retry-attempt-budget",
+      "category": "error-recovery",
+      "language": "javascript",
+      "difficulty": "medium",
+      "prompt": "Fix retry so maxAttempts is the total number of calls to operation, including its first call. Never call operation more than maxAttempts times. Continue returning the first success and rethrow the last error after exhausting a positive integer budget.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/retry.mjs": "export async function retry(operation, maxAttempts = 3) {\n  if (!Number.isInteger(maxAttempts) || maxAttempts < 1) {\n    throw new RangeError('maxAttempts must be a positive integer');\n  }\n  let lastError;\n  for (let attempt = 0; attempt <= maxAttempts; attempt += 1) {\n    try {\n      return await operation(attempt + 1);\n    } catch (error) {\n      lastError = error;\n    }\n  }\n  throw lastError;\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/retry.mjs';\n\ntest('returns a success following one transient failure', async () => {\n  const attempts = [];\n  const result = await subject.retry(async (attempt) => {\n    attempts.push(attempt);\n    if (attempt === 1) throw new Error('temporary');\n    return 'ok';\n  }, 3);\n  assert.equal(result, 'ok');\n  assert.deepEqual(attempts, [1, 2]);\n});\ntest('rejects invalid budgets', async () => {\n  await assert.rejects(subject.retry(() => 'ok', 0), RangeError);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/retry.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('failure consumes exactly the configured total attempts', async () => {\n  for (const maxAttempts of [1, 2, 4]) {\n    const attempts = [];\n    const finalError = new Error('exhausted');\n    await assert.rejects(subject.retry((attempt) => {\n      attempts.push(attempt);\n      throw finalError;\n    }, maxAttempts), (error) => error === finalError);\n    assert.deepEqual(attempts, Array.from({ length: maxAttempts }, (_, i) => i + 1));\n  }\n});\n",
+      "solution": [
+        {
+          "path": "src/retry.mjs",
+          "search": "for (let attempt = 0; attempt <= maxAttempts; attempt += 1) {",
+          "replace": "for (let attempt = 0; attempt < maxAttempts; attempt += 1) {"
+        }
+      ]
+    },
+    {
+      "taskId": "normalize-windows-path",
+      "category": "cross-platform",
+      "language": "javascript",
+      "difficulty": "medium",
+      "prompt": "Fix normalizeRelativePath to accept both forward slash and Windows backslash separators, including mixed separators. Return slash-separated paths, collapse empty and dot segments, resolve parent segments, and keep rejecting traversal above the relative root.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/paths.mjs": "export function normalizeRelativePath(input) {\n  if (typeof input !== 'string') throw new TypeError('path must be a string');\n  const segments = input.split('/');\n  const result = [];\n  for (const segment of segments) {\n    if (!segment || segment === '.') continue;\n    if (segment === '..') {\n      if (!result.length) throw new Error('path escapes root');\n      result.pop();\n    } else {\n      result.push(segment);\n    }\n  }\n  return result.join('/');\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/paths.mjs';\n\ntest('normalizes slash-separated relative paths', () => {\n  assert.equal(subject.normalizeRelativePath('src/./api/../index.mjs'), 'src/index.mjs');\n  assert.equal(subject.normalizeRelativePath('src//index.mjs'), 'src/index.mjs');\n  assert.throws(() => subject.normalizeRelativePath('../secret'), /escapes root/);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/paths.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('normalizes backslashes and mixed separators', () => {\n  assert.equal(subject.normalizeRelativePath('src\\\\api\\\\..\\\\index.mjs'), 'src/index.mjs');\n  assert.equal(subject.normalizeRelativePath('src\\\\api/./file.mjs'), 'src/api/file.mjs');\n  assert.equal(subject.normalizeRelativePath('src\\\\\\\\file.mjs'), 'src/file.mjs');\n  assert.throws(() => subject.normalizeRelativePath('..\\\\secret'), /escapes root/);\n  assert.throws(() => subject.normalizeRelativePath('src/..\\\\..\\\\secret'), /escapes root/);\n});\n",
+      "solution": [
+        {
+          "path": "src/paths.mjs",
+          "search": "const segments = input.split('/');",
+          "replace": "const segments = input.replace(/\\\\/g, '/').split('/');"
+        }
+      ]
+    },
+    {
+      "taskId": "pagination-partial-page",
+      "category": "pagination",
+      "language": "javascript",
+      "difficulty": "easy",
+      "prompt": "Fix paginate metadata so a final partial page is included in pageCount. Page numbers are 1-based; pageCount must be zero for no items. Keep slicing behavior and input validation unchanged.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/pagination.mjs": "export function paginate(items, page, pageSize) {\n  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(pageSize) || pageSize < 1) {\n    throw new RangeError('page and pageSize must be positive integers');\n  }\n  const start = (page - 1) * pageSize;\n  return {\n    items: items.slice(start, start + pageSize),\n    pageCount: Math.floor(items.length / pageSize),\n    total: items.length\n  };\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/pagination.mjs';\n\ntest('complete pages have correct metadata', () => {\n  assert.deepEqual(subject.paginate([1, 2, 3, 4], 2, 2), { items: [3, 4], pageCount: 2, total: 4 });\n  assert.deepEqual(subject.paginate([], 1, 2), { items: [], pageCount: 0, total: 0 });\n  assert.throws(() => subject.paginate([], 0, 2), RangeError);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/pagination.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('partial pages count as a page', () => {\n  assert.deepEqual(subject.paginate([1, 2, 3, 4, 5], 3, 2), { items: [5], pageCount: 3, total: 5 });\n  assert.equal(subject.paginate([1], 1, 10).pageCount, 1);\n  assert.equal(subject.paginate([1, 2, 3], 4, 2).pageCount, 2);\n  assert.deepEqual(subject.paginate([1, 2, 3], 4, 2).items, []);\n});\n",
+      "solution": [
+        {
+          "path": "src/pagination.mjs",
+          "search": "pageCount: Math.floor(items.length / pageSize),",
+          "replace": "pageCount: Math.ceil(items.length / pageSize),"
+        }
+      ]
+    },
+    {
+      "taskId": "cache-namespace-invalidation",
+      "category": "cache",
+      "language": "javascript",
+      "difficulty": "medium",
+      "prompt": "Fix invalidateNamespace to remove the exact namespace key and its dot-separated descendants, while preserving sibling namespaces with the same text prefix. Return the number of removed entries. For example invalidating auth removes auth and auth.session but preserves authentication and authz.token.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/cache.mjs": "export function invalidateNamespace(cache, namespace) {\n  let removed = 0;\n  for (const key of cache.keys()) {\n    if (key.startsWith(namespace)) {\n      cache.delete(key);\n      removed += 1;\n    }\n  }\n  return removed;\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/cache.mjs';\n\ntest('removes a namespace and descendants', () => {\n  const cache = new Map([['auth', 1], ['auth.session', 2], ['billing.invoice', 3]]);\n  assert.equal(subject.invalidateNamespace(cache, 'auth'), 2);\n  assert.deepEqual([...cache.keys()], ['billing.invoice']);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/cache.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('shared text prefixes do not imply namespace membership', () => {\n  const cache = new Map([['auth', 1], ['auth.session', 2], ['auth.session.cookie', 3], ['authentication', 4], ['authz.token', 5], ['author.name', 6]]);\n  assert.equal(subject.invalidateNamespace(cache, 'auth'), 3);\n  assert.deepEqual([...cache.keys()], ['authentication', 'authz.token', 'author.name']);\n  assert.equal(subject.invalidateNamespace(cache, 'missing'), 0);\n});\n",
+      "solution": [
+        {
+          "path": "src/cache.mjs",
+          "search": "if (key.startsWith(namespace)) {",
+          "replace": "if (key === namespace || key.startsWith(`${namespace}.`)) {"
+        }
+      ]
+    },
+    {
+      "taskId": "score-sort-stability",
+      "category": "ordering",
+      "language": "javascript",
+      "difficulty": "medium",
+      "prompt": "Fix rankItems so it sorts by descending numeric score while preserving original input order for equal scores. Do not mutate the caller array.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/ranking.mjs": "export function rankItems(items) {\n  return [...items].sort((a, b) => {\n    const scoreDelta = b.score - a.score;\n    return scoreDelta || a.name.localeCompare(b.name);\n  });\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/ranking.mjs';\n\ntest('ranks distinct scores without changing the input', () => {\n  const items = [{ name: 'second', score: 3 }, { name: 'first', score: 9 }];\n  const ranked = subject.rankItems(items);\n  assert.deepEqual(ranked.map((item) => item.name), ['first', 'second']);\n  assert.deepEqual(items.map((item) => item.name), ['second', 'first']);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/ranking.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('equal scores preserve insertion order', () => {\n  const items = [{ name: 'zeta', score: 5 }, { name: 'alpha', score: 5 }, { name: 'top', score: 8 }, { name: 'beta', score: 5 }];\n  const ranked = subject.rankItems(items);\n  assert.deepEqual(ranked.map((item) => item.name), ['top', 'zeta', 'alpha', 'beta']);\n  assert.deepEqual(items.map((item) => item.name), ['zeta', 'alpha', 'top', 'beta']);\n  assert.deepEqual(subject.rankItems([]), []);\n});\n",
+      "solution": [
+        {
+          "path": "src/ranking.mjs",
+          "search": "return scoreDelta || a.name.localeCompare(b.name);",
+          "replace": "return scoreDelta;"
+        }
+      ]
+    },
+    {
+      "taskId": "unicode-codepoint-truncation",
+      "category": "unicode",
+      "language": "javascript",
+      "difficulty": "medium",
+      "prompt": "Fix truncateText so limit counts Unicode code points, not UTF-16 code units. Preserve complete supplementary-plane characters such as emoji. Combining marks count as individual code points; grapheme segmentation is not required. Keep the existing validation.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/text.mjs": "export function truncateText(text, limit) {\n  if (!Number.isInteger(limit) || limit < 0) throw new RangeError('limit must be a nonnegative integer');\n  return text.slice(0, limit);\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/text.mjs';\n\ntest('truncates ASCII text', () => {\n  assert.equal(subject.truncateText('hello', 3), 'hel');\n  assert.equal(subject.truncateText('hello', 0), '');\n  assert.equal(subject.truncateText('hi', 5), 'hi');\n  assert.throws(() => subject.truncateText('hi', -1), RangeError);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/text.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('counts Unicode code points', () => {\n  assert.equal(subject.truncateText('😀ab', 1), '😀');\n  assert.equal(subject.truncateText('A😀B', 2), 'A😀');\n  assert.equal(subject.truncateText('𠮷野家', 2), '𠮷野');\n  assert.equal(subject.truncateText('😀😺', 2), '😀😺');\n  assert.equal(subject.truncateText('e\\u0301x', 2), 'e\\u0301');\n  assert.equal(subject.truncateText('😀', 0), '');\n});\n",
+      "solution": [
+        {
+          "path": "src/text.mjs",
+          "search": "return text.slice(0, limit);",
+          "replace": "return Array.from(text).slice(0, limit).join('');"
+        }
+      ]
+    },
+    {
+      "taskId": "blank-port-config",
+      "category": "input-parsing",
+      "language": "javascript",
+      "difficulty": "easy",
+      "prompt": "Fix parsePort so empty or whitespace-only strings, null, booleans and objects fall back instead of being coerced into a port. Accept numbers and nonblank numeric strings only when they are integers from 0 through 65535. Keep valid port 0 support.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/config.mjs": "export function parsePort(value, fallback = 3000) {\n  const port = Number(value);\n  if (Number.isInteger(port) && port >= 0 && port <= 65535) return port;\n  return fallback;\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/config.mjs';\n\ntest('parses ordinary numeric configuration', () => {\n  assert.equal(subject.parsePort('8080'), 8080);\n  assert.equal(subject.parsePort(0), 0);\n  assert.equal(subject.parsePort('not-a-port', 9000), 9000);\n  assert.equal(subject.parsePort('70000'), 3000);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/config.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('rejects coercion-only values', () => {\n  for (const value of ['', '   ', '\\t\\n', null, false, true, [], [80], { valueOf: () => 80 }, { valueOf: () => { throw new Error('must not coerce'); } }]) {\n    assert.equal(subject.parsePort(value, 9000), 9000);\n  }\n  assert.equal(subject.parsePort(' 0 '), 0);\n  assert.equal(subject.parsePort(' 8080 '), 8080);\n  assert.equal(subject.parsePort(65535), 65535);\n  assert.equal(subject.parsePort('1.5', 9000), 9000);\n});\n",
+      "solution": [
+        {
+          "path": "src/config.mjs",
+          "search": "  const port = Number(value);",
+          "replace": "  if (typeof value !== 'number' && (typeof value !== 'string' || value.trim() === '')) return fallback;\n  const port = Number(value);"
+        }
+      ]
+    },
+    {
+      "taskId": "inclusive-search-end",
+      "category": "search",
+      "language": "javascript",
+      "difficulty": "easy",
+      "prompt": "Fix findInRange so both start and end indices are inclusive. Return -1 when no matching item exists in the specified range; keep clamping the range to the array.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/search.mjs": "export function findInRange(items, target, start = 0, end = items.length - 1) {\n  const from = Math.max(0, start);\n  const to = Math.min(items.length - 1, end);\n  for (let index = from; index < to; index += 1) {\n    if (items[index] === target) return index;\n  }\n  return -1;\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/search.mjs';\n\ntest('finds matches strictly inside the range', () => {\n  assert.equal(subject.findInRange(['a', 'b', 'c', 'd'], 'b', 0, 3), 1);\n  assert.equal(subject.findInRange(['a', 'b', 'c', 'd'], 'missing', 0, 3), -1);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/search.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('includes the final and singleton indices', () => {\n  assert.equal(subject.findInRange(['a', 'b', 'c'], 'c', 0, 2), 2);\n  assert.equal(subject.findInRange(['a', 'b', 'c'], 'b', 1, 1), 1);\n  assert.equal(subject.findInRange(['a'], 'a'), 0);\n  assert.equal(subject.findInRange([], 'a'), -1);\n  assert.equal(subject.findInRange(['a', 'b'], 'b', -5, 20), 1);\n  assert.equal(subject.findInRange(['a', 'b', 'c'], 'a', 1, 2), -1);\n});\n",
+      "solution": [
+        {
+          "path": "src/search.mjs",
+          "search": "for (let index = from; index < to; index += 1) {",
+          "replace": "for (let index = from; index <= to; index += 1) {"
+        }
+      ]
+    },
+    {
+      "taskId": "migration-preserve-disabled",
+      "category": "data-migration",
+      "language": "javascript",
+      "difficulty": "easy",
+      "prompt": "Fix migrateUser so an explicitly disabled user (active: false) stays disabled. Default active to true only when it is missing or null. Preserve the id and version migration behavior.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/migrate.mjs": "export function migrateUser(user) {\n  return {\n    id: user.id,\n    active: user.active || true,\n    schemaVersion: 2\n  };\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/migrate.mjs';\n\ntest('migrates active and legacy users', () => {\n  assert.deepEqual(subject.migrateUser({ id: 'u1', active: true }), { id: 'u1', active: true, schemaVersion: 2 });\n  assert.deepEqual(subject.migrateUser({ id: 'u2' }), { id: 'u2', active: true, schemaVersion: 2 });\n  assert.deepEqual(subject.migrateUser({ id: 'u3', active: null }), { id: 'u3', active: true, schemaVersion: 2 });\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/migrate.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('preserves an explicit disabled state', () => {\n  const original = { id: 'disabled', active: false, schemaVersion: 1 };\n  assert.deepEqual(subject.migrateUser(original), { id: 'disabled', active: false, schemaVersion: 2 });\n  assert.equal(original.active, false);\n  assert.equal(original.schemaVersion, 1);\n});\n",
+      "solution": [
+        {
+          "path": "src/migrate.mjs",
+          "search": "active: user.active || true,",
+          "replace": "active: user.active ?? true,"
+        }
+      ]
+    },
+    {
+      "taskId": "async-queue-rejection-recovery",
+      "category": "async-control",
+      "language": "javascript",
+      "difficulty": "medium",
+      "prompt": "Fix AsyncQueue so a rejected task rejects only its own returned promise. Already-enqueued later tasks and subsequently-enqueued tasks must still execute in serial order. Preserve each successful task result.",
+      "files": {
+        "package.json": "{\n  \"name\": \"tea-runtime-fixture\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test tests/public.test.mjs\"\n  }\n}\n",
+        "src/queue.mjs": "export class AsyncQueue {\n  constructor() {\n    this.tail = Promise.resolve();\n  }\n\n  enqueue(task) {\n    this.tail = this.tail.then(task);\n    return this.tail;\n  }\n}\n",
+        "tests/public.test.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from '../src/queue.mjs';\n\ntest('runs successful tasks in order', async () => {\n  const queue = new subject.AsyncQueue();\n  const order = [];\n  const first = queue.enqueue(async () => {\n    order.push('first');\n    return 1;\n  });\n  const second = queue.enqueue(async () => {\n    order.push('second');\n    return 2;\n  });\n  assert.deepEqual(await Promise.all([first, second]), [1, 2]);\n  assert.deepEqual(order, ['first', 'second']);\n});\n",
+        "AGENTS.md": "# Fixture instructions\n\nMake the requested behavior change in the existing source file. Keep the exported API. Run `node --test tests/public.test.mjs` after editing.\n"
+      },
+      "entry": "src/queue.mjs",
+      "publicTestCommand": "node --test tests/public.test.mjs",
+      "hiddenTest": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport * as subject from './candidate.mjs';\n\ntest('continues after a failed task', async () => {\n  const queue = new subject.AsyncQueue();\n  const order = [];\n  const failure = new Error('failed task');\n  const first = queue.enqueue(() => {\n    order.push('first');\n    throw failure;\n  });\n  const second = queue.enqueue(() => {\n    order.push('second');\n    return 2;\n  });\n  const results = await Promise.allSettled([first, second]);\n  assert.equal(results[0].status, 'rejected');\n  assert.equal(results[0].reason, failure);\n  assert.deepEqual(results[1], { status: 'fulfilled', value: 2 });\n  assert.deepEqual(order, ['first', 'second']);\n  assert.equal(await queue.enqueue(() => { order.push('third'); return 3; }), 3);\n  assert.deepEqual(order, ['first', 'second', 'third']);\n});\n",
+      "solution": [
+        {
+          "path": "src/queue.mjs",
+          "search": "    this.tail = this.tail.then(task);\n    return this.tail;",
+          "replace": "    const result = this.tail.then(task);\n    this.tail = result.catch(() => {});\n    return result;"
+        }
+      ]
+    }
+  ]
+}

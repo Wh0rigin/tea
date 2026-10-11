@@ -9,8 +9,9 @@
   },
   "scripts": {
     "tea": "node src/cli.mjs",
-    "test": "node --test",
-    "benchmark:replay": "node src/cli.mjs benchmark run --suite core --mode replay"
+    "test": "node scripts/test.mjs",
+    "benchmark:replay": "node src/cli.mjs benchmark run --suite core --mode replay",
+    "benchmark:runtime": "node src/cli.mjs benchmark run --suite runtime-smoke --mode runtime"
   },
   "engines": {
     "node": ">=20"

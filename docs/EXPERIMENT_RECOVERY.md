@@ -1,7 +1,7 @@
 # 恢复与继续执行
 
 1. `cd` 到项目目录，执行 `git status --short --branch` 和 `git log --oneline --decorate -5`；先阅读 `PROGRESS.md`。不要丢弃未提交试验。
-2. 运行 `npm test`、`npm run benchmark:replay`。controlled replay 只能验证 Harness，不能当作真实模型结果。
+2. 运行 `npm test`、`npm run benchmark:replay`、`npm run benchmark:runtime`。Replay 只估算；Runtime 用脚本化工具选择执行真实代码/验收，两者都不是模型成功率或 provider usage。运行目录必须唯一；中断时先检查 checkpoint 与逐请求 Ledger，未知花费不能自动按零重跑。
 3. 从 PackyAPI 当前令牌分组控制台获取该模型的输入、输出价格倍率，并设置环境变量。公开 Anthropic Messages 示例使用 `https://cf.api.fan`，先到模型广场确认 GLM-5.3-Flash 的协议兼容性。再执行一次有限输出的单请求 Smoke，核实工具调用、SSE 终止事件、low/high/max effort 映射、服务端 usage 和实际扣费。底层档位以 [Z.AI 官方模型文档](https://docs.z.ai/guides/vlm/glm-5.3-flash) 为准。
 4. 补全可固定版本和验收的多语言任务仓库及隐藏测试，做 Live baseline，并归档脱敏日志、价格、配置哈希和 commit SHA。未能取得这些资源时记录 `NOT_MEASURED` 并停止宣称性能收益。
 5. 完成 V1 实验后，逐版本按 `docs/VERSION_ROADMAP.md` 和 `docs/GIT_WORKFLOW.md` 继续；每次提交都需直接父版本配对 Live 证据。

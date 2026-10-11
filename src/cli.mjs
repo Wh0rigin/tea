@@ -3,8 +3,9 @@ import path from 'node:path';
 import { runTask } from './agent.mjs';
 import { loadConfig, ConfigError } from './config.mjs';
 import { compareRuns, loadRun, renderComparisonReport, renderRunReport, runReplayBenchmark, RESULT_ROOT } from './benchmark.mjs';
+import { renderExecutableReport, runExecutableBenchmark } from './runtime-benchmark.mjs';
 
-const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://www.packyapi.ai'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.\n`;
+const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--context-strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 24\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.`;
 
 function parseOptions(args) {
   const options = {};
@@ -12,11 +13,11 @@ function parseOptions(args) {
   for (let i = 0; i < args.length; i += 1) {
     const value = args[i];
     if (value === '--help' || value === '-h') options.help = true;
-    else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--base-run', '--candidate-run', '--run'].includes(value)) {
+    else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--base-run', '--candidate-run', '--run'].includes(value)) {
       const next = args[i + 1];
       if (next === undefined || next.startsWith('--')) throw new Error(`Missing value after ${value}`);
       i += 1;
-      const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
+      const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--strategy': 'strategy', '--context-strategy': 'contextStrategy', '--initial-file-limit': 'initialFileLimit', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
       options[key] = next;
     } else if (value.startsWith('-')) throw new Error(`Unknown option: ${value}`);
     else positional.push(value);
@@ -27,7 +28,7 @@ function parseOptions(args) {
 
 async function main() {
   const args = process.argv.slice(2);
-  if (!args.length || args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); return; }
+  if (!args.length || args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP + '\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
   const group = args[0];
   if (group === 'benchmark') { await benchmarkCommand(args.slice(1)); return; }
 
@@ -47,8 +48,17 @@ async function benchmarkCommand(args) {
   const parsed = parseOptions(args.slice(1));
   if (subcommand === 'run') {
     const mode = parsed.mode || 'replay';
-    if (mode !== 'replay') throw new Error('Live suite execution is not implemented yet. Replay mode is controlled, offline, and explicitly not a live-model result.');
-    const result = await runReplayBenchmark({ suite: parsed.suite || 'core', runId: parsed.runId });
+    if (['runtime', 'live'].includes(mode)) {
+      const config = mode === 'live' ? loadConfig(parsed) : undefined;
+      const result = await runExecutableBenchmark({ mode, suite: parsed.suite || 'runtime-smoke', strategy: parsed.strategy || 'v1',
+        initialFileLimit: parsed.initialFileLimit === undefined ? undefined : Number(parsed.initialFileLimit), runId: parsed.runId,
+        config, onProgress: (text) => process.stdout.write(`${text}\n`) });
+      process.stdout.write(`Executable run saved: ${result.outputDir}\n${renderExecutableReport(result.run)}`);
+      if (result.run.totals.acceptedTasks !== result.run.totals.taskCount) process.exitCode = 2;
+      return;
+    }
+    if (mode !== 'replay') throw new Error('Benchmark mode must be replay, runtime, or live.');
+    const result = await runReplayBenchmark({ suite: parsed.suite || 'core', strategy: parsed.strategy || 'baseline', initialFileLimit: parsed.initialFileLimit === undefined ? undefined : Number(parsed.initialFileLimit), runId: parsed.runId });
     process.stdout.write(`Replay run saved: ${result.outputDir}\n`);
     process.stdout.write(renderRunReport(result.run));
     return;
@@ -64,7 +74,7 @@ async function benchmarkCommand(args) {
   if (subcommand === 'report') {
     if (!parsed.run) throw new Error('Use --run ID.');
     const run = await loadRun(parsed.run);
-    process.stdout.write(renderRunReport(run));
+    process.stdout.write(['offline-runtime', 'live-fixture'].includes(run.mode) ? renderExecutableReport(run) : renderRunReport(run));
     return;
   }
   throw new Error('Unknown benchmark command. Use run, compare, or report.');

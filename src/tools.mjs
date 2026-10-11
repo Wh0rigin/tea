@@ -1,8 +1,10 @@
+import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { constants } from 'node:fs';
-import { access, lstat, readFile, readdir, realpath, stat, writeFile } from 'node:fs/promises';
+import { lstat, readFile, readdir, realpath, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
+import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
+import { BoundedOutput } from './output.mjs';
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -18,9 +20,27 @@ const VALIDATION_COMMANDS = [
   /^npm\s+(?:test|run\s+(?:test|lint|check|typecheck))(?:\s+--\s+[^;&|<>`]+)?$/,
   /^python\s+-m\s+(?:pytest|unittest)(?:\s+[^;&|<>`]+)?$/,
   /^pytest(?:\s+[^;&|<>`]+)?$/,
-  /^git\s+(?:status(?:\s+--short)?|diff(?:\s+--check)?|log\s+-\d+(?:\s+--oneline)?)$/,
 ];
+const DIAGNOSTIC_COMMANDS = [/^git\s+(?:status(?:\s+--short)?|diff(?:\s+--check)?|log\s+-\d+(?:\s+--oneline)?)$/];
+const NON_VALIDATING_FLAGS = /(?:^|\s)(?:-h|--help|--version|--list(?:-[a-z-]+)?|--collect-only|--collectonly|--co|--fixtures(?:-per-test)?|--inspect(?:-brk)?|--eval|--print)(?:=|\s|$)/i;
 const BLOCKED_SHELL = /(?:\brm\b|\bdel\b|\berase\b|\brmdir\b|\bformat\b|\bmkfs\b|\bshutdown\b|\breg\s+(?:add|delete)\b|git\s+(?:reset|clean|push|restore|checkout\s+-f)|\bRemove-Item\b)/i;
+
+function isAllowedCommand(command) {
+  return typeof command === 'string' && !/[;&|<>`\n\r]/.test(command)
+    && [...VALIDATION_COMMANDS, ...DIAGNOSTIC_COMMANDS].some((pattern) => pattern.test(command.trim()));
+}
+
+export function isValidationCommand(command) {
+  return isAllowedCommand(command) && VALIDATION_COMMANDS.some((pattern) => pattern.test(command.trim()))
+    && !NON_VALIDATING_FLAGS.test(command)
+    && !(command.trim().split(/\s+/)[0] === 'node' && /(?:^|\s)(?:-v|-e|-p)(?:\s|$)/.test(command));
+}
+
+function assertWindowsCommand(command) {
+  if (process.platform === 'win32' && /[%!^()\"']/.test(command)) {
+    throw new Error('CMD metacharacters are not allowed in Windows validation commands');
+  }
+}
 
 function truncate(text, max = MAX_TOOL_OUTPUT) {
   const value = String(text);
@@ -36,10 +56,12 @@ function isSensitivePath(relativePath) {
 }
 
 export class WorkspaceTools {
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS }) {
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
+    this.deduplicateReads = deduplicateReads;
+    this.readEvidence = new Map();
   }
 
   async init() {
@@ -64,14 +86,17 @@ export class WorkspaceTools {
     return candidate;
   }
 
-  async listFiles({ maxFiles = 250 } = {}) {
+  async listFilePaths({ maxFiles = 250, offset = 0 } = {}) {
+    const pageSize = Math.max(1, Math.min(MAX_FILES, Math.floor(Number(maxFiles) || 250)));
+    const start = Math.max(0, Math.floor(Number(offset) || 0));
+    const stop = Math.min(MAX_FILES, start + pageSize);
     const rows = [];
     const walk = async (directory, depth) => {
-      if (depth > 12 || rows.length >= Math.min(maxFiles, MAX_FILES)) return;
+      if (depth > 12 || rows.length >= stop) return;
       const entries = await readdir(directory, { withFileTypes: true });
       entries.sort((a, b) => a.name.localeCompare(b.name));
       for (const entry of entries) {
-        if (rows.length >= Math.min(maxFiles, MAX_FILES)) break;
+        if (rows.length >= stop) break;
         if (entry.name.startsWith('.') && entry.name !== '.github') continue;
         if (OMIT.has(entry.name)) continue;
         const full = path.join(directory, entry.name);
@@ -85,7 +110,25 @@ export class WorkspaceTools {
       }
     };
     await walk(this.workspace, 0);
-    return rows.join('\n') || '(no text files found)';
+    return rows.slice(start, stop);
+  }
+
+  async listFiles({ maxFiles = 250, offset = 0 } = {}) {
+    const files = await this.listFilePaths({ maxFiles, offset });
+    const listing = files.join('\n') || '(no text files found)';
+    return Number(offset) > 0 ? `File listing from 0-based offset ${Math.floor(Number(offset))} (${files.length} paths returned):\n${listing}` : listing;
+  }
+
+  async initialInventory({ task, strategy = 'v1', limit = 8 } = {}) {
+    const files = await this.listFilePaths({ maxFiles: MAX_FILES });
+    return strategy === 'baseline' || strategy === 'v1-dedup'
+      ? buildBaselineInventory(files, 160)
+      : buildProgressiveInventory(task, files, {
+        limit,
+        queryExpansion: ['v1-inventory-expanded', 'v1-expanded'].includes(strategy)
+          ? true
+          : ['v1', 'v1-inventory-auto', 'v1-auto'].includes(strategy) ? 'auto' : false,
+      });
   }
 
   async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
@@ -97,12 +140,28 @@ export class WorkspaceTools {
     if (!TEXT_EXTENSIONS.has(path.extname(filename).toLowerCase()) && path.basename(filename).includes('.')) {
       throw new Error('This file type is not in the text-reading allowlist');
     }
-    const source = await readFile(filename, 'utf8');
+    const source = redactText(await readFile(filename, 'utf8'));
     const lines = source.split(/\r?\n/);
     const start = Math.max(1, Number(startLine) || 1);
     const end = Math.min(lines.length, Number(endLine) || lines.length);
     if (end < start) throw new Error('endLine must be greater than or equal to startLine');
-    return truncate(redactText(lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')));
+    const relative = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
+    const rangeKey = `${relative}:${start}-${end}`;
+    const sourceHash = createHash('sha256').update(source).digest('hex');
+    const evidenceRef = `${relative}#L${start}-L${end}@${sourceHash.slice(0, 16)}`;
+    const fullEvidence = `[evidence ref=${evidenceRef} sha256=${sourceHash}]\n${lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')}`;
+    const complete = fullEvidence.length <= MAX_TOOL_OUTPUT;
+    const partialHint = '\nOnly a prefix of the requested lines is shown. Use smaller startLine/endLine ranges to read omitted lines; this range is not cached as complete evidence.';
+    const evidence = complete ? fullEvidence : `${truncate(fullEvidence, MAX_TOOL_OUTPUT - partialHint.length - 80)}${partialHint}`;
+    if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
+      const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
+      return reference.length < evidence.length ? reference : evidence;
+    }
+    if (this.deduplicateReads) {
+      if (complete) this.readEvidence.set(rangeKey, sourceHash);
+      else this.readEvidence.delete(rangeKey);
+    }
+    return evidence;
   }
 
   async searchCode({ query, maxResults = 30 } = {}) {
@@ -163,13 +222,11 @@ export class WorkspaceTools {
   }
 
   async runTests({ command } = {}) {
-    if (typeof command !== 'string' || !VALIDATION_COMMANDS.some((pattern) => pattern.test(command.trim()))) {
+    if (!isAllowedCommand(command)) {
       throw new Error('Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests');
     }
-    if (process.platform === 'win32' && /[%!^()\"']/.test(command)) {
-      throw new Error('CMD metacharacters are not allowed in Windows validation commands');
-    }
-    return this.#spawnCommand(command.trim(), 120_000);
+    assertWindowsCommand(command);
+    return this.#spawnCommand(command.trim(), this.maxCommandMs);
   }
 
   async runShell({ command } = {}) {
@@ -177,7 +234,10 @@ export class WorkspaceTools {
     const value = command.trim();
     if (BLOCKED_SHELL.test(value)) throw new Error('Destructive commands and Git history mutations are blocked');
     if (/[;&|<>`\n\r]/.test(value)) throw new Error('Shell operators and multiline commands are blocked');
-    if (VALIDATION_COMMANDS.some((pattern) => pattern.test(value))) return this.#spawnCommand(value, this.maxCommandMs);
+    if (isAllowedCommand(value)) {
+      assertWindowsCommand(value);
+      return this.#spawnCommand(value, this.maxCommandMs);
+    }
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('Unlisted shell commands require an interactive terminal for approval');
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     let answer;
@@ -202,39 +262,58 @@ export class WorkspaceTools {
         windowsHide: true,
         stdio: ['ignore', 'pipe', 'pipe'],
       });
-      let stdout = '';
-      let stderr = '';
+      const stdout = new BoundedOutput();
+      const stderr = new BoundedOutput();
       let settled = false;
+      let timedOut = false;
+      let timeoutCleanup = Promise.resolve();
       const timer = setTimeout(() => {
-        child.kill();
-        if (!settled) { settled = true; reject(new Error(`Command timed out after ${timeoutMs} ms`)); }
+        timedOut = true;
+        if (process.platform === 'win32' && child.pid) {
+          // Node's Windows kill only ends the parent; test workers can retain the workspace.
+          timeoutCleanup = new Promise((done) => {
+            const terminator = spawn(path.join(safeEnv.SYSTEMROOT || 'C:\\Windows', 'System32', 'taskkill.exe'), ['/PID', String(child.pid), '/T', '/F'], {
+              env: safeEnv, shell: false, windowsHide: true, stdio: 'ignore',
+            });
+            terminator.once('error', () => { child.kill(); done(); });
+            terminator.once('close', done);
+          });
+        } else child.kill();
       }, timeoutMs);
       for (const [stream, target] of [[child.stdout, 'stdout'], [child.stderr, 'stderr']]) {
         stream.setEncoding('utf8');
         stream.on('data', (chunk) => {
-          if (target === 'stdout') stdout += chunk;
-          else stderr += chunk;
-          if (stdout.length + stderr.length > MAX_TOOL_OUTPUT * 2) child.kill();
+          (target === 'stdout' ? stdout : stderr).append(chunk);
         });
       }
       child.once('error', (error) => { clearTimeout(timer); if (!settled) { settled = true; reject(error); } });
-      child.once('close', (code, signal) => {
+      child.once('close', async (code, signal) => {
         clearTimeout(timer);
         if (settled) return;
         settled = true;
-        resolve(truncate(`exit=${code ?? signal}\n${stdout}\n${stderr}`));
+        if (timedOut) {
+          await timeoutCleanup;
+          reject(new Error(`Command timed out after ${timeoutMs} ms`));
+          return;
+        }
+        const maxChars = code === 0 ? 2_000 : 6_500;
+        const sanitized = redactText(`exit=${code ?? signal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
+        // Redaction can expand short assignments, so bound the sanitized result too.
+        const finalOutput = new BoundedOutput({ maxChars: MAX_TOOL_OUTPUT });
+        finalOutput.append(sanitized);
+        resolve(finalOutput.render());
       });
     });
-    return redactText(output);
+    return output;
   }
 }
 
 export const TOOL_DEFINITIONS = [
-  { name: 'list_files', description: 'List text files in the workspace, excluding dependencies and generated folders.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 } }, additionalProperties: false } },
+  { name: 'list_files', description: 'List a page of text file paths in the workspace. Use offset to inspect later pages; dependencies and generated folders are omitted.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 700 } }, additionalProperties: false } },
   { name: 'search_code', description: 'Search for a literal string in text source files.', input_schema: { type: 'object', properties: { query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
   { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
-  { name: 'run_tests', description: 'Run an allowlisted test or read-only Git validation command.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
+  { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
   { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
 ];
 

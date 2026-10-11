@@ -12,11 +12,15 @@ PackyAPI 的[公开 Anthropic Messages 示例](https://docs.packyapi.com/docs/cl
 
 ## D3 — 本地成本预留需明确价格
 
-PackyAPI 的费用受令牌分组和倍率影响。项目不硬编码公共标价或猜测用户账户实际费率；启动时要求两个输入/输出价格和成本上限。预检按单次输入上限和最大输出预留，不因缓存折扣降低预估。真实账单以服务端计费页为准。
+PackyAPI 的费用受令牌分组和倍率影响。项目不硬编码公共标价或猜测用户账户实际费率；启动时要求两个输入/输出价格和有限正数成本上限。预检按单次输入上限和最大输出预留。缓存读不假设折扣；写入默认使用基础输入价 2× 的保守 guard，参考 [Anthropic 缓存计量与价格](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)，不是 Packy 已核对费率。未知 usage 保留预留且停止，真实账单以服务端计费页为准。
 
 ## D4 — 测试后置条件
 
-Patch 后 Runtime 保持“待验证”状态，直至后续测试命令返回 0。预算或工具限制导致未验证时返回 `needs_validation`/`tool_limit_reached`，不以模型自评代替。
+Patch 后 Runtime 保持“待验证”状态，直至后续真正验证命令成功；Git 诊断、help/collect-only 和 Node 零通过测试不满足。后续编辑或失败验证恢复待验证。独立 fixture 验收同时检查公开/隐藏断言和完成见证。预算或工具限制导致未验证时返回 `needs_validation`/`tool_limit_reached`，不以模型自评代替。
+
+## D6 — 输出体积限制不终止测试
+
+真实命令发现输出超过约 28k 触发原工具杀进程，丢失末尾状态。候选改为有界 stdout/stderr 头尾与全流哈希；成功用更小预算，失败保留更多诊断。超时仍可终止进程树。仅完整发送的源码范围允许重复读引用，截断输出引导请求较窄范围。此决定有离线真实命令证据，尚无 provider Token 节省证据。
 
 ## D5 — 记录内容默认脱敏
 

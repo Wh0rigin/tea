@@ -1,0 +1,111 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { execFile } from 'node:child_process';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { promisify } from 'node:util';
+import { runTask } from '../src/agent.mjs';
+import { loadConfig } from '../src/config.mjs';
+import { ModelError } from '../src/model.mjs';
+
+const patch = { name: 'apply_patch', input: { path: 'value.mjs', search: 'value = 1', replace: 'value = 2' } };
+const verify = { name: 'run_tests', input: { command: 'node --test value.test.mjs' } };
+function toolResult(calls) {
+  return { content: calls.map((call, index) => ({ type: 'tool_use', id: `call_${index}`, ...call })), stop_reason: 'tool_use' };
+}
+function scriptedFactory(steps, captured = []) {
+  return () => ({ complete: async (request) => {
+    captured.push(structuredClone(request.messages));
+    const step = steps.shift();
+    if (step instanceof Error) throw step;
+    return step || { content: [{ type: 'text', text: 'Finished.' }], stop_reason: 'end_turn' };
+  } });
+}
+async function scenario(steps, callback, { maxToolCalls = 24, initializeGit = false } = {}) {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'tea-agent-'));
+  try {
+    await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');
+    await writeFile(path.join(root, 'value.test.mjs'), "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { value } from './value.mjs';\ntest('value', () => assert.equal(value, 2));\n");
+    if (initializeGit) await promisify(execFile)('git', ['init', '-q'], { cwd: root, windowsHide: true });
+    const config = { ...loadConfig({ workspace: root, runId: 'integration' }, {}), maxToolCalls };
+    const captured = [];
+    const result = await runTask('修复 value 的值', config, { adapterFactory: scriptedFactory(steps, captured) });
+    await callback(result, root, captured);
+  } finally { await rm(root, { recursive: true, force: true }); }
+}
+
+test('runs the actual patch/test loop and hashes arbitrary task text correctly', async () => {
+  await scenario([toolResult([{ name: 'read_file', input: { path: 'value.mjs' } }]), toolResult([patch, verify])], async (result, root) => {
+    assert.equal(result.status, 'completed');
+    assert.equal(result.validationPassed, true);
+    assert.equal(result.validationAttempts, 1);
+    assert.equal(result.runType, 'offline-runtime');
+    assert.match(await readFile(path.join(root, 'value.mjs'), 'utf8'), /value = 2/);
+    const [started] = (await readFile(path.join(result.runDirectory, 'ledger.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+    assert.equal(started.taskSha256, createHash('sha256').update('修复 value 的值').digest('hex'));
+    assert.equal(started.runType, 'offline-runtime');
+    assert.equal(started.usageSource, 'scripted');
+    assert.ok(result.wallElapsedMs > 0);
+  });
+});
+
+test('successful Git diagnostics cannot satisfy post-edit validation', async () => {
+  await scenario([toolResult([patch, { name: 'run_tests', input: { command: 'git status' } }])], async (result) => {
+    assert.equal(result.status, 'needs_validation');
+    assert.equal(result.validationPassed, false);
+    assert.equal(result.validationAttempts, 0);
+  }, { initializeGit: true });
+});
+
+test('run_shell counts an actual safe test command', async () => {
+  await scenario([toolResult([patch, { ...verify, name: 'run_shell' }])], async (result) => {
+    assert.equal(result.status, 'completed');
+    assert.equal(result.validationPassed, true);
+  });
+});
+
+test('an edit after a passing test restores pending validation', async () => {
+  await scenario([toolResult([patch, verify, { name: 'apply_patch', input: { path: 'value.mjs', search: 'value = 2', replace: 'value = 3' } }])], async (result) => {
+    assert.equal(result.status, 'needs_validation');
+    assert.equal(result.validationPassed, false);
+  });
+});
+
+test('a zero-test Node run cannot satisfy post-edit validation', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'tea-agent-zero-'));
+  try {
+    await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');
+    await writeFile(path.join(root, 'zero.test.mjs'), "import test from 'node:test';\ntest.skip('not executed', () => {});\n");
+    const result = await runTask('Update value', loadConfig({ workspace: root, runId: 'zero' }, {}), {
+      adapterFactory: scriptedFactory([toolResult([patch, { name: 'run_tests', input: { command: 'node --test zero.test.mjs' } }])]),
+    });
+    assert.equal(result.status, 'needs_validation');
+    assert.equal(result.validationPassed, false);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('a later failed validation invalidates an earlier pass', async () => {
+  await scenario([toolResult([patch, verify, { name: 'run_tests', input: { command: 'node --test absent.test.mjs' } }])], async (result) => {
+    assert.equal(result.status, 'needs_validation');
+    assert.equal(result.validationPassed, false);
+    assert.equal(result.validationAttempts, 2);
+  });
+});
+
+test('a tool budget cannot mark an unvalidated edit complete', async () => {
+  await scenario([toolResult([patch, verify])], async (result) => {
+    assert.equal(result.status, 'tool_limit_reached');
+    assert.equal(result.validationPassed, false);
+  }, { maxToolCalls: 1 });
+});
+
+test('stops on a truncated final response or provider error', async () => {
+  await scenario([{ content: [{ type: 'text', text: 'Partial' }], stop_reason: 'max_tokens' }], async (result) => assert.equal(result.status, 'incomplete'));
+  await scenario([new ModelError('Provider stopped')], async (result) => assert.equal(result.status, 'failed'));
+});
+
+test('live runtime still requires credentials and a hard budget', async () => {
+  await assert.rejects(runTask('task', loadConfig({}, {})), /API_KEY/);
+});

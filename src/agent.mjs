@@ -1,27 +1,39 @@
 import { createHash } from 'node:crypto';
 import { TokenLedger } from './ledger.mjs';
 import { AnthropicMessagesAdapter, ModelError } from './model.mjs';
-import { TOOL_DEFINITIONS, WorkspaceTools, dispatchTool } from './tools.mjs';
+import { TOOL_DEFINITIONS, WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
 import { assertLiveConfig } from './config.mjs';
 
-const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
+const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 
-function estimateTextTokens(text) {
-  const value = String(text);
-  const wideChars = (value.match(/[\u2E80-\u9FFF\uF900-\uFAFF]/g) || []).length;
-  return Math.ceil(wideChars * 1.4 + (value.length - wideChars) / 4);
+function validationSucceeded(output) {
+  const text = String(output);
+  return /^exit=0\b/.test(text) && !/(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+(?:tests|pass)\s+0\s*(?:\n|$)/.test(text);
 }
 
-export async function runTask(task, config, { onText = () => {} } = {}) {
-  assertLiveConfig(config);
+export async function runTask(task, config, { onText = () => {}, adapterFactory } = {}) {
+  // Injected adapters are for deterministic integration checks, never live usage evidence.
+  const offline = adapterFactory !== undefined;
+  if (offline && typeof adapterFactory !== 'function') throw new TypeError('adapterFactory must be a function');
+  if (!offline) assertLiveConfig(config);
   const ledger = new TokenLedger({ workspace: config.workspace, runId: config.runId, model: config.model, storeRaw: config.storeRaw });
-  await ledger.init({ workspace: config.workspace, taskSha256: createTaskHash(task), effort: config.effort, runType: 'live' });
-  const tools = new WorkspaceTools({ workspace: config.workspace, ledger });
+  const wallStarted = Date.now();
+  await ledger.init({ workspace: config.workspace, taskSha256: createTaskHash(task), effort: config.effort,
+    runType: offline ? 'offline-runtime' : 'live', usageSource: offline ? 'scripted' : 'provider' });
+  const deduplicateReads = ['v1-dedup', 'v1', 'v1-expanded', 'v1-auto'].includes(config.contextStrategy);
+  const tools = new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads });
   await tools.init();
-  const adapter = new AnthropicMessagesAdapter(config);
-  adapter.onRequest = (event) => ledger.request(event).catch((error) => onText(`Warning: ledger write failed: ${error.message}`));
-  const files = await tools.listFiles({ maxFiles: 160 });
-  const userMessage = `${task}\n\nWorkspace: ${config.workspace}\nInitial text-file listing:\n${files}`;
+  const adapter = offline ? await adapterFactory(config) : new AnthropicMessagesAdapter(config);
+  if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
+  adapter.onRequest = (event) => ledger.request(event);
+  const inventory = await tools.initialInventory({ task, strategy: config.contextStrategy, limit: config.initialFileLimit });
+  const selectedHash = createHash('sha256').update(inventory.selectedFiles.join('\n')).digest('hex');
+  await ledger.event({
+    type: 'initial_inventory', strategy: config.contextStrategy, totalFiles: inventory.totalFiles,
+    selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
+    queryExpansionApplied: inventory.queryExpansionApplied ?? false,
+  });
+  const userMessage = `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`;
   const messages = [{ role: 'user', content: userMessage }];
   let pendingValidation = false;
   let validationPassed = false;
@@ -81,15 +93,19 @@ export async function runTask(task, config, { onText = () => {} } = {}) {
             validationPassed = false;
             const filename = call.input?.path || '(unknown file)';
             if (!changedFiles.includes(filename)) changedFiles.push(filename);
-          } else if (call.name === 'run_tests') {
+          } else if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
             validationAttempts += 1;
-            validationPassed = /^exit=0\b/.test(String(output));
-            if (validationPassed) pendingValidation = false;
+            validationPassed = validationSucceeded(output);
+            if (changedFiles.length) pendingValidation = !validationPassed;
           }
         } catch (error) {
           isError = true;
           output = error.message;
-          if (call.name === 'run_tests') validationAttempts += 1;
+          if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
+            validationAttempts += 1;
+            validationPassed = false;
+            if (changedFiles.length) pendingValidation = true;
+          }
         }
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
@@ -104,9 +120,10 @@ export async function runTask(task, config, { onText = () => {} } = {}) {
   }
 
   const summary = await ledger.finish({ status, prompt: userMessage });
-  return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts, runDirectory: ledger.directory };
+  return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
+    runType: offline ? 'offline-runtime' : 'live', wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
 }
 
 function createTaskHash(task) {
-  return createHash(String(task)).digest('hex');
+  return createHash('sha256').update(String(task)).digest('hex');
 }
