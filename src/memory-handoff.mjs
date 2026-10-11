@@ -6,6 +6,7 @@ export function memoryHandoff(session) {
   return structuredClone({ schema: 1, kind: 'contextos-handoff', sourceModel: session.model,
     workspaceIdentity: session.lastIdentity || null,
     userRequirements: task?.goal || null, constraints: task?.constraints || null,
+    retainedUserMessages: (session.messages || []).filter(message=>message.role==='user'&&typeof message.content==='string').map(message=>message.content),
     activeFiles: task?.active_files || [], observedFindings: task?.confirmed_findings || [],
     inferredDecisions: task?.decisions || [], failedAttempts: task?.failed_attempts || [],
     evidenceRefs: task?.evidence_refs || [], pendingSteps: task?.pending_steps || [],

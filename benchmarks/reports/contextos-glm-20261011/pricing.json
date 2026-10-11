@@ -1,0 +1,30 @@
+{
+  "source": "https://www.packyapi.ai/api/pricing",
+  "checkedOn": "2026-10-11",
+  "models": [
+    {
+      "model_name": "glm-5.3-flash",
+      "vendor_id": 6,
+      "quota_type": 0,
+      "model_ratio": 0.4,
+      "model_price": 0,
+      "owner_by": "",
+      "completion_ratio": 3.5,
+      "cache_ratio": 0.2875,
+      "enable_groups": [
+        "zai-officially",
+        "glm-sale"
+      ],
+      "supported_endpoint_types": [
+        "openai",
+        "openai-response",
+        "anthropic"
+      ]
+    }
+  ],
+  "eligibleGroupRatios": {
+    "zai-officially": 1,
+    "glm-sale": 1
+  },
+  "billing": "Conservative undiscounted estimate; not invoice"
+}

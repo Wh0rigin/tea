@@ -85,6 +85,8 @@ export function restoreToolMemory(session, tools) {
   tools.sessionTerms = new Map(memory.sessionTerms || []);
   tools.unresolvedQueries = new Set(memory.unresolvedQueries || []);
   tools.readEvidence = new Map(memory.readEvidence || []);
+  tools.searchEvidence = new Map(memory.searchEvidence || []);
+  tools.sourceEvidence = new Map(memory.sourceEvidence || []);
   tools.presentedSource = new Map((memory.presentedSource || []).map(([key, value]) =>
     [key, { ...value, lines: new Map(value.lines) }]));
   session.restoredTools = null;
@@ -101,7 +103,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
     taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
     identity,
     tools: tools ? { sessionTerms: [...tools.sessionTerms], unresolvedQueries: [...tools.unresolvedQueries],
-      readEvidence: [...tools.readEvidence], presentedSource: [...tools.presentedSource].map(([key, value]) =>
+      readEvidence: [...tools.readEvidence], searchEvidence: [...tools.searchEvidence], sourceEvidence: [...tools.sourceEvidence], presentedSource: [...tools.presentedSource].map(([key, value]) =>
         [key, { ...value, lines: [...value.lines] }]) } : null, ...extra });
   session.lastIdentity = identity;
 }
@@ -125,6 +127,8 @@ export async function resetPersistentConversation(session, config) {
     session.messages.length = 0; session.compaction = null; session.compactionCount = 0;
     session.tools?.sessionTerms.clear(); session.tools?.unresolvedQueries.clear();
     session.tools?.readEvidence.clear(); session.tools?.presentedSource.clear();
+    session.tools?.searchEvidence.clear();
+    session.tools?.sourceEvidence.clear();
     session.contextMemory = null;
     if (session.tools) session.tools.contextMemory = null;
     session.taskState = null; session.memoryDiagnostics = null;

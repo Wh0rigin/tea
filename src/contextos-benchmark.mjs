@@ -278,6 +278,10 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
           totalTokens:known?sum('inputTokens')+sum('outputTokens'):null,conservativeSpendUsd:adapter.spentUsd,elapsedMs:Date.now()-started,
           summaryRequests:run.requests.filter(r=>r.purpose==='compaction').length});await save();
         onProgress(`Finish ${item.id}/${repetition}/${variant}: accepted=${run.accepted}, tokens=${run.totalTokens??'unknown'}, spend=$${run.conservativeSpendUsd.toFixed(5)}`);
+        if(variant==='contextos'&&!acceptance.passed){
+          report.stopReason=`Candidate rejected after independent acceptance failure: ${item.id}/${repetition}`;
+          halted=true;
+        }
         if(!known&&run.requests.length)halted=true;
       }));if(halted)break;
     }if(halted)break;

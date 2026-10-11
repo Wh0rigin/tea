@@ -24,6 +24,12 @@ Implemented version-checked `recall_context`/`search_history`, observed/inferred
 - M2/M3: implemented; stabilize and freeze candidate before paid measurements.
 - M4: frozen replay and live A/B; retain negative outcomes, remove candidates that regress acceptance or fail the token gate. No performance claims before provider measurements.
 
-## M4 — rejected A, frozen B
+## M4 — rejected A and B
 
-A (`bbac783`) had short-control +19.70% provider tokens versus full history, 9/9 short acceptance, with 1,002 avoidable request bytes after source edits. Rejected and interrupted before long cases; all completed evidence and one unknown reservation retained. Conservative A spend USD 0.5767008. B removes stale-only recovery schemas, retains freshness safety, and adds a historical receipt recovery case. Same model/control settings; 63 live runs are planned within the remaining USD 7.4232992. Full pre-freeze suite 220/220; seven fixture preflights must pass. No target-token success claim yet.
+A (`bbac783`) had short-control +19.70% provider tokens versus full history, 9/9 short acceptance, with 1,002 avoidable request bytes after source edits. Rejected and interrupted before long cases; all completed evidence and one unknown reservation retained. Conservative A spend USD 0.5767008.
+
+B (`07d6070`) removed stale-only recovery schemas and added historical receipt recovery. All 63 runs completed with known usage; 62 accepted. One ContextOS TypeScript run also edited `text.mjs` despite the task and project rule allowing only `points.ts`. B is rejected on correctness, regardless of its 50.35%/49.84% descriptive real-30-turn savings versus legacy/full. A stop file was written after B had already completed; it did not interrupt any B calls. B spend USD 6.4853088; combined conservative spend/reservation USD 7.0620096 within the original USD 8 cap. [Negative evidence and charts](../benchmarks/reports/contextos-glm-20261011/README.md) retain failures, all-run and equally accepted subset statistics separately.
+
+## Candidate C — working memory and provenance repair
+
+Candidate C reanchors actual current user text and observed valid project rules, pages complete unsigned old tool rounds, reinserts original user text across optional checkpoints and propagates version dependencies through read/search/recall copies. It adds no paid memory model or domain dictionary. Deterministic suite: **229/229**. No C provider-token improvement is claimed before a frozen repeated comparison. The same seven-case, three-repeat, three-arm matrix and unchanged correctness/token gates are retained. Live calls require a finite approved remaining budget; there are no C calls while the additional-budget question is pending.

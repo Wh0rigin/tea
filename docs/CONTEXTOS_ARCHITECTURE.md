@@ -30,6 +30,37 @@ Resume verifies the original workspace, model and endpoint, compares Git HEAD an
 
 User requests remain user-confirmed requirements. Tool operations, hashes and actual tests are observations; model text and summaries are inferred claims. Only actual successful relevant validation can clear pending edits. A restored summary cannot certify a test. Phase labels are descriptive hints and do not constrain exploration to a fixed pipeline.
 
+TaskState stores the latest goal, source event IDs, active files, observed operations, inferred decisions, failures, pending validation and evidence references. Every original user message also remains pinned. This is a provenance-aware runtime record, not a model-certified semantic graph. A data-only `memoryHandoff` interface preserves provenance, obligations and accounting for future routing; it performs no model switch or provider request.
+
+## Working set and memory lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Observed: durable tool result
+    Observed --> Resident: recent / active / protected
+    Observed --> Reference: older recoverable output and net smaller request
+    Resident --> Stale: source hash differs or file unavailable
+    Reference --> Stale: source hash differs or file unavailable
+    Reference --> Recovered: recall_context byte page
+    Stale --> FreshRead: read_file of current source
+    FreshRead --> Observed: new hash and source event
+    Recovered --> Resident: subsequent request includes recovery
+```
+
+The assembler indexes canonical call/result pairs and inferred assistant notes. It retains every user requirement, original assistant thinking/signature, recent two result rounds, active/changed source, AGENTS/README, failures, side effects and edit receipts. Older source reads, discovery and successful validation logs may become content-addressed historical references above a soft target. Unsigned rounds consisting entirely of tool calls and their matching selected results can be paged together, with a reference directory. Rounds containing thinking, signatures or assistant text keep their original assistant blocks. Retained calls and results stay paired in their original order. Reference schemas/guidance and recovery follow-up requests are part of total measured overhead. A non-reducing projection falls back to full history. Evicting a source also invalidates the normal read cache so an omitted body cannot leave an unresolvable 'unchanged' receipt.
+
+When valid recoverable references exist, candidate C repeats the current user goal verbatim and already observed, version-valid AGENTS rules near the latest result. Rules remain subordinate workspace evidence. This adds measured request bytes and is a hypothesis for reducing scope mistakes, not an enforcement guarantee. Every original user text is also reinserted if an optional semantic checkpoint has omitted it. No domain keywords or hand-written scope parser decide which requirements matter.
+
+Every source unit, including pinned source, is checked for freshness. Read/search snapshots are captured from the same decoded content used to produce the output and retained across resume. Recalled source pages and search previews inherit source dependencies; any changed, inaccessible or protected dependency withholds the old lines. Unversioned old search snippets are withheld conservatively. Freshness checks decode UTF-8 consistently, include BOM handling and cache each file hash within one assembly. Version identity does not prove semantic correctness or lock external writers.
+
+`recall_context` returns bounded UTF-8 pages without re-executing historical tools. `search_history` uses literal multilingual words/path matching, bounded previews and observed/inferred labels. Stale source previews are withheld. It uses no hand-written domain synonym list, embeddings or additional summary model. Existing session vocabulary still requires a source occurrence and version check; hash validity alone does not prove the model's semantic mapping.
+
+The inspector reports unit IDs, provenance, version, inclusion reason, byte/heuristic diagnostics, freshness and recovery counts. Byte diagnostics use the complete native wire request; provider tokens are recorded separately. The canonical original history remains in RAM and on disk; request selection does not bound process RAM. The journal preserves exactly the agent-visible output. Existing command truncation is earlier in the tool pipeline, so omitted raw stdout is not recoverable from the journal. Freshness is checked at read time without locking external writers. These limits remain explicit.
+
+## Recovery and rollback
+
+On restart: lock → authenticate events → restore original messages/state/accounting → preserve unknown liabilities → compare workspace identity → invalidate stale checkpoint/cache → fill interrupted tool pairs with uncertainty → require inspection/validation. No edit or command is automatically replayed. Unknown billing blocks provider requests. Corrupt committed storage fails closed; incomplete final metadata can be repaired. `/new` records a reset while preserving costs and edits. `full-history` provides a feature-level rollback with the same persistent session.
+
 ## Research considered
 
 [MemGPT (2023/2024)](https://arxiv.org/abs/2310.08560) motivates separating resident context from retrievable storage. [LightMem (2025/2026)](https://arxiv.org/abs/2510.18866) motivates separating filtering and consolidation from online inference. [A-MEM (2025)](https://arxiv.org/abs/2502.12110) explores structured linked memory. TEA will first test deterministic references and source validation without an embedding service or another paid summarizer. These are design inspirations, not reproduced paper results or established TEA gains.

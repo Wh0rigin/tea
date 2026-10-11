@@ -51,12 +51,12 @@ export function redactText(text) {
   return String(text).replace(SECRET_TEXT, '[REDACTED]').replace(SECRET_ASSIGNMENT, '$1$2[REDACTED]');
 }
 
-function isSensitivePath(relativePath) {
+export function isSensitivePath(relativePath) {
   return relativePath.split(/[\\/]/).some((part) => SENSITIVE_FILE.test(part)) || /\.(?:pem|key|p12|pfx)$/i.test(relativePath);
 }
 
 // Inspect bytes rather than requiring a language-specific filename suffix.
-function decodeText(buffer) {
+export function decodeText(buffer) {
   if (buffer.includes(0)) return null;
   try { return new TextDecoder('utf-8', { fatal: true }).decode(buffer); }
   catch { return null; }
@@ -73,6 +73,8 @@ export class WorkspaceTools {
     this.sessionTerms = new Map();
     this.unresolvedQueries = new Set();
     this.presentedSource = new Map();
+    this.searchEvidence = new Map();
+    this.sourceEvidence = new Map();
   }
 
   async init() {
@@ -176,13 +178,19 @@ export class WorkspaceTools {
     if (this.presentedSource.size > 32) this.presentedSource.delete(this.presentedSource.keys().next().value);
     if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
       const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
-      return reference.length < evidence.length ? reference : evidence;
+      const output = reference.length < evidence.length ? reference : evidence;
+      this.recordSourceSnapshot(output,relative,sourceHash);return output;
     }
     if (this.deduplicateReads) {
       if (complete) this.readEvidence.set(rangeKey, sourceHash);
       else this.readEvidence.delete(rangeKey);
     }
-    return evidence;
+    this.recordSourceSnapshot(evidence,relative,sourceHash);return evidence;
+  }
+
+  recordSourceSnapshot(output,relative,sourceHash) {
+    this.sourceEvidence.set(createHash('sha256').update(output).digest('hex'),{path:relative,sourceHash});
+    if(this.sourceEvidence.size>128)this.sourceEvidence.delete(this.sourceEvidence.keys().next().value);
   }
 
   async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false } = {}) {
@@ -207,6 +215,7 @@ export class WorkspaceTools {
     const root = await this.resolveFile(scope);
     if (!(await stat(root)).isDirectory() || (isSensitivePath(path.relative(this.workspace, root)) || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part)))) throw new Error('Search scope must be a non-sensitive workspace directory');
     const results = [];
+    const dependencies = new Map();
     let filesScanned = 0;
     let bytesScanned = 0;
     const walk = async (directory, depth) => {
@@ -230,6 +239,8 @@ export class WorkspaceTools {
         const lines = decoded.split(/\r?\n/);
         for (let index = 0; index < lines.length; index += 1) {
           if (needles.some(term => lines[index].toLowerCase().includes(term))) {
+            const relative = path.relative(this.workspace, full).replaceAll(path.sep, '/');
+            dependencies.set(relative, { path: relative, sourceHash: createHash('sha256').update(redactText(decoded)).digest('hex') });
             results.push(redactText(`${path.relative(this.workspace, full).replaceAll(path.sep, '/')}:${index + 1}: ${lines[index].trim()}`));
             if (results.length >= Math.min(Number(maxResults) || 30, 80)) break;
           }
@@ -244,7 +255,10 @@ export class WorkspaceTools {
     }
     this.unresolvedQueries.delete(needle);
     const mappingHint = learned.length ? `Session query mapping: ${query} -> ${learned.map(item => item.target).join(', ')}\n` : '';
-    return mappingHint + results.join('\n') + '\n' + coverage;
+    const output = mappingHint + results.join('\n') + '\n' + coverage;
+    this.searchEvidence.set(createHash('sha256').update(output).digest('hex'), [...dependencies.values()]);
+    if (this.searchEvidence.size > 128) this.searchEvidence.delete(this.searchEvidence.keys().next().value);
+    return output;
   }
 
   modelToolDefinitions({ includeMemory = true } = {}) {

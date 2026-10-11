@@ -56,7 +56,21 @@ npm run tea -- --demo
 
 **Esc / Ctrl+C** 可中断当前任务，已完成修改会保留，未完成验证仍需继续。`/new` 清空对话和学习词表，保留已消耗预算和待验证修改；`/clear` 仅清屏。费用和累计输入上限覆盖整个终端会话；`/exit` 退出。
 
-演示使用脚本化回答和本地只读工具，不解决真实编程任务，也不产生模型用量测量。会话目前保存在内存中，退出后暂不支持恢复。详见[终端指南（英文）](docs/TERMINAL.md)。
+演示使用脚本化回答和本地只读工具，不解决真实编程任务，也不产生模型用量测量。默认会话保存在内存中；使用 `--session` 或 ContextOS 可启用本地持久化和恢复。详见[终端指南（英文）](docs/TERMINAL.md)。
+
+## Agent 记忆管理：ContextOS
+
+主动开启 `--memory-policy contextos` 后，完整历史写入本地加密日志，发送给模型的旧工具输出可变为可恢复引用。保留用户要求、近期和当前源码、失败信息及待验证修改；源码变化后旧证据失效。模型需要细节时可通过工具按引用或关键词恢复。默认仍使用完整历史模式。
+
+```sh
+npm run tea -- --interactive --session work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- --interactive --resume work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- sessions inspect work
+npm run tea -- sessions delete work
+npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
+```
+
+恢复保留累计费用，不能提高原预算；`/new` 保留费用和待验证修改。`/memory` 查看上次上下文选择的原因；`--memory-policy full-history` 可关闭选择并保留持久化。目标大小使用 UTF-8 字节，不是服务商 Token。真实收益正在按冻结门槛验证。详见[中文指南](docs/CONTEXTOS.zh-CN.md)、[架构](docs/CONTEXTOS_ARCHITECTURE.md)和[实验协议](docs/CONTEXTOS_BENCHMARK.md)。
 
 ## 会话压缩
 

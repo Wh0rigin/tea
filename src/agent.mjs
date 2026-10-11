@@ -54,6 +54,8 @@ export function resetConversation(session, config) {
   session.tools?.sessionTerms.clear();
   session.tools?.unresolvedQueries.clear();
   session.tools?.readEvidence.clear();
+  session.tools?.searchEvidence.clear();
+  session.tools?.sourceEvidence.clear();
   session.tools?.presentedSource.clear();
   session.contextMemory = null;
   if (session.tools) session.tools.contextMemory = null;

@@ -82,6 +82,13 @@ the conversation context; it does not replenish spending. Optional
 [Conversation compaction](COMPACTION.md) for the byte trigger, retained boundaries,
 request accounting, failure handling and limits.
 
-Conversation and expanded tool records remain in process memory. There is no
-disk-based session resume yet. Normal ledger storage remains hashes and counts
-unless raw storage is enabled explicitly. The interface is not an OS sandbox.
+Conversation and expanded tool records remain in process memory by default.
+`--session ID` enables an encrypted local journal; `--resume ID` restores the
+original workspace/model/endpoint and cumulative budget. ContextOS adds a
+retrievable request projection via `--memory-policy contextos`. `/memory`
+explains retained/referenced evidence. Resumed terminal token totals show `?`
+because the restored budget's input-only counter cannot establish old output
+and cache totals. Per-turn ledgers still retain known provider counts. See
+[ContextOS architecture](CONTEXTOS_ARCHITECTURE.md) and [usage](CONTEXTOS.zh-CN.md).
+Normal ledger storage remains hashes and counts unless raw storage is enabled
+explicitly. The interface is not an OS sandbox.

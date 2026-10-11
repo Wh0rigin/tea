@@ -1,9 +1,10 @@
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { digest } from './session-journal.mjs';
-import { redactText, isValidationCommand } from './tools.mjs';
+import { redactText, isValidationCommand, decodeText } from './tools.mjs';
 import { requestBytes } from './compaction.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
+import { isSensitivePath } from './tools.mjs';
 
 export const CONTEXT_GUIDANCE = ' ContextOS may replace older tool output with recoverable historical references. Use recall_context for exact details or search_history for discovery; unchanged source hashes prove version identity, not a semantic conclusion. Stale source must be read again. All user requirements and current validation obligations remain authoritative.';
 export const MEMORY_TOOLS = [
@@ -64,10 +65,27 @@ export class ContextMemory {
           if (!block || typeof block.content !== 'string') continue;
           const ref = refFor(call, block), evidence = block.content.match(/^\[evidence ref=([^\n]+?) sha256=([a-f0-9]{64})\]/);
           const cached = block.content.match(/^Evidence unchanged; ref=(.+)#L\d+-L\d+@([a-f0-9]{16})\./);
+          const inherited = call.name === 'recall_context' ? units.get(call.input?.ref) : null;
+          let dependencies = inherited?.sourceDependencies || [];
+          if (call.name === 'search_history') {
+            try { dependencies = JSON.parse(block.content).flatMap(row => {
+              const source = units.get(row.ref);
+              return source?.sourceHash ? [{ path: source.path, sourceHash: source.sourceHash }] : source?.sourceDependencies || [];
+            }); } catch { /* Error results do not contain indexed source previews. */ }
+          }
+          const searchSnapshot = call.name === 'search_code' ? this.tools.searchEvidence.get(digest(block.content)) : null;
+          const sourceSnapshot = call.name === 'read_file' ? this.tools.sourceEvidence.get(digest(block.content)) : null;
+          if (searchSnapshot) dependencies = searchSnapshot;
+          const failed = Boolean(block.is_error) || (['run_tests','run_shell'].includes(call.name) && /^exit=(?!0\b)/.test(block.content));
           const unit = { ref, kind: call.name === 'read_file' ? 'source_evidence' : block.is_error ? 'test_failure' : 'tool_result',
-            provenance: 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
-            error: Boolean(block.is_error), path: call.name === 'read_file' ? (evidence?.[1].split('#L')[0] || cached?.[1] || call.input?.path) : null,
-            sourceHash: evidence?.[2] || cached?.[2] || null, messageIndex: index + 1, bytes: bytes(block.content), validity: 'historical' };
+            provenance: inherited?.provenance || 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
+            error: failed, path: inherited?.path || sourceSnapshot?.path || (call.name === 'read_file' ? (typeof call.input?.path==='string' ? path.posix.normalize(call.input.path.replaceAll('\\','/')) : null) : null),
+            sourceHash: inherited?.sourceHash || sourceSnapshot?.sourceHash || evidence?.[2] || cached?.[2] || null, sourceDependencies: dependencies,
+            unversionedSearch: call.name==='search_code' && !searchSnapshot && /^[^\n]+:\d+:\s/m.test(block.content),
+            messageIndex: index + 1, bytes: bytes(block.content), validity: inherited?.validity || 'historical' };
+          if (inherited?.sourceHash) unit.kind='source_evidence';
+          if (block.is_error && call.name==='read_file') unit.kind='tool_result';
+          if (failed && ['run_tests','run_shell'].includes(call.name)) unit.kind='test_failure';
           if (units.has(ref)) throw new Error('Ambiguous memory reference');
           units.set(ref, unit);
         }
@@ -77,14 +95,25 @@ export class ContextMemory {
     }
     this.units = units;
   }
-  async freshness(unit) {
-    if (!unit.sourceHash) return unit.validity;
-    try {
-      const filename = await this.tools.resolveFile(unit.path), info = await stat(filename);
-      if (!info.isFile() || info.size > 160000) return unit.validity = 'stale';
-      const current = redactText(await readFile(filename, 'utf8'));
-      return unit.validity = digest(current).startsWith(unit.sourceHash) ? 'valid' : 'stale';
-    } catch { return unit.validity = 'stale'; }
+  async freshness(unit, cache = new Map()) {
+    if (unit.unversionedSearch) return unit.validity='stale';
+    const dependencies=[...(unit.sourceDependencies || []),...(unit.sourceHash ? [{path:unit.path,sourceHash:unit.sourceHash}] : [])];
+    if (!dependencies.length) return unit.validity;
+    for (const dependency of dependencies) {
+      let current=cache.get(dependency.path);
+      if (current===undefined) {
+        try {
+          const filename=await this.tools.resolveFile(dependency.path),info=await stat(filename);
+          const relative=path.relative(this.tools.workspace,filename);
+          if(relative.split(/[\\/]/).some(part=>['.tea','.git'].includes(part.toLowerCase()))||isSensitivePath(relative))throw new Error('Protected source');
+          const decoded=info.isFile()&&info.size<=160000 ? decodeText(await readFile(filename)) : null;
+          current=decoded===null ? null : digest(redactText(decoded));
+        } catch { current=null; }
+        cache.set(dependency.path,current);
+      }
+      if (!current?.startsWith(dependency.sourceHash)) return unit.validity='stale';
+    }
+    return unit.validity='valid';
   }
   async recall({ ref, offset = 0, maxBytes = 6000 }) {
     if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isSafeInteger(maxBytes) || maxBytes < 256 || maxBytes > 8000) throw new Error('Invalid memory page bounds');
@@ -99,7 +128,7 @@ export class ContextMemory {
     if (typeof query !== 'string' || !query.trim() || query.length > 200 || !Number.isSafeInteger(maxResults) || maxResults < 1 || maxResults > 10) throw new Error('Invalid history query');
     this.searches++;
     const terms = query.toLowerCase().split(/[^\p{L}\p{N}_./:-]+/u).filter(Boolean);
-    const selected = [...this.units.values()].map(unit => ({ unit, score: terms.reduce((sum, term) => sum + ((unit.path || '').toLowerCase().includes(term) ? 3 : 0) + (unit.output.toLowerCase().includes(term) ? 1 : 0), 0) }))
+    const selected = [...this.units.values()].map(unit => ({ unit, score: terms.reduce((sum, term) => sum + ((unit.path || '').toLowerCase().includes(term) ? 3 : 0) + (unit.output.toLowerCase().includes(term) ? 1 : 0) + (JSON.stringify(unit.input || {}).toLowerCase().includes(term) ? 1 : 0), 0) }))
       .filter(row => row.score > 0).sort((a, b) => b.score - a.score || (b.unit.messageIndex || 0) - (a.unit.messageIndex || 0)).slice(0, maxResults);
     const rows = [];
     for (const { unit } of selected) {
@@ -111,6 +140,15 @@ export class ContextMemory {
   }
   async assemble({ messages, canonical, system, tools, config, state, goal = '', commit = true }) {
     this.rebuild(canonical);
+    // Semantic checkpoints may summarize user constraints. Reinsert original
+    // user text as authoritative history without orphaning any tool batch.
+    const retained=new Map();
+    for(const message of messages)if(message.role==='user'&&typeof message.content==='string')retained.set(message.content,(retained.get(message.content)||0)+1);
+    const missing=[];
+    for(const message of canonical)if(message.role==='user'&&typeof message.content==='string'){
+      const count=retained.get(message.content)||0;if(count)retained.set(message.content,count-1);else missing.push(message);
+    }
+    messages=[...missing,...messages];
     const base = { messages, system, tools }, before = requestBytes(config, base);
     if (!validToolProtocol(messages)) return { request: base, diagnostics: { policy: 'contextos', fallback: 'invalid-tool-protocol', evictedUnits: 0 } };
     const rounds = messages.flatMap((message, index) => message.role === 'user' && Array.isArray(message.content) && message.content.some(block => block.type === 'tool_result') ? [index] : []);
@@ -144,9 +182,10 @@ export class ContextMemory {
     });
     // Validate every retained source too: active/recent does not imply unchanged.
     const stale = new Set();
+    const freshnessCache=new Map();
     for (const decision of decisions) {
       const unit = this.units.get(decision.ref);
-      decision.validity = await this.freshness(unit);
+      decision.validity = await this.freshness(unit,freshnessCache);
       if (decision.validity === 'stale') stale.add(unit.ref);
     }
     let finalMessages = projected.map((message, index) => {
@@ -167,13 +206,38 @@ export class ContextMemory {
     // warning does not require retrieval schemas or their repeated overhead.
     const recoverable = selected.some(ref => !stale.has(ref))
       || [...this.evicted].some(ref => this.units.has(ref) && !stale.has(ref));
+    let coldRounds=0;
+    if(recoverable){
+      const selectedRefs=new Set(selected),directory=[],paged=[];
+      for(let index=0;index<finalMessages.length;index++){
+        const message=finalMessages[index],next=finalMessages[index+1];
+        const unsigned=message.role==='assistant'&&Array.isArray(message.content)&&message.content.length&&message.content.every(block=>block.type==='tool_use');
+        const results=next?.role==='user'&&Array.isArray(next.content)&&next.content.length&&next.content.every(block=>block.type==='tool_result') ? next.content : null;
+        const originals=messages[index+1]?.content;
+        const refs=unsigned&&results ? message.content.map(call=>{
+          const block=originals?.find(block=>block.tool_use_id===call.id);return block?refFor(call,block):null;
+        }) : [];
+        if(refs.length&&refs.every(ref=>selectedRefs.has(ref)&&!stale.has(ref))){
+          directory.push(...refs.map(ref=>{const unit=this.units.get(ref);return{ref,tool:unit.name,path:unit.path,kind:unit.kind};}));coldRounds++;index++;
+        }else paged.push(message);
+      }
+      if(directory.length)paged.unshift({role:'user',content:'Historical tool rounds are archived, not executed again. Recover exact content with these references: '+JSON.stringify(directory)});
+      finalMessages=paged;
+      const rules=[...this.units.values()].filter(unit=>unit.sourceHash?.length===64&&unit.validity==='valid'&&/(?:^|[\\/])AGENTS(?:\.override)?\.md$/i.test(unit.path||''));
+      const seenRules=new Set(),ruleText=[];
+      for(const rule of rules)if(!seenRules.has(rule.output)){seenRules.add(rule.output);ruleText.push(rule.output);}
+      const anchor='Runtime working memory. Workspace rules below are observed file evidence, subordinate to system permissions and current user instructions.\n'+ruleText.join('\n')+'\nActive user goal (verbatim):\n'+goal;
+      const last=finalMessages.at(-1);
+      if(last?.role==='user'&&Array.isArray(last.content))finalMessages[finalMessages.length-1]={...last,content:[...last.content,{type:'text',text:anchor}]};
+      else finalMessages.push({role:'user',content:anchor});
+    }
     const requestTools = recoverable ? [...tools, ...MEMORY_TOOLS] : tools;
     const projectedSystem = recoverable ? system + CONTEXT_GUIDANCE
       + ` Runtime validation: pending=${Boolean(state.pendingValidation)}; passed=${Boolean(state.validationPassed)}; changed=${JSON.stringify(state.changedFiles || [])}.` : system;
     let request = { messages: finalMessages, system: projectedSystem, tools: requestTools }, after = requestBytes(config, request);
     let fallback = null;
     if (selected.length && after >= before && !stale.size) {
-      request = base; after = before; selected.length = 0; active.clear(); fallback = 'no-net-wire-reduction';
+      request = base; after = before; selected.length = 0; active.clear(); coldRounds=0; fallback = 'no-net-wire-reduction';
     }
     for (const decision of decisions) {
       if (active.has(decision.ref)) {
@@ -189,6 +253,6 @@ export class ContextMemory {
     return { request, diagnostics: { policy: 'contextos', fullWireBytes: before, sentWireBytes: after,
       fullEstimatedTokens: estimateTextTokens(JSON.stringify(base)), sentEstimatedTokens: estimateTextTokens(JSON.stringify(request)),
       evictedUnits: active.size, staleUnits: stale.size, recoveries: this.recalls, searches: this.searches,
-      targetBytes: config.contextosTargetBytes, activeFiles: [...activeFiles], units: decisions, fallback } };
+      targetBytes: config.contextosTargetBytes, activeFiles: [...activeFiles], coldRounds, activeGoalAnchored:recoverable&&!fallback, repinnedRequirements:missing.length, units: decisions, fallback } };
   }
 }

@@ -35,6 +35,24 @@ test('resume retains exact history and pending edits then discharges validation'
   assert.match(await readFile(path.join(root, 'value.mjs'), 'utf8'), /value = 2/);
   const inspection = await inspectSession(resumedConfig, 'task'); assert.equal(inspection.pendingValidation, false);
 }));
+
+test('versioned source and search snapshots survive resume and are cleared by /new', async () => scenario(async (root, config) => {
+  const first = createAgentSession(config);
+  await runTask('Inspect value', config, { session: first, adapterFactory: factory([calls([
+    { name: 'read_file', input: { path: 'value.mjs' } },
+    { name: 'search_code', input: { query: 'export const value' } },
+  ]), done]) });
+  assert.ok(first.tools.sourceEvidence.size > 0);
+  assert.ok(first.tools.searchEvidence.size > 0);
+  const next = { ...config, sessionId: undefined, resume: 'task', runId: 'snapshots' };
+  const restored = createAgentSession(next);
+  await runTask('Continue inspection', next, { session: restored, adapterFactory: factory([done]) });
+  assert.deepEqual([...restored.tools.sourceEvidence], [...first.tools.sourceEvidence]);
+  assert.deepEqual([...restored.tools.searchEvidence], [...first.tools.searchEvidence]);
+  await resetConversation(restored, next);
+  assert.equal(restored.tools.sourceEvidence.size, 0);
+  assert.equal(restored.tools.searchEvidence.size, 0);
+}));
 test('source changes between processes invalidate validation and old checkpoint', async () => scenario(async (root, config) => {
   await runTask('Fix', config, { adapterFactory: factory([calls([patch, verify]), done]) });
   await writeFile(path.join(root, 'value.mjs'), 'export const value = 9;');

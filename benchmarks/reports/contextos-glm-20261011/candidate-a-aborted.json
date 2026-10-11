@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "candidate": "A",
+  "candidateCommit": "bbac78366e5242026f0a95d540039035a2aa3ff4",
+  "originalFile": "comparison.json",
+  "rejected": true,
+  "complete": false,
+  "reason": "Short control aggregate +19.70% versus full-history; stale-only references introduced unnecessary memory schemas. Candidate discarded before long workloads.",
+  "abortedAt": "2026-10-11T10:24:07.243Z",
+  "active": {
+    "caseId": "crossfile-ts",
+    "repeat": 1,
+    "variant": "contextos",
+    "accepted": false,
+    "totalTokens": null,
+    "usageComplete": false,
+    "knownSettlements": [
+      {
+        "requestId": "26564a5e-8a2e-48e3-adf7-1b3ce6fc745e",
+        "purpose": "task",
+        "usage": {
+          "input_tokens": 5027,
+          "output_tokens": 177,
+          "server_tool_use": {}
+        },
+        "usageStatus": "complete",
+        "costBasis": "conservative-reported-usage",
+        "requestSha256": "0ed9bb560d8ab4ce90612e089b6b8dcc4bc9120fde5a483d7cc060bee21484c8",
+        "responseSha256": "ebb7b53a3dbe555814fb125e87e82b62841f9d7a7170f2020ae55afb281b3618"
+      },
+      {
+        "requestId": "961753c2-8a5c-409e-94cd-64284cbc27a9",
+        "purpose": "task",
+        "usage": {
+          "input_tokens": 4283,
+          "output_tokens": 30,
+          "cache_read_input_tokens": 576,
+          "server_tool_use": {}
+        },
+        "usageStatus": "complete",
+        "costBasis": "conservative-reported-usage",
+        "requestSha256": "2efd8d9cea1f7d5a8bcfca0bc2e124fb72c19377d9db642b46d8f32975575f8b",
+        "responseSha256": "9f43fb6bfe100dc80725f7276c9825bee6068f58b5e6ef2d9ed590a16be79fa9"
+      },
+      {
+        "requestId": "f79335e7-82a5-4ebd-8788-94e7ef88a64f",
+        "purpose": "task",
+        "usage": {
+          "input_tokens": 3982,
+          "output_tokens": 82,
+          "cache_read_input_tokens": 576,
+          "server_tool_use": {}
+        },
+        "usageStatus": "complete",
+        "costBasis": "conservative-reported-usage",
+        "requestSha256": "1caa2653f0252437a2e58a0174faa993355827045f84f25fb2be617cc4fbcf77",
+        "responseSha256": "1214ad08a1d6c0dbf71f6978852e6206d90e4389544f232a3bbfef471ef06a7d"
+      },
+      {
+        "requestId": "790144ae-bf9e-4a85-bc2a-6ef4b006a1d6",
+        "purpose": "task",
+        "usage": {
+          "input_tokens": 990,
+          "output_tokens": 45,
+          "cache_read_input_tokens": 3776,
+          "server_tool_use": {}
+        },
+        "usageStatus": "complete",
+        "costBasis": "conservative-reported-usage",
+        "requestSha256": "272026ca3399102f49767e57ce7a7cd2476bcd87b8fb9e27fef508ed861f015c",
+        "responseSha256": "f0e11c579a7115a48b63d7306aeaf63577d91a482013f8a38e6efb771078c757"
+      },
+      {
+        "requestId": "6abdcf02-7632-4e1b-9881-ddc53dde9213",
+        "purpose": "task",
+        "usage": {
+          "input_tokens": 4139,
+          "output_tokens": 19,
+          "cache_read_input_tokens": 576,
+          "server_tool_use": {}
+        },
+        "usageStatus": "complete",
+        "costBasis": "conservative-reported-usage",
+        "requestSha256": "264de1417d3f6ec6c24ce95eb06f328ae510c6e8a9c0d9246ce71ca796da801b",
+        "responseSha256": "cac7d58180e1608526c7ddddf99bc6df43fe6118c4d265f659667c1dc1b9a19f"
+      }
+    ],
+    "outstandingRequests": [
+      "44ecea6f-a2e2-4716-abc3-c4292d6ac511"
+    ],
+    "knownSpendUsd": 0.0201284,
+    "unknownReservationUsd": 0.2674688,
+    "conservativeSpendUsd": 0.2875972
+  },
+  "completedRuns": 11,
+  "completedAnalysis": {
+    "variants": {
+      "legacy": {
+        "runs": 4,
+        "accepted": 4,
+        "knownUsage": 4,
+        "allRunTokens": 203506,
+        "inputTokens": 202656,
+        "outputTokens": 850,
+        "cacheInputTokens": 151936,
+        "requests": 21,
+        "recoveryCalls": 0,
+        "conservativeSpendUsd": 0.1645048,
+        "spendPerAccepted": 0.0411262,
+        "medianTokens": 5721,
+        "p95Tokens": 184454,
+        "medianMs": 23955,
+        "p95Ms": 50465
+      },
+      "full": {
+        "runs": 4,
+        "accepted": 4,
+        "knownUsage": 4,
+        "allRunTokens": 131069,
+        "inputTokens": 130184,
+        "outputTokens": 885,
+        "cacheInputTokens": 126080,
+        "requests": 17,
+        "recoveryCalls": 0,
+        "conservativeSpendUsd": 0.10662519999999999,
+        "spendPerAccepted": 0.026656299999999997,
+        "medianTokens": 5625,
+        "p95Tokens": 113971,
+        "medianMs": 24992,
+        "p95Ms": 37961
+      },
+      "contextos": {
+        "runs": 3,
+        "accepted": 3,
+        "knownUsage": 3,
+        "allRunTokens": 20467,
+        "inputTokens": 19667,
+        "outputTokens": 800,
+        "cacheInputTokens": 9280,
+        "requests": 13,
+        "recoveryCalls": 0,
+        "conservativeSpendUsd": 0.0179736,
+        "spendPerAccepted": 0.0059911999999999995,
+        "medianTokens": 6107,
+        "p95Tokens": 8267,
+        "medianMs": 26726,
+        "p95Ms": 32680
+      }
+    },
+    "cases": {
+      "short-js": {
+        "legacy": {
+          "pairs": 3,
+          "knownPairs": 3,
+          "eligiblePairs": 3,
+          "before": 19052,
+          "after": 20467,
+          "savingsPercent": -7.42704178039051,
+          "allKnownBefore": 19052,
+          "allKnownAfter": 20467,
+          "allKnownSavingsPercent": -7.42704178039051,
+          "acceptanceDecline": false,
+          "repeats": [
+            {
+              "repeat": 1,
+              "baseAccepted": true,
+              "candidateAccepted": true,
+              "before": 7734,
+              "after": 8267,
+              "savingsPercent": -6.891647271786915
+            },
+            {
+              "repeat": 2,
+              "baseAccepted": true,
+              "candidateAccepted": true,
+              "before": 5721,
+              "after": 6107,
+              "savingsPercent": -6.747072190176542
+            },
+            {
+              "repeat": 3,
+              "baseAccepted": true,
+              "candidateAccepted": true,
+              "before": 5597,
+              "after": 6093,
+              "savingsPercent": -8.86189029837413
+            }
+          ]
+        },
+        "full": {
+          "pairs": 3,
+          "knownPairs": 3,
+          "eligiblePairs": 3,
+          "before": 17098,
+          "after": 20467,
+          "savingsPercent": -19.704058954263658,
+          "allKnownBefore": 17098,
+          "allKnownAfter": 20467,
+          "allKnownSavingsPercent": -19.704058954263658,
+          "acceptanceDecline": false,
+          "repeats": [
+            {
+              "repeat": 1,
+              "baseAccepted": true,
+              "candidateAccepted": true,
+              "before": 5581,
+              "after": 8267,
+              "savingsPercent": -48.127575703278985
+            },
+            {
+              "repeat": 2,
+              "baseAccepted": true,
+              "candidateAccepted": true,
+              "before": 5892,
+              "after": 6107,
+              "savingsPercent": -3.6490156143923964
+            },
+            {
+              "repeat": 3,
+              "baseAccepted": true,
+              "candidateAccepted": true,
+              "before": 5625,
+              "after": 6093,
+              "savingsPercent": -8.32
+            }
+          ]
+        }
+      },
+      "crossfile-ts": {
+        "legacy": {
+          "pairs": 1,
+          "knownPairs": 0,
+          "eligiblePairs": 0,
+          "before": 0,
+          "after": 0,
+          "savingsPercent": null,
+          "allKnownBefore": 0,
+          "allKnownAfter": 0,
+          "allKnownSavingsPercent": null,
+          "acceptanceDecline": false,
+          "repeats": []
+        },
+        "full": {
+          "pairs": 1,
+          "knownPairs": 0,
+          "eligiblePairs": 0,
+          "before": 0,
+          "after": 0,
+          "savingsPercent": null,
+          "allKnownBefore": 0,
+          "allKnownAfter": 0,
+          "allKnownSavingsPercent": null,
+          "acceptanceDecline": false,
+          "repeats": []
+        }
+      }
+    },
+    "conservativeSpendUsd": 0.309232,
+    "unknownRuns": 0
+  },
+  "conservativeSpendUsd": 0.5767008,
+  "remainingSharedBudgetUsd": 7.4232992,
+  "notes": [
+    "comparison.json is preserved unchanged as the pre-abort checkpoint.",
+    "Interrupted provider request usage is unknown; full durable preflight reservation retained. No automatic retry.",
+    "Completed case/regression evidence is retained; incomplete targets cannot support a performance claim."
+  ]
+}

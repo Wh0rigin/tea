@@ -17,7 +17,7 @@ Self-authored fixtures are diagnostic evidence, not a substitute for unseen repo
 
 ## Current results
 
-M0 baseline is measured locally. M1 tests and M2–M4 experiments are in progress. No ContextOS provider-token gain has been measured yet; no performance candidate has passed its gate.
+M1 persistence and M2/M3 working-set implementation are tested. A and B were rejected; B completed 63 paid runs with 62 accepted. Its long-workflow token reduction is descriptive and cannot override its scope failure. No performance candidate has passed the complete gate. [Detailed negative results](../benchmarks/reports/contextos-glm-20261011/README.md).
 
 ## Frozen live matrix — candidate A
 
@@ -44,3 +44,9 @@ B extends the frozen matrix with `historical-recall` (seven cases × three repea
 B uses at most **three concurrent independent runs** per repeat, rotating launch order. Each receives a disjoint native run cap before launch, at most USD 1.40 and at most one-third of the suite remainder; even all caps exhausted cannot exceed the remainder. Accounting writes are serialized. Concurrent scheduling is recorded and latency is a within-schedule comparison, not a production SLA. A ran sequentially. `halt.txt` in an experiment output directory stops at the next request boundary without another submission. Unknown accounting stops future work. B suite limit is **USD 7.4232992**, after retaining A's settled cost and unknown reservation; combined limit remains USD 8.
 
 Before submission, B tightens each native byte guard to the exact serialized request size, bounded by the 160,000 suite maximum, using the same algorithm in all arms. The actual payload, model parameters and reported input bound are unchanged. This avoids reserving the entire unused maximum request capacity on small requests. Unknown billing still retains the complete native reservation for that exact request. A used the uniform maximum guard; this reservation-policy difference does not establish invoiced savings.
+
+## Candidate B rejected; candidate C protocol
+
+B finished all 63 runs: 62 accepted, all usage known, unchanged frozen engine. One TypeScript ContextOS run edited a disallowed shadow JavaScript file. The exact failure, all repeats and gate rejection are retained. No B release/performance claim. Combined A/B spend and unresolved reservation are USD 7.0620096; B stop file was written after completion.
+
+C tests a current-goal/rules anchor, complete unsigned-round paging and source-dependency propagation. All extra anchor bytes, source retrieval and provider follow-ups count. The full seven-case matrix, fixtures with eight comment lines, empty-start 30 real turns, three repeats, three concurrent independently capped arms and all original correctness/token gates are unchanged. C freezes a new commit and engine hash before submission and never overwrites A/B results. A candidate independent-acceptance failure now stops future submissions; already submitted concurrent calls are still accounted. This stopping policy differs from B's completed matrix and is disclosed. There are no C calls before an approved finite remaining budget; the requested increase is USD 8 (combined cap USD 16), pending authorization.

@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm, mkdir } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { ContextMemory, validToolProtocol, utf8Page } from '../src/context-assembler.mjs';
 import { WorkspaceTools } from '../src/tools.mjs';
 import { loadConfig } from '../src/config.mjs';
 import { runTask, createAgentSession } from '../src/agent.mjs';
+import { digest } from '../src/session-journal.mjs';
 
 async function scenario(fn) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'tea-contextos-'));
@@ -29,7 +30,7 @@ const assemble = (memory, messages, config, extra = {}) => memory.assemble({ mes
 test('working set preserves requirements, exact signatures and tool pairing', async () => scenario(async (root, tools, config, memory) => {
   const messages = history(), original = structuredClone(messages), plan = await assemble(memory, messages, config);
   assert.ok(plan.diagnostics.sentWireBytes < plan.diagnostics.fullWireBytes); assert.equal(plan.diagnostics.evictedUnits, 1);
-  assert.deepEqual(messages, original); assert.equal(plan.request.messages[0], messages[0]); assert.equal(plan.request.messages.at(-1), messages.at(-1));
+  assert.deepEqual(messages, original); assert.equal(plan.request.messages[0], messages[0]); assert.ok(plan.request.messages.includes(messages.at(-1)));
   assert.equal(plan.request.messages[1], messages[1]); assert.equal(validToolProtocol(plan.request.messages), true);
   assert.match(plan.request.messages[2].content[0].content, /ContextOS/); assert.match(plan.request.system, /pending=true/);
 }));
@@ -97,7 +98,8 @@ test('30 and 50 turn replay preserve complete protocol and explicit negative/zer
     const messages = [{ role: 'user', content: 'Never break API compatibility' }];
     for (let n=0;n<turns;n++) { messages.push(...pair('turn-'+n, 'list_files', { offset: n*10 }, 'snapshot data\n'.repeat(300))); messages.push({ role: 'user', content: 'Continue inspection '+n }); }
     const plan = await assemble(memory, messages, config); assert.ok(plan.diagnostics.sentWireBytes < plan.diagnostics.fullWireBytes*.5); assert.equal(validToolProtocol(plan.request.messages), true);
-    assert.equal(plan.request.messages.filter(message=>typeof message.content==='string').length, turns+1);
+    assert.ok(plan.request.messages.filter(message=>typeof message.content==='string').length >= turns+1);
+    assert.ok(messages.filter(message=>typeof message.content==='string').every(message=>plan.request.messages.includes(message)));
   }
 }));
 test('non-reducing small replacements fall back to the original request', async () => scenario(async (root, tools, config, memory) => {
@@ -126,7 +128,7 @@ test('real agent loop recalls old evidence after process resume and performs act
   const resumed={...config,sessionId:undefined,resume:'memory',runId:'memory-second'}, restored=createAgentSession(resumed);
   let stage=0;
   const result=await runTask('Set value to the earlier module marker; validate it',resumed,{session:restored,adapterFactory:()=>({complete:async request=>{
-    if(stage++===0){ const ref=JSON.stringify(request.messages).match(/ref=(ctx-[a-f0-9]{20})/)[1];return call('recall','recall_context',{ref}); }
+    if(stage++===0){ const ref=JSON.stringify(request.messages).match(/(?:ref=|\\"ref\\":\\")(ctx-[a-f0-9]{20})/)[1];return call('recall','recall_context',{ref}); }
     if(stage===2){ assert.match(JSON.stringify(request.messages.at(-1)),/marker = 17/); return call('edit','apply_patch',{path:'value.mjs',search:'value = 1',replace:'value = 17'}); }
     if(stage===3)return call('verify','run_tests',{command:'node --test value.test.mjs'});
     return {content:[{type:'text',text:'Done'}],stop_reason:'end_turn'};
@@ -159,4 +161,73 @@ test('a formerly evicted source becoming stale also removes needless schemas',as
   await assemble(memory,messages,config);assert.ok(memory.evicted.size);
   await writeFile(path.join(root,'old.mjs'),'// new source');
   const plan=await assemble(memory,messages,config);assert.equal(plan.request.tools.some(tool=>tool.name==='recall_context'),false);
+}));
+test('unsigned old tool rounds are paged together and active constraints are reanchored',async()=>scenario(async(root,tools,config,memory)=>{
+  await writeFile(path.join(root,'AGENTS.md'),'Modify only points.ts. Do not edit shadow.mjs.');
+  const unsigned=pair('old','list_files',{},'irrelevant paths\n'.repeat(900));unsigned[0].content.shift();
+  const messages=[{role:'user',content:'Original constraints'},...pair('rules','read_file',{path:'AGENTS.md'},await tools.readFile({path:'AGENTS.md'})),...unsigned,...pair('r1','list_files',{},'recent1'),...pair('r2','list_files',{},'recent2'),{role:'user',content:'Modify points.ts only'}];
+  const original=structuredClone(messages),plan=await assemble(memory,messages,config,{goal:'Modify points.ts only'});
+  assert.equal(plan.diagnostics.coldRounds,1);assert.equal(validToolProtocol(plan.request.messages),true);
+  assert.ok(!plan.request.messages.some(m=>Array.isArray(m.content)&&m.content.some(b=>b.type==='tool_use'&&b.id==='old')));
+  assert.match(JSON.stringify(plan.request.messages.at(-1)),/Modify only points.ts/);assert.match(JSON.stringify(plan.request.messages.at(-1)),/Active user goal/);
+  assert.deepEqual(messages,original);assert.ok(plan.request.messages.includes(messages[0]));
+}));
+test('source freshness propagates through recalled pages and history search previews',async()=>scenario(async(root,tools,config,memory)=>{
+  await writeFile(path.join(root,'module.mjs'),'export const obsoleteValue = 17;\n');
+  const messages=[{role:'user',content:'Inspect'},...pair('source','read_file',{path:'module.mjs'},await tools.readFile({path:'module.mjs'}))];
+  memory.rebuild(messages);const ref=[...memory.units.values()].find(u=>u.kind==='source_evidence').ref;
+  messages.push(...pair('recall','recall_context',{ref},await memory.recall({ref})));memory.rebuild(messages);
+  messages.push(...pair('search','search_history',{query:'obsoleteValue'},await memory.search({query:'obsoleteValue'})));
+  await writeFile(path.join(root,'module.mjs'),'export const currentValue = 19;');
+  const plan=await assemble(memory,messages,config);assert.equal(plan.diagnostics.staleUnits,3);assert.doesNotMatch(JSON.stringify(plan.request),/obsoleteValue = 17/);
+}));
+test('live search captures source dependencies and old snippets expire without extra provider content',async()=>scenario(async(root,tools,config,memory)=>{
+  await writeFile(path.join(root,'one.py'),'original_name = 17\n');
+  const output=await tools.searchCode({query:'original_name'});assert.doesNotMatch(output,/sha256=/);assert.equal(tools.searchEvidence.size,1);
+  const messages=[{role:'user',content:'Inspect'},...pair('search','search_code',{query:'original_name'},output)];
+  assert.equal((await assemble(memory,messages,config)).diagnostics.staleUnits,0);
+  await writeFile(path.join(root,'one.py'),'current_name = 19\n');
+  const plan=await assemble(memory,messages,config);assert.equal(plan.diagnostics.staleUnits,1);assert.doesNotMatch(JSON.stringify(plan.request),/original_name = 17/);
+}));
+test('unversioned old search snippets are withheld and UTF-8 BOM identity uses tool decoding',async()=>scenario(async(root,tools,config,memory)=>{
+  await writeFile(path.join(root,'bom.mjs'),'\ufeffexport const marker = 17;');
+  const messages=[{role:'user',content:'Inspect'},...pair('bom','read_file',{path:'bom.mjs'},await tools.readFile({path:'bom.mjs'})),...pair('legacy','search_code',{query:'marker'},'bom.mjs:1: export const marker = 1;')];
+  const plan=await assemble(memory,messages,config);assert.equal(plan.diagnostics.staleUnits,1);
+  assert.equal(plan.diagnostics.units.find(u=>u.path==='bom.mjs').validity,'valid');assert.doesNotMatch(JSON.stringify(plan.request),/marker = 1;/);
+}));
+test('recalling an inferred note keeps inferred provenance',async()=>scenario(async(root,tools,config,memory)=>{
+  const messages=[{role:'user',content:'Inspect'},{role:'assistant',content:[{type:'text',text:'I infer a possible cause; not verified.'}]}];
+  memory.rebuild(messages);const ref=[...memory.units.keys()][0];
+  messages.push(...pair('recall','recall_context',{ref},await memory.recall({ref})));memory.rebuild(messages);
+  assert.equal([...memory.units.values()].find(u=>u.name==='recall_context').provenance,'inferred');
+}));
+test('original user requirements survive semantic checkpoint projection',async()=>scenario(async(root,tools,config,memory)=>{
+  const canonical=history(),active=canonical.slice(3);active.unshift({role:'user',content:'Inferred compacted summary'});
+  const plan=await memory.assemble({messages:active,canonical,system:'fixed system',tools:tools.modelToolDefinitions(),config,state:{changedFiles:[]},goal:'Continue'});
+  assert.ok(plan.request.messages.includes(canonical[0]));assert.equal(plan.diagnostics.repinnedRequirements,1);assert.equal(validToolProtocol(plan.request.messages),true);
+}));
+
+test('source snapshots preserve filenames containing evidence reference punctuation', async () => scenario(async (root, tools, config, memory) => {
+  const filename = 'module#L1-L2@abcdef0123456789.mjs';
+  await writeFile(path.join(root, filename), 'export const originalValue = 17;');
+  const output = await tools.readFile({ path: filename });
+  const messages = [{ role: 'user', content: 'Inspect' }, ...pair('unusual', 'read_file', { path: filename }, output)];
+  const plan = await assemble(memory, messages, config);
+  assert.equal(plan.diagnostics.units[0].path, filename);
+  assert.equal(plan.diagnostics.units[0].validity, 'valid');
+  await writeFile(path.join(root, filename), 'export const currentValue = 19;');
+  assert.doesNotMatch(JSON.stringify((await assemble(memory, messages, config)).request), /originalValue = 17/);
+}));
+
+test('archived source cannot bypass protected session storage', async () => scenario(async (root, tools, config, memory) => {
+  await mkdir(path.join(root, '.tea'));
+  const source = 'private journal canary';
+  await writeFile(path.join(root, '.tea', 'private.mjs'), source);
+  const output = `[evidence ref=.tea/private.mjs#L1-L1@${digest(source).slice(0,16)} sha256=${digest(source)}]\n1: ${source}`;
+  const messages = [{ role: 'user', content: 'Inspect' }, ...pair('protected', 'read_file', { path: '.tea/private.mjs' }, output)];
+  const plan = await assemble(memory, messages, config);
+  assert.equal(plan.diagnostics.staleUnits, 1);
+  assert.doesNotMatch(JSON.stringify(plan.request), /private journal canary/);
+  const ref = plan.diagnostics.units[0].ref;
+  assert.doesNotMatch(await memory.recall({ ref }), /private journal canary/);
 }));

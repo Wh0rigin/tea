@@ -95,6 +95,20 @@ Source evidence, failures, patch receipts, recent results, and original assistan
 
 ## Experiments
 
+### Persistent and retrievable memory
+
+ContextOS is opt-in: exact session history is stored locally in an encrypted journal, while older recoverable tool output can be replaced with references in model requests. Requirements, current evidence, failures and validation obligations are retained. Source changes invalidate old evidence. Full history remains the default and rollback control.
+
+```sh
+npm run tea -- --interactive --session work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- --interactive --resume work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- sessions inspect work
+npm run tea -- sessions delete work
+npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
+```
+
+Resume uses the original workspace/model/endpoint and preserves spending; `/new` preserves outstanding edits too. `/memory` explains the last request projection. `--memory-policy full-history` disables selection; `--session` still enables persistence. The soft target uses UTF-8 request bytes, not provider tokens. See the [architecture](docs/CONTEXTOS_ARCHITECTURE.md), [benchmark protocol](docs/CONTEXTOS_BENCHMARK.md) and [Chinese usage guide](docs/CONTEXTOS.zh-CN.md). Live evidence is being evaluated; no ContextOS token gain is claimed until the frozen gate passes.
+
 Run offline experiments without a provider connection:
 
 ```sh
