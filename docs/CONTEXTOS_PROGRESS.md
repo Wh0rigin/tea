@@ -23,3 +23,7 @@ Implemented version-checked `recall_context`/`search_history`, observed/inferred
 - M1: deterministic/protocol and cross-process checks passed; additional edge cases remain part of stabilization.
 - M2/M3: implemented; stabilize and freeze candidate before paid measurements.
 - M4: frozen replay and live A/B; retain negative outcomes, remove candidates that regress acceptance or fail the token gate. No performance claims before provider measurements.
+
+## M4 — rejected A, frozen B
+
+A (`bbac783`) had short-control +19.70% provider tokens versus full history, 9/9 short acceptance, with 1,002 avoidable request bytes after source edits. Rejected and interrupted before long cases; all completed evidence and one unknown reservation retained. Conservative A spend USD 0.5767008. B removes stale-only recovery schemas, retains freshness safety, and adds a historical receipt recovery case. Same model/control settings; 63 live runs are planned within the remaining USD 7.4232992. Full pre-freeze suite 220/220; seven fixture preflights must pass. No target-token success claim yet.

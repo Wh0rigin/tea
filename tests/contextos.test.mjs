@@ -144,3 +144,19 @@ test('unchanged source references and path aliases also expire on source mutatio
   const stale=await assemble(memory,messages,config); assert.equal(stale.diagnostics.staleUnits,2);
   assert.doesNotMatch(JSON.stringify(stale.request),/sourceValue = 1|Evidence unchanged/);
 }));
+test('stale-only current edits withhold old source without adding retrieval schemas', async()=>scenario(async(root,tools,config,memory)=>{
+  await writeFile(path.join(root,'value.mjs'),'export const value = 1;');
+  const messages=[{role:'user',content:'Edit value.mjs'},...pair('read','read_file',{path:'value.mjs'},await tools.readFile({path:'value.mjs'}))];
+  await writeFile(path.join(root,'value.mjs'),'export const value = 2;');
+  const plan=await assemble(memory,messages,{...config,contextosTargetBytes:100000});
+  assert.equal(plan.diagnostics.staleUnits,1);assert.equal(plan.request.system,'fixed system');
+  assert.equal(plan.request.tools.some(tool=>tool.name==='recall_context'),false);
+  assert.doesNotMatch(JSON.stringify(plan.request),/value = 1/);assert.match(JSON.stringify(plan.request),/Read current source/);
+}));
+test('a formerly evicted source becoming stale also removes needless schemas',async()=>scenario(async(root,tools,config,memory)=>{
+  await writeFile(path.join(root,'old.mjs'),'// old source\n'.repeat(400));
+  const messages=history();messages.splice(1,2,...pair('old','read_file',{path:'old.mjs'},await tools.readFile({path:'old.mjs'})));
+  await assemble(memory,messages,config);assert.ok(memory.evicted.size);
+  await writeFile(path.join(root,'old.mjs'),'// new source');
+  const plan=await assemble(memory,messages,config);assert.equal(plan.request.tools.some(tool=>tool.name==='recall_context'),false);
+}));

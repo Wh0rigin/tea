@@ -163,8 +163,12 @@ export class ContextMemory {
       return changed ? { ...message, content } : message;
     });
     const active = new Set([...selected, ...stale]);
-    const requestTools = active.size || this.evicted.size ? [...tools, ...MEMORY_TOOLS] : tools;
-    const projectedSystem = active.size || this.evicted.size ? system + CONTEXT_GUIDANCE
+    // Stale source can only be refreshed through read_file. A stale-only
+    // warning does not require retrieval schemas or their repeated overhead.
+    const recoverable = selected.some(ref => !stale.has(ref))
+      || [...this.evicted].some(ref => this.units.has(ref) && !stale.has(ref));
+    const requestTools = recoverable ? [...tools, ...MEMORY_TOOLS] : tools;
+    const projectedSystem = recoverable ? system + CONTEXT_GUIDANCE
       + ` Runtime validation: pending=${Boolean(state.pendingValidation)}; passed=${Boolean(state.validationPassed)}; changed=${JSON.stringify(state.changedFiles || [])}.` : system;
     let request = { messages: finalMessages, system: projectedSystem, tools: requestTools }, after = requestBytes(config, request);
     let fallback = null;
