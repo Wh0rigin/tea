@@ -1,0 +1,3375 @@
+{
+  "version": 1,
+  "startedAt": "2026-10-11T06:11:27.014Z",
+  "model": "glm-5.3-flash",
+  "engineCommit": "100c83d6c6acfe0cf46c802309ddf8bde043e467",
+  "engineSha256": "7efa99a58f079de5c25cf872feb6ee1927f91cad808dfbb9d7f371a4ff63fd9f",
+  "profile": {
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "taskMaxOutputTokens": 4096,
+    "summaryMaxOutputTokens": 1200,
+    "maxRequestWireBytes": 80000,
+    "historyStrategy": "full",
+    "triggerRatio": 0.35,
+    "keepRecentBytes": 8000,
+    "maxCompactionAttemptsPerTurn": 2,
+    "maxToolCallsPerTurn": 18,
+    "maxRequestsPerRun": 24,
+    "requestTimeoutMs": 90000,
+    "turnTimeoutMs": 300000,
+    "totalBudgetUsd": 2.2,
+    "perRunBudgetUsd": 0.3,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "stream": false
+  },
+  "notes": [
+    "Self-authored JavaScript fixtures; no universal savings claim.",
+    "seeded-stress setup uses scripted calls to real read-only tools; setup is not model-generated or billed.",
+    "model-workflow includes all provider calls from inspection through repair.",
+    "Every total includes summary requests and all provider cache input; reasoning is included in output, never counted twice.",
+    "Costs are conservative estimates/reservations, not invoices. Unknown usage stays null; no automatic retry.",
+    "Variants share the task output cap. Summary requests use the native 1200 cap and enabled-thinking budget 1199."
+  ],
+  "repeat": 2,
+  "cases": [
+    {
+      "id": "short-small-cache",
+      "task": "small-cache-key",
+      "category": "seeded-stress",
+      "shape": "empty",
+      "entry": "src/services/cache-key.mjs",
+      "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+      "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+      "fileCount": 12,
+      "bytes": 5456,
+      "lines": 112,
+      "seed": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "messages": 0
+      },
+      "prompts": [
+        "Fix cache key collisions between values of different primitive types. Preserve object key order independence and the current API. Read the project instructions, make the smallest relevant change, and run the public tests."
+      ],
+      "promptSha256": "59e19ad6735ab0c3979261f4a125748e2127bca06a37ba000d121773c0e3a746",
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": false
+      }
+    },
+    {
+      "id": "source-medium-retry",
+      "task": "medium-retry-budget",
+      "category": "seeded-stress",
+      "shape": "reads",
+      "entry": "src/services/retry-budget.mjs",
+      "commit": "3922f549375a05db5fe0ced58685d358f3d14684",
+      "sha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+      "fileCount": 120,
+      "bytes": 70324,
+      "lines": 1409,
+      "seed": {
+        "bytes": 51495,
+        "sha256": "e16cec7300887c4b3dc84e17b7b7dd8ddc424e230b4fff07998d3a89361f793a",
+        "messages": 102
+      },
+      "prompts": [
+        "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+      ],
+      "promptSha256": "69a7e36a24e53cf79358b465df2d62f107935f85bf5d075ef8429fdffc74aa13",
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": false
+      }
+    },
+    {
+      "id": "inventory-large-unicode",
+      "task": "large-unicode",
+      "category": "seeded-stress",
+      "shape": "inventory",
+      "entry": "src/services/text.mjs",
+      "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+      "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "fileCount": 1200,
+      "bytes": 725947,
+      "lines": 14365,
+      "seed": {
+        "bytes": 52566,
+        "sha256": "99b4d8ae419cb6efc2117148bae2d4262ac4ae0b300e87774aad12db4cd3db68",
+        "messages": 16
+      },
+      "prompts": [
+        "Make the text truncation utility count Unicode code points instead of UTF-16 code units, including astral characters. Keep zero limits and shorter strings correct. Read the project instructions, preserve the API, and run the public tests."
+      ],
+      "promptSha256": "39d99620e2248aecb7dc2061737e0214757cad201a6290fd661b66abc4d91384",
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": false
+      }
+    },
+    {
+      "id": "workflow-large-retry",
+      "task": "large-retry-budget",
+      "category": "model-workflow",
+      "shape": "empty",
+      "entry": "src/services/retry-budget.mjs",
+      "commit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+      "sha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+      "fileCount": 1200,
+      "bytes": 726153,
+      "lines": 14369,
+      "seed": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "messages": 0
+      },
+      "prompts": [
+        "Read AGENTS.md and README.md. Then inspect all file inventory pages using list_files with maxFiles=250 and offsets 0,250,500,750,1000. Do not modify files or solve bugs yet. Finish with at most 80 words describing project organization.",
+        "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+      ],
+      "promptSha256": "24b6378aa56f6c9a12f9307a77cbc3955dad476dcdfcdb37e92ec7d16f9029b2",
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": false
+      }
+    }
+  ],
+  "runs": [
+    {
+      "caseId": "short-small-cache",
+      "category": "seeded-stress",
+      "repeat": 1,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 7830,
+      "conservativeSpendUsd": 0.006836,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 7544,
+      "outputTokens": 286,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 38548,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/cache-key.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 5,
+            "inputTokens": 7544,
+            "uncachedInputTokens": 1912,
+            "outputTokens": 286,
+            "cachedInputTokens": 5632,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 31338,
+            "estimatedSpendUsd": 0.006836,
+            "toolCalls": 5,
+            "toolOutputChars": 1547,
+            "contextChars": 918,
+            "elapsedMs": 38000,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 5,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 7544,
+            "reportedOutputTokens": 286,
+            "reportedTotalTokens": 7830,
+            "totalActualTokens": 7830,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:12:06.456Z",
+            "contextDiagnostics": {
+              "requestCount": 5,
+              "fullRequestPayloadBytes": 30633,
+              "sentRequestPayloadBytes": 30633,
+              "fullRequestPayloadChars": 30615,
+              "sentRequestPayloadChars": 30615,
+              "fullHeuristicTokens": 7657,
+              "sentHeuristicTokens": 7657,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1057,
+            "output_tokens": 29,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0009268,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "770b9ebf2b0c6d04f717b84191697c6fcc2b6673f4caeb9677bc92eb04b9c3f8",
+          "responseSha256": "d13623e0f5ab5ca55a9720433bbd95c1c6964f0d832c629f4841ac0fa66b8a11",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 371,
+            "output_tokens": 41,
+            "cache_read_input_tokens": 1024,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0012308,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "37b0a3bc529d0b7cb7c01e097580c8d68f28156ba5ab5ddb9509d1e4e84276dd",
+          "responseSha256": "85176643db2482deec544cbcbdf73b3d7b5005061f77d5150e334dec67c9324d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 260,
+            "output_tokens": 82,
+            "cache_read_input_tokens": 1344,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0015128,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "6b8888395a291f8dd34c4feece6416a1e1bf8e78ecd426f4a84a9a97bef4ffc8",
+          "responseSha256": "80c29283909eb179caca6a424c62796886ece4c8de778cb13cdbd0d1ac8a6a47",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 97,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1600,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0014108000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8ece18a1977c0c9419f17fb75777771bf0cbc0b82eb9dcae716ae57f517a4970",
+          "responseSha256": "a3b9216e222dcc6683f06bafe930b8b7b59326cbf2d7d357f0e0d4907b12713b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 127,
+            "output_tokens": 115,
+            "cache_read_input_tokens": 1664,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0017548000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "6731815790043fd7d20b804ef7eb9cdfc29115a681444f3f4c15829aee16f289",
+          "responseSha256": "c838849b69e60fa3b86f7df8e454c825b01f03a806d35b0ca3e6565708c7c71a",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "short-small-cache",
+      "category": "seeded-stress",
+      "repeat": 1,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 5661,
+      "conservativeSpendUsd": 0.0049207999999999995,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 5465,
+      "outputTokens": 196,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 25742,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/cache-key.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 5465,
+            "uncachedInputTokens": 1817,
+            "outputTokens": 196,
+            "cachedInputTokens": 3648,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 22677,
+            "estimatedSpendUsd": 0.0049207999999999995,
+            "toolCalls": 4,
+            "toolOutputChars": 1120,
+            "contextChars": 919,
+            "elapsedMs": 25240,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 5465,
+            "reportedOutputTokens": 196,
+            "reportedTotalTokens": 5661,
+            "totalActualTokens": 5661,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:12:32.501Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 22113,
+              "sentRequestPayloadBytes": 22113,
+              "fullRequestPayloadChars": 22095,
+              "sentRequestPayloadChars": 22095,
+              "fullHeuristicTokens": 5526,
+              "sentHeuristicTokens": 5526,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1057,
+            "output_tokens": 29,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0009268,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "0382de8ade536edcbabe709d22015b49603027548f2d8169681b5f40dc404c85",
+          "responseSha256": "29905350a84bfe22d7ec571aa7cef9df4d1cfee1d0c93a6388efa792339100e3",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 499,
+            "output_tokens": 53,
+            "cache_read_input_tokens": 896,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0012644000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "3584c3faf619db1ce31522611229bd2edb8b9944c8031329514767f8acb02327",
+          "responseSha256": "b3ab2d0f9392420922dda964d0a7d48ca5ce1eb04a9636fab1d8797de947c040",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 115,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1344,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0012204000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "a5e04ba9e17d4e634c15c20fce313df8b41437707795c59df457fceaa8aa9d22",
+          "responseSha256": "046cae137ceda4fcf2abe76a06f34be675efbad847acf2d76a8a2f8b22d23b7e",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 146,
+            "output_tokens": 95,
+            "cache_read_input_tokens": 1408,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0015092,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "4ed1a8bdd2c2805f8aad7c21c41cf8216f9af59a83e7d16ee6529978e7cf1e0f",
+          "responseSha256": "600dfa349534c7f9542d7201104f2c9b9258058599d0205aab2f3de2fcaa49d7",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "short-small-cache",
+      "category": "seeded-stress",
+      "repeat": 2,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 6220,
+      "conservativeSpendUsd": 0.005398,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 6009,
+      "outputTokens": 211,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 27353,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/cache-key.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 6009,
+            "uncachedInputTokens": 953,
+            "outputTokens": 211,
+            "cachedInputTokens": 5056,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 24826,
+            "estimatedSpendUsd": 0.005398,
+            "toolCalls": 5,
+            "toolOutputChars": 1547,
+            "contextChars": 919,
+            "elapsedMs": 26808,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 6009,
+            "reportedOutputTokens": 211,
+            "reportedTotalTokens": 6220,
+            "totalActualTokens": 6220,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:13:00.072Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 24262,
+              "sentRequestPayloadBytes": 24262,
+              "fullRequestPayloadChars": 24244,
+              "sentRequestPayloadChars": 24244,
+              "fullHeuristicTokens": 6063,
+              "sentHeuristicTokens": 6063,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 161,
+            "output_tokens": 43,
+            "cache_read_input_tokens": 896,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.000966,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "33fdea300b3441a670f5a3fa10f3fd34ac500407eb193fde63d05b322fb2a2de",
+          "responseSha256": "2e57069b0082df7bf02a7b5e362902cfef0fdd9721cc1205d1d4f6af9e8d8108",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 551,
+            "output_tokens": 55,
+            "cache_read_input_tokens": 1024,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.001414,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "e82d72c87b4dfafe6d1231a2b11e1fd5d1d80db1962974c3c4343dd6bd871593",
+          "responseSha256": "4b491605a1351b4bb396455e113c294ab8f801e557c73a3d56a2eccf9f5e4998",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 105,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1536,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0013660000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "4fef6cfa07bef730697b4a69bea3a58cd21e31af4cad5cbda16dd0582e23d37b",
+          "responseSha256": "7d4b24633b263ddb6b96f2401577edc58cdca2eab659e3de01f810f38eac25e7",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 136,
+            "output_tokens": 94,
+            "cache_read_input_tokens": 1600,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0016520000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d4b4d1c824fbe47cd7dc99efa9ac37bedbc618542f8fafa182797733aad4682a",
+          "responseSha256": "bee6a9f18e624841bc51acb95e38b9a551322cc17459b402e1aeedd287d5156e",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "short-small-cache",
+      "category": "seeded-stress",
+      "repeat": 2,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 5595,
+      "conservativeSpendUsd": 0.0047799999999999995,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 5443,
+      "outputTokens": 152,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 26231,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/cache-key.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 5443,
+            "uncachedInputTokens": 771,
+            "outputTokens": 152,
+            "cachedInputTokens": 4672,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 22597,
+            "estimatedSpendUsd": 0.0047799999999999995,
+            "toolCalls": 4,
+            "toolOutputChars": 1120,
+            "contextChars": 918,
+            "elapsedMs": 25717,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 5443,
+            "reportedOutputTokens": 152,
+            "reportedTotalTokens": 5595,
+            "totalActualTokens": 5595,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:13:26.689Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 22033,
+              "sentRequestPayloadBytes": 22033,
+              "fullRequestPayloadChars": 22015,
+              "sentRequestPayloadChars": 22015,
+              "fullHeuristicTokens": 5506,
+              "sentHeuristicTokens": 5506,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 161,
+            "output_tokens": 29,
+            "cache_read_input_tokens": 896,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0009268,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8cb86af9f69646966fa18da475d0728b4fc036142d3814261ba9c3ca8d4f5fc2",
+          "responseSha256": "796cde7da62072c99a4c88823e8e5858b642f8de9e529ba1d91b5641c921a010",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 371,
+            "output_tokens": 42,
+            "cache_read_input_tokens": 1024,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0012335999999999998,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "a541884acda7f6ad7cb8d5b068af899871df619d8b79ba4fa52e85a18e747a1e",
+          "responseSha256": "b8bb3c82c81fe17a16891990ff61f8f653e0c000657d3fe93ea87b857debbe6a",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 104,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1344,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0012116000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "257e1302c41a28a17066f7ebdb10ac206cecaf4172dfd08f3a79e018f01cac61",
+          "responseSha256": "43ef3afac47d2ece5226bbd390d9c78e18e5c0f7151f20046e3b4d315d83eb6d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 135,
+            "output_tokens": 62,
+            "cache_read_input_tokens": 1408,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.001408,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1ac8c3f9e61a2b4ddd705197d0e803a7a924b8cf28f85a3bf703b6480808068b",
+          "responseSha256": "a9bc49f022664c48516744b203db80097264202f2e4b74017ae1c874db093c11",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "source-medium-retry",
+      "category": "seeded-stress",
+      "repeat": 1,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 76718,
+      "conservativeSpendUsd": 0.061988400000000006,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 76411,
+      "outputTokens": 307,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 42447,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 5,
+            "inputTokens": 76411,
+            "uncachedInputTokens": 29691,
+            "outputTokens": 307,
+            "cachedInputTokens": 46720,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 286698,
+            "estimatedSpendUsd": 0.061988400000000006,
+            "toolCalls": 6,
+            "toolOutputChars": 1914,
+            "contextChars": 250,
+            "elapsedMs": 41918,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 5,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 76411,
+            "reportedOutputTokens": 307,
+            "reportedTotalTokens": 76718,
+            "totalActualTokens": 76718,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:14:10.787Z",
+            "contextDiagnostics": {
+              "requestCount": 5,
+              "fullRequestPayloadBytes": 285993,
+              "sentRequestPayloadBytes": 285993,
+              "fullRequestPayloadChars": 285975,
+              "sentRequestPayloadChars": 285975,
+              "fullHeuristicTokens": 71496,
+              "sentHeuristicTokens": 71496,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 14795,
+            "output_tokens": 30,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.01192,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "87430f22097293ab0a5bb084217625222837b0787f3d4d4ec90aa0ae23f8baed",
+          "responseSha256": "b92ef9f5bdc456dc9dae54114e2e4d607a87ee4fe68be0a826af5a359ea6075a",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 14208,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0121216,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "aacb010dac32fc5b4c332f45356a6ebc776e41c34ecb93527756e9988e189e8f",
+          "responseSha256": "babcaa2ccc230e3aee5fa21dc73ef9a5d7c9bda4072b5c08bde8a1a3e60a4726",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 367,
+            "output_tokens": 119,
+            "cache_read_input_tokens": 15040,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.012658800000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "ba2d2e73a535a0e1674ebc27a17f66d4e35bb48f4389fdaf36c1f1055009467f",
+          "responseSha256": "51d4857dbdff4c729a3523a459216cd57518c6055b453fd889794adfb461bef4",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 178,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 15360,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.012483600000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b0afed278342560984bd7f161155eb0e66822605f3afe3a547470089c44b5b2e",
+          "responseSha256": "05a6a379b66878584fb28bf8afc9eb3a66f735b84415b3098bfece5edf8898df",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 143,
+            "output_tokens": 107,
+            "cache_read_input_tokens": 15488,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.012804400000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d9dca8481f44241083d64c5476fdf4edde096ab6e206b40ff60a0a559f26c33c",
+          "responseSha256": "c071ff6269f1484d90a29b092c92748dd617b177d95c390445bd57c4314ae348",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "source-medium-retry",
+      "category": "seeded-stress",
+      "repeat": 1,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 34477,
+      "conservativeSpendUsd": 0.0293716,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 33582,
+      "outputTokens": 895,
+      "summaryRequests": 1,
+      "summaryTokens": 12756,
+      "elapsedMs": 47997,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 1,
+          "summary": {
+            "requests": 6,
+            "inputTokens": 33582,
+            "uncachedInputTokens": 26478,
+            "outputTokens": 895,
+            "cachedInputTokens": 7104,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 125750,
+            "estimatedSpendUsd": 0.0293716,
+            "toolCalls": 6,
+            "toolOutputChars": 1761,
+            "contextChars": 250,
+            "elapsedMs": 47451,
+            "compactionRequests": 1,
+            "compactionInputTokens": 12164,
+            "compactionOutputTokens": 592,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 12164,
+            "reportedCompactionOutputTokens": 592,
+            "usageStatus": "complete",
+            "completeUsageRequests": 6,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 33582,
+            "reportedOutputTokens": 895,
+            "reportedTotalTokens": 34477,
+            "totalActualTokens": 34477,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:14:59.125Z",
+            "contextDiagnostics": {
+              "requestCount": 5,
+              "fullRequestPayloadBytes": 285670,
+              "sentRequestPayloadBytes": 85684,
+              "fullRequestPayloadChars": 285652,
+              "sentRequestPayloadChars": 85626,
+              "fullHeuristicTokens": 71415,
+              "sentHeuristicTokens": 21408,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": [
+            {
+              "type": "conversation_compaction",
+              "checkpointId": "45f58ceb-6297-4a47-920f-9fc43c433ae9",
+              "previousId": null,
+              "reason": "threshold",
+              "coveredFrom": 0,
+              "firstKeptIndex": 85,
+              "coveredMessages": 85,
+              "partial": false,
+              "beforeBytes": 55056,
+              "afterBytes": 15046,
+              "summarySha256": "d74d2949d1f5ddf9765d5b40877869da3ef2e0cbbeba2ec05cbb1d2ad9445aaa",
+              "summaryBytes": 2642,
+              "attemptedReadFileCount": 42,
+              "attemptedModifiedFileCount": 0,
+              "transcriptSha256": "be6acce0e208b3524abc0a5c5de140af57b1b8c609217bf07404c61fddf9b0c1",
+              "metricSource": "serialized wire request bytes, not provider token savings"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 12164,
+            "output_tokens": 592,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.011388800000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "9a7a02592d2a635a3e70d7862563931282485474864b0e16a75856e31e1d68e4",
+          "responseSha256": "a68bae818b4b858147d57565a2553aea843b8573e4ebf5144348b824bf9b08c0",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3814,
+            "output_tokens": 30,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0031352000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "879a26c93ac8b055ddd0080e6afc1d35278f3db9d2343e73896a566483805c9a",
+          "responseSha256": "d9337f7bb8d4834777886765b07893b85b4454357fd17ea2542e98d08103fbad",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3201,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.003316,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "9cd9c324d18a53d99c481bede3d93fcf9bd805bf6a874f3cac1c8a69273f38d5",
+          "responseSha256": "c5bfdc74622860e268998a79c2a840da2143bded7fe0afdaa62312208198499c",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 368,
+            "output_tokens": 119,
+            "cache_read_input_tokens": 4032,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0038531999999999998,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "e7e15f2b042841347027f00bc576a1fe6d82f7039cd824371d28a6e51d320a89",
+          "responseSha256": "95ab0ee55e67134893aafb3293ef06fde67c36b3d6915463cf110e2487a0ffec",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3706,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0036836,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "faa318886ecc1e0fd04f2074ab53875c6bcd1cc460f0fec0f8f8a3402b0c5a0a",
+          "responseSha256": "70fa97badf727409f46ca3451a2232bc1c15440ddc12e4d670d93d541b7fbad2",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3225,
+            "output_tokens": 103,
+            "cache_read_input_tokens": 1408,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.003994800000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2377145b7730d7423d02acb11796c44f9098f8b461d93845275795f33e992afe",
+          "responseSha256": "dbc73b65eb3bb95e728d1ea28d0e953535ed3cae0929162f6552a76173bf3d85",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "source-medium-retry",
+      "category": "seeded-stress",
+      "repeat": 2,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 34412,
+      "conservativeSpendUsd": 0.0291496,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 33602,
+      "outputTokens": 810,
+      "summaryRequests": 1,
+      "summaryTokens": 12658,
+      "elapsedMs": 47182,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 1,
+          "summary": {
+            "requests": 6,
+            "inputTokens": 33602,
+            "uncachedInputTokens": 10946,
+            "outputTokens": 810,
+            "cachedInputTokens": 22656,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 125754,
+            "estimatedSpendUsd": 0.0291496,
+            "toolCalls": 7,
+            "toolOutputChars": 2363,
+            "contextChars": 250,
+            "elapsedMs": 46661,
+            "compactionRequests": 1,
+            "compactionInputTokens": 12164,
+            "compactionOutputTokens": 494,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 12164,
+            "reportedCompactionOutputTokens": 494,
+            "usageStatus": "complete",
+            "completeUsageRequests": 6,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 33602,
+            "reportedOutputTokens": 810,
+            "reportedTotalTokens": 34412,
+            "totalActualTokens": 34412,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:15:46.701Z",
+            "contextDiagnostics": {
+              "requestCount": 5,
+              "fullRequestPayloadBytes": 288374,
+              "sentRequestPayloadBytes": 85688,
+              "fullRequestPayloadChars": 288356,
+              "sentRequestPayloadChars": 85660,
+              "fullHeuristicTokens": 72091,
+              "sentHeuristicTokens": 21417,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": [
+            {
+              "type": "conversation_compaction",
+              "checkpointId": "cf911326-19b8-410d-adc6-eddd1ea9efb1",
+              "previousId": null,
+              "reason": "threshold",
+              "coveredFrom": 0,
+              "firstKeptIndex": 85,
+              "coveredMessages": 85,
+              "partial": false,
+              "beforeBytes": 55056,
+              "afterBytes": 14506,
+              "summarySha256": "401c9ed57daa27b75b345dbaafcea6717803aa6dce121152a52062712d39a642",
+              "summaryBytes": 2101,
+              "attemptedReadFileCount": 42,
+              "attemptedModifiedFileCount": 0,
+              "transcriptSha256": "be6acce0e208b3524abc0a5c5de140af57b1b8c609217bf07404c61fddf9b0c1",
+              "metricSource": "serialized wire request bytes, not provider token savings"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 4,
+            "output_tokens": 494,
+            "cache_read_input_tokens": 12160,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.011114400000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "9a7a02592d2a635a3e70d7862563931282485474864b0e16a75856e31e1d68e4",
+          "responseSha256": "19bbe1252fc16f746c66fd21b9ca3cacd12dff86d2f24f7d9cca9d27a69a321b",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2873,
+            "output_tokens": 31,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0030508,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "95072c1f3481a801ad116bea0a66b8b13fdf122d44804cc45eb2b2f3bdd47c72",
+          "responseSha256": "5f06f7882595a97c3eeaa46000f68118fd30bf069c048fa46b1e2fa941e8512b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 303,
+            "output_tokens": 44,
+            "cache_read_input_tokens": 3648,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.003284,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d07953d48e3867fa14b8ff62f1bd4ed7c62208776df478b0dd3ed8ad783b1dc5",
+          "responseSha256": "f622167a940c6822b56315054305563430b571cd19944ede49387d453b4e0357",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 561,
+            "output_tokens": 127,
+            "cache_read_input_tokens": 3904,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039276,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b58ee5bb38a96ee35dfc984643711f28017bb8c35a5735627163af9105b437b8",
+          "responseSha256": "3a790535489455ac38613a8fc37f2fac39e2d6ddf6ffe9a8654f9739399e41c0",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3779,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.003742,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1333e538b2d03abb61436d9c6351b0789991554d91e9e9d5c0c8ecfdf374cdda",
+          "responseSha256": "1bb0ef0dee07f018c2e806b5bd3e76d979d16fd699b35537aa0bd834c10ad8f1",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3426,
+            "output_tokens": 95,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0040308,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "a6212ce273255a36bc5aba6d5e75d923b373e035e8b1d3de1ca51aa38ad0d67b",
+          "responseSha256": "c6f8c28a20dd4aa95f814324a97e3cca2999aef579aa44d196010235d382a231",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "source-medium-retry",
+      "category": "seeded-stress",
+      "repeat": 2,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 92827,
+      "conservativeSpendUsd": 0.0752516,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 92332,
+      "outputTokens": 495,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 58531,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 6,
+            "inputTokens": 92332,
+            "uncachedInputTokens": 30636,
+            "outputTokens": 495,
+            "cachedInputTokens": 61696,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 346963,
+            "estimatedSpendUsd": 0.0752516,
+            "toolCalls": 7,
+            "toolOutputChars": 1952,
+            "contextChars": 250,
+            "elapsedMs": 58018,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 6,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 92332,
+            "reportedOutputTokens": 495,
+            "reportedTotalTokens": 92827,
+            "totalActualTokens": 92827,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:16:45.597Z",
+            "contextDiagnostics": {
+              "requestCount": 6,
+              "fullRequestPayloadBytes": 346117,
+              "sentRequestPayloadBytes": 346117,
+              "fullRequestPayloadChars": 346091,
+              "sentRequestPayloadChars": 346091,
+              "fullHeuristicTokens": 86526,
+              "sentHeuristicTokens": 86526,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 13963,
+            "output_tokens": 30,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.01192,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "87430f22097293ab0a5bb084217625222837b0787f3d4d4ec90aa0ae23f8baed",
+          "responseSha256": "abb618630ceff6ac491b65d98c434ea78358f9aecc8633dcc15357532f664b09",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 256,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 14784,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0121216,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "4b9f07116e709a5fe65fe41ecde14b7081b450272853863c02452f7160ecbe90",
+          "responseSha256": "933ce653a6183fef39610a8653d2f530791b8e52941c41316cd8b3418a38adc0",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 15407,
+            "output_tokens": 136,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0127064,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "f0e7562ffa2aaa8d3e39d02cca24d814d903255bbaf9170d8d42327d3b03dc33",
+          "responseSha256": "f4d9058179a00cdde83c2b1b1f1c93443f864f16f728a427fd0b30873a275d6d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 515,
+            "output_tokens": 153,
+            "cache_read_input_tokens": 15040,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.012872399999999999,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "900c10986813a81db59f89eb48d8c0adbca950f1bcb6c28d5ae184ba53584795",
+          "responseSha256": "76c653cc6fe2f9108e2e10d77ddebaa9795e8c3b04c44a49f91d0a981c1ec72a",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 360,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 15360,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0126292,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "552c07e401ccd12083682a40470307a4ccc08a97cb9e289e563f85abd466ad94",
+          "responseSha256": "ab77a6d273f236708b142cb2cae949668dcb27b847457a19baf4bf3c8eacb752",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 135,
+            "output_tokens": 125,
+            "cache_read_input_tokens": 15680,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "615a02deaa5703ab287079921618a982c3201e27724abc0698d04d0fcf37ddb6",
+          "responseSha256": "e547a898842e5fc264e41e9ea81be97fa64a43f493b33891d42414c297e6ecf3",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "inventory-large-unicode",
+      "category": "seeded-stress",
+      "repeat": 1,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 68725,
+      "conservativeSpendUsd": 0.05535400000000001,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 68538,
+      "outputTokens": 187,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 27126,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/text.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 68538,
+            "uncachedInputTokens": 33146,
+            "outputTokens": 187,
+            "cachedInputTokens": 35392,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 229379,
+            "estimatedSpendUsd": 0.05535400000000001,
+            "toolCalls": 4,
+            "toolOutputChars": 853,
+            "contextChars": 238,
+            "elapsedMs": 26508,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 68538,
+            "reportedOutputTokens": 187,
+            "reportedTotalTokens": 68725,
+            "totalActualTokens": 68725,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:17:19.189Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 228815,
+              "sentRequestPayloadBytes": 228815,
+              "fullRequestPayloadChars": 228797,
+              "sentRequestPayloadChars": 228797,
+              "fullHeuristicTokens": 57201,
+              "sentHeuristicTokens": 57201,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 16846,
+            "output_tokens": 30,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013560800000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "cdaf56498b4db56dc77940e7262988cc0609fdc81714c82f131be3b9ec025fe5",
+          "responseSha256": "242c2f181afcdef8f0809bc8f52b5c9edd707a89bc5c69263103b0e127a3d2ac",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 16062,
+            "output_tokens": 64,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0138992,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "ec96174f160302acfe785225559f926d147a7c3d71360160c1ffe62ea8565f45",
+          "responseSha256": "6ad51512e03547809af460ffe98a907f53eee74d04af416fa6053b13d5cf092d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 136,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 17088,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013832400000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "aafc6a52a5602f379d5902b426a0391a8d768d65a2789ec77236f464ff4cffdf",
+          "responseSha256": "8a4d0877041b381b7e191f2d24131b657a166707d9b69b9ca2307874d365f8fa",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 102,
+            "output_tokens": 74,
+            "cache_read_input_tokens": 17216,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014061600000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "289e492da2a2e8bf032ebe3d3d4a703df6ca2133ee2015c36caa8cf52d6693b0",
+          "responseSha256": "717e31bd5af6f074f7520fbd0788b59b1f50c39b083da4be3c5813625da0be26",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "inventory-large-unicode",
+      "category": "seeded-stress",
+      "repeat": 1,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 22314,
+      "conservativeSpendUsd": 0.0195672,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 21456,
+      "outputTokens": 858,
+      "summaryRequests": 1,
+      "summaryTokens": 3893,
+      "elapsedMs": 35105,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/text.mjs"
+          ],
+          "compactionCount": 1,
+          "summary": {
+            "requests": 5,
+            "inputTokens": 21456,
+            "uncachedInputTokens": 19792,
+            "outputTokens": 858,
+            "cachedInputTokens": 1664,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 78676,
+            "estimatedSpendUsd": 0.0195672,
+            "toolCalls": 5,
+            "toolOutputChars": 1300,
+            "contextChars": 238,
+            "elapsedMs": 34498,
+            "compactionRequests": 1,
+            "compactionInputTokens": 3360,
+            "compactionOutputTokens": 533,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 3360,
+            "reportedCompactionOutputTokens": 533,
+            "usageStatus": "complete",
+            "completeUsageRequests": 5,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 21456,
+            "reportedOutputTokens": 858,
+            "reportedTotalTokens": 22314,
+            "totalActualTokens": 22314,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:17:55.444Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 231297,
+              "sentRequestPayloadBytes": 66677,
+              "fullRequestPayloadChars": 231277,
+              "sentRequestPayloadChars": 66617,
+              "fullHeuristicTokens": 57821,
+              "sentHeuristicTokens": 16656,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": [
+            {
+              "type": "conversation_compaction",
+              "checkpointId": "fe098cf4-3dcc-417f-91fc-3c9d716de4a6",
+              "previousId": null,
+              "reason": "threshold",
+              "coveredFrom": 0,
+              "firstKeptIndex": 13,
+              "coveredMessages": 13,
+              "partial": false,
+              "beforeBytes": 56115,
+              "afterBytes": 14948,
+              "summarySha256": "23c530328924245c7b844e3e93c867ff6c0c27ca73eee632a6aed835beddd933",
+              "summaryBytes": 2321,
+              "attemptedReadFileCount": 2,
+              "attemptedModifiedFileCount": 0,
+              "transcriptSha256": "96ef43dabcba1dc4e4760ab9eee39f81220290140213e76c8b6803f61cb71d25",
+              "metricSource": "serialized wire request bytes, not provider token savings"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 3360,
+            "output_tokens": 533,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0041804,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1bdff439da343c8320a735823f39a96aea486639655ed14d7cba7d6293f498fd",
+          "responseSha256": "c7264039b11f5ef97f00dad0faca7190baeaccb94a55964de3854d757993e005",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4096,
+            "output_tokens": 42,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0033944,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "fa4db3b838fb99eedc67c19b8ac81c3198ad9a4cae15f8b63cbb00e571edd6b0",
+          "responseSha256": "631be096319908a36c6d124587aa850c63f76974a91cf92b3662a403e7662cc0",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4547,
+            "output_tokens": 100,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039176,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "3f700f028ec2deb9900da452f826dc2951c284c794d631f41af0cf0e1b705338",
+          "responseSha256": "f2c09c66a131b9898dc1d8a5d8b3ff2b4c0766e9f0c95740bb6dd09d23cba023",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3830,
+            "output_tokens": 54,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0038808000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "5fc3bf5069056379aaa10168e2bbdfcadd85ba01d256c3304a6b10f546e9b35c",
+          "responseSha256": "347d380ca86309a4fbbea0cdf0fffa37382d1272d2ae9adeea74f64ace2964c8",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3959,
+            "output_tokens": 129,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004194,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "51053d1680eddb9879fce55da8b7eb2268c834973137cdf25a71e9f146f453a0",
+          "responseSha256": "c4ae010f0c5233271637aba2757670e75f2e76276ce8497838deac3a665a8e72",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "inventory-large-unicode",
+      "category": "seeded-stress",
+      "repeat": 2,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 22586,
+      "conservativeSpendUsd": 0.0198528,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 21694,
+      "outputTokens": 892,
+      "summaryRequests": 1,
+      "summaryTokens": 3963,
+      "elapsedMs": 40979,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/text.mjs"
+          ],
+          "compactionCount": 1,
+          "summary": {
+            "requests": 5,
+            "inputTokens": 21694,
+            "uncachedInputTokens": 11198,
+            "outputTokens": 892,
+            "cachedInputTokens": 10496,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 80279,
+            "estimatedSpendUsd": 0.0198528,
+            "toolCalls": 5,
+            "toolOutputChars": 1301,
+            "contextChars": 238,
+            "elapsedMs": 40116,
+            "compactionRequests": 1,
+            "compactionInputTokens": 3360,
+            "compactionOutputTokens": 603,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 3360,
+            "reportedCompactionOutputTokens": 603,
+            "usageStatus": "complete",
+            "completeUsageRequests": 5,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 21694,
+            "reportedOutputTokens": 892,
+            "reportedTotalTokens": 22586,
+            "totalActualTokens": 22586,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:18:37.363Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 231580,
+              "sentRequestPayloadBytes": 68280,
+              "fullRequestPayloadChars": 231560,
+              "sentRequestPayloadChars": 68220,
+              "fullHeuristicTokens": 57891,
+              "sentHeuristicTokens": 17057,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": [
+            {
+              "type": "conversation_compaction",
+              "checkpointId": "1b6af384-e467-4f21-abfb-39287f4d0ebe",
+              "previousId": null,
+              "reason": "threshold",
+              "coveredFrom": 0,
+              "firstKeptIndex": 13,
+              "coveredMessages": 13,
+              "partial": false,
+              "beforeBytes": 56115,
+              "afterBytes": 15278,
+              "summarySha256": "7f4e30c2ea9645a3d0d5108577b0ebf499209251d8c3a0fc0dd90e8dc8e88bf5",
+              "summaryBytes": 2650,
+              "attemptedReadFileCount": 2,
+              "attemptedModifiedFileCount": 0,
+              "transcriptSha256": "96ef43dabcba1dc4e4760ab9eee39f81220290140213e76c8b6803f61cb71d25",
+              "metricSource": "serialized wire request bytes, not provider token savings"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 32,
+            "output_tokens": 603,
+            "cache_read_input_tokens": 3328,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0043764,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1bdff439da343c8320a735823f39a96aea486639655ed14d7cba7d6293f498fd",
+          "responseSha256": "adceb3eb626c70d5227493e3b067d29f360136857c51e452163440e59e0e5c53",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3319,
+            "output_tokens": 42,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0034384,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d1ae58ae2d2119771e757e6b75a70f7bb7c7b4263e935c77f7f651065b265210",
+          "responseSha256": "5e93a76fb54b3a86b93bc9a36f1fd39c1fbf452b39784610a9a9a28d5ed425a7",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 506,
+            "output_tokens": 114,
+            "cache_read_input_tokens": 4096,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0040008000000000005,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "cba33616741898f57efe1283c4abf382db020c2e60545dee318d2cd2ee031bf6",
+          "responseSha256": "87c060977bd423b701c21afa2c22c74fa7a7367bb79893cbbb5807c74407914b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3899,
+            "output_tokens": 43,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039052,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "10d473d1443867121841892443e310b948411dd19e21265ac6b236f59c48360c",
+          "responseSha256": "4399d27a7c1c26619e5ec0ef1505a27d8fe5a5c93cb62abab9a5b11f5bc6ce80",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3442,
+            "output_tokens": 90,
+            "cache_read_input_tokens": 1408,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004132,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "915f20a9e495801cf462620c7ed2dd4de780678bd9cac32ed89ae505abf15d32",
+          "responseSha256": "2df50942b39f40d397e1fda76a253612416a2b0f460f7de1d26fbbb006a972ae",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "inventory-large-unicode",
+      "category": "seeded-stress",
+      "repeat": 2,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 68916,
+      "conservativeSpendUsd": 0.055650800000000014,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 68657,
+      "outputTokens": 259,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 27638,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/text.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 68657,
+            "uncachedInputTokens": 16369,
+            "outputTokens": 259,
+            "cachedInputTokens": 52288,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 230048,
+            "estimatedSpendUsd": 0.055650800000000014,
+            "toolCalls": 4,
+            "toolOutputChars": 854,
+            "contextChars": 238,
+            "elapsedMs": 27050,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 68657,
+            "reportedOutputTokens": 259,
+            "reportedTotalTokens": 68916,
+            "totalActualTokens": 68916,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:19:06.761Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 229484,
+              "sentRequestPayloadBytes": 229484,
+              "fullRequestPayloadChars": 229466,
+              "sentRequestPayloadChars": 229466,
+              "fullHeuristicTokens": 57368,
+              "sentHeuristicTokens": 57368,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 16014,
+            "output_tokens": 30,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013560800000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "cdaf56498b4db56dc77940e7262988cc0609fdc81714c82f131be3b9ec025fe5",
+          "responseSha256": "2b773f9203db3d221a5e1b7dcbb45579d24ada27d61de87f20fa97db62a3bb06",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 62,
+            "output_tokens": 123,
+            "cache_read_input_tokens": 17088,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0140644,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "5527306d47dd3cde0ddd296d295c61a53d5061c997b664c291b418ef02dff93f",
+          "responseSha256": "18f9538969740c2f49151b0ed9cf23e43cf7d305cb2fd0cce6720e5cf9c5e775",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 195,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 17088,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013879600000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "79c904a5b566c12dae99f181ac523dd6a1b8d289c8a0189dfb6aa600b8e3154b",
+          "responseSha256": "4c9edc191dc4b219313b50f939e1aad40ff1ff7a7f437a3cac7eeb2d73f81624",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 98,
+            "output_tokens": 87,
+            "cache_read_input_tokens": 17280,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014146000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "6728aa5c197c55e03aa04ecf916a66a6239c4973a95669b347748b901fcbf756",
+          "responseSha256": "4929f1241061c97e02a3142bd72af491d09e73bd689aee4ef4ecf24ca8361515",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "workflow-large-retry",
+      "category": "model-workflow",
+      "repeat": 1,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 90036,
+      "conservativeSpendUsd": 0.0730088,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 89546,
+      "outputTokens": 490,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 47306,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": false,
+          "validationAttempts": 0,
+          "changedFiles": [],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 3,
+            "inputTokens": 19448,
+            "uncachedInputTokens": 16184,
+            "outputTokens": 228,
+            "cachedInputTokens": 3264,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 66575,
+            "estimatedSpendUsd": 0.0161968,
+            "toolCalls": 7,
+            "toolOutputChars": 49626,
+            "contextChars": 967,
+            "elapsedMs": 20112,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 3,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 19448,
+            "reportedOutputTokens": 228,
+            "reportedTotalTokens": 19676,
+            "totalActualTokens": 19676,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:19:33.624Z",
+            "contextDiagnostics": {
+              "requestCount": 3,
+              "fullRequestPayloadBytes": 66152,
+              "sentRequestPayloadBytes": 66152,
+              "fullRequestPayloadChars": 66152,
+              "sentRequestPayloadChars": 66152,
+              "fullHeuristicTokens": 16540,
+              "sentHeuristicTokens": 16540,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        },
+        {
+          "phase": 2,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 70098,
+            "uncachedInputTokens": 914,
+            "outputTokens": 262,
+            "cachedInputTokens": 69184,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 236447,
+            "estimatedSpendUsd": 0.05681200000000001,
+            "toolCalls": 4,
+            "toolOutputChars": 1083,
+            "contextChars": 250,
+            "elapsedMs": 26529,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 70098,
+            "reportedOutputTokens": 262,
+            "reportedTotalTokens": 70360,
+            "totalActualTokens": 70360,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:20:00.171Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 235883,
+              "sentRequestPayloadBytes": 235883,
+              "fullRequestPayloadChars": 235841,
+              "sentRequestPayloadChars": 235841,
+              "fullHeuristicTokens": 58962,
+              "sentHeuristicTokens": 58962,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 256,
+            "output_tokens": 25,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0009404000000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "bfca13ba3db71b0443aedf2fe173732eed745a7bc117ec30b42db3c241cd7a09",
+          "responseSha256": "e6244869a5583c01d4c3e83de48466e3a0a327f9414ccf07c1bc42e4e2a1d0d9",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 282,
+            "output_tokens": 88,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0013424,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "ff4dec68234acfea020957fa7d77dfe6f6b08bc116ec1aa7ba7e4525a08edc45",
+          "responseSha256": "a44f31d1968de3af2784d5f0d52182b785e2d71015ec1eed4a9c08dc7d8a235b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 15646,
+            "output_tokens": 115,
+            "cache_read_input_tokens": 1344,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013914,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "7ef07507db5f76bc55032436dd103ea226e80f01206c2455dc89e0642ad4b9ba",
+          "responseSha256": "062950db5fb2caa21387000e2eead265fde6c2e9cbd663388946f08c2fac4122",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 196,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 16960,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013814400000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "618d80b61f67b89b47809d342bff83b33e7082d28f626f1a0b073de54e0fc49a",
+          "responseSha256": "0a4c0793fcd77fa6fe0c9f300cd8cf45ec2dbdb030d2ca0e3e348ce43136420d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 371,
+            "output_tokens": 127,
+            "cache_read_input_tokens": 17152,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014374000000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "deef93e7bfcc19d4f85c88d811d07850239e2d19bca74239f2232d4d05304ee4",
+          "responseSha256": "fe4bb81498b498211a1e12a67f7557560c98e44cf0fea2be52f3409802425a0c",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 190,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 17472,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0141828,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "dc893bdc791c243c9d0eebf06b1d51f7e71e579715219684b3bfedaedeb1399f",
+          "responseSha256": "d0798b64f1256aeb06a20eef7af590121cb0bd268de33915ea103aaf7bc04de5",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 157,
+            "output_tokens": 84,
+            "cache_read_input_tokens": 17600,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014440800000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "f2d41d27836301acfb4c4cb7d99ad81f958a6338988a1be1c735ee02f0cf7325",
+          "responseSha256": "0ce8d3abbbe5467df4af3cb20625866cf23b112be787ab7ab5c1fbefe3136fd6",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "workflow-large-retry",
+      "category": "model-workflow",
+      "repeat": 1,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 88651,
+      "conservativeSpendUsd": 0.0719028,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 88160,
+      "outputTokens": 491,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 42733,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": false,
+          "validationAttempts": 0,
+          "changedFiles": [],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 2,
+            "inputTokens": 18074,
+            "uncachedInputTokens": 16346,
+            "outputTokens": 231,
+            "cachedInputTokens": 1728,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 60970,
+            "estimatedSpendUsd": 0.015106000000000001,
+            "toolCalls": 7,
+            "toolOutputChars": 49626,
+            "contextChars": 968,
+            "elapsedMs": 14930,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 2,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 18074,
+            "reportedOutputTokens": 231,
+            "reportedTotalTokens": 18305,
+            "totalActualTokens": 18305,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:20:16.869Z",
+            "contextDiagnostics": {
+              "requestCount": 2,
+              "fullRequestPayloadBytes": 60688,
+              "sentRequestPayloadBytes": 60688,
+              "fullRequestPayloadChars": 60688,
+              "sentRequestPayloadChars": 60688,
+              "fullHeuristicTokens": 15173,
+              "sentHeuristicTokens": 15173,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        },
+        {
+          "phase": 2,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 70086,
+            "uncachedInputTokens": 902,
+            "outputTokens": 260,
+            "cachedInputTokens": 69184,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 236063,
+            "estimatedSpendUsd": 0.0567968,
+            "toolCalls": 4,
+            "toolOutputChars": 1083,
+            "contextChars": 250,
+            "elapsedMs": 27108,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 70086,
+            "reportedOutputTokens": 260,
+            "reportedTotalTokens": 70346,
+            "totalActualTokens": 70346,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:20:43.993Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 235499,
+              "sentRequestPayloadBytes": 235499,
+              "fullRequestPayloadChars": 235457,
+              "sentRequestPayloadChars": 235457,
+              "fullHeuristicTokens": 58866,
+              "sentHeuristicTokens": 58866,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 256,
+            "output_tokens": 111,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0011812,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1c280f5aa72d25a5771bd908918dd033e636733a91d14a1450a9a7bca4e9487c",
+          "responseSha256": "1cd44339be9453dfb08e519df9791ae3a6dc6bd457ffaee6248345f88fd620b7",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 16090,
+            "output_tokens": 120,
+            "cache_read_input_tokens": 896,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013924800000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "86a48c12a113bf9853eb93411ec4b7a47a474b642522fb5d058eb334472fbbaa",
+          "responseSha256": "6c43e64e52fee2dcdc8c62864fa9016d68f45fbac0d60df73ebee784a3350160",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 197,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 16960,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013815200000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2fc8287f479f530c9fb7b8cffd0faa2aa23f5132eafd54652103f8a6b5f0071d",
+          "responseSha256": "3d50e2608920438e8579e5591fe44cc0003d796bc4fd4e7da6d97d49b9de058a",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 372,
+            "output_tokens": 119,
+            "cache_read_input_tokens": 17152,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014352400000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "cc3f675116fce1ac6738347ed987c9bbeeef7931ad38ccc0b3c9f3c8be681837",
+          "responseSha256": "c0355cc8979084cd89f6a6d78e3f1bd9476cb7fc4a4d8809de86623f685bf1bd",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 183,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 17472,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014177200000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "c79f30a1fb0f8fb66fafbc650f47f72b7a91d6d2e3d55bf06dbde1220bef92cb",
+          "responseSha256": "beba0e5f1289b9b7ae6031e9d09ddcb88c3e20d4114a27e1d09fc46d70245887",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 150,
+            "output_tokens": 90,
+            "cache_read_input_tokens": 17600,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014452,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "60765acc8a1e2f45d9f5f0de78876fce55c76f69f1598fba8fc4d6726378c888",
+          "responseSha256": "41e0cd36b22e18169a858e86ba0b235c64b0a96861c33a304b771bfbe9d65ef9",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "workflow-large-retry",
+      "category": "model-workflow",
+      "repeat": 2,
+      "variant": "auto",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 54415,
+      "conservativeSpendUsd": 0.046810000000000004,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 52776,
+      "outputTokens": 1639,
+      "summaryRequests": 2,
+      "summaryTokens": 5545,
+      "elapsedMs": 74775,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": false,
+          "validationAttempts": 0,
+          "changedFiles": [],
+          "compactionCount": 1,
+          "summary": {
+            "requests": 6,
+            "inputTokens": 31613,
+            "uncachedInputTokens": 20925,
+            "outputTokens": 799,
+            "cachedInputTokens": 10688,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 109912,
+            "estimatedSpendUsd": 0.0275276,
+            "toolCalls": 7,
+            "toolOutputChars": 49626,
+            "contextChars": 968,
+            "elapsedMs": 42535,
+            "compactionRequests": 1,
+            "compactionInputTokens": 2288,
+            "compactionOutputTokens": 517,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 2288,
+            "reportedCompactionOutputTokens": 517,
+            "usageStatus": "complete",
+            "completeUsageRequests": 6,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 31613,
+            "reportedOutputTokens": 799,
+            "reportedTotalTokens": 32412,
+            "totalActualTokens": 32412,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:21:28.475Z",
+            "contextDiagnostics": {
+              "requestCount": 5,
+              "fullRequestPayloadBytes": 141128,
+              "sentRequestPayloadBytes": 101282,
+              "fullRequestPayloadChars": 141128,
+              "sentRequestPayloadChars": 101258,
+              "fullHeuristicTokens": 35284,
+              "sentHeuristicTokens": 25316,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": [
+            {
+              "type": "conversation_compaction",
+              "checkpointId": "74b24d34-a769-44cb-a047-455b4c7cd347",
+              "previousId": null,
+              "reason": "threshold",
+              "coveredFrom": 0,
+              "firstKeptIndex": 5,
+              "coveredMessages": 5,
+              "partial": false,
+              "beforeBytes": 48210,
+              "afterBytes": 28287,
+              "summarySha256": "be408c62a7468bc3c89537989d973b69025ed760ba9248c72845372741b35a4c",
+              "summaryBytes": 2200,
+              "attemptedReadFileCount": 2,
+              "attemptedModifiedFileCount": 0,
+              "transcriptSha256": "0b64ff32262ad970c82dd6379ab72e0d67f742b5a2f832cda7d82b4c20363c1f",
+              "metricSource": "serialized wire request bytes, not provider token savings"
+            }
+          ]
+        },
+        {
+          "phase": 2,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 2,
+          "summary": {
+            "requests": 5,
+            "inputTokens": 21163,
+            "uncachedInputTokens": 17067,
+            "outputTokens": 840,
+            "cachedInputTokens": 4096,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 79093,
+            "estimatedSpendUsd": 0.0192824,
+            "toolCalls": 5,
+            "toolOutputChars": 1530,
+            "contextChars": 250,
+            "elapsedMs": 31560,
+            "compactionRequests": 1,
+            "compactionInputTokens": 2198,
+            "compactionOutputTokens": 542,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 2198,
+            "reportedCompactionOutputTokens": 542,
+            "usageStatus": "complete",
+            "completeUsageRequests": 5,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 21163,
+            "reportedOutputTokens": 840,
+            "reportedTotalTokens": 22003,
+            "totalActualTokens": 22003,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:22:00.053Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 239226,
+              "sentRequestPayloadBytes": 70414,
+              "fullRequestPayloadChars": 239168,
+              "sentRequestPayloadChars": 70300,
+              "fullHeuristicTokens": 59794,
+              "sentHeuristicTokens": 17576,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": [
+            {
+              "type": "conversation_compaction",
+              "checkpointId": "be546164-72be-4a61-8ac5-3f555d6cc577",
+              "previousId": "74b24d34-a769-44cb-a047-455b4c7cd347",
+              "reason": "threshold",
+              "coveredFrom": 5,
+              "firstKeptIndex": 7,
+              "coveredMessages": 2,
+              "partial": false,
+              "beforeBytes": 36966,
+              "afterBytes": 15701,
+              "summarySha256": "88891879560173fb24d42d7f760c605035bd638e4a12f1f8d5c506042ce1868f",
+              "summaryBytes": 2311,
+              "attemptedReadFileCount": 2,
+              "attemptedModifiedFileCount": 0,
+              "transcriptSha256": "74482bc14e6af17f33e8f92b6f11f16d1414b98d38e182bda2b6b5ba8a5aaf07",
+              "metricSource": "serialized wire request bytes, not provider token savings"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 192,
+            "output_tokens": 25,
+            "cache_read_input_tokens": 896,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0009404000000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "ad78b522d7cc55022227bdfc85f87ec1d27f205c48a8231692755ab1aefa64d0",
+          "responseSha256": "a7e26cec7c3624d98fc4c844ca7b4e5f0b128e69ebca9a66a402dfcbae696623",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1370,
+            "output_tokens": 36,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0011968,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8a659ff2cebaf727ff113d63ef1ebe3786b6cbf15baf27782e96a0d81563b558",
+          "responseSha256": "0b301e0a48dcc31e42ccebc6381f174ff589ed99145bd6b2f96a5c2d980acf10",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 7032,
+            "output_tokens": 36,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.006392000000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "061ebd5e42620021fa158bd684e76b8a1259b94a51ee051ca41cdbb98761d78e",
+          "responseSha256": "28bae7710ac6f61b9954e5348abef50c9a5d36443d8c69d18f193162edbe0993",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 2288,
+            "output_tokens": 517,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.003278,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "5b24a3e45cbd94dcb47e3e6557fc5409ff10eb8446dc67abce75661b70f4a7a2",
+          "responseSha256": "e4ae568d39c26c6ff9729376737b066423ef2e13f5bca353d992d998874eb4d5",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 7359,
+            "output_tokens": 27,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0066284000000000004,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "a5d2c71d286a190a96ae1a660ab60224341d954f3fc3aa9ff77c1414ed9a9dbd",
+          "responseSha256": "8b7b9299ffd678e35764d28d1569d25beb678f79d0c235c645db70df725ef789",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2684,
+            "output_tokens": 158,
+            "cache_read_input_tokens": 8128,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009092,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "aa360ff42892696fbf88576f55825d4c55dc86c7b858c9455e0e417b0a8767df",
+          "responseSha256": "e10ec4b161ca7ba574fe99f78e253fe2727e5bdb87f6808601084180d357e48f",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 2198,
+            "output_tokens": 542,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.003276,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "f4932d72bff60b3ca4a6d80717b6cc9ee81d9a62d68e9fc2117d82a8cca92ad8",
+          "responseSha256": "e0ad65b1b29080624110fee59e2e5c7f9a89b6fa34e1a2b3a663c7de5683911e",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3427,
+            "output_tokens": 44,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0035304,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b09bcdc598602c24cfee3fdf4e891ce1529da9e9975cc17171354211f0d91fe6",
+          "responseSha256": "ca22c7650f7f302bda122eb78206d0f3fc3ca124c9700a3da6f8b444924bec24",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3813,
+            "output_tokens": 127,
+            "cache_read_input_tokens": 960,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004174,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "bc2b4689a4c2d23c527eb8ef018574142ef98c75c2a01874dbfd33742826c1bd",
+          "responseSha256": "6cd2ee2df69805cc19a1f93748f349afbd56d3f2c384176fa96abb5c30bd393f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3959,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 960,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039884000000000005,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "e5fc2f2df8a0b58325d530ac2ea31510e208c83b1c0adb068f8e6a67513154c5",
+          "responseSha256": "28be932ef23d935adb1bfadd7c05abe2a0a2e8f1c9a5178f06f4a59a4edace2c",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3670,
+            "output_tokens": 108,
+            "cache_read_input_tokens": 1344,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004313600000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8b2d1ed7fdbb3b25fd31e6f3cde4a67840a9b0d2f24491490c6abf036ab5be74",
+          "responseSha256": "40fccbf6e34691286c89a360d3ffc7ca015ac7d19631b62f3d9bd4420dcfea5c",
+          "stopReason": "end_turn"
+        }
+      ]
+    },
+    {
+      "caseId": "workflow-large-retry",
+      "category": "model-workflow",
+      "repeat": 2,
+      "variant": "off",
+      "accepted": true,
+      "usageComplete": true,
+      "totalTokens": 89970,
+      "conservativeSpendUsd": 0.072868,
+      "running": false,
+      "acceptance": {
+        "publicPassed": true,
+        "hiddenPassed": true,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "passed": true
+      },
+      "inputTokens": 89524,
+      "outputTokens": 446,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "elapsedMs": 52461,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "validationPassed": false,
+          "validationAttempts": 0,
+          "changedFiles": [],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 3,
+            "inputTokens": 19448,
+            "uncachedInputTokens": 16120,
+            "outputTokens": 256,
+            "cachedInputTokens": 3328,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 66575,
+            "estimatedSpendUsd": 0.0162752,
+            "toolCalls": 7,
+            "toolOutputChars": 49626,
+            "contextChars": 967,
+            "elapsedMs": 18020,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 3,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 19448,
+            "reportedOutputTokens": 256,
+            "reportedTotalTokens": 19704,
+            "totalActualTokens": 19704,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:22:19.867Z",
+            "contextDiagnostics": {
+              "requestCount": 3,
+              "fullRequestPayloadBytes": 66152,
+              "sentRequestPayloadBytes": 66152,
+              "fullRequestPayloadChars": 66152,
+              "sentRequestPayloadChars": 66152,
+              "fullHeuristicTokens": 16540,
+              "sentHeuristicTokens": 16540,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        },
+        {
+          "phase": 2,
+          "status": "completed",
+          "validationPassed": true,
+          "validationAttempts": 1,
+          "changedFiles": [
+            "src/services/retry-budget.mjs"
+          ],
+          "compactionCount": 0,
+          "summary": {
+            "requests": 4,
+            "inputTokens": 70076,
+            "uncachedInputTokens": 18428,
+            "outputTokens": 190,
+            "cachedInputTokens": 51648,
+            "cacheCreationInputTokens": 0,
+            "reasoningTokens": 0,
+            "estimatedInputTokens": 236143,
+            "estimatedSpendUsd": 0.056592800000000006,
+            "toolCalls": 4,
+            "toolOutputChars": 1083,
+            "contextChars": 250,
+            "elapsedMs": 33784,
+            "compactionRequests": 0,
+            "compactionInputTokens": 0,
+            "compactionOutputTokens": 0,
+            "usageSource": "provider",
+            "runType": "live",
+            "usageComplete": true,
+            "providerUsageComplete": true,
+            "ledgerIntegrity": true,
+            "compactionUsageComplete": true,
+            "reportedCompactionInputTokens": 0,
+            "reportedCompactionOutputTokens": 0,
+            "usageStatus": "complete",
+            "completeUsageRequests": 4,
+            "partialUsageRequests": 0,
+            "unknownUsageRequests": 0,
+            "reportedInputTokens": 70076,
+            "reportedOutputTokens": 190,
+            "reportedTotalTokens": 70266,
+            "totalActualTokens": 70266,
+            "status": "completed",
+            "completedAt": "2026-10-11T06:22:53.669Z",
+            "contextDiagnostics": {
+              "requestCount": 4,
+              "fullRequestPayloadBytes": 235579,
+              "sentRequestPayloadBytes": 235579,
+              "fullRequestPayloadChars": 235553,
+              "sentRequestPayloadChars": 235553,
+              "fullHeuristicTokens": 58889,
+              "sentHeuristicTokens": 58889,
+              "compactedResultOccurrences": 0
+            }
+          },
+          "checkpoints": []
+        }
+      ],
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 192,
+            "output_tokens": 25,
+            "cache_read_input_tokens": 896,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0009404000000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "65d7c4b9f21eb5a28851934b01a20bfe6c327946660fbc2df4a72070268d0c7a",
+          "responseSha256": "a035452c0ea309903241f02b5cd6a153c792b0906aaaafa214ead46554e9bf24",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 282,
+            "output_tokens": 88,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0013424,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b35159ab7667884cd13ebd748946ef3151798d9899056c5a9d3754ba9d507ab0",
+          "responseSha256": "7ae272ef7e678f852f78bd98c3ef5da0441e4e17a031c0a39d281a11b4f87f27",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 15646,
+            "output_tokens": 143,
+            "cache_read_input_tokens": 1344,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0139924,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "51bd1902455f51cd21ed9e876aa1a5427b39a8977545fe18b1f2c7d19311d35b",
+          "responseSha256": "b4536caeae82512395502471e79ffd9d3ddc7b7477fcdf41678a856600aac56f",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 224,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 16960,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.013836800000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d02c32b4daed9e8bf6837cbb703bd2fa5c05885c21cf8dca7384637a7fce9211",
+          "responseSha256": "acce37658365ed1758c5630ca6bc69f0d61d533aa40ba1204e13269e22923def",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 399,
+            "output_tokens": 60,
+            "cache_read_input_tokens": 17152,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0142088,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "4ee7f6e513d4f08c45c4345a809b536264e3aac24b875aa85f04327fbc67f289",
+          "responseSha256": "b48ae2ad05d13dacb1f123c492bd57e4c4c46c71da89898050023f1e080c6995",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 17623,
+            "output_tokens": 19,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014151600000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "ad0d282d81ea001fe403d35635b35110118e9beecfb2009f11e19c15724c524c",
+          "responseSha256": "c419e12f4aa04c8266a623812d7a5f47cc10ee2a4d5418fd36f3ed7a37aaa938",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 182,
+            "output_tokens": 79,
+            "cache_read_input_tokens": 17536,
+            "server_tool_use": {}
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.014395600000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "adfe1efd6b4b97c0847f17956d6077c26f86ba3a78afa36acefca6b5a65584ce",
+          "responseSha256": "5dfcc8044d7afc1af86213f610ebbfd040cec364b9dc5695f1718b86da0c69e3",
+          "stopReason": "end_turn"
+        }
+      ]
+    }
+  ],
+  "complete": true,
+  "analysis": {
+    "pairs": [
+      {
+        "pairId": "short-small-cache/1",
+        "category": "seeded-stress",
+        "caseId": "short-small-cache",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 7830,
+        "autoTokens": 5661,
+        "savedTokens": 2169,
+        "savingsPercent": 27.701149425287355
+      },
+      {
+        "pairId": "short-small-cache/2",
+        "category": "seeded-stress",
+        "caseId": "short-small-cache",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 5595,
+        "autoTokens": 6220,
+        "savedTokens": -625,
+        "savingsPercent": -11.170688114387847
+      },
+      {
+        "pairId": "source-medium-retry/1",
+        "category": "seeded-stress",
+        "caseId": "source-medium-retry",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 76718,
+        "autoTokens": 34477,
+        "savedTokens": 42241,
+        "savingsPercent": 55.06009020047446
+      },
+      {
+        "pairId": "source-medium-retry/2",
+        "category": "seeded-stress",
+        "caseId": "source-medium-retry",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 92827,
+        "autoTokens": 34412,
+        "savedTokens": 58415,
+        "savingsPercent": 62.92888922404042
+      },
+      {
+        "pairId": "inventory-large-unicode/1",
+        "category": "seeded-stress",
+        "caseId": "inventory-large-unicode",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 68725,
+        "autoTokens": 22314,
+        "savedTokens": 46411,
+        "savingsPercent": 67.53146598763186
+      },
+      {
+        "pairId": "inventory-large-unicode/2",
+        "category": "seeded-stress",
+        "caseId": "inventory-large-unicode",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 68916,
+        "autoTokens": 22586,
+        "savedTokens": 46330,
+        "savingsPercent": 67.22676882001277
+      },
+      {
+        "pairId": "workflow-large-retry/1",
+        "category": "model-workflow",
+        "caseId": "workflow-large-retry",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 90036,
+        "autoTokens": 88651,
+        "savedTokens": 1385,
+        "savingsPercent": 1.538273579457106
+      },
+      {
+        "pairId": "workflow-large-retry/2",
+        "category": "model-workflow",
+        "caseId": "workflow-large-retry",
+        "completePair": true,
+        "knownUsage": true,
+        "acceptedBoth": true,
+        "eligible": true,
+        "offTokens": 89970,
+        "autoTokens": 54415,
+        "savedTokens": 35555,
+        "savingsPercent": 39.51872846504391
+      }
+    ],
+    "categories": {
+      "seeded-stress": {
+        "pairs": 6,
+        "eligiblePairs": 6,
+        "offTokens": 320611,
+        "autoTokens": 125670,
+        "savingsPercent": 60.802966835199044
+      },
+      "model-workflow": {
+        "pairs": 2,
+        "eligiblePairs": 2,
+        "offTokens": 180006,
+        "autoTokens": 143066,
+        "savingsPercent": 20.521538170949857
+      }
+    },
+    "acceptedRuns": 16,
+    "totalRuns": 16,
+    "unknownUsageRuns": 0,
+    "conservativeSpendUsd": 0.6327104000000001
+  },
+  "budgetOrUnknownUsageStopped": false,
+  "endedAt": "2026-10-11T06:22:54.251Z",
+  "engineAfterSha256": "7efa99a58f079de5c25cf872feb6ee1927f91cad808dfbb9d7f371a4ff63fd9f",
+  "sourceUnchanged": true
+}

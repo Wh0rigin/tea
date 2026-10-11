@@ -5,6 +5,19 @@ export class ModelError extends Error {
   constructor(message, status) { super(message); this.name = 'ModelError'; this.status = status; }
 }
 
+// Shared by the adapter and compaction preflight. This is the wire payload,
+// including controls; its UTF-8 byte length is not a tokenizer measurement.
+export function buildMessagesRequest(config, { system, messages, tools = [], maxTokens }) {
+  const outputLimit = maxTokens ?? config.maxOutputTokens;
+  return {
+    model: config.model, max_tokens: outputLimit, stream: config.stream,
+    system, messages, tools,
+    thinking: config.thinkingMode === 'adaptive' ? { type: 'adaptive' }
+      : { type: 'enabled', budget_tokens: Math.min(outputLimit - 1, 8000) },
+    output_config: { effort: config.effort },
+  };
+}
+
 function safeProviderError(text) {
   return String(text)
     .replace(/(?:sk|pk)-[A-Za-z0-9_-]{12,}/g, '[REDACTED]')
@@ -155,16 +168,7 @@ export class AnthropicMessagesAdapter {
     if (config.thinkingMode === 'enabled' && outputLimit <= 1024) {
       throw new ModelError('Enabled thinking requires max_tokens greater than 1024; choose a compatible output limit');
     }
-    const body = {
-      model: config.model,
-      max_tokens: outputLimit,
-      stream: config.stream,
-      system,
-      messages,
-      tools,
-      thinking: config.thinkingMode === 'adaptive' ? { type: 'adaptive' } : { type: 'enabled', budget_tokens: Math.min(outputLimit - 1, 8000) },
-      output_config: { effort: config.effort },
-    };
+    const body = buildMessagesRequest(config, { system, messages, tools, maxTokens: outputLimit });
     const requestId = randomUUID();
     const url = `${config.baseUrl}/v1/messages`;
     const requestBytes = Buffer.byteLength(JSON.stringify(body), 'utf8');

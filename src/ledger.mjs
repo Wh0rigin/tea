@@ -18,6 +18,7 @@ export class TokenLedger {
     this.completeUsageRequests = 0;
     this.partialUsageRequests = 0;
     this.unknownUsageRequests = 0;
+    this.completeCompactionRequests = 0;
     this.ledgerIntegrity = true;
     this.totals = {
       requests: 0,
@@ -33,6 +34,9 @@ export class TokenLedger {
       toolOutputChars: 0,
       contextChars: 0,
       elapsedMs: 0,
+      compactionRequests: 0,
+      compactionInputTokens: 0,
+      compactionOutputTokens: 0,
     };
   }
 
@@ -50,7 +54,7 @@ export class TokenLedger {
     catch (error) { this.ledgerIntegrity = false; throw error; }
   }
 
-  async request({ requestId, payload, response, usage = {}, usageStatus, costBasis, estimatedInputTokens = 0, estimatedUsd = 0, elapsedMs = 0, error }) {
+  async request({ requestId, payload, response, usage = {}, usageStatus, costBasis, estimatedInputTokens = 0, estimatedUsd = 0, elapsedMs = 0, error, purpose = 'task' }) {
     const counts = normalizeAnthropicUsage(usage);
     const status = usageStatus === 'complete' && !counts.complete ? counts.status
       : usageStatus || (error ? 'partial' : counts.status);
@@ -67,8 +71,15 @@ export class TokenLedger {
     this.totals.estimatedInputTokens += estimatedInputTokens;
     this.totals.estimatedSpendUsd += estimatedUsd;
     this.totals.elapsedMs += elapsedMs;
+    if (purpose === 'compaction') {
+      this.totals.compactionRequests += 1;
+      this.totals.compactionInputTokens += counts.inputTokens;
+      this.totals.compactionOutputTokens += counts.outputTokens;
+      if (status === 'complete' && counts.complete) this.completeCompactionRequests += 1;
+    }
     const row = {
       type: 'model_request', timestamp: new Date().toISOString(), requestId,
+      purpose,
       model: this.model, usage, usageSource: this.usageSource,
       usageStatus: status, usageComplete: status === 'complete' && counts.complete,
       reportedInputTokens: counts.inputTokens, reportedOutputTokens: counts.outputTokens,
@@ -106,10 +117,17 @@ export class TokenLedger {
     this.totals.contextChars = String(prompt).length;
     const usageComplete = this.totals.requests > 0 && this.completeUsageRequests === this.totals.requests;
     const providerUsageComplete = this.usageSource === 'provider' && usageComplete && this.ledgerIntegrity;
+    const compactionUsageComplete = this.completeCompactionRequests === this.totals.compactionRequests;
+    const providerCompactionComplete = this.usageSource === 'provider' && compactionUsageComplete && this.ledgerIntegrity;
     const summary = {
       ...this.totals,
       usageSource: this.usageSource, runType: this.runType, usageComplete, providerUsageComplete,
       ledgerIntegrity: this.ledgerIntegrity,
+      compactionUsageComplete,
+      reportedCompactionInputTokens: this.totals.compactionInputTokens,
+      reportedCompactionOutputTokens: this.totals.compactionOutputTokens,
+      compactionInputTokens: providerCompactionComplete ? this.totals.compactionInputTokens : null,
+      compactionOutputTokens: providerCompactionComplete ? this.totals.compactionOutputTokens : null,
       usageStatus: this.usageSource !== 'provider' ? 'not-provider'
         : usageComplete ? 'complete' : this.partialUsageRequests ? 'partial' : 'unknown',
       completeUsageRequests: this.completeUsageRequests, partialUsageRequests: this.partialUsageRequests,

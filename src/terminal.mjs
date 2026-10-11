@@ -3,7 +3,8 @@ import { execFile } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { promisify } from 'node:util';
 import { Writable } from 'node:stream';
-import { createAgentSession, resetConversation, runTask } from './agent.mjs';
+import { compactAgentSession, createAgentSession, resetConversation, runTask } from './agent.mjs';
+import { sessionContext } from './compaction.mjs';
 import { assertLiveConfig } from './config.mjs';
 import { redactText } from './tools.mjs';
 
@@ -13,6 +14,7 @@ const HELP = [
   '/tools         List the last 100 tool records',
   '/tools N       Expand one tool result',
   '/diff          Show the current Git diff (up to 24,000 characters)',
+  '/compact [hint] Summarize older conversation; optional retention instructions',
   '/new           Clear conversation and vocabulary; spending is retained',
   '/clear         Clear the terminal display; conversation is retained',
   '/cancel        Stop the current turn (also Esc or Ctrl+C)',
@@ -119,6 +121,13 @@ export class TerminalView {
   }
 
   event(event) {
+    if (event.type === 'compaction_start') { this.mode = 'Summarizing context · Esc to stop'; this.prompt(); }
+    if (event.type === 'compaction_end') {
+      this.mode = event.status === 'compacted' ? 'Context compacted' : 'Context compaction finished';
+      this.write(event.status === 'compacted'
+        ? `Context: ${event.coveredMessages} older messages summarized · request ${tokens(event.beforeBytes)} → ${tokens(event.afterBytes)} UTF-8 bytes${event.partial ? ' · partial prefix' : ''}`
+        : `Context: ${event.status}${event.detail ? ` · ${event.detail}` : ''}`);
+    }
     if (event.type === 'model_start') { this.mode = 'Thinking · Esc to stop'; this.prompt(); }
     if (event.type === 'model_end') this.endStream();
     if (event.type === 'usage') {
@@ -152,7 +161,7 @@ export class TerminalView {
     }
     if (event.type === 'turn_end') {
       this.endStream();
-      this.baseUsage = { ...this.usage, complete: this.usage.complete && (this.demo || event.summary.providerUsageComplete) };
+      this.baseUsage = { ...this.usage, complete: this.usage.complete && (this.demo || event.summary.requests === 0 || event.summary.providerUsageComplete) };
       this.usage = { ...this.baseUsage };
       if (Number.isFinite(event.spentUsd)) this.spent = event.spentUsd;
       this.mode = event.status;
@@ -269,10 +278,27 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     if (!task) { view.prompt(); return; }
     if (task.startsWith('/') && !composed.length) {
       if (task === '/help') view.write(HELP);
-      else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${dollars(Math.max(0, config.maxCostUsd - view.spent))}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') : 'none'}\nHistory messages: ${session.messages.length}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
+      else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${dollars(Math.max(0, config.maxCostUsd - view.spent))}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') : 'none'}\nOriginal history messages: ${session.messages.length}\nActive context messages: ${sessionContext(session).length}\nConversation compactions: ${session.compactionCount}\nAuto compaction: ${config.compaction}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
       else if (/^\/tools(?:\s+\d+)?$/.test(task)) view.showTools(task.split(/\s+/)[1]);
       else if (task === '/new') { resetConversation(session); composed = []; view.multiline = false; view.mode = 'Ready'; view.write('New conversation. Spending and outstanding edits are retained.'); }
       else if (task === '/clear') { if (view.rich) output.write('\x1b[2J\x1b[H'); else output.write('\n'); view.editorAttached = false; view.banner(); }
+      else if (/^\/compact(?:\s|$)/.test(task)) {
+        if (demo) { view.write('Conversation summaries require a live model. The demo makes no provider requests.'); return; }
+        try { assertLiveConfig(config); }
+        catch (error) { view.write(`Setup required: ${error.message}`); return; }
+        view.baseUsage = { ...view.usage };
+        view.busy = true;
+        controller = new AbortController();
+        view.mode = 'Preparing conversation summary';
+        view.prompt();
+        try {
+          await compactAgentSession({ ...config, runId: `${config.runId}-${randomUUID().slice(0, 8)}` }, {
+            session, instructions: task.slice('/compact'.length).trim(), signal: controller.signal,
+            onText: text => view.write(text), onEvent: event => view.event(event),
+          });
+        } catch (error) { view.write(`Compaction error: ${error.message}`); view.mode = 'Failed'; }
+        finally { controller = undefined; view.busy = false; if (closed) finish(); else view.prompt(); }
+      }
       else if (task === '/diff') {
         view.busy = true;
         controller = new AbortController();

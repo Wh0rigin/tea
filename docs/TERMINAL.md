@@ -42,12 +42,14 @@ including retained reservations, and is not a provider invoice.
 ## Commands and input
 
 - `/help`: show commands.
-- `/status`: usage, remaining cost budget, outstanding validation, history size
-  and learned query count.
+- `/status`: usage, remaining cost budget, outstanding validation, original and
+  active context sizes, conversation compaction count and learned query count.
 - `/tools`: list up to 100 recent tool records. `/tools N` expands one result.
 - `/diff`: current tracked-file changes relative to HEAD, with external diff
   drivers disabled. The preview is bounded to 24,000 characters; untracked files
   are not included.
+- `/compact [instructions]`: summarize older conversation, optionally naming
+  requirements or unresolved work to preserve. Summary usage shares the session budget.
 - `/new`: clear conversation, source references and learned mappings. Keep
   spending, cumulative input reservations and outstanding validation.
 - `/clear`: clear the display; keep the conversation.
@@ -75,6 +77,10 @@ An interrupted request can have unknown usage and retain its cost reservation.
 Model context can eventually exceed the configured input limit. `/new` releases
 the conversation context; it does not replenish spending. Optional
 `--history-strategy compact-tools` retains the existing recovery rules.
+`--compaction auto` enables a bounded summary attempt before large coding requests;
+`/compact` remains available with automatic compaction off. See
+[Conversation compaction](COMPACTION.md) for the byte trigger, retained boundaries,
+request accounting, failure handling and limits.
 
 Conversation and expanded tool records remain in process memory. There is no
 disk-based session resume yet. Normal ledger storage remains hashes and counts
