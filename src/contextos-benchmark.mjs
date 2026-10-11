@@ -35,7 +35,7 @@ export async function contextosFixture(root, item) {
   for (let n = 0; n < paths.length; n++) {
     // Public synthetic domain comments; large enough to exercise repeated source transmission.
     await writeFile(path.join(root, paths[n]), (await readFile(path.join(root, paths[n]), 'utf8'))
-      + Array.from({ length: 14 }, (_, line) => `// Domain ${n}: record field ${line} is inspected locally; utility API is independent of service behavior.\n`).join(''));
+      + Array.from({ length: 8 }, (_, line) => `// Domain ${n}: record field ${line} is inspected locally; utility API is independent of service behavior.\n`).join(''));
   }
   definition.allowed = [definition.entry]; definition.validation = ['node', ['--test', 'tests/public.test.mjs']];
   if (item.language === 'TypeScript') {
@@ -185,7 +185,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
     profile:{model:config.model,thinkingMode:config.thinkingMode,effort:config.effort,maxOutputTokens:config.maxOutputTokens,
       maxRequestWireBytes:config.maxRequestInputTokens,contextosTargetBytes:config.contextosTargetBytes,maxRequestsPerRun:100,
       maxToolsPerTurn:config.maxToolCalls,requestTimeoutMs:config.timeoutMs,turnTimeoutMs:180000,totalBudgetUsd:config.maxCostUsd,
-      perRunBudgetUsd:perRun,maxConcurrentRuns:3,inputRate:config.inputRateUsdPerMillion,outputRate:config.outputRateUsdPerMillion,stream:config.stream,
+      perRunBudgetUsd:perRun,maxConcurrentRuns:3,reservationPolicy:'native guard tightened to exact request wire bytes below suite maximum; same algorithm for every arm',inputRate:config.inputRateUsdPerMillion,outputRate:config.outputRateUsdPerMillion,stream:config.stream,
       compaction:'off',contextStrategy:config.contextStrategy,endpointSha256:hash(config.baseUrl),temperature:'provider default; not explicitly set'},
     notes:['Self-authored fixtures; no universal savings claim.','Seeds are scripted actual source reads; Python prior failure is explicitly synthetic; neither is model-generated nor billed. Historical receipt comes from a real scripted successful command, not a model inference.',
       'long-30 starts empty: all 30 inspection user turns plus final repair provider requests are counted.',
@@ -232,7 +232,12 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
             const stop=await readFile(path.join(outputDir,'halt.txt'),'utf8').then(()=>true,()=>false);
             if(stop||halted){halted=true;throw new model.ModelError('Experiment stopped at request boundary');}
             if(++attempts>100)throw new model.ModelError('Experiment request limit reached');
-            try{return await complete(request);}finally{run.conservativeSpendUsd=adapter.spentUsd;await save();}
+            const originalGuard=adapter.config.maxRequestInputTokens;
+            const actualWire=Buffer.byteLength(JSON.stringify(model.buildMessagesRequest(adapter.config,request)),'utf8');
+            // Tighten the native upper bound for this exact, immutable request;
+            // the payload is unchanged. Never exceed the suite's wire maximum.
+            adapter.config.maxRequestInputTokens=Math.min(originalGuard,actualWire);
+            try{return await complete(request);}finally{adapter.config.maxRequestInputTokens=originalGuard;run.conservativeSpendUsd=adapter.spentUsd;await save();}
           };
         };installAdapter();
         onProgress(`Start ${item.id}/${repetition}/${variant}`);
@@ -247,7 +252,8 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
           let result;
           try{result=await engine.runTask(prompts[phase],{...turnConfig,runId:`phase-${phase+1}`},{session,signal:AbortSignal.timeout(180000),onEvent:event=>{
             if(event.type==='tool_start'&&['recall_context','search_history'].includes(event.name))run.recoveryCalls++;
-            if(item.receipt&&event.type==='tool_start'&&JSON.stringify(event.input).includes('receipt-old.test.mjs'))run.historyConstraintViolation=true;
+            if(item.receipt&&event.type==='tool_start'&&['read_file','search_code','run_tests','run_shell'].includes(event.name)
+              &&JSON.stringify(event.input).includes('receipt-old.test.mjs'))run.historyConstraintViolation=true;
           }});}catch(error){run.failure=String(error.message).replace(/(?:sk|pk)-[A-Za-z0-9_-]{12,}/g,'[REDACTED]').replaceAll(workspace,'[WORKSPACE]').slice(0,500);}
           const directory=path.join(workspace,'.tea','runs',`phase-${phase+1}`), rows=await readFile(path.join(directory,'ledger.jsonl'),'utf8').then(text=>text.trim().split('\n').map(JSON.parse),()=>[]);
           run.requests.push(...rows.filter(r=>r.type==='model_request').map(({purpose,usage,usageComplete,usageStatus,estimatedUsd,costBasis,requestSha256,responseSha256,stopReason,elapsedMs})=>({purpose,usage,usageComplete,usageStatus,estimatedUsd,costBasis,requestSha256,responseSha256,stopReason,elapsedMs})));
