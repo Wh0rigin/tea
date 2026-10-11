@@ -7,6 +7,8 @@ import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
 import { compactConversation, requestBytes, sessionContext } from './compaction.mjs';
+import { memorySessionFields, attachSessionJournal, appendSessionMessage, restoreToolMemory,
+  persistRuntimeState, closeSessionJournal, resetPersistentConversation } from './session-memory.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -36,11 +38,15 @@ function validationSucceeded(output) {
 export function createAgentSession(config) {
   return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
     running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [],
-    compaction: null, compactionCount: 0 };
+    compaction: null, compactionCount: 0, ...memorySessionFields(config) };
 }
 
-export function resetConversation(session) {
+export function resetConversation(session, config) {
   if (session.running) throw new Error('Stop the current turn before starting a new conversation');
+  if (session.persistent) {
+    if (!config) throw new Error('Persistent reset requires configuration');
+    return resetPersistentConversation(session, config);
+  }
   session.messages.length = 0;
   session.compaction = null;
   session.compactionCount = 0;
@@ -56,8 +62,10 @@ export async function runTask(task, config, options = {}) {
   if (session.running) throw new Error('This session already has a running turn');
   if (session.workspace !== path.resolve(config.workspace) || session.model !== config.model) throw new Error('A session cannot change workspace or model');
   session.running = true;
-  try { return await runTurn(task, config, { ...options, session }); }
-  finally { session.running = false; }
+  try {
+    await attachSessionJournal(session, config);
+    return await runTurn(task, config, { ...options, session });
+  } finally { try { await closeSessionJournal(session); } finally { session.running = false; } }
 }
 
 export async function compactAgentSession(config, options = {}) {
@@ -83,13 +91,30 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   tools.signal = signal;
   tools.approveCommand = approveCommand;
   session.tools = tools;
+  restoreToolMemory(session, tools);
+  if (session.budgetUnknown && !offline) throw new ModelError('Session has unresolved billing from an interrupted request; no automatic retry is allowed');
   if (session.adapter && session.offline !== offline) throw new Error('A session cannot mix scripted and provider adapters');
-  const adapter = session.adapter || (offline ? await adapterFactory(config) : new AnthropicMessagesAdapter(config));
+  const adapterConfig = session.restoredBudget ? { ...config, maxCostUsd: session.restoredBudget.maxCostUsd,
+    maxInputTokens: session.restoredBudget.maxInputTokens } : config;
+  const adapter = session.adapter || (offline ? await adapterFactory(adapterConfig) : new AnthropicMessagesAdapter(adapterConfig));
   if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
   session.adapter = adapter;
+  if (session.restoredBudget) {
+    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens']) adapter[field] = session.restoredBudget[field];
+    session.restoredBudget = null;
+  }
   session.offline = offline;
   let requestPurpose = 'task';
+  adapter.onBeforeRequest = session.journal ? event => session.journal.append('request_intent', event) : undefined;
   adapter.onRequest = async (event) => {
+    if (session.journal) {
+      session.budgetUnknown = Boolean(session.budgetUnknown || event.usageStatus !== 'complete');
+      await session.journal.append('request_settled', { requestId: event.requestId, purpose: requestPurpose,
+        usage: event.usage, usageStatus: event.usageStatus, costBasis: event.costBasis,
+        requestSha256: createTaskHash(JSON.stringify(event.payload)), responseSha256: createTaskHash(JSON.stringify(event.response)),
+        budget: { spentUsd: adapter.spentUsd, spentInputBound: adapter.spentInputBound,
+          actualInputTokens: adapter.actualInputTokens, blockedUnknown: session.budgetUnknown } });
+    }
     await ledger.request({ ...event, purpose: requestPurpose });
     emit({ type: 'usage', totals: { ...ledger.totals }, usageComplete: ledger.completeUsageRequests === ledger.totals.requests,
       spentUsd: adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
@@ -107,6 +132,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       throw error;
     } finally { requestPurpose = 'task'; }
   };
+  await persistRuntimeState(session);
   if (compactionOnly) {
     let outcome;
     try { outcome = await summarize(session, 'manual', task); }
@@ -114,6 +140,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       outcome = { status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message };
     }
     const summary = await ledger.finish({ status: outcome.status, prompt: task });
+    await persistRuntimeState(session);
     onText(`Conversation compaction: ${outcome.status}.${outcome.detail ? ` ${outcome.detail}` : ''}`);
     emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.spentUsd,
       changedFiles: session.changedFiles, pendingValidation: session.pendingValidation, runDirectory: ledger.directory });
@@ -133,7 +160,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   const userMessage = firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task;
   const messages = session.messages;
-  messages.push({ role: 'user', content: userMessage });
+  if (session.resumeNotice) {
+    await appendSessionMessage(session, { role: 'user', content: session.resumeNotice });
+    session.resumeNotice = null;
+  }
+  await appendSessionMessage(session, { role: 'user', content: userMessage });
   let pendingValidation = session.pendingValidation;
   let validationPassed = session.validationPassed;
   let validationAttempts = session.validationAttempts;
@@ -204,7 +235,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       }
       const content = Array.isArray(result.content) ? result.content : [];
       const assistantMessage = { role: 'assistant', content };
-      messages.push(assistantMessage);
+      await appendSessionMessage(session, assistantMessage);
       const textBlocks = content.filter((block) => block.type === 'text').map((block) => block.text || '');
       if (textBlocks.length) { finalText = textBlocks.join('\n'); if (!result.displayedAsStream) onText(finalText); }
       const toolUses = content.filter((block) => block.type === 'tool_use');
@@ -217,7 +248,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         }
         if (pendingValidation && forcedValidationNudges < 2 && toolCalls < config.maxToolCalls) {
           forcedValidationNudges += 1;
-          messages.push({ role: 'user', content: `You changed files (${changedFiles.join(', ')}) but no relevant test command has passed after the latest edit. Run the appropriate test now. If validation cannot be completed, explain that clearly and do not claim the task is complete.` });
+          await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace changed'}) but no relevant test command has passed after the latest edit or workspace change. Run the appropriate test now. If validation cannot be completed, explain that clearly and do not claim the task is complete.` });
           continue;
         }
         status = pendingValidation ? 'needs_validation' : 'completed';
@@ -241,6 +272,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         let output;
         let isError = false;
         emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
+        await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
           output = await dispatchTool(tools, call.name, call.input || {});
           if (call.name === 'apply_patch') {
@@ -251,7 +283,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           } else if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
             validationAttempts += 1;
             validationPassed = validationSucceeded(output);
-            if (changedFiles.length) pendingValidation = !validationPassed;
+            if (changedFiles.length || pendingValidation) pendingValidation = !validationPassed;
           }
         } catch (error) {
           isError = true;
@@ -263,10 +295,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           }
         }
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
+        await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError });
+        await persistRuntimeState(session, runtimeState());
         emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, isError });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
       }
-      messages.push({ role: 'user', content: toolResults });
+      await appendSessionMessage(session, { role: 'user', content: toolResults });
       if (signal?.aborted) status = 'cancelled';
       if (['tool_limit_reached', 'cancelled'].includes(status)) break;
     }
@@ -277,11 +311,13 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   }
 
   Object.assign(session, { pendingValidation, validationPassed, validationAttempts, changedFiles });
-  if (status === 'cancelled') messages.push({ role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
+  if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
+  await persistRuntimeState(session);
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });
   emit({ type: 'turn_end', status, summary, spentUsd: adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
   return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
-    runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
+    runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, sessionId: session.persistent ? session.sessionId : null,
+    wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
 }
 
 function createTaskHash(task) {

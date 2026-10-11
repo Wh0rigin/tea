@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { validateRunId } from './run-id.mjs';
 
 export class ConfigError extends Error {}
 
@@ -35,6 +36,13 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isInteger(initialFileLimit) || initialFileLimit < 1 || initialFileLimit > 250) throw new ConfigError('--initial-file-limit / TEA_INITIAL_FILE_LIMIT must be an integer from 1 through 250');
   const historyStrategy = String(options.historyStrategy || env.TEA_HISTORY_STRATEGY || 'full').toLowerCase();
   if (!['full', 'compact-tools'].includes(historyStrategy)) throw new ConfigError('History strategy must be full or compact-tools');
+  const memoryPolicy = String(options.memoryPolicy || env.TEA_MEMORY_POLICY || (historyStrategy === 'compact-tools' ? 'compact-tools' : 'full-history')).toLowerCase();
+  if (!['full-history', 'compact-tools', 'contextos'].includes(memoryPolicy)) throw new ConfigError('Memory policy must be full-history, compact-tools or contextos');
+  const sessionId = options.sessionId || env.TEA_SESSION_ID;
+  const resume = options.resume;
+  if (sessionId) validateRunId(sessionId);
+  if (resume) validateRunId(resume);
+  if (resume && sessionId) throw new ConfigError('Choose --session or --resume, not both');
   const historyKeepRecent = positiveNumber(options.historyKeepRecent ?? env.TEA_HISTORY_KEEP_RECENT, 2, 'History recent rounds');
   if (!Number.isInteger(historyKeepRecent) || historyKeepRecent < 2 || historyKeepRecent > 24) throw new ConfigError('History recent rounds must be an integer from 2 through 24');
 
@@ -81,8 +89,11 @@ export function loadConfig(options = {}, env = process.env) {
     thinkingMode,
     contextStrategy,
     initialFileLimit,
-    historyStrategy,
+    historyStrategy: options.memoryPolicy || env.TEA_MEMORY_POLICY ? (memoryPolicy === 'compact-tools' ? 'compact-tools' : 'full') : historyStrategy,
     historyKeepRecent,
+    memoryPolicy,
+    sessionId,
+    resume,
     compaction,
     compactionTriggerRatio,
     compactionKeepRecentBytes,

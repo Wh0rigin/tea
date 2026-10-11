@@ -150,6 +150,7 @@ export class WorkspaceTools {
   async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
     const filename = await this.resolveFile(relativePath);
     const normalizedPath = path.relative(this.workspace, filename);
+    if (normalizedPath.split(path.sep).some(part => ['.tea', '.git'].includes(part))) throw new Error('Reading agent storage and Git metadata is blocked');
     if (isSensitivePath(normalizedPath)) throw new Error('Reading credential and key files is blocked');
     const info = await stat(filename);
     if (!info.isFile() || info.size > MAX_READ_BYTES) throw new Error(`File must be a regular text file smaller than ${MAX_READ_BYTES} bytes`);
@@ -291,6 +292,7 @@ export class WorkspaceTools {
     const fileStat = await lstat(filename);
     if (!fileStat.isFile() || fileStat.size > MAX_READ_BYTES) throw new Error('Patch target must be a regular file smaller than 160 KB');
     const normalizedPath = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
+    if (normalizedPath.split('/').includes('.tea')) throw new Error('Patching agent storage is blocked');
     if (isSensitivePath(normalizedPath)) throw new Error('Patching credential and key files is blocked');
     if (normalizedPath === '.git' || normalizedPath.startsWith('.git/') || normalizedPath === '.env' || normalizedPath.startsWith('.env.')) {
       throw new Error('Patching Git metadata and environment files is blocked');

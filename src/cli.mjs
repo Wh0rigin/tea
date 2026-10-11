@@ -5,10 +5,13 @@ import { loadConfig, ConfigError } from './config.mjs';
 import { compareRuns, loadRun, renderComparisonReport, renderRunReport, runReplayBenchmark, RESULT_ROOT } from './benchmark.mjs';
 import { renderExecutableReport, runExecutableBenchmark } from './runtime-benchmark.mjs';
 import { runInteractive } from './terminal.mjs';
+import { listSessions, deleteSession } from './session-journal.mjs';
+import { inspectSession } from './session-memory.mjs';
 
 const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--context-strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 24\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.`;
 
 const COMPACTION_HELP = '\nConversation compaction:\n  tea --interactive --compaction auto --max-cost-usd USD\n  /compact [retention instructions]   # summarize older conversation\n  --compaction off|auto               # default off; manual remains available\n  --compaction-keep-recent-bytes N     # recent message retention in UTF-8 bytes\nSummary requests share the session model, usage ledger and hard budget.\n';
+const SESSION_HELP = '\nPersistent memory (opt-in):\n  --session ID                       # create a durable session\n  --resume ID                        # continue the original workspace/model/budget\n  --memory-policy full-history|compact-tools|contextos\n  tea sessions list|inspect|delete [ID] [--workspace PATH]\n  /memory                            # explain the last context working set\n';
 
 function parseOptions(args) {
   const options = {};
@@ -18,12 +21,13 @@ function parseOptions(args) {
     if (value === '--help' || value === '-h') options.help = true;
     else if (value === '--interactive' || value === '-i') options.interactive = true;
     else if (value === '--demo') { options.demo = true; options.interactive = true; }
-    else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--history-strategy', '--history-keep-recent', '--compaction', '--compaction-keep-recent-bytes', '--fixture-variant', '--base-run', '--candidate-run', '--run'].includes(value)) {
+    else if (['--session', '--resume', '--memory-policy', '--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--history-strategy', '--history-keep-recent', '--compaction', '--compaction-keep-recent-bytes', '--fixture-variant', '--base-run', '--candidate-run', '--run'].includes(value)) {
       const next = args[i + 1];
       if (next === undefined || next.startsWith('--')) throw new Error(`Missing value after ${value}`);
       i += 1;
       const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--strategy': 'strategy', '--context-strategy': 'contextStrategy', '--initial-file-limit': 'initialFileLimit', '--history-strategy': 'historyStrategy', '--history-keep-recent': 'historyKeepRecent', '--compaction': 'compaction', '--compaction-keep-recent-bytes': 'compactionKeepRecentBytes', '--fixture-variant': 'fixtureVariant', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
-      options[key] = next;
+      const sessionKey = ({ '--session': 'sessionId', '--resume': 'resume', '--memory-policy': 'memoryPolicy' })[value];
+      options[sessionKey || key] = next;
     } else if (value.startsWith('-')) throw new Error(`Unknown option: ${value}`);
     else positional.push(value);
   }
@@ -33,9 +37,18 @@ function parseOptions(args) {
 
 async function main() {
   const args = process.argv.slice(2);
+  if (args.includes('--help') || args.includes('-h')) process.stdout.write(SESSION_HELP);
   if (args.includes('--help') || args.includes('-h') || (!args.length && !process.stdin.isTTY)) { process.stdout.write(HELP + COMPACTION_HELP + '\n\nInteractive terminal:\n  tea                         # start a conversation in a terminal\n  tea --interactive [task]     # keep talking after the initial task\n  tea --demo                  # offline interface preview, no API calls\n  /help /status /tools /diff /compact /new /clear /cancel /exit\n  Esc or Ctrl+C stops the current turn; spending is shared across turns.\n\nHistory experiments:\n  tea <task> --history-strategy full|compact-tools [--history-keep-recent 2]\n  tea benchmark memory [--history-keep-recent 2] [--run-id ID]\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--history-strategy full|compact-tools] [--fixture-variant solution|extended] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nThe extended variant is an artificial verbose-log stress profile, available only in runtime mode.\nHistory experiments measure serialized input size, not provider tokens or model success.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
   const group = args[0];
   if (group === 'benchmark') { await benchmarkCommand(args.slice(1)); return; }
+  if (group === 'sessions') {
+    const parsed = parseOptions(args.slice(2)), config = loadConfig(parsed), id = parsed.positional[0];
+    if (args[1] === 'list') console.log(JSON.stringify(await listSessions(config.workspace), null, 2));
+    else if (args[1] === 'inspect' && id) console.log(JSON.stringify(await inspectSession(config, id), null, 2));
+    else if (args[1] === 'delete' && id) { await deleteSession(config.workspace, id); console.log('Session deleted: ' + id); }
+    else throw new Error('Use sessions list, sessions inspect ID, or sessions delete ID');
+    return;
+  }
 
   const parsed = parseOptions(args);
   const task = parsed.positional.join(' ').trim();
@@ -46,6 +59,7 @@ async function main() {
   }
   if (!task) throw new Error('Provide a task in quotes, or use --interactive in a terminal.');
   const result = await runTask(task, config, { onText: (text) => process.stdout.write(`${text}\n`) });
+  if (result.sessionId) process.stdout.write(`Persistent session: ${result.sessionId}\n`);
   process.stdout.write(`\nRun status: ${result.status}\nToken ledger: ${path.relative(process.cwd(), result.runDirectory)}\n`);
   process.stdout.write(`Provider tokens: input=${result.summary.inputTokens}, output=${result.summary.outputTokens}, cached=${result.summary.cachedInputTokens}\n`);
   process.stdout.write(`Heuristic input estimate: ${result.summary.estimatedInputTokens} (diagnostic only)\n`);
