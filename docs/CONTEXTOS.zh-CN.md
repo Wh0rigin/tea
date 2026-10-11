@@ -45,4 +45,4 @@ tea sessions delete work
 
 `node scripts/replay-contextos.mjs benchmarks/results/contextos-replay` 可复现短任务、30/50 轮、重复读取、失败、源码变化与任务切换的工具回放，不调用模型。它测量请求字节，并检查用户要求、工具配对和精确恢复；不能替代真实 Token 对照。输出目录必须不存在。
 
-A 的短任务负收益、B 的越界修改均已淘汰并保留[详细负面证据](../benchmarks/reports/contextos-glm-20261011/README.zh-CN.md)。当前 C 仍是待真实验证的候选；本地测试通过不保证任意任务都节省 Token 或遵守范围。
+A 的短任务负收益、B 的越界修改均已淘汰并保留[详细负面证据](../benchmarks/reports/contextos-glm-20261011/README.zh-CN.md)。[C 实测](../benchmarks/reports/contextos-c-glm-20261011/README.zh-CN.md)通过冻结门槛，七个场景各重复三次，C 21/21；比完整历史少 62.99% 实际 Token，真实 30 轮少 52.12%。更严格的事后读取要求下 C 仍为 21/21，完整历史组为 20/21。样本结果不保证任意任务都节省 Token 或遵守范围。缓存费用降幅与总 Token 降幅分开报告。

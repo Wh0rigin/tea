@@ -1,0 +1,1855 @@
+{
+  "kind": "supplementary-posthoc-requirement-audit",
+  "sourceExperiment": "contextos-glm-c-20261011",
+  "providerRequests": 0,
+  "metric": "actual settled read_file output SHA256 versus expected complete source output; no token estimate",
+  "notes": [
+    "Posthoc additional requirement checks do not change the frozen gate or hide failed attempts.",
+    "No raw tool outputs, thinking, signatures or private paths exported.",
+    "Fresh resumed checkpoint must be read from its new version; inferred mention alone does not count.",
+    "The frozen acceptance checks service behavior and exact external-file preservation; it does not independently require a fresh checkpoint read. One full-history run fails that stricter posthoc requirement; all ContextOS runs pass. Both definitions are reported."
+  ],
+  "rows": [
+    {
+      "variant": "legacy",
+      "repeat": 1,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "contextos",
+      "repeat": 1,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "full",
+      "repeat": 1,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "legacy",
+      "repeat": 2,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "contextos",
+      "repeat": 2,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "full",
+      "repeat": 2,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "legacy",
+      "repeat": 3,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "contextos",
+      "repeat": 3,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    },
+    {
+      "variant": "full",
+      "repeat": 3,
+      "passed": true,
+      "turns": [
+        {
+          "phase": 1,
+          "expectedOutputSha256": "412628495f97708607a99b6ab560a2fd908d13a3a19aea8e1c235ae234aaae77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 2,
+          "expectedOutputSha256": "e850c4747f95026718c1d11fbfa879cedef7bed4102a335880f7cd9c90e91b57",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 3,
+          "expectedOutputSha256": "af61c2b2164950de24eff0ae8e1f78a7ea9fc2fb62c773d1f7a5d29c82520379",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 4,
+          "expectedOutputSha256": "ade9fbbb5acf615260a16926fb8711ee482246e1f6bd9ae8b7bdc23fa5cccf0d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 5,
+          "expectedOutputSha256": "154288a389ff113fda13cd2d2942f3af2e4ac08b10deb683275527db8d2438f5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 6,
+          "expectedOutputSha256": "4eea82feb60f6516465df6192197d638c8d4ea79c8e885292ea54f186bac7a1e",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 7,
+          "expectedOutputSha256": "b576fbf1871751c35a1e0349771e8c7691e57dec9cf07d5f8b153bc3aa0053ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 8,
+          "expectedOutputSha256": "63a349dca8ff372bd923539ffccb14834bfc67af511642cdf6e480a6d07e18ce",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 9,
+          "expectedOutputSha256": "d081dbcc7cffd3482b07797e678ce97c0d85cd0e15d873fcb41eac9679630072",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 10,
+          "expectedOutputSha256": "5df5d93ae0c0922742183eb71c7dfd4c4dcb815f9266b8180b072e13b3c676c0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 11,
+          "expectedOutputSha256": "3f2e32bdb2abc68d12fca4af4efd95bacc4725888b43f01eaab78dd42427a60a",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 12,
+          "expectedOutputSha256": "1ca1d5ef889fc23fd56a78bc135cc8cb0608d49d796762eda1858a01b269edc4",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 13,
+          "expectedOutputSha256": "0c40b8953c385a4d4c06365dad22f20b1cf01983f9052830f7b2ffa2efc840b0",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 14,
+          "expectedOutputSha256": "ac3c1e9fdecb8e673878a2ef28e841256d04770f6ff4a109a88e30fc3f88b026",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 15,
+          "expectedOutputSha256": "d04699bd9aa89da3f4508cb7b4e79f0e942e393e4a62ff4bb02ebdf9391bc448",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 16,
+          "expectedOutputSha256": "a4465fc6fb20bef4272e4182ab1d13c5b05eec37800f288eeb6136aadb29b0c8",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 17,
+          "expectedOutputSha256": "9cfafe428773749ea99c3fdfd88592a450512d2f1f6667237b8dec45884b7c95",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 18,
+          "expectedOutputSha256": "226e71fb888da97fe007d06e00258d97a20bcb2acb4bcb95281845746bff151c",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 19,
+          "expectedOutputSha256": "baa0de6d6ea4cc12bc5a75abddc12b0288230419f24384693e8ca890990674ff",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 20,
+          "expectedOutputSha256": "ffba768a8b5f67afbfd28642ab5c2fd7b153a7866bde20f82bcfc9b45efe0cb5",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 21,
+          "expectedOutputSha256": "e2779eb10448c815007b14b322b0814c496a815516d154923713dd436fa41d21",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 22,
+          "expectedOutputSha256": "59caf11075f98429eefb765dfc5dfd43a6a57796863661ed6794ceef4fb9eb05",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 23,
+          "expectedOutputSha256": "a294a58c526cad97a5ce69eaa7611507a27f91ed49546932526a1b167204eb77",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 24,
+          "expectedOutputSha256": "cfa4932046d344d71decb9b0ae97308e24f01e7d5bb4678e4fc06ac3273e523d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 25,
+          "expectedOutputSha256": "3f063105de1f1ffad56220fe41168f38cd71e9fe6227613b805b9efa4eb0a0e2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 26,
+          "expectedOutputSha256": "e1cf96c522e5476f880e361549362791b8c36e02a777b799df762721f53b0b8d",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 27,
+          "expectedOutputSha256": "76b9881f92f5eb13677cea7103359678e17b4e8d64f1241bd09ee2be332fe4fd",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 28,
+          "expectedOutputSha256": "78b9a3487aea762c1f442689fec4547d7e52e77d2d06cfc3abeefca626102471",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 29,
+          "expectedOutputSha256": "f2be1cf230acffe6ba521e4cb519eaf32c925216a2d73e827ddd473ec04d6ad2",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        },
+        {
+          "phase": 30,
+          "expectedOutputSha256": "767e64ef7117af536ecbbc09a1cb92dc949c9cfcb78f83467d90d8e6e6229156",
+          "matchedFullSource": true,
+          "mutatedOrRanTests": false
+        }
+      ]
+    }
+  ],
+  "stale": [
+    {
+      "variant": "legacy",
+      "repeat": 1,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 0,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "full",
+      "repeat": 1,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 0,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "contextos",
+      "repeat": 1,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 2,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "legacy",
+      "repeat": 2,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 0,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "contextos",
+      "repeat": 2,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 2,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "full",
+      "repeat": 2,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": false,
+      "staleNotices": 0,
+      "externalFilePreserved": true,
+      "postResumeCheckpointReadIntents": 0,
+      "diagnosis": "No fresh checkpoint read was requested after resume."
+    },
+    {
+      "variant": "legacy",
+      "repeat": 3,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 0,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "full",
+      "repeat": 3,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 0,
+      "externalFilePreserved": true
+    },
+    {
+      "variant": "contextos",
+      "repeat": 3,
+      "expectedCurrentSourceSha256": "ca7a1e9b202c01a5d55dde9d4aed797ebb4e059228d1eba530ea1f05374d2422",
+      "freshCheckpointRead": true,
+      "staleNotices": 2,
+      "externalFilePreserved": true
+    }
+  ],
+  "historical": [
+    {
+      "variant": "legacy",
+      "repeat": 1,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 0
+    },
+    {
+      "variant": "contextos",
+      "repeat": 1,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 2
+    },
+    {
+      "variant": "full",
+      "repeat": 1,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 0
+    },
+    {
+      "variant": "legacy",
+      "repeat": 2,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 0
+    },
+    {
+      "variant": "full",
+      "repeat": 2,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 0
+    },
+    {
+      "variant": "contextos",
+      "repeat": 2,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 1
+    },
+    {
+      "variant": "legacy",
+      "repeat": 3,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 0
+    },
+    {
+      "variant": "contextos",
+      "repeat": 3,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 2
+    },
+    {
+      "variant": "full",
+      "repeat": 3,
+      "oldCommandNotReadOrRerun": true,
+      "recoveredValueAccepted": true,
+      "recoveryCalls": 0
+    }
+  ],
+  "stricterAcceptance": [
+    {
+      "variant": "legacy",
+      "totalRuns": 21,
+      "acceptedWithFreshReadRequirement": 21
+    },
+    {
+      "variant": "full",
+      "totalRuns": 21,
+      "acceptedWithFreshReadRequirement": 20
+    },
+    {
+      "variant": "contextos",
+      "totalRuns": 21,
+      "acceptedWithFreshReadRequirement": 21
+    }
+  ]
+}

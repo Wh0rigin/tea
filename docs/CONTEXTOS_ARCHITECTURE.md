@@ -51,6 +51,23 @@ The assembler indexes canonical call/result pairs and inferred assistant notes. 
 
 When valid recoverable references exist, candidate C repeats the current user goal verbatim and already observed, version-valid AGENTS rules near the latest result. Rules remain subordinate workspace evidence. This adds measured request bytes and is a hypothesis for reducing scope mistakes, not an enforcement guarantee. Every original user text is also reinserted if an optional semantic checkpoint has omitted it. No domain keywords or hand-written scope parser decide which requirements matter.
 
+### One recorded coding task
+
+The closed C `crossfile-ts` repeat 1 ran this sequence. The original seeded inventory was stored in the journal. Requests paged 33–35 unsigned cold rounds; request wire sizes were 15,673, 15,227, 14,206 and 14,667 bytes. These sizes are protocol diagnostics, not provider tokens. The run used 15,654 provider tokens including every follow-up, and independent public, Unicode and changed-file checks passed. The other two repeats also passed, but three successes are not an enforcement guarantee.
+
+```mermaid
+flowchart TD
+    G[User: inspect dependencies and edit only points.ts] --> P[Project current goal and observed rules]
+    P --> R[Read text.ts and points.ts]
+    R --> E[Patch only points.ts]
+    E --> S[Old points.ts evidence becomes stale]
+    S --> V[Run node public tests after edit]
+    V --> J[Store original results and settled usage]
+    J --> A[Independent Unicode and scope acceptance]
+```
+
+For comparison, B repeat 1 read an unrelated shadow `text.mjs`, then requested patches to both `points.ts` and `text.mjs`. Functional tests passed but scope failed. Exact request reconstruction confirms the task and project rule were present. [The diagnosis](../benchmarks/reports/contextos-b-diagnosis-20261011/README.md) separates confirmed actions from attention hypotheses; it does not attribute the failure to deleted instructions.
+
 Every source unit, including pinned source, is checked for freshness. Read/search snapshots are captured from the same decoded content used to produce the output and retained across resume. Recalled source pages and search previews inherit source dependencies; any changed, inaccessible or protected dependency withholds the old lines. Unversioned old search snippets are withheld conservatively. Freshness checks decode UTF-8 consistently, include BOM handling and cache each file hash within one assembly. Version identity does not prove semantic correctness or lock external writers.
 
 `recall_context` returns bounded UTF-8 pages without re-executing historical tools. `search_history` uses literal multilingual words/path matching, bounded previews and observed/inferred labels. Stale source previews are withheld. It uses no hand-written domain synonym list, embeddings or additional summary model. Existing session vocabulary still requires a source occurrence and version check; hash validity alone does not prove the model's semantic mapping.
