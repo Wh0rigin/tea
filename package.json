@@ -12,7 +12,9 @@
     "tea": "node src/cli.mjs",
     "test": "node scripts/test.mjs",
     "benchmark:replay": "node src/cli.mjs benchmark run --suite core --mode replay",
-    "benchmark:runtime": "node src/cli.mjs benchmark run --suite runtime-smoke --mode runtime"
+    "benchmark:runtime": "node src/cli.mjs benchmark run --suite runtime-smoke --mode runtime",
+    "benchmark:pi": "node scripts/compare-pi.mjs",
+    "benchmark:pi:check": "node scripts/check-pi-protocol.mjs"
   },
   "engines": {
     "node": ">=20"

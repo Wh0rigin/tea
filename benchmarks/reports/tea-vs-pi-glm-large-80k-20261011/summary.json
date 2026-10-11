@@ -1,0 +1,316 @@
+{
+  "validComparison": true,
+  "issues": [],
+  "expectedControls": {
+    "model": "glm-5.3-flash",
+    "maxTokens": 4096,
+    "thinking": {
+      "type": "enabled",
+      "budget_tokens": 4095
+    },
+    "outputConfig": {
+      "effort": "low"
+    }
+  },
+  "pairs": [
+    {
+      "caseId": "large-cache-key-r1",
+      "taskId": "large-cache-key",
+      "scale": "large",
+      "family": "cache-key",
+      "fileCount": 1200,
+      "lines": 14368,
+      "tea": {
+        "taskId": "large-cache-key",
+        "caseId": "large-cache-key-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+        "initialCommit": "d75329958490887933052c1a00a3d56e548766f6",
+        "status": "completed",
+        "toolCalls": 8,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "5af68a34486bda7e0041095a56ae23d6d20babd13c5c54149e43a6fc5141523c"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "7a6ff9b73deaaf9bced33f259131a8d34908727b4c82bdf0b4803a6bafc34dd4"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 35695,
+        "requests": 6,
+        "usageComplete": true,
+        "totalTokens": 9964,
+        "inputTokens": 9678,
+        "outputTokens": 286,
+        "reportedTokenLowerBound": 9964,
+        "accountedUsd": 0.0076888799999999995,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "large-cache-key",
+        "caseId": "large-cache-key-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+        "initialCommit": "d75329958490887933052c1a00a3d56e548766f6",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 4,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "24117db5b91ca1b27b2634ebd948f2cbaed410de6e28533e543ce36189e5cb1b",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "3344c382bf8890b9e2a36318d05ea743f8990ee82c9ab86a00f7037b1e23d602"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "2579b0050154d279fb949b4d94dc1332a8c2d3469bb77a086bca407e480e6c57"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 34477,
+        "requests": 5,
+        "usageComplete": true,
+        "totalTokens": 81401,
+        "inputTokens": 81100,
+        "outputTokens": 301,
+        "reportedTokenLowerBound": 81401,
+        "accountedUsd": 0.05915052,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": 87.75936413557574
+    },
+    {
+      "caseId": "large-retry-budget-r1",
+      "taskId": "large-retry-budget",
+      "scale": "large",
+      "family": "retry-budget",
+      "fileCount": 1200,
+      "lines": 14369,
+      "tea": {
+        "taskId": "large-retry-budget",
+        "caseId": "large-retry-budget-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+        "initialCommit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+        "status": "completed",
+        "toolCalls": 12,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "f1f7718902a10c6b3c916d9c0506be84e61a297e04c3f3d0375e8c1e834b539a"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "3bdf2a9fe91ac5ac598532977825b03d68c3a27425b10d857249df39f48ed0ac"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 64568,
+        "requests": 11,
+        "usageComplete": true,
+        "totalTokens": 89835,
+        "inputTokens": 89398,
+        "outputTokens": 437,
+        "reportedTokenLowerBound": 89835,
+        "accountedUsd": 0.0654678,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "large-retry-budget",
+        "caseId": "large-retry-budget-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+        "initialCommit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 4,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "8d072cea3a467d1941c6c28d62b196a0c5bde0c0840acba22563b2a59c460a2b",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "c5fa39f1f2fd821db40b27e896b7b4e76c5c190b8fb2a3a184202fb69445ce7f"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "5cc47fe5a9577990631e72f83952e51a14ec1ff6c6ab372d829da2d8cded13ba"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 24139,
+        "requests": 5,
+        "usageComplete": true,
+        "totalTokens": 9787,
+        "inputTokens": 9490,
+        "outputTokens": 297,
+        "reportedTokenLowerBound": 9787,
+        "accountedUsd": 0.00758124,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": -817.9012976397262
+    },
+    {
+      "caseId": "large-unicode-r1",
+      "taskId": "large-unicode",
+      "scale": "large",
+      "family": "unicode",
+      "fileCount": 1200,
+      "lines": 14365,
+      "tea": {
+        "taskId": "large-unicode",
+        "caseId": "large-unicode-r1",
+        "agent": "tea",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "initialCommit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "status": "completed",
+        "toolCalls": 10,
+        "validationPassed": true,
+        "ledgerIntegrity": true,
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "3fc26f600224f78f03f3d6cdabc4c803521b07fcd46c44366607b2508fa659a7"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "dc77cc34f5d0f3b335094b3ab1611b1eb4a4c6cd9a5967654886d7a233f13f35"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 42558,
+        "requests": 9,
+        "usageComplete": true,
+        "totalTokens": 17327,
+        "inputTokens": 16856,
+        "outputTokens": 471,
+        "reportedTokenLowerBound": 17327,
+        "accountedUsd": 0.01332324,
+        "guards": []
+      },
+      "pi": {
+        "taskId": "large-unicode",
+        "caseId": "large-unicode-r1",
+        "agent": "pi",
+        "repetition": 1,
+        "scale": "large",
+        "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "initialCommit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "status": "completed",
+        "exitCode": 0,
+        "toolCalls": 6,
+        "parseErrors": 0,
+        "settled": true,
+        "lastStop": "stop",
+        "stdoutSha256": "f7380fcab1998e136718d65b07859d7267f18184d71f3e7e735c4e97f260fc52",
+        "accepted": true,
+        "acceptance": {
+          "public": {
+            "passed": true,
+            "outputSha256": "40e573c7cb5d2d446351c462ef80acaa41a7e6810d1d04fda22b8882c5b587fc"
+          },
+          "hidden": {
+            "passed": true,
+            "exitCode": 0,
+            "completed": true,
+            "timedOut": false,
+            "outputSha256": "da0e9bd2513f86f86457771e213b64dfc9421c0f646a96398dae841d32c35a72"
+          },
+          "scopePassed": true,
+          "passed": true
+        },
+        "elapsedMs": 34271,
+        "requests": 7,
+        "usageComplete": true,
+        "totalTokens": 16486,
+        "inputTokens": 16028,
+        "outputTokens": 458,
+        "reportedTokenLowerBound": 16486,
+        "accountedUsd": 0.012694319999999999,
+        "guards": []
+      },
+      "usageComplete": true,
+      "bothAccepted": true,
+      "tokenReductionPercent": -5.101298071090632
+    }
+  ],
+  "overall": {
+    "expectedPairs": 3,
+    "measuredPairs": 3,
+    "bothAcceptedPairs": 3,
+    "teaAccepted": 3,
+    "piAccepted": 3,
+    "teaMeasuredTokens": 117126,
+    "piMeasuredTokens": 107674,
+    "allPairsTokenReductionPercent": -8.778349462265723,
+    "bothAcceptedTeaTokens": 117126,
+    "bothAcceptedPiTokens": 107674,
+    "bothAcceptedTokenReductionPercent": -8.778349462265723
+  },
+  "scales": [
+    {
+      "scale": "large",
+      "expectedPairs": 3,
+      "measuredPairs": 3,
+      "bothAcceptedPairs": 3,
+      "teaAccepted": 3,
+      "piAccepted": 3,
+      "teaMeasuredTokens": 117126,
+      "piMeasuredTokens": 107674,
+      "allPairsTokenReductionPercent": -8.778349462265723,
+      "bothAcceptedTeaTokens": 117126,
+      "bothAcceptedPiTokens": 107674,
+      "bothAcceptedTokenReductionPercent": -8.778349462265723
+    }
+  ]
+}
