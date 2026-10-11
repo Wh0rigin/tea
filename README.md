@@ -124,6 +124,12 @@ These results do **not establish consistent token savings**. Each profile has on
 
 ![Separate large-task rerun with an 80,000-byte request guard](benchmarks/reports/tea-vs-pi-glm-large-80k-20261011/tea-vs-pi.png)
 
+## Conversation compaction
+
+Use `/compact [retention instructions]` in the terminal to summarize older conversation. Enable automatic compaction with `tea --interactive --compaction auto --max-cost-usd 0.10`. It sends a structured checkpoint plus recent complete messages, preserves the original in-memory transcript, and keeps outstanding validation in authoritative runtime state.
+
+Summary requests share the session model, usage ledger and hard budget. Automatic compaction is opt-in; default ledgers retain hashes rather than raw summaries. This feature has no measured provider-token savings result yet. See [the design and configuration](docs/COMPACTION.md).
+
 ## Usage records and budgets
 
 Runs write their ledger to `.tea/runs/<run-id>/`. By default, records contain hashes and counts rather than raw prompts or source. `TEA_STORE_RAW=1` enables local raw storage.

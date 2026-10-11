@@ -38,6 +38,17 @@ export function loadConfig(options = {}, env = process.env) {
   const historyKeepRecent = positiveNumber(options.historyKeepRecent ?? env.TEA_HISTORY_KEEP_RECENT, 2, 'History recent rounds');
   if (!Number.isInteger(historyKeepRecent) || historyKeepRecent < 2 || historyKeepRecent > 24) throw new ConfigError('History recent rounds must be an integer from 2 through 24');
 
+  const compaction = String(options.compaction || env.TEA_COMPACTION || 'off').toLowerCase();
+  if (!['off', 'auto'].includes(compaction)) throw new ConfigError('Compaction must be off or auto');
+  const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
+  if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
+  const maxRequestInputTokens = Math.floor(positiveNumber(env.TEA_MAX_REQUEST_INPUT_TOKENS, 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
+  const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
+    Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
+  if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
+  const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
+  if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
+
   const maxCostUsd = nonNegativeNumber(
     options.maxCostUsd ?? env.TEA_MAX_COST_USD,
     0,
@@ -63,7 +74,7 @@ export function loadConfig(options = {}, env = process.env) {
     inputRateUsdPerMillion: inputRate,
     outputRateUsdPerMillion: outputRate,
     maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, 1200, 'TEA_MAX_OUTPUT_TOKENS')),
-    maxRequestInputTokens: Math.floor(positiveNumber(env.TEA_MAX_REQUEST_INPUT_TOKENS, 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS')),
+    maxRequestInputTokens,
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
     effort,
@@ -72,6 +83,10 @@ export function loadConfig(options = {}, env = process.env) {
     initialFileLimit,
     historyStrategy,
     historyKeepRecent,
+    compaction,
+    compactionTriggerRatio,
+    compactionKeepRecentBytes,
+    compactionMaxPerTurn,
     stream: env.TEA_STREAM !== '0',
     storeRaw: env.TEA_STORE_RAW === '1',
     workspace: path.resolve(options.workspace || process.cwd()),

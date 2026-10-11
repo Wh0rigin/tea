@@ -6,9 +6,27 @@ import { WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
 import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
+import { compactConversation, requestBytes, sessionContext } from './compaction.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
+
+function prepareContextRequest(messages, config, requestTools) {
+  let memory = config.historyStrategy === 'compact-tools'
+    ? compactToolHistory(messages, { keepRecentRounds: config.historyKeepRecent ?? 2 })
+    : { messages, diagnostics: { compactedResults: 0 } };
+  const baseRequest = { system: SYSTEM_PROMPT, messages, tools: requestTools };
+  const basePayload = JSON.stringify(baseRequest);
+  let request = { system: SYSTEM_PROMPT + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: requestTools };
+  let sentPayload = JSON.stringify(request);
+  if (memory.diagnostics.compactedResults && (Buffer.byteLength(sentPayload, 'utf8') >= Buffer.byteLength(basePayload, 'utf8')
+    || sentPayload.length >= basePayload.length || estimateTextTokens(sentPayload) >= estimateTextTokens(basePayload))) {
+    memory = { messages, diagnostics: { compactedResults: 0 } };
+    request = baseRequest;
+    sentPayload = basePayload;
+  }
+  return { memory, request, sentPayload };
+}
 
 function validationSucceeded(output) {
   const text = String(output);
@@ -17,12 +35,15 @@ function validationSucceeded(output) {
 
 export function createAgentSession(config) {
   return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
-    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [] };
+    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [],
+    compaction: null, compactionCount: 0 };
 }
 
 export function resetConversation(session) {
   if (session.running) throw new Error('Stop the current turn before starting a new conversation');
   session.messages.length = 0;
+  session.compaction = null;
+  session.compactionCount = 0;
   session.tools?.sessionTerms.clear();
   session.tools?.unresolvedQueries.clear();
   session.tools?.readEvidence.clear();
@@ -39,7 +60,12 @@ export async function runTask(task, config, options = {}) {
   finally { session.running = false; }
 }
 
-async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand } = {}) {
+export async function compactAgentSession(config, options = {}) {
+  if (!options.session) throw new Error('Conversation compaction requires an existing session');
+  return runTask(options.instructions || '', config, { ...options, compactionOnly: true });
+}
+
+async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand, compactionOnly = false } = {}) {
   // Presentation observers must not change execution or accounting.
   const emit = (event) => { try { onEvent(event); } catch { /* UI is observational. */ } };
   // Injected adapters are for deterministic integration checks, never live usage evidence.
@@ -62,11 +88,39 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
   session.adapter = adapter;
   session.offline = offline;
+  let requestPurpose = 'task';
   adapter.onRequest = async (event) => {
-    await ledger.request(event);
+    await ledger.request({ ...event, purpose: requestPurpose });
     emit({ type: 'usage', totals: { ...ledger.totals }, usageComplete: ledger.completeUsageRequests === ledger.totals.requests,
       spentUsd: adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
   };
+  const summarize = async (state, reason, instructions = '') => {
+    requestPurpose = 'compaction';
+    try {
+      return await compactConversation(session, config, { adapter, ledger, state, reason, instructions,
+        system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions(), signal, onEvent: emit,
+        measureContext: context => requestBytes(config, prepareContextRequest(context, config, tools.modelToolDefinitions()).request) });
+    } catch (error) {
+      emit({ type: 'compaction_end', reason, status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message });
+      await ledger.event({ type: 'compaction_failed', reason, cancelled: Boolean(signal?.aborted),
+        errorSha256: createHash('sha256').update(String(error.message)).digest('hex') });
+      throw error;
+    } finally { requestPurpose = 'task'; }
+  };
+  if (compactionOnly) {
+    let outcome;
+    try { outcome = await summarize(session, 'manual', task); }
+    catch (error) {
+      outcome = { status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message };
+    }
+    const summary = await ledger.finish({ status: outcome.status, prompt: task });
+    onText(`Conversation compaction: ${outcome.status}.${outcome.detail ? ` ${outcome.detail}` : ''}`);
+    emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.spentUsd,
+      changedFiles: session.changedFiles, pendingValidation: session.pendingValidation, runDirectory: ledger.directory });
+    return { ...outcome, summary, toolCalls: 0, changedFiles: [...session.changedFiles],
+      validationPassed: session.validationPassed, validationAttempts: session.validationAttempts,
+      runType: offline ? 'offline-runtime' : 'live', wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
+  }
   const firstTurn = session.messages.length === 0;
   const inventory = firstTurn ? await tools.initialInventory({ task, strategy: config.contextStrategy, limit: config.initialFileLimit })
     : { text: '', selectedFiles: [], totalFiles: 0 };
@@ -90,27 +144,33 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let forcedValidationNudges = 0;
   const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
     fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
+  const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, changedFiles });
+  const prepareRequest = () => {
+    const activeMessages = sessionContext(session, runtimeState());
+    const requestTools = tools.modelToolDefinitions();
+    const fullPayload = JSON.stringify({ system: SYSTEM_PROMPT, messages, tools: requestTools });
+    return { ...prepareContextRequest(activeMessages, config, requestTools), fullPayload };
+  };
+  let autoCompactionAttempts = 0;
+  const attemptedContexts = new Set();
 
   try {
     while (toolCalls <= config.maxToolCalls) {
       if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
-        let memory = config.historyStrategy === 'compact-tools'
-          ? compactToolHistory(messages, { keepRecentRounds: config.historyKeepRecent ?? 2 })
-          : { messages, diagnostics: { compactedResults: 0 } };
-        const requestTools = tools.modelToolDefinitions();
-        const fullRequest = { system: SYSTEM_PROMPT, messages, tools: requestTools };
-        const fullPayload = JSON.stringify(fullRequest);
-        let request = { system: SYSTEM_PROMPT + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: requestTools };
-        let sentPayload = JSON.stringify(request);
-        // Include the recovery guidance cost. Small turns fall back to unchanged V1 input.
-        if (memory.diagnostics.compactedResults && (Buffer.byteLength(sentPayload, 'utf8') >= Buffer.byteLength(fullPayload, 'utf8')
-          || sentPayload.length >= fullPayload.length || estimateTextTokens(sentPayload) >= estimateTextTokens(fullPayload))) {
-          memory = { messages, diagnostics: { compactedResults: 0 } };
-          request = fullRequest;
-          sentPayload = fullPayload;
+        let prepared = prepareRequest();
+        while (config.compaction === 'auto' && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
+          && requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)) {
+          const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
+          if (attemptedContexts.has(fingerprint)) break;
+          attemptedContexts.add(fingerprint);
+          autoCompactionAttempts += 1;
+          const outcome = await summarize(runtimeState(), 'threshold');
+          if (outcome.status !== 'compacted') break;
+          prepared = prepareRequest();
         }
+        const { memory, request, sentPayload, fullPayload } = prepared;
         const fullBytes = Buffer.byteLength(fullPayload, 'utf8');
         const sentBytes = Buffer.byteLength(sentPayload, 'utf8');
         contextDiagnostics.requestCount += 1;
@@ -123,6 +183,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         contextDiagnostics.compactedResultOccurrences += memory.diagnostics.compactedResults;
         await ledger.event({ type: 'context_request', requestIndex: contextDiagnostics.requestCount,
           historyStrategy: config.historyStrategy ?? 'full', fullPayloadBytes: fullBytes, sentPayloadBytes: sentBytes,
+          conversationCompaction: config.compaction ?? 'off', checkpointId: session.compaction?.id || null,
           compactedResults: memory.diagnostics.compactedResults, payloadSha256: createHash('sha256').update(sentPayload).digest('hex'),
           metricSource: 'serialized adapter input (system/messages/tools), not provider tokens' });
         emit({ type: 'model_start', requestIndex: contextDiagnostics.requestCount });
