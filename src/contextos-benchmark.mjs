@@ -22,6 +22,16 @@ export const CONTEXTOS_CASES = [
   { id: 'stale-resume', language: 'JavaScript', files: 120, family: 'cache-key', seed: 35, group: 'recovery-control', resume: true },
   { id: 'historical-recall', language: 'JavaScript', files: 120, family: 'cache-key', seed: 35, group: 'recovery-control', receipt: true },
 ];
+
+export function orderedContextosCases(order = '') {
+  if (!order) return CONTEXTOS_CASES;
+  const ids = typeof order === 'string' ? order.split(',').map(id => id.trim()) : [];
+  if (ids.length !== CONTEXTOS_CASES.length || new Set(ids).size !== ids.length
+    || ids.some(id => !CONTEXTOS_CASES.some(item => item.id === id))) {
+    throw new Error('ContextOS case order must be an exact permutation of the complete matrix');
+  }
+  return ids.map(id => CONTEXTOS_CASES.find(item => item.id === id));
+}
 const hash = value => createHash('sha256').update(value).digest('hex');
 const git = async (root, args) => (await execute('git', args, { cwd: root, windowsHide: true,
   env: { ...process.env, GIT_AUTHOR_DATE: '2000-01-01T00:00:00Z', GIT_COMMITTER_DATE: '2000-01-01T00:00:00Z' } })).stdout.trim();
@@ -169,6 +179,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
   const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
   const outputDir=path.resolve(output || `benchmarks/results/contextos-${Date.now()}`); await mkdir(outputDir,{recursive:false});
   const config=loadConfig(options,process.env); if(mode==='live')assertLiveConfig(config);
+  const orderedCases=orderedContextosCases(process.env.TEA_CONTEXTOS_CASE_ORDER);
   if(config.storeRaw)throw new Error('Raw API storage must remain disabled');
   const repeat=Number(process.env.TEA_CONTEXTOS_REPEAT || 3), perRun=Number(process.env.TEA_CONTEXTOS_RUN_BUDGET_USD || 1.4);
   if(!Number.isSafeInteger(repeat)||repeat<3||repeat>5||!Number.isFinite(perRun)||perRun<=0)throw new Error('Invalid ContextOS experiment limits');
@@ -181,7 +192,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
   const engines={ legacy:await import(pathToFileURL(path.join(legacy,'src/agent.mjs'))), current:await import('./agent.mjs') };
   const models={ legacy:await import(pathToFileURL(path.join(legacy,'src/model.mjs'))), current:await import('./model.mjs') };
   const report={version:1,mode,startedAt:new Date().toISOString(), baselineCommit:CONTEXTOS_BASELINE,
-    candidateCommit:await git(root,['rev-parse','HEAD']), engineSha256:await sourceSnapshot(root), complete:false,repeat,cases:[],runs:[],
+    candidateCommit:await git(root,['rev-parse','HEAD']), engineSha256:await sourceSnapshot(root), complete:false,repeat,plannedCaseOrder:orderedCases.map(item=>item.id),cases:[],runs:[],
     profile:{model:config.model,thinkingMode:config.thinkingMode,effort:config.effort,maxOutputTokens:config.maxOutputTokens,
       maxRequestWireBytes:config.maxRequestInputTokens,contextosTargetBytes:config.contextosTargetBytes,maxRequestsPerRun:100,
       maxToolsPerTurn:config.maxToolCalls,requestTimeoutMs:config.timeoutMs,turnTimeoutMs:180000,totalBudgetUsd:config.maxCostUsd,
@@ -196,7 +207,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
   let saving=Promise.resolve();
   const save=async()=>{saving=saving.then(async()=>{report.analysis=analyzeContextos(report.runs);if(mode==='live')report.gate=contextosGate(report);await writeFile(path.join(outputDir,'comparison.json'),JSON.stringify(report,null,2)+'\n');});await saving;};
   await save();let halted=false;
-  for(const item of CONTEXTOS_CASES){
+  for(const item of orderedCases){
     const base=path.join(scratch,`${item.id}-base`), {definition,paths,identity}=await contextosFixture(base,item);
     const initial=await contextosAcceptance(base,definition,path.join(scratch,'acceptance',item.id,'initial'));
     if(!initial.publicPassed || initial.hiddenPassed || !initial.hiddenCompleted || !initial.scopePassed)throw new Error(`Invalid initial fixture ${item.id}: ${JSON.stringify(initial)}`);
