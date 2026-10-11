@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { pathToFileURL, fileURLToPath } from 'node:url';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { loadConfig, assertLiveConfig } from './config.mjs';
@@ -104,14 +104,15 @@ export async function contextosAcceptance(root, definition, scratch) {
   const publicPassed = await execute(definition.validation[0], definition.validation[1], { cwd: root, windowsHide: true, timeout: 20000 }).then(() => true, () => false);
   await mkdir(scratch, { recursive: true });
   let hiddenPassed, hiddenCompleted;
+  const witness = `TEA_CONTEXTOS_ACCEPTANCE_FINISHED_${randomUUID()}`;
   if (definition.entry.endsWith('.py')) {
     const source = `import importlib.util\nspec=importlib.util.spec_from_file_location('candidate',${JSON.stringify(path.join(root, definition.entry))})\nm=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\nassert m.retry(lambda attempt: 9,0)==9\nfor budget in [0,1,2,4]:\n    calls=[]\n    failure=RuntimeError('last')\n    def fail(attempt):\n        calls.append(attempt)\n        raise failure\n    try:\n        m.retry(fail,budget)\n        raise AssertionError('expected failure')\n    except RuntimeError as error:\n        assert error is failure\n    assert calls==list(range(budget+1))\n`;
-    const file = path.join(scratch, 'hidden.py'); await writeFile(file, source);
-    const result = await execute('python', ['-B', file], { windowsHide: true, timeout: 15000 }).then(() => ({ passed: true, completed: true }), error => ({ passed: false, completed: Number.isInteger(error.code) }));
+    const file = path.join(scratch, 'hidden.py'); await writeFile(file, source + `\nprint(${JSON.stringify(witness)})\n`);
+    const result = await execute('python', ['-B', file], { windowsHide: true, timeout: 15000 }).then(result => ({ passed: result.stdout.includes(witness), completed: result.stdout.includes(witness) }), error => ({ passed: false, completed: Number.isInteger(error.code) }));
     hiddenPassed = result.passed; hiddenCompleted = result.completed;
   } else {
-    const file = path.join(scratch, 'hidden.mjs'); await writeFile(file, `import assert from 'node:assert/strict'; import {${definition.export}} from ${JSON.stringify(pathToFileURL(path.join(root, definition.entry)).href)};\n${definition.hidden}`);
-    const result = await execute(process.execPath, [file], { windowsHide: true, timeout: 15000 }).then(() => ({ passed: true, completed: true }), error => ({ passed: false, completed: Number.isInteger(error.code) }));
+    const file = path.join(scratch, 'hidden.mjs'); await writeFile(file, `import assert from 'node:assert/strict'; import {${definition.export}} from ${JSON.stringify(pathToFileURL(path.join(root, definition.entry)).href)};\n${definition.hidden}\nprocess.stdout.write(${JSON.stringify(witness + '\n')});\n`);
+    const result = await execute(process.execPath, [file], { windowsHide: true, timeout: 15000 }).then(result => ({ passed: result.stdout.includes(witness), completed: result.stdout.includes(witness) }), error => ({ passed: false, completed: Number.isInteger(error.code) }));
     hiddenPassed = result.passed; hiddenCompleted = result.completed;
   }
   const changed = (await git(root, ['diff', '--name-only', 'HEAD'])).split(/\r?\n/).filter(Boolean);

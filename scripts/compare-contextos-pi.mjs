@@ -21,11 +21,14 @@ const execute = promisify(execFile), hash = value => createHash('sha256').update
 const options = {};
 for (let n = 2; n < process.argv.length; n++) {
   const key = process.argv[n];
-  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
+  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
   options[key.slice(2)] = process.argv[++n];
 }
 const mode = options.mode || 'prepare', repeat = Number(options.repeat || 3), timeoutMs = Number(options['timeout-ms'] || 180000);
 if (!['prepare', 'live'].includes(mode) || !Number.isSafeInteger(repeat) || repeat < 3 || repeat > 5 || !Number.isSafeInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > 300000) throw new Error('Invalid experiment controls');
+const scales = options.scales?.split(',') || ['small', 'medium', 'large'];
+const groups = options.groups?.split(',') || ['fresh', 'long-session'];
+if (!scales.length || new Set(scales).size !== scales.length || scales.some(scale => !['small', 'medium', 'large'].includes(scale)) || !groups.length || new Set(groups).size !== groups.length || groups.some(group => !['fresh', 'long-session'].includes(group))) throw new Error('Invalid task selection');
 const runId = validateRunId(options['run-id'] || `contextos-pi-${Date.now()}`);
 const output = path.join(ROOT, 'benchmarks', 'results', runId);
 const piRoot = path.resolve(options['pi-package'] || path.join(os.homedir(), 'AppData', 'Roaming', 'npm', 'node_modules', '@earendil-works', 'pi-coding-agent'));
@@ -55,19 +58,23 @@ const report = { schemaVersion: 2, mode, runId, startedAt: new Date().toISOStrin
     endpointSha256: hash(config.baseUrl), rateBasis: 'User-supplied conservative rates; not invoice', turnTimeoutMs: timeoutMs },
   teaProfile: { memoryPolicy: config.memoryPolicy, contextosTargetBytes: config.contextosTargetBytes, contextStrategy: config.contextStrategy, compaction: config.compaction, maxToolCallsPerTurn: config.maxToolCalls },
   piProfile: { nativeRpc: true, autoCompaction: true, contextWindow: 200000, automaticRetry: false, cacheWarming: false, persistedSession: false, extensions: false, skills: false },
-  profileNote: 'Gateway normalizes model/thinking/effort/output, preserves native prompts/tools and cache directives. Pi native auto-compaction is enabled; TEA uses deterministic ContextOS and semantic compaction off. Sessions start empty. No scripted seed history. Native tool limits differ; shared 100-request/1.4 USD per-run and 8 USD suite guard apply.',
+  profileNote: 'Gateway normalizes model/thinking/effort/output, preserves native prompts/tools and cache directives. Pi native auto-compaction is enabled; TEA uses deterministic ContextOS and semantic compaction off. Sessions start empty. No scripted seed history. Native tool limits differ; shared 100-request/1.4 USD per-run and configured suite guard apply.',
   perAgentTaskBudgetUsd: perCaseBudget, workspaceContextIsolated: true, workspaceRoot, tasks: [], runs: [], requests: [], repeat, complete: false };
 const save = () => writeFile(path.join(output, 'comparison.json'), JSON.stringify(report, null, 2) + '\n');
 const definitions = [];
 let gateway;
 try {
-  for (const task of taskDefinitions()) {
+  for (const task of groups.includes('fresh') ? taskDefinitions().filter(task => scales.includes(task.scale)) : []) {
     const definition = { ...task, allowed: [task.entry], validation: [process.execPath, ['--test', 'tests/public.test.mjs']] };
     const identity = await prepareFixture(path.join(output, 'bases', definition.taskId), definition);
     definitions.push({ definition, paths: [], identity, group: 'fresh' });
   }
+  if (groups.includes('long-session')) {
   const long = await contextosFixture(path.join(output, 'bases', 'long-30'), CONTEXTOS_CASES.find(item => item.id === 'long-30'));
   long.definition = { ...long.definition, taskId: 'long-30', scale: 'long-session' }; long.group = 'long-session'; definitions.push(long);
+  }
+  report.taskSelection = { scales, groups };
+  report.benchmarkKind = `Self-authored JavaScript fixtures; selected groups ${groups.join(',')}, sizes ${scales.join(',')}; ${definitions.length} tasks, ${repeat} repetitions; not production holdout.`;
   for (const fixture of definitions) {
     const { definition, identity, paths, group } = fixture;
     const initial = await contextosAcceptance(path.join(output, 'bases', definition.taskId), definition, path.join(workspaceRoot, 'initial-acceptance', definition.taskId));

@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { analyzeContextos, CONTEXTOS_CASES, orderedContextosCases, contextosReadAcceptance } from '../src/contextos-benchmark.mjs';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { analyzeContextos, CONTEXTOS_CASES, orderedContextosCases, contextosReadAcceptance, contextosFixture, contextosAcceptance } from '../src/contextos-benchmark.mjs';
 const run = (variant, tokens, accepted=true, known=true) => ({caseId:'case',repeat:1,variant,totalTokens:known?tokens:null,
   inputTokens:known?tokens-10:null,outputTokens:known?10:null,cacheInputTokens:0,accepted,usageComplete:known,conservativeSpendUsd:.1,elapsedMs:1,requests:[{}]});
 test('ContextOS comparison counts failed paid runs and keeps acceptance-matched savings separate',()=>{
@@ -48,4 +51,18 @@ test('inspection acceptance rejects edits, tests and shell execution despite a c
     assert.equal(contextosReadAcceptance(rows,sha,true).passed,false);
     assert.equal(contextosReadAcceptance(rows,sha,false).passed,true);
   }
+});
+
+test('hidden ContextOS acceptance requires finished assertions, not an early zero exit', async () => {
+  const root=await mkdtemp(path.join(os.tmpdir(),'tea-contextos-witness-test-'));
+  const workspace=path.join(root,'workspace');
+  const {definition}=await contextosFixture(workspace,CONTEXTOS_CASES.find(item=>item.id==='short-js'));
+  await writeFile(path.join(workspace,definition.entry),definition.source.replace('return String(value);',"return typeof value + ':' + String(value);"));
+  const good=await contextosAcceptance(workspace,definition,path.join(root,'good'));
+  assert.equal(good.passed,true);assert.equal(good.hiddenCompleted,true);
+  await writeFile(path.join(workspace,definition.entry),"export function cacheKey(){return 'wrong';}\nprocess.exit(0);\n");
+  const bypass=await contextosAcceptance(workspace,definition,path.join(root,'bypass'));
+  assert.equal(bypass.publicPassed,true); // Exit-code-only public checks are insufficient.
+  assert.equal(bypass.scopePassed,true);
+  assert.equal(bypass.hiddenCompleted,false);assert.equal(bypass.hiddenPassed,false);assert.equal(bypass.passed,false);
 });
