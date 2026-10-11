@@ -7,7 +7,7 @@ import { redactText } from './tools.mjs';
 
 const exec = promisify(execFile);
 
-function childEnvironment() {
+export function comparisonChildEnvironment() {
   const env = {};
   for (const name of ['PATH', 'PATHEXT', 'SYSTEMROOT', 'SystemRoot', 'WINDIR', 'TEMP', 'TMP', 'ComSpec', 'ProgramFiles', 'ProgramFiles(x86)']) {
     if (process.env[name]) env[name] = process.env[name];
@@ -16,8 +16,7 @@ function childEnvironment() {
   return env;
 }
 
-/** Run the installed native Pi CLI with a fresh configuration and no real API key. */
-export async function runPiTask({ piCli, workspace, agentDir, baseUrl, token, config, prompt, timeoutMs }) {
+export async function configurePiComparison({ agentDir, baseUrl, token, config }) {
   await mkdir(agentDir, { recursive: true });
   await writeFile(path.join(agentDir, 'models.json'), JSON.stringify({ providers: { comparison: {
     baseUrl, api: 'anthropic-messages', apiKey: token, models: [{
@@ -27,15 +26,20 @@ export async function runPiTask({ piCli, workspace, agentDir, baseUrl, token, co
     }],
   } } }, null, 2));
   await writeFile(path.join(agentDir, 'settings.json'), JSON.stringify({
-    compaction: { enabled: false }, retry: { enabled: false, provider: { maxRetries: 0 } }, cacheWarming: 'off',
+    compaction: { enabled: config.piAutoCompaction ?? false }, retry: { enabled: false, provider: { maxRetries: 0 } }, cacheWarming: 'off',
   }));
+}
+
+/** Run the installed native Pi CLI with a fresh configuration and no real API key. */
+export async function runPiTask({ piCli, workspace, agentDir, baseUrl, token, config, prompt, timeoutMs }) {
+  await configurePiComparison({ agentDir, baseUrl, token, config });
   const shell = process.platform === 'win32' ? 'powershell' : 'bash';
   const args = ['--offline', '--mode', 'json', '--print', '--no-session', '--no-extensions', '--no-skills',
     '--no-prompt-templates', '--no-themes', '--no-approve', '--provider', 'comparison', '--model', config.model,
     '--thinking', config.effort, '--tools', `read,${shell},edit,write`, '--', prompt];
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [piCli, ...args], { cwd: workspace,
-      env: { ...childEnvironment(), PI_CODING_AGENT_DIR: agentDir }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+      env: { ...comparisonChildEnvironment(), PI_CODING_AGENT_DIR: agentDir }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     let buffer = '', stderr = '', toolCalls = 0, parseErrors = 0, settled = false, timedOut = false, lastStop = null, errorMessage = null;
     const digest = createHash('sha256');
     const consume = line => {
