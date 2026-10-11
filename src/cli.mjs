@@ -4,6 +4,7 @@ import { runTask } from './agent.mjs';
 import { loadConfig, ConfigError } from './config.mjs';
 import { compareRuns, loadRun, renderComparisonReport, renderRunReport, runReplayBenchmark, RESULT_ROOT } from './benchmark.mjs';
 import { renderExecutableReport, runExecutableBenchmark } from './runtime-benchmark.mjs';
+import { runInteractive } from './terminal.mjs';
 
 const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--context-strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 24\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.`;
 
@@ -13,6 +14,8 @@ function parseOptions(args) {
   for (let i = 0; i < args.length; i += 1) {
     const value = args[i];
     if (value === '--help' || value === '-h') options.help = true;
+    else if (value === '--interactive' || value === '-i') options.interactive = true;
+    else if (value === '--demo') { options.demo = true; options.interactive = true; }
     else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--history-strategy', '--history-keep-recent', '--fixture-variant', '--base-run', '--candidate-run', '--run'].includes(value)) {
       const next = args[i + 1];
       if (next === undefined || next.startsWith('--')) throw new Error(`Missing value after ${value}`);
@@ -28,14 +31,18 @@ function parseOptions(args) {
 
 async function main() {
   const args = process.argv.slice(2);
-  if (!args.length || args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP + '\n\nHistory experiments:\n  tea <task> --history-strategy full|compact-tools [--history-keep-recent 2]\n  tea benchmark memory [--history-keep-recent 2] [--run-id ID]\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--history-strategy full|compact-tools] [--fixture-variant solution|extended] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nThe extended variant is an artificial verbose-log stress profile, available only in runtime mode.\nHistory experiments measure serialized input size, not provider tokens or model success.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
+  if (args.includes('--help') || args.includes('-h') || (!args.length && !process.stdin.isTTY)) { process.stdout.write(HELP + '\n\nInteractive terminal:\n  tea                         # start a conversation in a terminal\n  tea --interactive [task]     # keep talking after the initial task\n  tea --demo                  # offline interface preview, no API calls\n  /help /status /tools /diff /new /clear /cancel /exit\n  Esc or Ctrl+C stops the current turn; spending is shared across turns.\n\nHistory experiments:\n  tea <task> --history-strategy full|compact-tools [--history-keep-recent 2]\n  tea benchmark memory [--history-keep-recent 2] [--run-id ID]\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--history-strategy full|compact-tools] [--fixture-variant solution|extended] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nThe extended variant is an artificial verbose-log stress profile, available only in runtime mode.\nHistory experiments measure serialized input size, not provider tokens or model success.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
   const group = args[0];
   if (group === 'benchmark') { await benchmarkCommand(args.slice(1)); return; }
 
   const parsed = parseOptions(args);
   const task = parsed.positional.join(' ').trim();
-  if (!task) throw new Error('Provide a task in quotes.');
   const config = loadConfig(parsed);
+  if (parsed.interactive || (!task && process.stdin.isTTY)) {
+    await runInteractive(config, { demo: parsed.demo, initialTask: task || undefined });
+    return;
+  }
+  if (!task) throw new Error('Provide a task in quotes, or use --interactive in a terminal.');
   const result = await runTask(task, config, { onText: (text) => process.stdout.write(`${text}\n`) });
   process.stdout.write(`\nRun status: ${result.status}\nToken ledger: ${path.relative(process.cwd(), result.runDirectory)}\n`);
   process.stdout.write(`Provider tokens: input=${result.summary.inputTokens}, output=${result.summary.outputTokens}, cached=${result.summary.cachedInputTokens}\n`);

@@ -21,7 +21,7 @@ function mergeUsage(target, source = {}) {
   return target;
 }
 
-async function readSseMessage(body) {
+async function readSseMessage(body, onTextDelta) {
   const decoder = new TextDecoder('utf-8', { fatal: true });
   let buffer = '';
   let eventName = '';
@@ -47,6 +47,7 @@ async function readSseMessage(body) {
       case 'content_block_start': {
         const block = { ...(event.content_block || {}) };
         if (block.type === 'text' && typeof block.text !== 'string') block.text = '';
+        if (block.type === 'text' && block.text) onTextDelta?.(block.text);
         if (block.type === 'thinking' && typeof block.thinking !== 'string') block.thinking = '';
         if (block.type === 'tool_use' && !block.input) { block.input = {}; block.partial_json = ''; }
         blocks.set(event.index, block);
@@ -55,7 +56,7 @@ async function readSseMessage(body) {
       case 'content_block_delta': {
         const block = blocks.get(event.index) || { type: event.delta?.type };
         const delta = event.delta || {};
-        if (delta.type === 'text_delta') block.text = `${block.text || ''}${delta.text || ''}`;
+        if (delta.type === 'text_delta') { block.text = `${block.text || ''}${delta.text || ''}`; onTextDelta?.(delta.text || ''); }
         else if (delta.type === 'thinking_delta') block.thinking = `${block.thinking || ''}${delta.thinking || ''}`;
         else if (delta.type === 'signature_delta') block.signature = `${block.signature || ''}${delta.signature || ''}`;
         else if (delta.type === 'input_json_delta') block.partial_json = `${block.partial_json || ''}${delta.partial_json || ''}`;
@@ -132,7 +133,8 @@ async function readSseMessage(body) {
 export class AnthropicMessagesAdapter {
   constructor(config) { this.config = config; }
 
-  async complete({ system, messages, tools, maxTokens }) {
+  async complete({ system, messages, tools, maxTokens, signal, onTextDelta }) {
+    signal?.throwIfAborted();
     const config = this.config;
     const outputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
     if (this.requestInFlight) throw new ModelError('Concurrent requests are blocked to preserve the hard budget');
@@ -192,6 +194,11 @@ export class AnthropicMessagesAdapter {
     let result;
     let recorded = false;
     this.requestInFlight = true;
+    const controller = new AbortController();
+    const cancel = () => controller.abort(signal.reason);
+    signal?.addEventListener('abort', cancel, { once: true });
+    const timer = setTimeout(() => controller.abort(new Error('Request timeout')), config.timeoutMs);
+    if (signal?.aborted) cancel();
     try {
       response = await fetch(url, {
         method: 'POST',
@@ -201,10 +208,10 @@ export class AnthropicMessagesAdapter {
           'x-api-key': config.apiKey,
         },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(config.timeoutMs),
+        signal: controller.signal,
       });
       if (!response.ok) throw new ModelError(`Provider returned HTTP ${response.status}: ${safeProviderError(await response.text())}`, response.status);
-      result = config.stream ? await readSseMessage(response.body) : await response.json();
+      result = config.stream ? await readSseMessage(response.body, onTextDelta) : await response.json();
       const usage = result.usage || {};
       const counts = normalizeAnthropicUsage(usage);
       if (!counts.complete) {
@@ -251,7 +258,7 @@ export class AnthropicMessagesAdapter {
       }
       if (error instanceof ModelError) throw error;
       throw new ModelError(`Model request failed: ${safeProviderError(error.message)}`);
-    } finally { this.requestInFlight = false; }
+    } finally { clearTimeout(timer); signal?.removeEventListener('abort', cancel); this.requestInFlight = false; }
   }
 
   spentUsd = 0;

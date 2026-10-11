@@ -19,7 +19,9 @@ test('lists and searches workspace text files while omitting environment files a
     await writeFile(path.join(root, 'credentials.json'), '{"password":"hidden-value"}\n');
     await writeFile(path.join(root, 'node_modules', 'hidden.js'), 'target\n');
     await tools.init();
-    assert.equal(await tools.listFiles(), 'src.js');
+    const listing = await tools.listFiles();
+    assert.match(listing, /^Scoped listing: \.; offset=0; 1 paths\./);
+    assert.equal(listing.split('\n').slice(1).join('\n'), 'src.js');
     assert.match(await tools.searchCode({ query: 'target' }), /src\.js:1/);
     await assert.rejects(tools.readFile({ path: '.env' }), /credential|allowlist|regular text file/);
     await assert.rejects(tools.readFile({ path: 'credentials.json' }), /credential/);
