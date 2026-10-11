@@ -87,6 +87,9 @@ function scriptedAdapter(fixture, variant) {
     variant === 'unchanged' ? [] : fixture.solution.map((input) => ({ name: 'apply_patch', input })),
     [{ name: 'run_tests', input: { command: fixture.publicTestCommand } }],
   ].filter((items) => items.length);
+  if (variant === 'extended') {
+    for (let round = 0; round < 8; round += 1) phases.push([{ name: 'run_tests', input: { command: 'node --test tests/diagnostic.test.mjs' } }]);
+  }
   return { complete: async () => {
     const items = phases[index++];
     return items ? calls(items) : { content: [{ type: 'text', text: 'Scripted runtime check finished.' }], stop_reason: 'end_turn' };
@@ -113,12 +116,14 @@ export async function loadExecutableManifest(filename = path.join(PROJECT_ROOT, 
 }
 
 export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtime-smoke', strategy = 'v1', initialFileLimit,
-  runId = `runtime-${new Date().toISOString().replaceAll(':', '-')}`, config, onProgress = () => {}, fixtureVariant = 'solution', taskIds } = {}) {
+  runId = `runtime-${new Date().toISOString().replaceAll(':', '-')}`, config, onProgress = () => {}, fixtureVariant = 'solution', taskIds,
+  historyStrategy = 'full', historyKeepRecent = 2 } = {}) {
   if (!['runtime', 'live'].includes(mode)) throw new Error('Executable benchmark mode must be runtime or live');
   if (suite !== 'runtime-smoke') throw new Error('Only runtime-smoke is available for executable fixtures');
-  if (!['solution', 'unchanged'].includes(fixtureVariant)) throw new Error('Unknown scripted fixture variant');
+  if (!['solution', 'unchanged', 'extended'].includes(fixtureVariant)) throw new Error('Unknown scripted fixture variant');
+  if (mode === 'live' && fixtureVariant === 'extended') throw new Error('Extended diagnostic loops are a scripted stress check only');
   validateRunId(runId);
-  const validatedConfig = loadConfig({ contextStrategy: strategy, initialFileLimit }, {});
+  const validatedConfig = loadConfig({ contextStrategy: strategy, initialFileLimit, historyStrategy, historyKeepRecent }, {});
   if (mode === 'live') { if (!config) throw new Error('Live benchmark requires configured credentials, rates, and a total budget'); assertLiveConfig(config); }
   const { manifest, manifestSha256 } = await loadExecutableManifest();
   const selected = taskIds ? manifest.tasks.filter((task) => taskIds.includes(task.taskId)) : manifest.tasks;
@@ -133,7 +138,7 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
   const wallStarted = Date.now();
   const source = await command('git', ['rev-parse', 'HEAD'], PROJECT_ROOT);
   const diff = await command('git', ['diff', 'HEAD', '--', 'src'], PROJECT_ROOT);
-  const sourceFiles = ['agent.mjs', 'config.mjs', 'context.mjs', 'tools.mjs', 'output.mjs', 'model.mjs', 'ledger.mjs', 'usage.mjs', 'run-id.mjs', 'runtime-benchmark.mjs'];
+  const sourceFiles = ['agent.mjs', 'benchmark.mjs', 'config.mjs', 'context.mjs', 'memory.mjs', 'tools.mjs', 'output.mjs', 'model.mjs', 'ledger.mjs', 'usage.mjs', 'run-id.mjs', 'runtime-benchmark.mjs'];
   const snapshot = async () => sha256(JSON.stringify(await Promise.all(sourceFiles.map(async (filename) => [filename, await readFile(path.join(PROJECT_ROOT, 'src', filename), 'utf8')]))));
   const sourceSnapshotSha256 = await snapshot();
   const checkpoint = async () => writeFile(path.join(outputDir, 'checkpoint.json'), `${JSON.stringify({ schemaVersion: 1, runId, mode: mode === 'live' ? 'live-fixture' : 'offline-runtime',
@@ -150,8 +155,10 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
     await checkpoint();
     try {
     await mkdir(workspace, { recursive: true });
-    const repositoryCommit = await pinRepository(workspace, fixture.files);
-    const fileSnapshotSha256 = sha256(JSON.stringify(Object.entries(fixture.files).sort(([a], [b]) => a.localeCompare(b))));
+    const files = fixtureVariant === 'extended' ? { ...fixture.files,
+      'tests/diagnostic.test.mjs': "import test from 'node:test';\ntest('fixed verbose diagnostic stress', () => {\n  for (let index = 0; index < 120; index += 1) console.log('diagnostic ' + index + ': ' + 'fixture-log '.repeat(12));\n});\n" } : fixture.files;
+    const repositoryCommit = await pinRepository(workspace, files);
+    const fileSnapshotSha256 = sha256(JSON.stringify(Object.entries(files).sort(([a], [b]) => a.localeCompare(b))));
     const tools = new WorkspaceTools({ workspace });
     await tools.init();
     const publicBefore = await tools.runTests({ command: fixture.publicTestCommand });
@@ -159,7 +166,7 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
     if (!/^exit=0\b/.test(publicBefore) || hiddenBefore.passed || !hiddenBefore.completed || hiddenBefore.timedOut) throw new Error(`Invalid initial fixture ${fixture.taskId}: public must pass and hidden assertions must complete with failure`);
     Object.assign(row, { repositoryCommit, fileSnapshotSha256, acceptanceTestsSha256: sha256(fixture.publicTestCommand + fixture.hiddenTest), publicBeforePassed: true, hiddenBeforePassed: false });
     const taskConfig = { ...(mode === 'live' ? config : validatedConfig), contextStrategy: strategy,
-      initialFileLimit: validatedConfig.initialFileLimit, workspace, runId: 'agent',
+      initialFileLimit: validatedConfig.initialFileLimit, historyStrategy: validatedConfig.historyStrategy, historyKeepRecent: validatedConfig.historyKeepRecent, workspace, runId: 'agent',
       ...(mode === 'live' ? { maxCostUsd: config.maxCostUsd - reservedSpendUsd,
         maxInputTokens: config.maxInputTokens === undefined ? undefined : config.maxInputTokens - consumedInputTokens } : {}) };
     await onProgress(`${fixture.taskId}: ${mode === 'live' ? 'provider execution' : 'scripted runtime execution'}`);
@@ -175,6 +182,7 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
         totalActualTokens: agentResult.summary.totalActualTokens } : null,
       usageStatus: agentResult.summary.usageStatus, toolCalls: agentResult.toolCalls, toolOutputChars: agentResult.summary.toolOutputChars,
       validationAttempts: agentResult.validationAttempts, agentWallElapsedMs: agentResult.wallElapsedMs, wallElapsedMs: Date.now() - taskStarted,
+      contextDiagnostics: agentResult.contextDiagnostics,
       ledgerPath: path.relative(outputDir, agentResult.runDirectory).replaceAll(path.sep, '/'),
       notes: mode === 'live' ? 'Self-authored executable fixture; independent acceptance, not production-repository evidence.' : 'Scripted tool selection and supplied patch exercise real code/tests only; no model intelligence or provider tokens measured.' });
     await checkpoint(); // Provider charges are durable before any acceptance process can fail.
@@ -204,7 +212,8 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
   const sumUsage = (key) => actualComplete ? attempted.reduce((sum, row) => sum + row.providerUsage[key], 0) : null;
   const sourceSnapshotAfterSha256 = await snapshot();
   const run = { schemaVersion: 1, runId, createdAt: new Date().toISOString(), mode: mode === 'live' ? 'live-fixture' : 'offline-runtime',
-    suite, strategy, initialFileLimit: validatedConfig.initialFileLimit, fixtureVariant: mode === 'live' ? null : fixtureVariant,
+    suite, strategy, historyStrategy: validatedConfig.historyStrategy, historyKeepRecent: validatedConfig.historyKeepRecent,
+    initialFileLimit: validatedConfig.initialFileLimit, fixtureVariant: mode === 'live' ? null : fixtureVariant,
     source: manifest.source, seed: manifest.seed, manifestSha256, commit: source.code === 0 ? source.output.trim() : null,
     sourceDiffSha256: sha256(diff.output), sourceSnapshotSha256, sourceSnapshotAfterSha256,
     sourceUnchangedDuringRun: sourceSnapshotSha256 === sourceSnapshotAfterSha256,
@@ -212,7 +221,7 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
     model: mode === 'live' ? config.model : null, effort: mode === 'live' ? config.effort : null,
     parametersSha256: sha256(JSON.stringify(mode === 'live' ? { model: config.model, effort: config.effort, stream: config.stream, thinkingMode: config.thinkingMode,
       maxOutputTokens: config.maxOutputTokens, maxRequestInputTokens: config.maxRequestInputTokens, maxToolCalls: config.maxToolCalls,
-      initialFileLimit: validatedConfig.initialFileLimit, strategy } : { initialFileLimit: validatedConfig.initialFileLimit, strategy, fixtureVariant })),
+      initialFileLimit: validatedConfig.initialFileLimit, strategy, historyStrategy, historyKeepRecent } : { initialFileLimit: validatedConfig.initialFileLimit, strategy, fixtureVariant, historyStrategy, historyKeepRecent })),
     gateEligible: false, gateReason: mode === 'live' ? 'Smoke fixtures only; no paired core/holdout revision gate.' : 'Offline scripted execution has no provider token or model task-success measurement.',
     stopReason, totals: { taskCount: selected.length, preparedTasks: tasks.length, attemptedTasks: attempted.length, acceptedTasks: tasks.filter((row) => row.acceptance === 'PASS').length,
       acceptanceRate: attempted.length ? tasks.filter((row) => row.acceptance === 'PASS').length / attempted.length : null,
@@ -220,6 +229,10 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
       providerInputTokens: sumUsage('inputTokens'), providerOutputTokens: sumUsage('outputTokens'), providerTotalActualTokens: sumUsage('totalActualTokens'),
       providerUsageComplete: actualComplete, localBudgetConsumedUsd: mode === 'live' ? reservedSpendUsd : null, billedUsd: null,
       toolOutputChars: tasks.reduce((sum, row) => sum + row.toolOutputChars, 0), wallElapsedMs: Date.now() - wallStarted }, tasks };
+  run.totals.sentRequestPayloadBytes = tasks.reduce((sum, row) => sum + (row.contextDiagnostics?.sentRequestPayloadBytes ?? 0), 0);
+  run.totals.fullRequestPayloadBytes = tasks.reduce((sum, row) => sum + (row.contextDiagnostics?.fullRequestPayloadBytes ?? 0), 0);
+  run.totals.sentHeuristicTokens = tasks.reduce((sum, row) => sum + (row.contextDiagnostics?.sentHeuristicTokens ?? 0), 0);
+  run.totals.compactedResultOccurrences = tasks.reduce((sum, row) => sum + (row.contextDiagnostics?.compactedResultOccurrences ?? 0), 0);
   await writeFile(path.join(outputDir, 'run.json'), `${JSON.stringify(run, null, 2)}\n`, 'utf8');
   await checkpoint();
   await writeFile(path.join(outputDir, 'report.md'), renderExecutableReport(run), 'utf8');
@@ -227,8 +240,8 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
 }
 
 export function renderExecutableReport(run) {
-  return `# Executable benchmark ${run.runId}\n\n- Mode: ${run.mode}\n- Suite: ${run.suite}\n- Strategy: ${run.strategy}\n` +
+  return `# Executable benchmark ${run.runId}\n\n- Mode: ${run.mode}\n- Suite: ${run.suite}\n- Strategy: ${run.strategy}\n- History: ${run.historyStrategy ?? 'full'}\n` +
     `- Attempted fixtures: ${run.totals.attemptedTasks}/${run.totals.taskCount}\n- Independent acceptance: ${run.totals.acceptedTasks}/${run.totals.attemptedTasks}\n` +
     `- Provider actual tokens: ${run.totals.providerTotalActualTokens ?? 'NOT_MEASURED'}\n- Model task success: ${run.mode === 'offline-runtime' ? 'NOT_MEASURED (scripted patches)' : run.totals.modelTaskSuccessRate}\n` +
-    `- Tool output characters: ${run.totals.toolOutputChars}\n- Gate: INELIGIBLE — ${run.gateReason}\n`;
+    `- Tool output characters: ${run.totals.toolOutputChars}\n- Serialized adapter-input bytes: ${run.totals.sentRequestPayloadBytes ?? 'NOT_MEASURED'} (diagnostic, not provider tokens)\n- Gate: INELIGIBLE — ${run.gateReason}\n`;
 }

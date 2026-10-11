@@ -46,3 +46,11 @@ test('direct live config cannot bypass finite prices, budget, and integer caps',
   assert.throws(() => assertLiveConfig({ ...configured, maxCostUsd: Infinity }), ConfigError);
   assert.throws(() => assertLiveConfig({ ...configured, maxToolCalls: 2.5 }), ConfigError);
 });
+
+test('loads explicit history ablations with at least two recent tool rounds', () => {
+  assert.equal(loadConfig({}, {}).historyStrategy, 'full');
+  assert.equal(loadConfig({ historyStrategy: 'compact-tools', historyKeepRecent: 4 }, {}).historyKeepRecent, 4);
+  assert.equal(loadConfig({}, { TEA_HISTORY_STRATEGY: 'compact-tools' }).historyStrategy, 'compact-tools');
+  assert.throws(() => loadConfig({ historyStrategy: 'drop-all' }, {}), ConfigError);
+  for (const historyKeepRecent of [1, 2.5, 25]) assert.throws(() => loadConfig({ historyKeepRecent }, {}), ConfigError);
+});

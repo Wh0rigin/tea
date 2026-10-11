@@ -22,6 +22,8 @@ The agent uses the current directory as its workspace unless `--workspace` is su
 
 The default context strategy (`v1`) starts with up to 8 ranked file paths, pins applicable `AGENTS.md` files plus root README/package manifests, and expands task terms with a small domain synonym list when path overlap is weak. The full file/search tools remain available for discovery. Set `--context-strategy baseline` to compare the original 160-path inventory, or change the candidate cap with `--initial-file-limit N` (1–250). These are still experimental heuristics; synthetic replay does not establish live task correctness.
 
+V2 adds opt-in `--history-strategy compact-tools` with `--history-keep-recent 2` (2–24). It replaces older long discovery results and successful logs with hashed recovery records while preserving source evidence, failures, patch receipts, recent results and assistant thinking/signatures. The original history stays complete. Final request overhead is included; turns with no saving use the unchanged input. Default is `full` pending model quality evidence.
+
 ## Configure live model calls
 
 Set credentials and prices in the launching process. Do not store the real API key in this repository, `.env`, benchmark files, or shell history.
@@ -55,6 +57,8 @@ tea benchmark compare --base-run RUN_A --candidate-run RUN_B
 npm run benchmark:runtime
 tea benchmark run --suite runtime-smoke --mode runtime --strategy baseline
 tea benchmark run --suite runtime-smoke --mode live --max-cost-usd 0.10
+tea benchmark run --suite runtime-smoke --mode runtime --history-strategy compact-tools --fixture-variant extended
+tea benchmark memory --history-keep-recent 2
 ```
 
 Replay mode screens payload sizes using 23 self-authored traces. Its prior candidate estimate of 13,431 → 2,106 tokens (-84.32%) is diagnostic, not provider usage or correctness evidence.
@@ -62,6 +66,8 @@ Replay mode screens payload sizes using 23 self-authored traces. Its prior candi
 `runtime` mode executes 12 self-authored JavaScript repositories with reproducible initial commits, scripted tool choices, real patches, public tests, and separate acceptance tests. Both context strategies passed 12/12; returned tool characters fell 15,552 → 11,910 (23.42%). This validates runtime behavior under supplied patches, not model task success. The `baseline` strategy here uses the current engine with original inventory/read settings, rather than executing the historical Git revision. `live` mode runs the same smoke fixtures through the provider only when explicit credentials, current rates, and a total budget are configured. It has not been run. Formal 40–60 core / 100+ holdout sets and paired Git-revision scheduling remain unfinished. These fixtures run without OS isolation; source tests/solutions are in the project manifest, so they are not confidential production acceptance tests. All current runs remain gate-ineligible. See [runtime experiment](benchmarks/reports/v1-runtime.md).
 
 Every provider request writes its usage to `.tea/runs/<run-id>/`; default ledgers retain hashes/counts rather than prompts/code. Set `TEA_STORE_RAW=1` only when contents are safe to retain locally. Benchmark task workspaces necessarily retain fixture code and are ignored by Git. Per-task checkpoints preserve charges and failures before acceptance runs. Long command output keeps stream beginnings and endings with a full-stream hash; successful commands use smaller output limits. Output volume no longer terminates tests, while timeouts remain enforced. `npm test` selects project test files explicitly so archived fixture tests do not accumulate in the test scan.
+
+V2 integrated history ablation reduced cumulative adapter-input bytes by **20.90%** on artificial repeated verbose-log trajectories, with 12/12 scripted acceptance on each side. Ordinary trajectories produced **0%** saving and no compaction. Seven auxiliary memory trajectories measured **54.02%** reduction with a different fixed system prompt. These are separate offline size measurements, not provider Token or model success results; see the [V2 report](benchmarks/reports/v2.md).
 
 ## Current completion state
 

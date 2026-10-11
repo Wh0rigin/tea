@@ -95,3 +95,25 @@ test('acceptance exceptions preserve attempted task evidence and a final failed 
   assert.ok(checkpoint.tasks[0].toolOutputChars > 0);
   assert.equal(JSON.parse(await readFile(path.join(outputDir, 'run.json'), 'utf8')).stopReason, 'harness_error');
 });
+
+test('extended history stress executes real logs and independent acceptance with fewer serialized input bytes', async () => {
+  const { manifest } = await loadExecutableManifest();
+  const taskIds = [manifest.tasks[0].taskId];
+  const stamp = `${Date.now()}-${process.pid}`;
+  const full = await runExecutableBenchmark({ runId: `memory-unit-full-${stamp}`, taskIds, fixtureVariant: 'extended', historyStrategy: 'full' });
+  const compact = await runExecutableBenchmark({ runId: `memory-unit-comp-${stamp}`, taskIds, fixtureVariant: 'extended', historyStrategy: 'compact-tools' });
+  assert.equal(full.run.totals.acceptedTasks, 1);
+  assert.equal(compact.run.totals.acceptedTasks, 1);
+  assert.equal(full.run.tasks[0].repositoryCommit, compact.run.tasks[0].repositoryCommit);
+  assert.equal(full.run.tasks[0].validationAttempts, 9);
+  assert.equal(compact.run.tasks[0].validationAttempts, 9);
+  assert.ok(compact.run.totals.compactedResultOccurrences > 0);
+  assert.ok(compact.run.totals.sentRequestPayloadBytes < full.run.totals.sentRequestPayloadBytes);
+  assert.ok(compact.run.totals.sentRequestPayloadBytes < compact.run.totals.fullRequestPayloadBytes);
+  assert.equal(compact.run.totals.providerTotalActualTokens, null);
+  assert.equal(compact.run.gateEligible, false);
+});
+
+test('diagnostic stress cannot be selected for paid live execution', async () => {
+  await assert.rejects(runExecutableBenchmark({ mode: 'live', fixtureVariant: 'extended' }), /scripted stress/);
+});

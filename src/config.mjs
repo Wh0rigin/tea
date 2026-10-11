@@ -33,6 +33,10 @@ export function loadConfig(options = {}, env = process.env) {
   }
   const initialFileLimit = positiveNumber(options.initialFileLimit ?? env.TEA_INITIAL_FILE_LIMIT, 8, '--initial-file-limit / TEA_INITIAL_FILE_LIMIT');
   if (!Number.isInteger(initialFileLimit) || initialFileLimit < 1 || initialFileLimit > 250) throw new ConfigError('--initial-file-limit / TEA_INITIAL_FILE_LIMIT must be an integer from 1 through 250');
+  const historyStrategy = String(options.historyStrategy || env.TEA_HISTORY_STRATEGY || 'full').toLowerCase();
+  if (!['full', 'compact-tools'].includes(historyStrategy)) throw new ConfigError('History strategy must be full or compact-tools');
+  const historyKeepRecent = positiveNumber(options.historyKeepRecent ?? env.TEA_HISTORY_KEEP_RECENT, 2, 'History recent rounds');
+  if (!Number.isInteger(historyKeepRecent) || historyKeepRecent < 2 || historyKeepRecent > 24) throw new ConfigError('History recent rounds must be an integer from 2 through 24');
 
   const maxCostUsd = nonNegativeNumber(
     options.maxCostUsd ?? env.TEA_MAX_COST_USD,
@@ -66,6 +70,8 @@ export function loadConfig(options = {}, env = process.env) {
     thinkingMode,
     contextStrategy,
     initialFileLimit,
+    historyStrategy,
+    historyKeepRecent,
     stream: env.TEA_STREAM !== '0',
     storeRaw: env.TEA_STORE_RAW === '1',
     workspace: path.resolve(options.workspace || process.cwd()),

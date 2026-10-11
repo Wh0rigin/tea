@@ -2,9 +2,9 @@
 
 ## 当前状态
 
-- 阶段：用户于2026-10-11明确批准提交 V1 离线实验检查点并进入 V2；V1 的 Live 门禁仍未通过。
+- 阶段：V1 离线检查点已提交；V2 选择性历史实验完成并保存结果，进入 V3 本地策略/请求预算实验。各版 Live 门禁仍未通过。
 - 仓库：`C:\Users\Administrator\Documents\token-efficient-coding-agent`。
-- Git：本次在 `v1` 提交已验证候选，随后 `v2` 从该提交继续；父提交/`baseline-v0` 为 `17779508744eee1cf986eb123a612be3d957fbee`。确切检查点 SHA 可用 `git rev-parse v1` 查看，`main` 保持 V0。
+- Git：V1 检查点为 `c2a218d4daada6901038d30d149ee515d44910e7`，V2 从其继续；`baseline-v0`/`main` 为 `17779508744eee1cf986eb123a612be3d957fbee`。用 `git rev-parse v2` 查看 V2 检查点；版本分支冻结各自离线状态，无 release 标签。
 - 运行时：Node.js 原生依赖；Anthropic Messages/SSE、工具调用、工作区安全、测试后置条件、脱敏 Token Ledger、硬预算预检。
 - Offline harness：23 条自编 Replay（13 条大型合成定位）及 12 个固定 commit 的可执行 JavaScript fixture；后者脚本化选择工具、实际修改和运行公开/独立验收。没有模型成功率数据。
 - Live Baseline：`NOT_MEASURED`。未调用付费 API；当前 Token 分组价格、桥接兼容性和 Live 验收尚未完成。
@@ -13,7 +13,7 @@
 
 | 项目 | 结果 |
 |---|---|
-| `npm test` | 71/71 passed；明确限定 tests 目录，不扫描旧 benchmark 仓库 |
+| `npm test` | V2 94/94 passed；明确限定 tests 目录，不扫描旧 benchmark 仓库 |
 | `git diff --check` | passed |
 | `npm run benchmark:replay` | baseline 23 条；估算 13,431；服务商 Token 未测 |
 | baseline → 默认 V1（cap=8） | 估算 13,431 → 2,106（−84.32%）；标注相关路径召回 1/26 → 26/26；paired bootstrap 95% 差值区间 `[-679.57, -304.78]` |
@@ -35,9 +35,16 @@
 
 ## 下一步
 
-1. 扩展真实多语言仓库、40–60 Core / 100+ Holdout、保密隔离验收及任意 Git revision A/B；继续检查大型仓库发现与工具上下文开销。
+1. V3 确定性双向 effort 路由：由实际验证失败/成功、待验证状态和预算预留决策，加入滞回与最低保持期；先做本地请求预算边界实验。完整思考签名与源码证据继续保留。
 2. 在一次 Live Smoke 前核对 PackyAPI 当前 Token 分组输入/输出价格、Anthropic Messages 桥接能力和 GLM effort 行为，并给定总花费上限。
-3. 在同一模型/effort 下对父版和 V1 候选运行成对任务；只有 Token、任务成功率、安全、统计区间、成本及延迟门槛全部达标才提交并推进 `main`。
+3. 扩展真实多语言仓库、40–60 Core / 100+ Holdout、保密隔离验收及任意 Git revision A/B；同一模型/effort 下做父版配对测试。用户授权的离线检查点必须标明量纲；只有完整 Live 门禁通过才推进 `main`。
+
+## V2 离线结果（2026-10-11）
+
+- 普通 runtime full/compact 各12/12验收，候选原始/准备输入279,315→279,315字节，0%变化；60次adapter输入，没有压缩。
+- 重复长日志压力 full/compact 各12/12验收，156次adapter输入/108次验证。候选同轨迹原始输入1,694,687→1,340,431字节（−20.90%，含恢复说明）；中位单任务−20.97%。源码、清单、仓库commit与验收一致且运行期间源码未变。
+- 7条工具记忆辅助轨迹/79成对输入减少54.02%，该辅助system比真正agent短，不能与集成数值混用；保留4轮则37.09%。短任务和普通短成功日志0%变化，失败/两代源码/重复引用保留检查全通过。
+- 完整报告：[V2](benchmarks/reports/v2.md)。实际provider Token、模型成功率、计费和延迟改进仍未测；当前结果只支持可选策略的离线检查点。
 
 ## 恢复命令
 

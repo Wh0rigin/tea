@@ -1,6 +1,6 @@
 # 架构
 
-## 当前候选实现（尚未提交）
+## 当前实现与实验
 
 - `src/cli.mjs`：命令解析、`tea` 任务入口、Benchmark 子命令。
 - `src/agent.mjs`：运行循环、工具调用、测试后置条件、失败和预算停止状态。
@@ -12,8 +12,12 @@
 - `src/runtime-benchmark.mjs`：12 个自编可执行仓库的固定初始化、脚本化/Live 运行入口、独立验收、逐项 checkpoint、源码前后身份校验及套件总预算。
 - `src/output.mjs`：有界日志头尾、完整流哈希和可缩小的返回预算；输出量不再中止进程。
 - `src/usage.mjs` / `src/run-id.mjs`：缓存输入归一化、完整 usage 判定和安全运行目录名。
+- `src/memory.mjs`：请求视图中的旧工具结果选择性压缩；完整历史不变，保留源码/失败/补丁/最近两轮/assistant 原始块，重复或无法配对的 ID 不压缩。
+- `src/memory-benchmark.mjs`：真实工具固定轨迹的成对序列化字节诊断与独立保留检查，不调用模型。
 
-当前 Agent 是单代理、单模型循环。`v1` 工作区原型默认发送最多 8 个任务相关路径，并优先保留适用的 `AGENTS.md` 和根项目说明；词面重合弱时自动扩展少量领域同义词。读取相同文件范围且脱敏后内容未变时回传稳定 evidence ref；内容变化后发送新片段。两项策略都可通过 context strategy 配置分别消融。当前只有自编合成 Replay 证据，尚未通过 Live Gate；V2 的选择性历史和 V3 双向策略/结构化交接尚未实现。
+当前 Agent 是单代理、单模型循环。V1 已提交离线检查点，默认发送最多 8 个任务相关路径，优先保留适用的 `AGENTS.md` 和根项目说明；词面重合弱时自动扩展少量领域同义词。完整发送过的文件范围且脱敏后内容未变时回传 evidence ref，内容变化后发送新片段。V2 `compact-tools` 是可选请求历史视图，压缩旧发现结果和成功日志；全请求字节/字符/估算需均下降（含恢复说明），否则回退到原始输入。默认仍为 `full`。V3 双向策略/结构化交接进入下一阶段实验，尚未接入 Live。
+
+`context_request` 事件和 `contextDiagnostics` 累计准备给 adapter 的 system/messages/tools 序列化大小。它们在 complete 调用前记录，可能包含被 provider 预算预检拒绝的输入，不是 HTTP 网络量或 provider Token。完整计费用量仍只取 provider usage。
 
 ## 请求与预算
 

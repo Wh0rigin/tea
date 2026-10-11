@@ -13,11 +13,11 @@ function parseOptions(args) {
   for (let i = 0; i < args.length; i += 1) {
     const value = args[i];
     if (value === '--help' || value === '-h') options.help = true;
-    else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--base-run', '--candidate-run', '--run'].includes(value)) {
+    else if (['--max-cost-usd', '--max-input-tokens', '--workspace', '--effort', '--run-id', '--suite', '--mode', '--strategy', '--context-strategy', '--initial-file-limit', '--history-strategy', '--history-keep-recent', '--fixture-variant', '--base-run', '--candidate-run', '--run'].includes(value)) {
       const next = args[i + 1];
       if (next === undefined || next.startsWith('--')) throw new Error(`Missing value after ${value}`);
       i += 1;
-      const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--strategy': 'strategy', '--context-strategy': 'contextStrategy', '--initial-file-limit': 'initialFileLimit', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
+      const key = ({ '--max-cost-usd': 'maxCostUsd', '--max-input-tokens': 'maxInputTokens', '--workspace': 'workspace', '--effort': 'effort', '--run-id': 'runId', '--suite': 'suite', '--mode': 'mode', '--strategy': 'strategy', '--context-strategy': 'contextStrategy', '--initial-file-limit': 'initialFileLimit', '--history-strategy': 'historyStrategy', '--history-keep-recent': 'historyKeepRecent', '--fixture-variant': 'fixtureVariant', '--base-run': 'baseRun', '--candidate-run': 'candidateRun', '--run': 'run' })[value];
       options[key] = next;
     } else if (value.startsWith('-')) throw new Error(`Unknown option: ${value}`);
     else positional.push(value);
@@ -28,7 +28,7 @@ function parseOptions(args) {
 
 async function main() {
   const args = process.argv.slice(2);
-  if (!args.length || args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP + '\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
+  if (!args.length || args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP + '\n\nHistory experiments:\n  tea <task> --history-strategy full|compact-tools [--history-keep-recent 2]\n  tea benchmark memory [--history-keep-recent 2] [--run-id ID]\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--history-strategy full|compact-tools] [--fixture-variant solution|extended] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nThe extended variant is an artificial verbose-log stress profile, available only in runtime mode.\nHistory experiments measure serialized input size, not provider tokens or model success.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
   const group = args[0];
   if (group === 'benchmark') { await benchmarkCommand(args.slice(1)); return; }
 
@@ -52,6 +52,7 @@ async function benchmarkCommand(args) {
       const config = mode === 'live' ? loadConfig(parsed) : undefined;
       const result = await runExecutableBenchmark({ mode, suite: parsed.suite || 'runtime-smoke', strategy: parsed.strategy || 'v1',
         initialFileLimit: parsed.initialFileLimit === undefined ? undefined : Number(parsed.initialFileLimit), runId: parsed.runId,
+        historyStrategy: parsed.historyStrategy, historyKeepRecent: parsed.historyKeepRecent, fixtureVariant: parsed.fixtureVariant,
         config, onProgress: (text) => process.stdout.write(`${text}\n`) });
       process.stdout.write(`Executable run saved: ${result.outputDir}\n${renderExecutableReport(result.run)}`);
       if (result.run.totals.acceptedTasks !== result.run.totals.taskCount) process.exitCode = 2;
@@ -71,13 +72,24 @@ async function benchmarkCommand(args) {
     process.stdout.write(`Comparison saved: ${outputDir}\n${renderComparisonReport(result)}`);
     return;
   }
+  if (subcommand === 'memory') {
+    const { renderMemoryReport, runMemoryBenchmark } = await import('./memory-benchmark.mjs');
+    const result = await runMemoryBenchmark({ runId: parsed.runId, keepRecentRounds: parsed.historyKeepRecent === undefined ? undefined : Number(parsed.historyKeepRecent) });
+    process.stdout.write(`Memory experiment saved: ${result.outputDir}\n${renderMemoryReport(result.run)}`);
+    return;
+  }
   if (subcommand === 'report') {
     if (!parsed.run) throw new Error('Use --run ID.');
     const run = await loadRun(parsed.run);
+    if (run.mode === 'offline-memory-replay') {
+      const { renderMemoryReport } = await import('./memory-benchmark.mjs');
+      process.stdout.write(renderMemoryReport(run));
+      return;
+    }
     process.stdout.write(['offline-runtime', 'live-fixture'].includes(run.mode) ? renderExecutableReport(run) : renderRunReport(run));
     return;
   }
-  throw new Error('Unknown benchmark command. Use run, compare, or report.');
+  throw new Error('Unknown benchmark command. Use run, memory, compare, or report.');
 }
 
 main().catch((error) => {

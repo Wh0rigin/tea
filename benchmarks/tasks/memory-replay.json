@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "mode": "tool-memory-replay",
+  "source": {
+    "origin": "self-authored",
+    "description": "Deterministic histories populated by actual WorkspaceTools execution; supplied tool choices, no model task-success evidence."
+  },
+  "seed": 773,
+  "tasks": [
+    {
+      "taskId": "memory-short-read",
+      "profile": "small",
+      "rounds": [{ "calls": [{ "name": "read_file", "input": { "path": "AGENTS.md" } }] }]
+    },
+    {
+      "taskId": "memory-short-validation",
+      "profile": "small",
+      "rounds": [
+        { "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }] },
+        { "calls": [{ "name": "run_tests", "input": { "command": "node --test tests/pass.test.mjs" } }] }
+      ]
+    },
+    {
+      "taskId": "memory-discovery-long",
+      "profile": "large",
+      "rounds": [
+        { "repeat": 12, "calls": [{ "name": "list_files", "input": { "maxFiles": 250 } }, { "name": "search_code", "input": { "query": "MEMORY_MARKER", "maxResults": 80 } }] },
+        { "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }] }
+      ]
+    },
+    {
+      "taskId": "memory-success-long",
+      "profile": "small",
+      "rounds": [
+        { "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }] },
+        { "repeat": 14, "calls": [{ "name": "run_tests", "input": { "command": "node --test tests/verbose.test.mjs" } }] },
+        { "calls": [{ "name": "list_files", "input": { "maxFiles": 250 } }] }
+      ]
+    },
+    {
+      "taskId": "memory-quiet-success-long",
+      "profile": "small",
+      "rounds": [
+        { "repeat": 10, "calls": [{ "name": "run_tests", "input": { "command": "node --test tests/pass.test.mjs" } }] }
+      ]
+    },
+    {
+      "taskId": "memory-failure-preservation",
+      "profile": "large",
+      "rounds": [
+        { "repeat": 3, "calls": [{ "name": "run_tests", "input": { "command": "node --test tests/failure.test.mjs" } }] },
+        { "calls": [{ "name": "read_file", "input": { "path": "missing.mjs" } }] },
+        { "repeat": 10, "calls": [{ "name": "list_files", "input": { "maxFiles": 250 } }, { "name": "search_code", "input": { "query": "MEMORY_MARKER", "maxResults": 80 } }] }
+      ]
+    },
+    {
+      "taskId": "memory-evidence-refresh",
+      "profile": "large",
+      "rounds": [
+        { "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }] },
+        { "repeat": 6, "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }, { "name": "list_files", "input": { "maxFiles": 250 } }, { "name": "search_code", "input": { "query": "MEMORY_MARKER", "maxResults": 80 } }] },
+        { "calls": [{ "name": "apply_patch", "input": { "path": "src/feature.mjs", "search": "revision = 1", "replace": "revision = 2" } }] },
+        { "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }] },
+        { "repeat": 6, "calls": [{ "name": "read_file", "input": { "path": "src/feature.mjs" } }, { "name": "list_files", "input": { "maxFiles": 250 } }, { "name": "search_code", "input": { "query": "MEMORY_MARKER", "maxResults": 80 } }] },
+        { "calls": [{ "name": "run_tests", "input": { "command": "node --test tests/pass.test.mjs" } }] }
+      ]
+    }
+  ]
+}

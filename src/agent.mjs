@@ -3,8 +3,11 @@ import { TokenLedger } from './ledger.mjs';
 import { AnthropicMessagesAdapter, ModelError } from './model.mjs';
 import { TOOL_DEFINITIONS, WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
 import { assertLiveConfig } from './config.mjs';
+import { compactToolHistory } from './memory.mjs';
+import { estimateTextTokens } from './benchmark.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
+const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
 
 function validationSucceeded(output) {
   const text = String(output);
@@ -43,12 +46,42 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
   let finalText = '';
   let toolCalls = 0;
   let forcedValidationNudges = 0;
+  const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
+    fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
 
   try {
     while (toolCalls <= config.maxToolCalls) {
       let result;
       try {
-        result = await adapter.complete({ system: SYSTEM_PROMPT, messages, tools: TOOL_DEFINITIONS });
+        let memory = config.historyStrategy === 'compact-tools'
+          ? compactToolHistory(messages, { keepRecentRounds: config.historyKeepRecent ?? 2 })
+          : { messages, diagnostics: { compactedResults: 0 } };
+        const fullRequest = { system: SYSTEM_PROMPT, messages, tools: TOOL_DEFINITIONS };
+        const fullPayload = JSON.stringify(fullRequest);
+        let request = { system: SYSTEM_PROMPT + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: TOOL_DEFINITIONS };
+        let sentPayload = JSON.stringify(request);
+        // Include the recovery guidance cost. Small turns fall back to unchanged V1 input.
+        if (memory.diagnostics.compactedResults && (Buffer.byteLength(sentPayload, 'utf8') >= Buffer.byteLength(fullPayload, 'utf8')
+          || sentPayload.length >= fullPayload.length || estimateTextTokens(sentPayload) >= estimateTextTokens(fullPayload))) {
+          memory = { messages, diagnostics: { compactedResults: 0 } };
+          request = fullRequest;
+          sentPayload = fullPayload;
+        }
+        const fullBytes = Buffer.byteLength(fullPayload, 'utf8');
+        const sentBytes = Buffer.byteLength(sentPayload, 'utf8');
+        contextDiagnostics.requestCount += 1;
+        contextDiagnostics.fullRequestPayloadBytes += fullBytes;
+        contextDiagnostics.sentRequestPayloadBytes += sentBytes;
+        contextDiagnostics.fullRequestPayloadChars += fullPayload.length;
+        contextDiagnostics.sentRequestPayloadChars += sentPayload.length;
+        contextDiagnostics.fullHeuristicTokens += estimateTextTokens(fullPayload);
+        contextDiagnostics.sentHeuristicTokens += estimateTextTokens(sentPayload);
+        contextDiagnostics.compactedResultOccurrences += memory.diagnostics.compactedResults;
+        await ledger.event({ type: 'context_request', requestIndex: contextDiagnostics.requestCount,
+          historyStrategy: config.historyStrategy ?? 'full', fullPayloadBytes: fullBytes, sentPayloadBytes: sentBytes,
+          compactedResults: memory.diagnostics.compactedResults, payloadSha256: createHash('sha256').update(sentPayload).digest('hex'),
+          metricSource: 'serialized adapter input (system/messages/tools), not provider tokens' });
+        result = await adapter.complete(request);
       } catch (error) {
         status = 'failed';
         if (error instanceof ModelError) onText(`Agent stopped: ${error.message}`);
@@ -119,9 +152,9 @@ export async function runTask(task, config, { onText = () => {}, adapterFactory 
     onText(`Agent error: ${error.message}`);
   }
 
-  const summary = await ledger.finish({ status, prompt: userMessage });
+  const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });
   return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
-    runType: offline ? 'offline-runtime' : 'live', wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
+    runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
 }
 
 function createTaskHash(task) {
