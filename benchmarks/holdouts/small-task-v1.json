@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 1,
+  "frozenAt": "2026-10-12",
+  "stage": "S0, before S1 implementation or provider runs",
+  "kind": "20 self-authored seeded fault tasks on 5 real upstream repositories; diagnostic holdout, not naturally occurring upstream bugs or confidential evaluation",
+  "tasksPerRepository": 4,
+  "repositories": [
+    {
+      "id": "p-map",
+      "url": "https://github.com/sindresorhus/p-map",
+      "commit": "d61b6a33cc1d5533ad5711b435959f3f78c3d2fe",
+      "license": "MIT",
+      "licensePath": "license",
+      "licenseSha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+    },
+    {
+      "id": "p-limit",
+      "url": "https://github.com/sindresorhus/p-limit",
+      "commit": "a8a6fbec4e0e866d6d779b10889bb4f5567e70eb",
+      "license": "MIT",
+      "licensePath": "license",
+      "licenseSha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+    },
+    {
+      "id": "boltons",
+      "url": "https://github.com/mahmoud/boltons",
+      "commit": "4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d",
+      "license": "BSD-3-Clause",
+      "licensePath": "LICENSE",
+      "licenseSha256": "c301912653a8d8c99eab6212aa3aea8d164ea249d8ad53c941e0558a0a5ac1e3"
+    },
+    {
+      "id": "more-itertools",
+      "url": "https://github.com/more-itertools/more-itertools",
+      "commit": "b21ec4ee8e139ebe297e2221980a694bebb69523",
+      "license": "MIT",
+      "licensePath": "LICENSE",
+      "licenseSha256": "09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46"
+    },
+    {
+      "id": "govalidator",
+      "url": "https://github.com/asaskevich/govalidator",
+      "commit": "3dd3875e2b081a20d6eed935913a482fea14ecd0",
+      "license": "MIT",
+      "licensePath": "LICENSE",
+      "licenseSha256": "2a563618ea15afe8a1cc6a1ef61b5165f39923a21734ee06c79b61d39d5530ae"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "p-map-pre-abort",
+      "repository": "p-map",
+      "language": "JavaScript",
+      "goal": "Reject a pre-aborted signal with its reason and do not call the mapper.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "if (signal.aborted) {",
+          "replace": "if (false && signal.aborted) {"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pMap, {pMapSkip,pMapIterable} from './index.js';\nconst c=new AbortController();const reason=new Error('stopped');c.abort(reason);let calls=0;await assert.rejects(pMap([1],x=>{calls++;return x;},{signal:c.signal}),e=>e===reason);assert.equal(calls,0);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "cc7f3717cef13b84dd673c6eea25346b6fbb047840b77ff835e718ed87adc3a4"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "c52d254a2fd2d0c94bcd061589afc8ae120af2e2478cf3a181b1ed307ef7dd57"
+    },
+    {
+      "id": "p-map-error-order",
+      "repository": "p-map",
+      "language": "JavaScript",
+      "goal": "Aggregate mapper failures in input order even when completion order differs.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "collectedErrors.push(errors[index]);",
+          "replace": "collectedErrors.unshift(errors[index]);"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pMap, {pMapSkip,pMapIterable} from './index.js';\nconst a=new Error('first'),b=new Error('second');await assert.rejects(pMap([0,1],async x=>{if(x===0)await new Promise(r=>setTimeout(r,10));throw x===0?a:b;},{concurrency:2,stopOnError:false}),e=>e instanceof AggregateError&&e.errors[0]===a&&e.errors[1]===b);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "cc7f3717cef13b84dd673c6eea25346b6fbb047840b77ff835e718ed87adc3a4"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "d8462103f33f19cf0bb3dc515aa2eceb16fc2879ed421666733cb28d02dee5c9"
+    },
+    {
+      "id": "p-map-skip-index",
+      "repository": "p-map",
+      "language": "JavaScript",
+      "goal": "Omit skipped results while preserving mapper input indexes and result order.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "resolve(result.slice(0, lastIndex).filter(value => value !== pMapSkip));",
+          "replace": "resolve(result.slice(0, lastIndex));"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pMap, {pMapSkip,pMapIterable} from './index.js';\nconst indexes=[];const r=await pMap([3,4,5],(x,i)=>{indexes.push(i);return i===1?pMapSkip:x;},{concurrency:1});assert.deepEqual(r,[3,5]);assert.deepEqual(indexes,[0,1,2]);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "cc7f3717cef13b84dd673c6eea25346b6fbb047840b77ff835e718ed87adc3a4"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "1ddb8730ee96d15b71fcd14b819cbcc85e9420e61bfafa250f1c040e23aa6b0c"
+    },
+    {
+      "id": "p-map-backpressure-range",
+      "repository": "p-map",
+      "language": "JavaScript",
+      "goal": "Reject backpressure below concurrency and noninteger backpressure, preserving valid iteration.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "if (!isLimit(backpressure, concurrency)) {",
+          "replace": "if (false && !isLimit(backpressure, concurrency)) {"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pMap, {pMapSkip,pMapIterable} from './index.js';\nassert.throws(()=>pMapIterable([1],x=>x,{concurrency:2,backpressure:1}),TypeError);assert.throws(()=>pMapIterable([1],x=>x,{concurrency:1,backpressure:1.5}),TypeError);assert.deepEqual(await Array.fromAsync(pMapIterable([1,2],x=>x,{concurrency:1,backpressure:2})),[1,2]);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "cc7f3717cef13b84dd673c6eea25346b6fbb047840b77ff835e718ed87adc3a4"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "72a85b98d74e76797f5195c1da89534fdff697c9b6a6109959930044a181f469"
+    },
+    {
+      "id": "p-limit-pending-count",
+      "repository": "p-limit",
+      "language": "JavaScript",
+      "goal": "Report pending and active jobs separately without losing queued work.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "get: () => queue.size,",
+          "replace": "get: () => queue.size + activeCount,"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pLimit,{limitFunction} from './index.js';\nconst limit=pLimit(1);let release;const a=limit(()=>new Promise(r=>{release=r;}));const b=limit(()=>2);const c=limit(()=>3);await Promise.resolve();assert.equal(limit.activeCount,1);assert.equal(limit.pendingCount,2);release(1);assert.deepEqual(await Promise.all([a,b,c]),[1,2,3]);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "bd1e18c84dd5ba40527840b5a5826d7fd3f5fed748efeb2974713ca465c5f2cc"
+    },
+    {
+      "id": "p-limit-decrease-concurrency",
+      "repository": "p-limit",
+      "language": "JavaScript",
+      "goal": "After reducing concurrency, wait for active work to fall below the new limit before starting queued work.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "if (activeCount < concurrency && queue.size > 0) {",
+          "replace": "if (activeCount <= concurrency && queue.size > 0) {"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pLimit,{limitFunction} from './index.js';\nconst l=pLimit(2);const releases=[];const starts=[];const jobs=[0,1,2].map(i=>l(()=>{starts.push(i);return new Promise(r=>{releases[i]=r;});}));await Promise.resolve();l.concurrency=1;releases[0](0);await new Promise(r=>setTimeout(r,0));assert.deepEqual(starts,[0,1]);releases[1](1);await new Promise(r=>setTimeout(r,0));assert.deepEqual(starts,[0,1,2]);releases[2](2);await Promise.all(jobs);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "2c6ae677fa4c4eecdf0843af7cf7e1b841e3119f1b18a25314d25c675e1b16ff"
+    },
+    {
+      "id": "p-limit-clear-rejections",
+      "repository": "p-limit",
+      "language": "JavaScript",
+      "goal": "Clearing pending work rejects it with AbortError while active work can finish.",
+      "allowedChanges": [
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "queue.dequeue().reject(abortError);",
+          "replace": "queue.dequeue().reject(new Error(\"cleared\"));"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pLimit,{limitFunction} from './index.js';\nconst l=pLimit({concurrency:1,rejectOnClear:true});let release;const a=l(()=>new Promise(r=>{release=r;}));const b=l(()=>2);const check=assert.rejects(b,e=>e.name==='AbortError');await Promise.resolve();l.clearQueue();await check;assert.equal(l.pendingCount,0);release(1);assert.equal(await a,1);",
+      "sourceFiles": [
+        {
+          "path": "index.js",
+          "sha256": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "1a8ac90cca33f88b2a5c72916db09ce7a139b7130ada4ae5e8245ffd205aa9b6"
+    },
+    {
+      "id": "p-limit-argument-types",
+      "repository": "p-limit",
+      "language": "JavaScript+TypeScript",
+      "goal": "Preserve argument forwarding and the Promise return type in implementation and declaration.",
+      "allowedChanges": [
+        "index.d.ts",
+        "index.js"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "index.js",
+          "search": "const limitedFunction = (...arguments_) => limit(() => function_(...arguments_));",
+          "replace": "const limitedFunction = (...arguments_) => limit(() => function_());"
+        },
+        {
+          "path": "index.d.ts",
+          "search": "): ((...arguments_: Arguments) => Promise<ReturnType>) & Pick<LimitFunction, 'clearQueue'>;",
+          "replace": "): ((...arguments_: Arguments) => ReturnType) & Pick<LimitFunction, 'clearQueue'>;"
+        }
+      ],
+      "acceptanceCode": "import assert from 'node:assert/strict';\nimport pLimit,{limitFunction} from './index.js';\nconst f=limitFunction(async(a,b)=>a+b,{concurrency:1});assert.equal(await f(2,3),5);assert.equal(typeof f.clearQueue,'function');",
+      "sourceFiles": [
+        {
+          "path": "index.d.ts",
+          "sha256": "d367543c32631ba661e044b1d1f44deed2bbf54654dd0eb251061337162514ee"
+        },
+        {
+          "path": "index.js",
+          "sha256": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "typescriptAcceptanceCode": "import {limitFunction} from './index.js';\nconst f=limitFunction(async (a:number,b:string)=>String(a)+b,{concurrency:1});\nconst value:Promise<string>=f(2,'x');\nf.clearQueue();\n// @ts-expect-error argument types are preserved\nf('wrong',2);\n",
+      "taskSha256": "83e4b2ccabefa6675cc296091d992138f497ea091e1cffc494e2dfd3684abc2d"
+    },
+    {
+      "id": "boltons-chunk-fill",
+      "repository": "boltons",
+      "language": "Python",
+      "goal": "Fill the final short chunk to its requested size without fabricating an empty chunk.",
+      "allowedChanges": [
+        "boltons/iterutils.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "boltons/iterutils.py",
+          "search": "cur_chunk[lc:] = [fill_val] * (size - lc)",
+          "replace": "cur_chunk[lc:] = [fill_val] * (size - lc - 1)"
+        }
+      ],
+      "acceptanceCode": "from boltons.iterutils import split_iter, chunked_iter, windowed_iter, unique_iter\nassert list(chunked_iter([1,2,3],2,fill=None))==[[1,2],[3,None]]\nassert list(chunked_iter([],2,fill=0))==[]\n",
+      "sourceFiles": [
+        {
+          "path": "boltons/iterutils.py",
+          "sha256": "7fb67f49dc1d895051549b523c2e21161e3c1f4e21590fa7fd09039386d08510"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "01ab67078dc84176c38ed0ad051304b13d451b88cdd89d99cffbcf18f6a73c56"
+    },
+    {
+      "id": "boltons-window-fill",
+      "repository": "boltons",
+      "language": "Python",
+      "goal": "Preserve padded trailing windows and the unpadded short-input behavior.",
+      "allowedChanges": [
+        "boltons/iterutils.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "boltons/iterutils.py",
+          "search": "return zip_longest(*tees, fillvalue=fill)",
+          "replace": "return zip(*tees)"
+        }
+      ],
+      "acceptanceCode": "from boltons.iterutils import split_iter, chunked_iter, windowed_iter, unique_iter\nassert list(windowed_iter([1,2],3,fill=None))==[(1,2,None),(2,None,None)]\nassert list(windowed_iter([1,2],3))==[]\n",
+      "sourceFiles": [
+        {
+          "path": "boltons/iterutils.py",
+          "sha256": "7fb67f49dc1d895051549b523c2e21161e3c1f4e21590fa7fd09039386d08510"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "1964af82620934c1c5d80fed8fb63b7fcbd5edc3da738fea42dcbb6fe8720d48"
+    },
+    {
+      "id": "boltons-maxsplit-tail",
+      "repository": "boltons",
+      "language": "Python",
+      "goal": "Stop splitting at maxsplit and retain later separators in the tail.",
+      "allowedChanges": [
+        "boltons/iterutils.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "boltons/iterutils.py",
+          "search": "if maxsplit is not None and split_count >= maxsplit:",
+          "replace": "if maxsplit is not None and split_count > maxsplit:"
+        }
+      ],
+      "acceptanceCode": "from boltons.iterutils import split_iter, chunked_iter, windowed_iter, unique_iter\nassert list(split_iter([1,0,2,0,3],0,maxsplit=1))==[[1],[2,0,3]]\nassert list(split_iter([1,0,2],0,maxsplit=0))==[[1,0,2]]\n",
+      "sourceFiles": [
+        {
+          "path": "boltons/iterutils.py",
+          "sha256": "7fb67f49dc1d895051549b523c2e21161e3c1f4e21590fa7fd09039386d08510"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "5d53cb31ae2b9d5b0631bb9be60c1fbdaf91ea8b2448177cdc85d70fd7ea72c8"
+    },
+    {
+      "id": "boltons-unique-key",
+      "repository": "boltons",
+      "language": "Python",
+      "goal": "Deduplicate by the supplied key, preserving the first original value and order.",
+      "allowedChanges": [
+        "boltons/iterutils.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "boltons/iterutils.py",
+          "search": "seen.add(k)\n            yield i",
+          "replace": "seen.add(i)\n            yield i"
+        }
+      ],
+      "acceptanceCode": "from boltons.iterutils import split_iter, chunked_iter, windowed_iter, unique_iter\nassert list(unique_iter(['A','a','B','b'],key=str.lower))==['A','B']\nassert list(unique_iter([0,0,1]))==[0,1]\n",
+      "sourceFiles": [
+        {
+          "path": "boltons/iterutils.py",
+          "sha256": "7fb67f49dc1d895051549b523c2e21161e3c1f4e21590fa7fd09039386d08510"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "77b4e6d019bfecf651bbb2998c80a8bdd8f9c298569192919e3084a69d3e7843"
+    },
+    {
+      "id": "more-itertools-prepend-order",
+      "repository": "more-itertools",
+      "language": "Python",
+      "goal": "Prepend in caller order, including falsy values and an exhausted iterator.",
+      "allowedChanges": [
+        "more_itertools/more.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "more_itertools/more.py",
+          "search": "self._cache.extendleft(reversed(items))",
+          "replace": "self._cache.extendleft(items)"
+        }
+      ],
+      "acceptanceCode": "from more_itertools import peekable, seekable, collapse, windowed\np=peekable([9]);p.prepend(0,False,'');assert list(p)==[0,False,'',9]\np=peekable([]);assert p.peek(None) is None;p.prepend(0);assert p.peek()==0;assert next(p)==0\n",
+      "sourceFiles": [
+        {
+          "path": "more_itertools/more.py",
+          "sha256": "1bdc5f323ea18906436a42268b942d5b4d15ac8b3ff17c1211a59fb192fa068e"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "65f803e81932dfd0406e1b1d89e29541a3c149e376ac512ce2339ee69ebb1415"
+    },
+    {
+      "id": "more-itertools-relative-seek",
+      "repository": "more-itertools",
+      "language": "Python",
+      "goal": "Clamp a relative backward seek at the beginning and replay cached values in order.",
+      "allowedChanges": [
+        "more_itertools/more.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "more_itertools/more.py",
+          "search": "self.seek(max(self._index + count, 0))",
+          "replace": "self.seek(max(self._index + count, 1))"
+        }
+      ],
+      "acceptanceCode": "from more_itertools import peekable, seekable, collapse, windowed\ns=seekable([10,20,30]);assert next(s)==10;assert next(s)==20;s.relative_seek(-20);assert next(s)==10;assert next(s)==20\n",
+      "sourceFiles": [
+        {
+          "path": "more_itertools/more.py",
+          "sha256": "1bdc5f323ea18906436a42268b942d5b4d15ac8b3ff17c1211a59fb192fa068e"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "832a39d93735c7e3b78e817127f9dc6a78914c8f657433bd26a0b8dfdb13f006"
+    },
+    {
+      "id": "more-itertools-collapse-depth",
+      "repository": "more-itertools",
+      "language": "Python",
+      "goal": "Honor the requested collapse depth while treating strings and bytes as atomic values.",
+      "allowedChanges": [
+        "more_itertools/more.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "more_itertools/more.py",
+          "search": "if levels is not None and level > levels:",
+          "replace": "if levels is not None and level >= levels:"
+        }
+      ],
+      "acceptanceCode": "from more_itertools import peekable, seekable, collapse, windowed\nassert list(collapse([[1,[2]],3],levels=1))==[1,[2],3]\nassert list(collapse(['ab',[b'cd',4]]))==['ab',b'cd',4]\n",
+      "sourceFiles": [
+        {
+          "path": "more_itertools/more.py",
+          "sha256": "1bdc5f323ea18906436a42268b942d5b4d15ac8b3ff17c1211a59fb192fa068e"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "e3759bc916c499be7a98136ed72fab9b1f000f10a80cb856ac1b33de44447034"
+    },
+    {
+      "id": "more-itertools-window-step-tail",
+      "repository": "more-itertools",
+      "language": "Python",
+      "goal": "Retain the correctly padded last window for a nonunit step and empty-input behavior.",
+      "allowedChanges": [
+        "more_itertools/more.py"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "more_itertools/more.py",
+          "search": "padding = (fillvalue,) * (n - 1 if step >= n else step - 1)",
+          "replace": "padding = ()"
+        }
+      ],
+      "acceptanceCode": "from more_itertools import peekable, seekable, collapse, windowed\nassert list(windowed([1,2,3,4],3,fillvalue=None,step=2))==[(1,2,3),(3,4,None)]\nassert list(windowed([],3))==[]\n",
+      "sourceFiles": [
+        {
+          "path": "more_itertools/more.py",
+          "sha256": "1bdc5f323ea18906436a42268b942d5b4d15ac8b3ff17c1211a59fb192fa068e"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "27504bb4d81da372ebc8aa69098ae7c3a901a144fa1a553e560322ebf457b360"
+    },
+    {
+      "id": "govalidator-port-upper-bound",
+      "repository": "govalidator",
+      "language": "Go",
+      "goal": "Accept ports 1 through 65535 and reject values outside the range.",
+      "allowedChanges": [
+        "validator.go"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "validator.go",
+          "search": "err == nil && i > 0 && i < 65536",
+          "replace": "err == nil && i > 0 && i <= 65536"
+        }
+      ],
+      "acceptanceCode": "package govalidator\nimport (\"testing\";\"strings\")\nfunc TestFrozenAcceptance(t *testing.T) {\nif !IsPort(\"65535\") || IsPort(\"65536\") || IsPort(\"0\") || IsPort(\"-1\") {t.Fatal(\"port boundary\")};_ = strings.Repeat\n}",
+      "sourceFiles": [
+        {
+          "path": "validator.go",
+          "sha256": "fa4fb0242a8de7c1ea235b2540d9e3f3f544a057325cf97b733f4cea8ce0de06"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "a398ccfef37d2d59c7458a285f8c3cc0baeedfb082845528d885a62fc7086009"
+    },
+    {
+      "id": "govalidator-ip-version",
+      "repository": "govalidator",
+      "language": "Go",
+      "goal": "Distinguish IPv4 and IPv6 without admitting invalid addresses.",
+      "allowedChanges": [
+        "validator.go"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "validator.go",
+          "search": "return ip != nil && strings.Contains(str, \".\")",
+          "replace": "return ip != nil"
+        }
+      ],
+      "acceptanceCode": "package govalidator\nimport (\"testing\";\"strings\")\nfunc TestFrozenAcceptance(t *testing.T) {\nif !IsIPv4(\"127.0.0.1\") || IsIPv4(\"::1\") || !IsIPv6(\"::1\") || IsIPv6(\"127.0.0.1\") {t.Fatal(\"IP version\")};_ = strings.Repeat\n}",
+      "sourceFiles": [
+        {
+          "path": "validator.go",
+          "sha256": "fa4fb0242a8de7c1ea235b2540d9e3f3f544a057325cf97b733f4cea8ce0de06"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "ebecc39bb43b12f8d6a4ab792cfd7d7ebb956a407e513e942a5b018e3d0dde28"
+    },
+    {
+      "id": "govalidator-cidr-prefix",
+      "repository": "govalidator",
+      "language": "Go",
+      "goal": "Support valid IPv4 and IPv6 CIDR while rejecting excessive prefix lengths.",
+      "allowedChanges": [
+        "validator.go"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "validator.go",
+          "search": "_, _, err := net.ParseCIDR(str)\n\treturn err == nil",
+          "replace": "_, _, err := net.ParseCIDR(str)\n\treturn err == nil && !strings.Contains(str, \":\")"
+        }
+      ],
+      "acceptanceCode": "package govalidator\nimport (\"testing\";\"strings\")\nfunc TestFrozenAcceptance(t *testing.T) {\nif !IsCIDR(\"192.168.1.0/24\") || !IsCIDR(\"2001:db8::/32\") || IsCIDR(\"192.168.1.0/33\") || IsCIDR(\"2001:db8::/129\") {t.Fatal(\"CIDR prefix\")};_ = strings.Repeat\n}",
+      "sourceFiles": [
+        {
+          "path": "validator.go",
+          "sha256": "fa4fb0242a8de7c1ea235b2540d9e3f3f544a057325cf97b733f4cea8ce0de06"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "70354b2d36090ae2fb06ee3c5778c926338e8a723d547ad725df22e5f6ac42a1"
+    },
+    {
+      "id": "govalidator-hash-algorithm",
+      "repository": "govalidator",
+      "language": "Go",
+      "goal": "Normalize algorithm names and preserve exact hexadecimal length validation.",
+      "allowedChanges": [
+        "validator.go"
+      ],
+      "initialization": "Copy pinned upstream tree, apply only these exact unique mutations; preserve upstream license and tests.",
+      "mutations": [
+        {
+          "path": "validator.go",
+          "search": "algo := strings.ToLower(algorithm)",
+          "replace": "algo := algorithm"
+        }
+      ],
+      "acceptanceCode": "package govalidator\nimport (\"testing\";\"strings\")\nfunc TestFrozenAcceptance(t *testing.T) {\nif !IsHash(strings.Repeat(\"a\",64),\"SHA256\") || IsHash(strings.Repeat(\"a\",63),\"sha256\") || IsHash(strings.Repeat(\"z\",64),\"sha256\") || IsHash(\"abcd\",\"unknown\") {t.Fatal(\"hash algorithm\")}\n}",
+      "sourceFiles": [
+        {
+          "path": "validator.go",
+          "sha256": "fa4fb0242a8de7c1ea235b2540d9e3f3f544a057325cf97b733f4cea8ce0de06"
+        }
+      ],
+      "acceptancePolicy": "Positive execution required; every declared check must pass. Scope is independently checked. No model-facing answer or acceptance-source access.",
+      "taskSha256": "0827a376340ab28c22a4ca2f95c4b088644ad2f6d0de3ae5a7997581cc49d0d7"
+    }
+  ],
+  "runtimePins": {
+    "node": "24.14.0",
+    "python": "3.13.9",
+    "go": "1.24.0",
+    "typescript": "5.9.3",
+    "yocto-queue": "1.2.2"
+  },
+  "paidProviderRequests": 0
+}

@@ -51,6 +51,13 @@ test('gateway applies the same common controls and meters native clients identic
   assert.ok(setup.gateway.records.every(row=>JSON.stringify(row.normalizedControls)===JSON.stringify(controls)&&row.totalTokens===160));
   assert.ok(setup.bodies.every(body=>!Object.hasOwn(body,'temperature')));
 });
+
+test('gateway preserves baseline/candidate identities with identical normalized controls',async t=>{
+  const setup=await localGateway(t);
+  assert.equal((await setup.request('baseline')).status,200);assert.equal((await setup.request('candidate')).status,200);
+  assert.deepEqual(setup.gateway.records.map(row=>row.agent),['baseline','candidate']);
+  assert.ok(setup.gateway.records.every(row=>JSON.stringify(row.normalizedControls)===JSON.stringify(controls)&&row.totalTokens===160));
+});
 test('gateway retains unknown-usage reservation and blocks subsequent submission',async t=>{
   const setup=await localGateway(t,{complete:false});await setup.request();
   assert.equal(setup.gateway.records[0].complete,false);assert.equal(setup.gateway.records[0].totalTokens,null);
@@ -85,6 +92,12 @@ test('report withholds ratios for mismatched thinking or initial snapshots',()=>
     const report=sample();mutate(report);const analysis=analyzeComparison(report);
     assert.equal(analysis.validComparison,false);assert.equal(analysis.overall.allPairsTokenReductionPercent,null);
   }
+});
+
+test('report withholds provider ratios if Pi source was observed changing',()=>{
+  const report=sample();report.piSourceUnchanged=false;
+  assert.equal(analyzeComparison(report).validComparison,false);
+  assert.equal(analyzeComparison(report).overall.allPairsTokenReductionPercent,null);
 });
 test('unknown usage is not zero and incomplete planned coverage has no overall ratio',()=>{
   const report=sample();report.runs[0].usageComplete=false;report.runs[0].totalTokens=null;report.requests[0].complete=false;

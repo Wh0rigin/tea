@@ -31,15 +31,16 @@ await new Promise(r=>setTimeout(r,30));emit({type:'agent_settled',turn:n});}}`);
 test('shared turn audit rejects partial reads, mutations and failed validation', () => {
   const root = path.resolve('fixture');
   const audit = createComparisonTurnAudit({ agent: 'tea', workspace: root, requiredPath: 'src/a.mjs', expectedOutput: 'complete', readOnly: true });
-  audit.observe({ type: 'tool_end', name: 'read_file', input: { path: 'src/a.mjs' }, output: 'partial', isError: false });
+  const observe = event => { audit.observe({ ...event, type: 'tool_start' }); audit.observe(event); };
+  observe({ type: 'tool_end', name: 'read_file', input: { path: 'src/a.mjs' }, output: 'partial', isError: false });
   assert.equal(audit.finish().passed, false);
-  audit.observe({ type: 'tool_end', name: 'read_file', input: { path: path.join(root, 'src/a.mjs') }, output: 'complete', isError: false });
+  observe({ type: 'tool_end', name: 'read_file', input: { path: path.join(root, 'src/a.mjs') }, output: 'complete', isError: false });
   assert.equal(audit.finish().passed, true);
-  audit.observe({ type: 'tool_end', name: 'run_tests', input: { command: 'node --test tests/public.test.mjs' }, output: 'exit=0\n# tests 1', isError: false });
+  observe({ type: 'tool_end', name: 'run_tests', input: { command: 'node --test tests/public.test.mjs' }, output: 'exit=0\n# tests 1\n# pass 1\n# fail 0', isError: false });
   assert.equal(audit.finish().passed, false); assert.equal(audit.finish().validatedAfterEdit, true);
-  audit.observe({ type: 'tool_end', name: 'apply_patch', input: { path: 'src/a.mjs' }, output: 'edited', isError: false });
+  observe({ type: 'tool_end', name: 'apply_patch', input: { path: 'src/a.mjs' }, output: 'edited', isError: false });
   assert.equal(audit.finish().validatedAfterEdit, false);
-  audit.observe({ type: 'tool_end', name: 'run_tests', input: { command: 'node --test tests/public.test.mjs' }, output: 'exit=1', isError: true });
+  observe({ type: 'tool_end', name: 'run_tests', input: { command: 'node --test tests/public.test.mjs' }, output: 'exit=1', isError: true });
   assert.equal(audit.finish().validatedAfterEdit, false);
 });
 

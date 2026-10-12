@@ -17,6 +17,7 @@ export function analyzeComparison(report) {
   if (report.mode !== 'live' || report.usageSource !== 'provider-wire') issues.push('No live provider-wire experiment');
   if (!submitted.length) issues.push('No submitted provider requests');
   if (report.sourceUnchanged !== true) issues.push('TEA source stability was not confirmed');
+  if (report.piSourceUnchanged === false) issues.push('Pi source stability was not confirmed');
   if (report.workspaceContextIsolated !== true || report.invalidated) issues.push('External instruction isolation was not confirmed');
   if (submitted.some(row => JSON.stringify(row.normalizedControls) !== JSON.stringify(expectedControls))) issues.push('Missing or mismatched common request controls');
   const runs = report.runs || [];
