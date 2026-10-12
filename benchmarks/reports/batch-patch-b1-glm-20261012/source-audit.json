@@ -1,0 +1,150 @@
+{
+  "runtimeChangedFiles": [
+    "src/tools.mjs"
+  ],
+  "allOtherEngineFilesAndPackageUnchanged": [
+    {
+      "path": "package.json",
+      "sha256": "55c9e92f3ce4278f3eb45111b0b0a74229f0917e07a81aa92fea0f50f96bf043"
+    },
+    {
+      "path": "src/agent.mjs",
+      "sha256": "f35df1d42aa625b7d6a7ab1243f7bb60e8ad0e885c143a6482b7358163a67d26"
+    },
+    {
+      "path": "src/benchmark.mjs",
+      "sha256": "c5e52911bf7f38a9f33754a5c819a157daa5683e39cfeef905bbd6fdc10b6289"
+    },
+    {
+      "path": "src/cli.mjs",
+      "sha256": "4c59f78fe76f8db2d59db389d2152a89b9fe075583ae7eace056e5f94ab65af0"
+    },
+    {
+      "path": "src/compaction-experiment.mjs",
+      "sha256": "78769248909ef041ad6ec7cfc54df2a391ca74958d78406efa44927ce3b2633c"
+    },
+    {
+      "path": "src/compaction.mjs",
+      "sha256": "bae3d58421b3c10612e9fed313f2cdf2d03f551868197ef4e7827c751ea9c27b"
+    },
+    {
+      "path": "src/comparison-fixtures.mjs",
+      "sha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d"
+    },
+    {
+      "path": "src/comparison-gateway.mjs",
+      "sha256": "a59acea278f0ec74cbf3f25d6b9bb5caa194aaa089a409074c689ff9c4864afc"
+    },
+    {
+      "path": "src/comparison-pi-rpc.mjs",
+      "sha256": "fbf30c26fb542c85533db68d7eea75efe253d52d7db1428bc6a726711b35b239"
+    },
+    {
+      "path": "src/comparison-pi.mjs",
+      "sha256": "1ec8e165ad2311524c8e4924878a4d96dc7048a3af14b8db7f57a560548298e2"
+    },
+    {
+      "path": "src/comparison-report.mjs",
+      "sha256": "becc1d41f17d222df375b62e79251057a32455248ae9a4aa1d8389c3c4e06f6e"
+    },
+    {
+      "path": "src/comparison-revision-report.mjs",
+      "sha256": "9a7db34af8ba3a5386b0dcda9b765b6984a3bee510a63d04c457c36e56f2fa1b"
+    },
+    {
+      "path": "src/comparison-revisions.mjs",
+      "sha256": "0b22a4a38d7bf3646ad4ca5d84148ec98b8139d6523b57d72eac85cc04108da0"
+    },
+    {
+      "path": "src/comparison-source-capture.mjs",
+      "sha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa"
+    },
+    {
+      "path": "src/comparison-turn-audit.mjs",
+      "sha256": "787108eb067dd352e20311585acd45081f6470ea39429185cf644b82647b711b"
+    },
+    {
+      "path": "src/comparison-validation.mjs",
+      "sha256": "aad6f26e069c7569aea991026a4189dc3b76d34db9f9d09bcc4a77998199c4e9"
+    },
+    {
+      "path": "src/config.mjs",
+      "sha256": "73bb9ff6fad59b5b9b3b984046c54bedecfca0f147f7dec84e9317f492ecbc0c"
+    },
+    {
+      "path": "src/context-assembler.mjs",
+      "sha256": "4c597a09ee562c44e2881881e4a12184b6138e91ed438f68602ef1ed2b340dff"
+    },
+    {
+      "path": "src/context.mjs",
+      "sha256": "fe3712bf50f965d8fdcf4a84290e7e78f58e70c96476865cd5cf4f6fa1f386ca"
+    },
+    {
+      "path": "src/contextos-benchmark.mjs",
+      "sha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c"
+    },
+    {
+      "path": "src/ledger.mjs",
+      "sha256": "7ac67058a32d247b2bf30492972a0bda0e5b59b321f4eddf8fad99e9f2852c87"
+    },
+    {
+      "path": "src/memory-benchmark.mjs",
+      "sha256": "9096cba9b8a6d96e26a9eb2f7e075aedc0901943636ef60a16c7450aa10c5543"
+    },
+    {
+      "path": "src/memory-handoff.mjs",
+      "sha256": "d553203cf5fdbf7c786747c8b54a18320bdc3d7621c682f984441738de2127f8"
+    },
+    {
+      "path": "src/memory.mjs",
+      "sha256": "0b215e127d7973d9fd164a334eecc5c986c3b5fcb2849d87fefdb642c8bb9692"
+    },
+    {
+      "path": "src/model.mjs",
+      "sha256": "74fbcc13a3ce31c9b498f20fff3259a275161dc6b4b7a7ab984341b7822e136b"
+    },
+    {
+      "path": "src/output.mjs",
+      "sha256": "d35dbc4031dbb94f9b6be11ad56ec28f369ebe5764c7fa01adf06a0515870def"
+    },
+    {
+      "path": "src/policy.mjs",
+      "sha256": "bf4c5c51c387a5c320de993e20f7cef998d37133d59cf51c7f663e27530354cd"
+    },
+    {
+      "path": "src/run-id.mjs",
+      "sha256": "13ed48178930c77d1b2b0ced0b320e6c5461bafc1a01ddb88b625e1ec579a475"
+    },
+    {
+      "path": "src/runtime-benchmark.mjs",
+      "sha256": "43efec1b45020144d011262d8c8641eee76877bef6e27f5920a489f771f3a28a"
+    },
+    {
+      "path": "src/session-journal.mjs",
+      "sha256": "7fbf901dd1d2d89696a504a29470d1935e6df0407d77d8ef8278e1e943413a4c"
+    },
+    {
+      "path": "src/session-memory.mjs",
+      "sha256": "70f07d8c05b1fdb1435e2b88cf710cf1e87b10937ec316fdc475d96c82a5759e"
+    },
+    {
+      "path": "src/terminal.mjs",
+      "sha256": "e5ca4b9974e867656e218247df94a9da4400bc729e88741d2e88f937bf4478f0"
+    },
+    {
+      "path": "src/tool-feedback.mjs",
+      "sha256": "e3b9e4f657000980b057c8d39a7ca3277d492b5533872f771f5769941f1a73fc"
+    },
+    {
+      "path": "src/usage.mjs",
+      "sha256": "eb3e7f7b1f91dc9fc35d49b37d891d0db55a58ac2b5566f866f0298652c08bd4"
+    }
+  ],
+  "runtimeRestoredToParent": true,
+  "directoryCapRemainsReverted": true,
+  "revertCommits": [
+    "9f3e3af",
+    "4b98a1f"
+  ],
+  "restoredHead": "4b98a1fc32989d649df90bd3a46c93db284f478e"
+}

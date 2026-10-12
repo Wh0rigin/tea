@@ -1,0 +1,30 @@
+{
+  "kind": "scripted native multi-edit diagnostic; model choices prescribed",
+  "paidRequestsAdded": 0,
+  "providerTokenImprovement": null,
+  "unit": "serialized native request bytes (normalized workspace)",
+  "results": [
+    {
+      "role": "baseline",
+      "commit": "ffd07a1a0c6e57047486661e2936f02660011a11",
+      "requests": 6,
+      "toolCalls": 6,
+      "totalWireBytes": 29038,
+      "firstWireBytes": 3662,
+      "accepted": true,
+      "validationAttempts": 1,
+      "finalSourceSha256": "2317b15f2bd1aa35eefe98bf1333e902e5afb80992a441e47f8c0c0d92726179"
+    },
+    {
+      "role": "candidate",
+      "commit": "5bc1d477a5bc6fc2b7da1a5c6a14c4a63c0d6809",
+      "requests": 4,
+      "toolCalls": 4,
+      "totalWireBytes": 19908,
+      "firstWireBytes": 4055,
+      "accepted": true,
+      "validationAttempts": 1,
+      "finalSourceSha256": "2317b15f2bd1aa35eefe98bf1333e902e5afb80992a441e47f8c0c0d92726179"
+    }
+  ]
+}
