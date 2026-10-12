@@ -9,8 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),execute=promisify(execFile);
 const baseline=process.argv[2],candidate=process.argv[3];
 if(!baseline||!candidate)throw new Error('Pass frozen baseline and candidate revisions');
-const runId='reference-recovery-contract-'+Date.now(),controls=new Set();
-let requestOrdinal=0;
+const runId='reference-recovery-contract-'+Date.now(),counters=new Map(),controls=new Set();
 let initialBaselineEntries=null,initialCandidateEntries=null;
 const event=value=>`data: ${JSON.stringify(value)}\n\n`;
 const server=createServer(async(request,response)=>{
@@ -18,10 +17,9 @@ const server=createServer(async(request,response)=>{
     const chunks=[];for await(const chunk of request)chunks.push(chunk);
     const body=JSON.parse(Buffer.concat(chunks).toString());assert.equal(request.headers['x-api-key'],'loopback-only-no-real-key');
     controls.add(JSON.stringify({model:body.model,thinking:body.thinking,effort:body.output_config,output:body.max_tokens}));
-    // Seeded sessions deliberately have no first-turn workspace banner. The
-    // serial six-request protocol has a fixed alternating arm schedule.
-    const ordinal=requestOrdinal++,runIndex=Math.floor(ordinal/6),round=ordinal%6;
-    const role=['baseline','candidate','candidate','baseline','baseline','candidate'][runIndex],caseId='historical-recall-r'+(Math.floor(runIndex/2)+1);assert.ok(role);
+    const text=body.messages.map(m=>typeof m.content==='string'?m.content:'').join('\n');
+    const role=text.match(/Workspace: [^\n]+[\\/](baseline|candidate)(?:\n|$)/)?.[1],caseId=text.match(/historical-recall-r\d+/)?.[0];assert.ok(role&&caseId);
+    const key=role+'/'+caseId,round=counters.get(key)||0;counters.set(key,round+1);
     const call=(name,input,n=0)=>({type:'tool_use',id:`recovery-${caseId}-${round}-${n}`,name,input});
     let blocks;
     if(round===0){
@@ -48,7 +46,7 @@ const server=createServer(async(request,response)=>{
     }
     payload+=event({type:'message_delta',delta:{stop_reason:round<5?'tool_use':'end_turn'},usage:{output_tokens:20}})+event({type:'message_stop'});
     response.writeHead(200,{'content-type':'text/event-stream'});response.end(payload);
-  }catch(error){console.error('Contract assertion:',error.message);response.writeHead(500);response.end(error.message);}
+  }catch(error){response.writeHead(500);response.end(error.message);}
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 try{
