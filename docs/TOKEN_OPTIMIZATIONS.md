@@ -272,3 +272,9 @@
 - 自编 JavaScript、三缺陷家族、三次重复，不证明未见项目泛化。ContextOS 主动开启，默认完整历史。通过 feature/contextos 与 PR #3 交付，未合并 main。
 
 [默认额度详细结果](../benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.zh-CN.md) · [主实验与长会话](../benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.zh-CN.md) · [冻结协议](CONTEXTOS_PI_EXPERIMENT.md)。
+
+## 2026-10-12：小任务额外请求诊断
+
+只读检查全部 9 个 TEA 加密会话，79/79 原生请求哈希与网关原记录一致，无新模型调用或运行时变更。平均每请求 TEA 小 11.34%，但请求 79/46、多 71.74%；最坏 Unicode 配对贡献净超额的 90.63%。21 次 Shell 拒绝中 20 次在公开验证已通过后发生；参数内 JavaScript 字符也被整段命令过滤，缺少可用的补充验证路径和不可重试反馈。该例随后一度移除导出、写出无效声明，再修复，最终触顶。
+
+最大请求 18,172 字节，小于 32,000 目标；可恢复驱逐为零，旧源码失效屏蔽累计仅减少 2.10% 请求字节。优先候选为能力协商、通用错误分类、结构化验证、进度判断及版本化补丁回执；每项需单独与当前 TEA 配对验证，不能通过公开测试一绿就强制成功或为三类样本写特例。当前没有新改善百分比。[完整分析、方案与图表](../benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.zh-CN.md)。

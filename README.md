@@ -137,6 +137,8 @@ Default-quota results differ by size: small tasks use **52.26% more** TEA tokens
 
 These are self-authored JavaScript bug fixtures; larger repositories add unrelated modules. Three repeats do not prove unseen-project generalization. Native prompts, tool protocols and cache policies differ. ContextOS remains opt-in. Token reductions are not invoice reductions; stronger compression can reduce cache reuse. Earlier full-history TEA/Pi results remain [recorded separately](benchmarks/reports/tea-vs-pi-glm-20261011/README.md): +4.49% at 64k bytes and +8.78% in the 80k large-only profile. [Protocol and comparison guide](docs/PI_COMPARISON.md).
 
+[Small-task diagnosis](benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.md): 79/46 requests, 21 denied shell calls and one dominant recovery loop explain the observed aggregate regression; proposed fixes have no measured savings yet.
+
 ![Default-24 fresh tasks](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![Actual long conversation](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)

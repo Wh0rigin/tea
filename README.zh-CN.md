@@ -159,6 +159,8 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 
 这些是自编 JavaScript 缺陷，规模增加主要添加无关模块；三次重复不能证明未见项目泛化。保留双方原生提示、工具与缓存策略。ContextOS 仍需主动开启，Token 降幅不等于账单降幅，压缩也可能降低缓存复用。旧完整历史 TEA/Pi 的 64k 多 4.49%、80k 大型多 8.78% 结果[单独保留](benchmarks/reports/tea-vs-pi-glm-20261011/README.zh-CN.md)。[对比说明](docs/PI_COMPARISON.zh-CN.md)。
 
+[小任务专项诊断](benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.zh-CN.md)：79/46 次请求、21 次 Shell 拒绝和一个显著的恢复循环构成主要成本问题；解决方案的实际收益尚未测量。
+
 ![默认 24 次额度短任务](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![真实长会话累计 Token](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
