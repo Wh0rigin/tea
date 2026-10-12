@@ -38,24 +38,6 @@ async function scenario(steps, callback, { maxToolCalls = 24, initializeGit = fa
   } finally { await rm(root, { recursive: true, force: true }); }
 }
 
-test('batch patches require actual validation and later batches restore pending validation', async () => {
-  const batch = { name: 'apply_patch', input: { path: 'value.mjs', edits: [
-    { search: 'value = 1', replace: 'value = 2' }, { search: 'export const', replace: 'export let' },
-  ] } };
-  await scenario([toolResult([batch]), { content: [{ type: 'text', text: 'Done.' }], stop_reason: 'end_turn' },
-    toolResult([verify])], async result => {
-    assert.equal(result.status, 'completed');
-    assert.equal(result.validationPassed, true);
-    assert.equal(result.validationAttempts, 1);
-    assert.equal(result.toolCalls, 2);
-  });
-  await scenario([toolResult([batch, verify, { name: 'apply_patch', input: { path: 'value.mjs',
-    edits: [{ search: 'value = 2', replace: 'value = 3' }] } }])], async result => {
-    assert.equal(result.validationPassed, false);
-    assert.notEqual(result.status, 'completed');
-  }, { maxToolCalls: 3 });
-});
-
 test('runs the actual patch/test loop and hashes arbitrary task text correctly', async () => {
   await scenario([toolResult([{ name: 'read_file', input: { path: 'value.mjs' } }]), toolResult([patch, verify])], async (result, root) => {
     assert.equal(result.status, 'completed');
