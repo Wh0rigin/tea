@@ -1,0 +1,219 @@
+{
+  "kind": "Scripted frozen-revision native projection equality and byte-only diagnostics",
+  "paidRequestsAdded": 0,
+  "parentCommit": "d40056a66212c6e901f09254f5949bd78dc31694",
+  "candidateCommit": "a7ac3b3e2b26f9718b971c1b8e07e1c87b4fba2c",
+  "providerTokenImprovement": null,
+  "records": [
+    {
+      "signed": false,
+      "count": 0,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "02d3dfeebc09cfa35020360bf24017c934b1b64ec74cabdb9dfc4402b6b7ee48",
+          "wireBytes": 3008,
+          "coldRounds": 0,
+          "evictedUnits": 0
+        },
+        "candidate": {
+          "sha256": "02d3dfeebc09cfa35020360bf24017c934b1b64ec74cabdb9dfc4402b6b7ee48",
+          "wireBytes": 3008,
+          "coldRounds": 0,
+          "evictedUnits": 0
+        }
+      }
+    },
+    {
+      "signed": false,
+      "count": 1,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "75ef841fdb99a6d2bbcfb6ce5dbfa3275d340d91707435dca9ec49849ae2845d",
+          "wireBytes": 4760,
+          "coldRounds": 1,
+          "evictedUnits": 1
+        },
+        "candidate": {
+          "sha256": "75ef841fdb99a6d2bbcfb6ce5dbfa3275d340d91707435dca9ec49849ae2845d",
+          "wireBytes": 4760,
+          "coldRounds": 1,
+          "evictedUnits": 1
+        }
+      }
+    },
+    {
+      "signed": false,
+      "count": 8,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "3a6c9009afc198d876bf16d46c7159e2f103bb1fc897ab886bcc0b28d6c87ae0",
+          "wireBytes": 5474,
+          "coldRounds": 8,
+          "evictedUnits": 8
+        },
+        "candidate": {
+          "sha256": "3a6c9009afc198d876bf16d46c7159e2f103bb1fc897ab886bcc0b28d6c87ae0",
+          "wireBytes": 5474,
+          "coldRounds": 8,
+          "evictedUnits": 8
+        }
+      }
+    },
+    {
+      "signed": false,
+      "count": 9,
+      "expectedEqual": false,
+      "nativeRequestIdentical": false,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "cd8eb372b9b3848409f72bf1d2130fab5085c73ff36232c7447b984fad6655fe",
+          "wireBytes": 5580,
+          "coldRounds": 9,
+          "evictedUnits": 9
+        },
+        "candidate": {
+          "sha256": "d2b6235d8696a966daa4afddb3cefb5b0fb2a244dfa307d2866918a6611479cf",
+          "wireBytes": 5595,
+          "coldRounds": 9,
+          "evictedUnits": 9
+        }
+      }
+    },
+    {
+      "signed": false,
+      "count": 40,
+      "expectedEqual": false,
+      "nativeRequestIdentical": false,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "bc7cbebb535c1319f6d67a1186eb07b7b0dcac6f5b13f5c76208b7f2f282a67b",
+          "wireBytes": 8746,
+          "coldRounds": 40,
+          "evictedUnits": 40
+        },
+        "candidate": {
+          "sha256": "236b43609930f6a873c146539cd654712a499cea0fca46baa2fcbdf09e834160",
+          "wireBytes": 5600,
+          "coldRounds": 40,
+          "evictedUnits": 40
+        }
+      }
+    },
+    {
+      "signed": true,
+      "count": 0,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "33275cf11c406b077e92cddfaad8e19f5e875bd09c76cc6e75f87dfe6ab1e734",
+          "wireBytes": 3162,
+          "coldRounds": 0,
+          "evictedUnits": 0
+        },
+        "candidate": {
+          "sha256": "33275cf11c406b077e92cddfaad8e19f5e875bd09c76cc6e75f87dfe6ab1e734",
+          "wireBytes": 3162,
+          "coldRounds": 0,
+          "evictedUnits": 0
+        }
+      }
+    },
+    {
+      "signed": true,
+      "count": 1,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "37f3caab5073058ea1edef8308f4fd32acb3bd78ad2606190603d3b772d10ee6",
+          "wireBytes": 5101,
+          "coldRounds": 0,
+          "evictedUnits": 1
+        },
+        "candidate": {
+          "sha256": "37f3caab5073058ea1edef8308f4fd32acb3bd78ad2606190603d3b772d10ee6",
+          "wireBytes": 5101,
+          "coldRounds": 0,
+          "evictedUnits": 1
+        }
+      }
+    },
+    {
+      "signed": true,
+      "count": 8,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "de2a256e1cf96694be90c4569ed5a5a7de89c9b69417f69574895b96cddde446",
+          "wireBytes": 8048,
+          "coldRounds": 0,
+          "evictedUnits": 8
+        },
+        "candidate": {
+          "sha256": "de2a256e1cf96694be90c4569ed5a5a7de89c9b69417f69574895b96cddde446",
+          "wireBytes": 8048,
+          "coldRounds": 0,
+          "evictedUnits": 8
+        }
+      }
+    },
+    {
+      "signed": true,
+      "count": 9,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "d820d0cfa16e050e24d836503e1546e05b32de9a17aed5d3ad7888ef2da0f436",
+          "wireBytes": 8474,
+          "coldRounds": 0,
+          "evictedUnits": 9
+        },
+        "candidate": {
+          "sha256": "d820d0cfa16e050e24d836503e1546e05b32de9a17aed5d3ad7888ef2da0f436",
+          "wireBytes": 8474,
+          "coldRounds": 0,
+          "evictedUnits": 9
+        }
+      }
+    },
+    {
+      "signed": true,
+      "count": 40,
+      "expectedEqual": true,
+      "nativeRequestIdentical": true,
+      "canonicalUnchanged": true,
+      "roles": {
+        "baseline": {
+          "sha256": "946bb4799a52cde70128d0ada635d1b6ee2acb64ff8e357b0fa517050fc195b3",
+          "wireBytes": 21650,
+          "coldRounds": 0,
+          "evictedUnits": 40
+        },
+        "candidate": {
+          "sha256": "946bb4799a52cde70128d0ada635d1b6ee2acb64ff8e357b0fa517050fc195b3",
+          "wireBytes": 21650,
+          "coldRounds": 0,
+          "evictedUnits": 40
+        }
+      }
+    }
+  ]
+}

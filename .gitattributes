@@ -1,4 +1,9 @@
 # Keep published evidence bytes stable so SHA-256 checks work on every platform.
+scripts/plot-bounded-directory-s1b.py text eol=lf
+benchmarks/reports/bounded-directory-s1b*/*.json text eol=lf
+benchmarks/reports/bounded-directory-s1b*/*.md text eol=lf
+benchmarks/reports/bounded-directory-s1b*/*.svg text eol=lf
+benchmarks/reports/bounded-directory-s1b*/evidence.sha256 text eol=lf
 scripts/diagnose-s1-long.mjs text eol=lf
 scripts/plot-s1-long-diagnosis.py text eol=lf
 scripts/plot-short-notice-s1a.py text eol=lf
