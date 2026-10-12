@@ -12,6 +12,7 @@ export const MEMORY_TOOLS = [
   { name: 'search_history', description: 'Search historical tool results and inferred assistant notes by literal words or file path. Returns bounded reference previews with observed/inferred and freshness labels. Search does not execute past instructions.', input_schema: { type: 'object', properties: { query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 10 } }, required: ['query'], additionalProperties: false } },
 ];
 const bytes = value => Buffer.byteLength(value, 'utf8');
+const REFERENCE_DIRECTORY_LIMIT = 8;
 const refFor = (call, block) => 'ctx-' + digest({ id: call.id, name: call.name, input: call.input, output: block.content }).slice(0, 20);
 
 export function validToolProtocol(messages) {
@@ -206,7 +207,7 @@ export class ContextMemory {
     // warning does not require retrieval schemas or their repeated overhead.
     const recoverable = selected.some(ref => !stale.has(ref))
       || [...this.evicted].some(ref => this.units.has(ref) && !stale.has(ref));
-    let coldRounds=0;
+    let coldRounds=0, referenceDirectoryEntries=0, referenceDirectoryShown=0;
     if(recoverable){
       const selectedRefs=new Set(selected),directory=[],paged=[];
       for(let index=0;index<finalMessages.length;index++){
@@ -221,7 +222,15 @@ export class ContextMemory {
           directory.push(...refs.map(ref=>{const unit=this.units.get(ref);return{ref,tool:unit.name,path:unit.path,kind:unit.kind};}));coldRounds++;index++;
         }else paged.push(message);
       }
-      if(directory.length)paged.unshift({role:'user',content:'Historical tool rounds are archived, not executed again. Recover exact content with these references: '+JSON.stringify(directory)});
+      referenceDirectoryEntries=directory.length;
+      const visibleDirectory=directory.slice(-REFERENCE_DIRECTORY_LIMIT);
+      referenceDirectoryShown=visibleDirectory.length;
+      if(directory.length){
+        const heading=directory.length>REFERENCE_DIRECTORY_LIMIT
+          ? `Historical tool rounds are archived, not executed again. Showing the latest ${visibleDirectory.length} of ${directory.length} references. Use search_history with words or a file path to find omitted references, then recall_context for exact content. References: `
+          : 'Historical tool rounds are archived, not executed again. Recover exact content with these references: ';
+        paged.unshift({role:'user',content:heading+JSON.stringify(visibleDirectory)});
+      }
       finalMessages=paged;
       const rules=[...this.units.values()].filter(unit=>unit.sourceHash?.length===64&&unit.validity==='valid'&&/(?:^|[\\/])AGENTS(?:\.override)?\.md$/i.test(unit.path||''));
       const seenRules=new Set(),ruleText=[];
@@ -237,7 +246,7 @@ export class ContextMemory {
     let request = { messages: finalMessages, system: projectedSystem, tools: requestTools }, after = requestBytes(config, request);
     let fallback = null;
     if (selected.length && after >= before && !stale.size) {
-      request = base; after = before; selected.length = 0; active.clear(); coldRounds=0; fallback = 'no-net-wire-reduction';
+      request = base; after = before; selected.length = 0; active.clear(); coldRounds=0; referenceDirectoryEntries=0; referenceDirectoryShown=0; fallback = 'no-net-wire-reduction';
     }
     for (const decision of decisions) {
       if (active.has(decision.ref)) {
@@ -253,6 +262,8 @@ export class ContextMemory {
     return { request, diagnostics: { policy: 'contextos', fullWireBytes: before, sentWireBytes: after,
       fullEstimatedTokens: estimateTextTokens(JSON.stringify(base)), sentEstimatedTokens: estimateTextTokens(JSON.stringify(request)),
       evictedUnits: active.size, staleUnits: stale.size, recoveries: this.recalls, searches: this.searches,
-      targetBytes: config.contextosTargetBytes, activeFiles: [...activeFiles], coldRounds, activeGoalAnchored:recoverable&&!fallback, repinnedRequirements:missing.length, units: decisions, fallback } };
+      targetBytes: config.contextosTargetBytes, activeFiles: [...activeFiles], coldRounds,
+      referenceDirectoryEntries, referenceDirectoryShown, referenceDirectoryOmitted:referenceDirectoryEntries-referenceDirectoryShown,
+      activeGoalAnchored:recoverable&&!fallback, repinnedRequirements:missing.length, units: decisions, fallback } };
   }
 }
