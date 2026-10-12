@@ -297,15 +297,9 @@ export class WorkspaceTools {
     return `Session mapping saved with source occurrence evidence: ${query} -> ${target}; evidence=${relative}#L${line}@${sourceHash.slice(0, 16)}. Applies only to this in-memory conversation.`;
   }
 
-  async applyPatch({ path: relativePath, search, replace, edits } = {}) {
-    const batch = edits !== undefined;
-    if (batch && (search !== undefined || replace !== undefined)) {
-      throw new ToolFeedbackError('INPUT_INVALID', 'Use either search/replace or edits, not both');
-    }
-    const replacements = batch ? edits : [{ search, replace }];
-    if (!Array.isArray(replacements) || !replacements.length || replacements.length > 64
-      || replacements.some(edit => !edit || typeof edit.search !== 'string' || !edit.search.length || typeof edit.replace !== 'string')) {
-      throw new ToolFeedbackError('INPUT_INVALID', 'Provide 1-64 edits with non-empty search strings and replace strings, or one search/replace');
+  async applyPatch({ path: relativePath, search, replace } = {}) {
+    if (typeof search !== 'string' || !search.length || typeof replace !== 'string') {
+      throw new ToolFeedbackError('INPUT_INVALID', 'apply_patch requires a non-empty search string and a replace string');
     }
     if (typeof relativePath === 'string' && (relativePath === '.git' || relativePath.startsWith('.git/') || relativePath === '.env' || relativePath.startsWith('.env.'))) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
@@ -320,22 +314,11 @@ export class WorkspaceTools {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
     const source = await readFile(filename, 'utf8');
-    const spans = replacements.map(edit => {
-      const first = source.indexOf(edit.search);
-      if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
-      if (source.indexOf(edit.search, first + (batch ? 1 : edit.search.length)) >= 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text is ambiguous; include more surrounding lines');
-      return { first, end: first + edit.search.length, replace: edit.replace };
-    }).sort((a, b) => a.first - b.first);
-    for (let index = 1; index < spans.length; index++) {
-      if (spans[index].first < spans[index - 1].end) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch edits overlap; combine them into one replacement');
-    }
-    let cursor = 0, updated = '';
-    for (const span of spans) {
-      updated += source.slice(cursor, span.first) + span.replace;
-      cursor = span.end;
-    }
-    await writeFile(filename, updated + source.slice(cursor), 'utf8');
-    return `Updated ${normalizedPath}${batch ? ` (${spans.length} replacements)` : ''}`;
+    const first = source.indexOf(search);
+    if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
+    if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text is ambiguous; include more surrounding lines');
+    await writeFile(filename, source.slice(0, first) + replace + source.slice(first + search.length), 'utf8');
+    return `Updated ${normalizedPath}`;
   }
 
   async runTests({ command } = {}) {
@@ -445,7 +428,7 @@ export const TOOL_DEFINITIONS = [
   { name: 'list_files', description: 'List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
   { name: 'search_code', description: 'Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
-  { name: 'apply_patch', description: 'Replace unique exact text spans in one file. Use search/replace for one change or edits for multiple independent changes. All edits match the original file; combine overlapping changes. Batch known changes and keep search text short but unique.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' }, edits: { type: 'array', minItems: 1, maxItems: 64, items: { type: 'object', properties: { search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['search', 'replace'], additionalProperties: false } } }, required: ['path'], additionalProperties: false } },
+  { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
   { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
 ];
