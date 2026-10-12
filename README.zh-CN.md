@@ -161,6 +161,8 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 
 [小任务专项诊断](benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.zh-CN.md)：79/46 次请求、21 次 Shell 拒绝和一个显著的恢复循环构成主要成本问题；解决方案的实际收益尚未测量。
 
+[改进计划](docs/SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)：先完善评测，再逐项处理能力反馈、结构化验证、进度与结束判断、版本化补丁回执，最后做独立任务确认。每项与直接父版对照，计划目标不写成已实现收益。
+
 ![默认 24 次额度短任务](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![真实长会话累计 Token](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)

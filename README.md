@@ -139,6 +139,8 @@ These are self-authored JavaScript bug fixtures; larger repositories add unrelat
 
 [Small-task diagnosis](benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.md): 79/46 requests, 21 denied shell calls and one dominant recovery loop explain the observed aggregate regression; proposed fixes have no measured savings yet.
 
+[Improvement plan](docs/SMALL_TASK_IMPROVEMENT_PLAN.md): evaluation, capability feedback, structured validation, progress/completion, versioned patch receipts and independent confirmation. Each candidate is measured separately against its direct parent; targets are not measured gains.
+
 ![Default-24 fresh tasks](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![Actual long conversation](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
