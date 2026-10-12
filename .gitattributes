@@ -1,6 +1,8 @@
 # Keep published evidence bytes stable so SHA-256 checks work on every platform.
 scripts/diagnose-s1-long.mjs text eol=lf
 scripts/plot-s1-long-diagnosis.py text eol=lf
+scripts/plot-short-notice-s1a.py text eol=lf
+tests/capability-notice-scope.test.mjs text eol=lf
 benchmarks/reports/contextos-c-vs-pi*/*.json text eol=lf
 benchmarks/reports/contextos-c-vs-pi*/*.md text eol=lf
 benchmarks/reports/contextos-c-vs-pi*/*.svg text eol=lf
@@ -14,3 +16,7 @@ benchmarks/reports/small-task-s1*/*.json text eol=lf
 benchmarks/reports/small-task-s1*/*.md text eol=lf
 benchmarks/reports/small-task-s1*/*.svg text eol=lf
 benchmarks/reports/small-task-s1*/evidence.sha256 text eol=lf
+benchmarks/reports/short-notice-s1a*/*.json text eol=lf
+benchmarks/reports/short-notice-s1a*/*.md text eol=lf
+benchmarks/reports/short-notice-s1a*/*.svg text eol=lf
+benchmarks/reports/short-notice-s1a*/evidence.sha256 text eol=lf

@@ -1,0 +1,843 @@
+{
+  "stage": "S1a",
+  "parentCommit": "eb39591bd7e6fcee354a5ee660abb356c936c701",
+  "candidateCommit": "efc942daab0d09da196d515c8f0e7799833bf417",
+  "state": "complete",
+  "cohorts": [
+    {
+      "name": "long",
+      "runId": "short-notice-s1a-long-glm-20261012-1791791834935769200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 789,
+      "accountedUsd": 2.9908648000000264,
+      "roles": {
+        "baseline": {
+          "inputTokens": 1830745,
+          "outputTokens": 9803,
+          "totalTokens": 1840548,
+          "requests": 393,
+          "toolCalls": 214,
+          "runs": 6,
+          "accepted": 6,
+          "qualityDimensions": {
+            "codeCorrect": 6,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 6,
+            "nativePostEditValidation": 6,
+            "nativeCompleted": 6,
+            "usageComplete": 6
+          },
+          "elapsedP95Ms": 456611.5,
+          "elapsedMedianMs": 371077.5,
+          "cacheReadInputTokens": 829824,
+          "uncachedInputTokens": 1000921,
+          "readOnlyTokens": 1653055,
+          "repairTokens": 187493
+        },
+        "candidate": {
+          "inputTokens": 1838627,
+          "outputTokens": 9971,
+          "totalTokens": 1848598,
+          "requests": 396,
+          "toolCalls": 217,
+          "runs": 6,
+          "accepted": 6,
+          "qualityDimensions": {
+            "codeCorrect": 6,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 6,
+            "nativePostEditValidation": 6,
+            "nativeCompleted": 6,
+            "usageComplete": 6
+          },
+          "elapsedP95Ms": 406050.25,
+          "elapsedMedianMs": 389715.5,
+          "cacheReadInputTokens": 830528,
+          "uncachedInputTokens": 1008099,
+          "readOnlyTokens": 1645601,
+          "repairTokens": 202997
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "long-30-r1",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 307867,
+          "candidateTokens": 309741,
+          "reductionPercent": -0.6087044080723247,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r2",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 307996,
+          "candidateTokens": 308015,
+          "reductionPercent": -0.006168911284554213,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r3",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 306319,
+          "candidateTokens": 309230,
+          "reductionPercent": -0.9503165001191638,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r4",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 304458,
+          "candidateTokens": 306218,
+          "reductionPercent": -0.5780764506105873,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r5",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 307001,
+          "candidateTokens": 307324,
+          "reductionPercent": -0.10521138367627358,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r6",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 306907,
+          "candidateTokens": 308070,
+          "reductionPercent": -0.37894215511540263,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "long-session",
+          "baselineTokens": 1840548,
+          "candidateTokens": 1848598,
+          "reductionPercent": -0.43736973988182104
+        }
+      ],
+      "tokenReductionPercent": -0.43736973988182104,
+      "p95LatencyChangePercent": -11.073144237497301,
+      "familyAcceptanceNonregression": true,
+      "pairedRepeatBootstrap95Percent": [
+        -0.6853876614961063,
+        -0.18512669286359085
+      ],
+      "readOnlyTokenReductionPercent": 0.45092268557307413,
+      "repairTokenReductionPercent": -8.26910871339197
+    },
+    {
+      "name": "small",
+      "runId": "short-notice-s1a-small-glm-20261012-1791791834935769200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 304,
+      "accountedUsd": 0.44016519999999904,
+      "roles": {
+        "baseline": {
+          "inputTokens": 235225,
+          "outputTokens": 8435,
+          "totalTokens": 243660,
+          "requests": 146,
+          "toolCalls": 154,
+          "runs": 30,
+          "accepted": 29,
+          "qualityDimensions": {
+            "codeCorrect": 29,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 30,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          },
+          "elapsedP95Ms": 34829.34999999999,
+          "elapsedMedianMs": 24348.5,
+          "cacheReadInputTokens": 111296,
+          "uncachedInputTokens": 123929
+        },
+        "candidate": {
+          "inputTokens": 251236,
+          "outputTokens": 9778,
+          "totalTokens": 261014,
+          "requests": 158,
+          "toolCalls": 163,
+          "runs": 30,
+          "accepted": 30,
+          "qualityDimensions": {
+            "codeCorrect": 30,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 30,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          },
+          "elapsedP95Ms": 41153.99999999999,
+          "elapsedMedianMs": 28123.5,
+          "cacheReadInputTokens": 122176,
+          "uncachedInputTokens": 129060
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "small-cache-key-r1",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 7849,
+          "candidateTokens": 10304,
+          "reductionPercent": -31.277869792330225,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r1",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6870,
+          "candidateTokens": 6663,
+          "reductionPercent": 3.0131004366812264,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r1",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 6608,
+          "candidateTokens": 7914,
+          "reductionPercent": -19.763922518159816,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r2",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8284,
+          "candidateTokens": 5956,
+          "reductionPercent": 28.102366006760015,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r2",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8189,
+          "candidateTokens": 8857,
+          "reductionPercent": -8.157284161680312,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r2",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 10137,
+          "candidateTokens": 9902,
+          "reductionPercent": 2.318240110486336,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r3",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8628,
+          "candidateTokens": 10434,
+          "reductionPercent": -20.931849791376923,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r3",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6899,
+          "candidateTokens": 6030,
+          "reductionPercent": 12.596028409914483,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r3",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 5995,
+          "candidateTokens": 8032,
+          "reductionPercent": -33.97831526271893,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r4",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8155,
+          "candidateTokens": 7989,
+          "reductionPercent": 2.035561005518083,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r4",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6914,
+          "candidateTokens": 8933,
+          "reductionPercent": -29.201619901648822,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r4",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8191,
+          "candidateTokens": 9855,
+          "reductionPercent": -20.31497985593944,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r5",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 7883,
+          "candidateTokens": 5899,
+          "reductionPercent": 25.168083217049343,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r5",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8133,
+          "candidateTokens": 6081,
+          "reductionPercent": 25.230542235337516,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r5",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8107,
+          "candidateTokens": 7780,
+          "reductionPercent": 4.033551252004441,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r6",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 6215,
+          "candidateTokens": 10275,
+          "reductionPercent": -65.32582461786001,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r6",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 10533,
+          "candidateTokens": 9686,
+          "reductionPercent": 8.041393714990985,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r6",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8307,
+          "candidateTokens": 9719,
+          "reductionPercent": -16.997712772360664,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r7",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 6114,
+          "candidateTokens": 7839,
+          "reductionPercent": -28.213935230618258,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r7",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6851,
+          "candidateTokens": 7989,
+          "reductionPercent": -16.610713764413966,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r7",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 5983,
+          "candidateTokens": 9758,
+          "reductionPercent": -63.09543707170315,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r8",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 10657,
+          "candidateTokens": 5768,
+          "reductionPercent": 45.87595007975979,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r8",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 10599,
+          "candidateTokens": 5852,
+          "reductionPercent": 44.78724407963015,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r8",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 6631,
+          "candidateTokens": 9942,
+          "reductionPercent": -49.93213693258936,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r9",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 5954,
+          "candidateTokens": 10427,
+          "reductionPercent": -75.12596573731945,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r9",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 13381,
+          "candidateTokens": 8808,
+          "reductionPercent": 34.175323219490316,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r9",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 12722,
+          "candidateTokens": 9913,
+          "reductionPercent": 22.079861656972177,
+          "baselineAccepted": false,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r10",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 10134,
+          "candidateTokens": 8762,
+          "reductionPercent": 13.538582987961323,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r10",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6177,
+          "candidateTokens": 13000,
+          "reductionPercent": -110.45815120608711,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r10",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 6560,
+          "candidateTokens": 12647,
+          "reductionPercent": -92.78963414634147,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "small",
+          "baselineTokens": 243660,
+          "candidateTokens": 261014,
+          "reductionPercent": -7.122219486169246
+        }
+      ],
+      "tokenReductionPercent": -7.122219486169246,
+      "p95LatencyChangePercent": 18.15896650382509,
+      "familyAcceptanceNonregression": true
+    },
+    {
+      "name": "scale",
+      "runId": "short-notice-s1a-scale-glm-20261012-1791791834935769200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 273,
+      "accountedUsd": 0.7294876000000022,
+      "roles": {
+        "baseline": {
+          "inputTokens": 429665,
+          "outputTokens": 6166,
+          "totalTokens": 435831,
+          "requests": 129,
+          "toolCalls": 144,
+          "runs": 18,
+          "accepted": 18,
+          "qualityDimensions": {
+            "codeCorrect": 18,
+            "scopeCorrect": 18,
+            "declaredReadRequirements": 18,
+            "nativePostEditValidation": 18,
+            "nativeCompleted": 18,
+            "usageComplete": 18
+          },
+          "elapsedP95Ms": 67227.79999999997,
+          "elapsedMedianMs": 35500.5,
+          "cacheReadInputTokens": 190208,
+          "uncachedInputTokens": 239457
+        },
+        "candidate": {
+          "inputTokens": 434346,
+          "outputTokens": 7505,
+          "totalTokens": 441851,
+          "requests": 144,
+          "toolCalls": 158,
+          "runs": 18,
+          "accepted": 17,
+          "qualityDimensions": {
+            "codeCorrect": 18,
+            "scopeCorrect": 17,
+            "declaredReadRequirements": 18,
+            "nativePostEditValidation": 18,
+            "nativeCompleted": 18,
+            "usageComplete": 18
+          },
+          "elapsedP95Ms": 79218.75,
+          "elapsedMedianMs": 35446.5,
+          "cacheReadInputTokens": 204864,
+          "uncachedInputTokens": 229482
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "medium-cache-key-r1",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 8504,
+          "candidateTokens": 8102,
+          "reductionPercent": 4.7271872060207,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r1",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 6332,
+          "candidateTokens": 6071,
+          "reductionPercent": 4.1219204042956425,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r1",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 10072,
+          "candidateTokens": 9838,
+          "reductionPercent": 2.3232724384432135,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r1",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 48692,
+          "candidateTokens": 37907,
+          "reductionPercent": 22.14942906432268,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r1",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 40823,
+          "candidateTokens": 23939,
+          "reductionPercent": 41.35903779732014,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r1",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": 37233,
+          "candidateTokens": 60580,
+          "reductionPercent": -62.70512717213226,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-cache-key-r2",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 8386,
+          "candidateTokens": 5776,
+          "reductionPercent": 31.123300739327455,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r2",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 8238,
+          "candidateTokens": 7896,
+          "reductionPercent": 4.151493080844871,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r2",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 10106,
+          "candidateTokens": 9864,
+          "reductionPercent": 2.3946170591727656,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r2",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 35217,
+          "candidateTokens": 36664,
+          "reductionPercent": -4.108811085555275,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r2",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 46646,
+          "candidateTokens": 55928,
+          "reductionPercent": -19.89881233117523,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r2",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": 34992,
+          "candidateTokens": 62933,
+          "reductionPercent": -79.84967992684042,
+          "baselineAccepted": true,
+          "candidateAccepted": false
+        },
+        {
+          "caseId": "medium-cache-key-r3",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 8451,
+          "candidateTokens": 9792,
+          "reductionPercent": -15.867944621938236,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r3",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 6061,
+          "candidateTokens": 12615,
+          "reductionPercent": -108.13397129186603,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r3",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 12392,
+          "candidateTokens": 14390,
+          "reductionPercent": -16.12330535829567,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r3",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 47366,
+          "candidateTokens": 9752,
+          "reductionPercent": 79.41139213782039,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r3",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 29167,
+          "candidateTokens": 47107,
+          "reductionPercent": -61.50786848150307,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r3",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": 37153,
+          "candidateTokens": 22697,
+          "reductionPercent": 38.90937474766506,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "large",
+          "baselineTokens": 357289,
+          "candidateTokens": 357507,
+          "reductionPercent": -0.06101503264863695
+        },
+        {
+          "scale": "medium",
+          "baselineTokens": 78542,
+          "candidateTokens": 84344,
+          "reductionPercent": -7.3871304524967485
+        }
+      ],
+      "tokenReductionPercent": -1.3812693452278424,
+      "p95LatencyChangePercent": 17.836296889084615,
+      "familyAcceptanceNonregression": false
+    }
+  ],
+  "pairedQualityRegressions": [
+    {
+      "cohort": "scale",
+      "caseId": "large-unicode-r2",
+      "dimensions": [
+        "scopeCorrect"
+      ]
+    }
+  ],
+  "combined": {
+    "baselineTokens": 2520039,
+    "candidateTokens": 2551463,
+    "tokenReductionPercent": -1.2469648287189106,
+    "paidRequests": 1366,
+    "conservativeSpendUsd": 4.160517600000028,
+    "conservativeGuardUsd": 8
+  },
+  "gates": {
+    "stableKnownComplete": true,
+    "longSavings": false,
+    "longReadOnlySavings": true,
+    "longBootstrapLowerBoundAboveZero": false,
+    "otherScaleTokenNonregression": false,
+    "quality": false,
+    "scope": false,
+    "latency": false
+  },
+  "predeclaredGatesPassed": false,
+  "additionalCorrectnessFinding": {
+    "kind": "resident notice overgeneralizes Windows quote restrictions",
+    "paidHeadlessResultsUnchanged": true,
+    "offlineApprovedCommandPassed": true,
+    "scopeRegressionConfirmed": true,
+    "note": "This is a separate correctness finding, not a retrospective change to the frozen quantitative gates."
+  },
+  "retainCandidate": false,
+  "journalAudit": {
+    "runs": 108,
+    "exactNativeGatewayRequestHashes": 1366,
+    "allJournalsUnchanged": true,
+    "paidRequestsAdded": 0,
+    "roles": {
+      "baseline": {
+        "denials": 2,
+        "failedPatches": 0,
+        "sourceStableFailedPatches": 0,
+        "capabilityDeclarations": 54,
+        "capabilityNoticeBytes": 37746,
+        "feedbackBytes": 788,
+        "sourceVerifiedFinalValidation": 54
+      },
+      "candidate": {
+        "denials": 17,
+        "failedPatches": 0,
+        "sourceStableFailedPatches": 0,
+        "capabilityDeclarations": 54,
+        "capabilityNoticeBytes": 21492,
+        "feedbackBytes": 5003,
+        "sourceVerifiedFinalValidation": 54
+      }
+    }
+  },
+  "verification": {
+    "targetedTests": 15,
+    "fullTests": 269,
+    "passedTests": 269,
+    "skippedTests": 0,
+    "nativeRevisionContractRuns": 18,
+    "scriptedContractRequests": 72,
+    "contractRunId": "s0-contract-1791791717678",
+    "implementationCiUrl": "https://github.com/Wh0rigin/tea/actions/runs/38220482649",
+    "offlineLauncherSetupError": "Exact prepared-state text initially mismatched; fixed before any paid request without changing sources, plan or fixtures.",
+    "restoredRuntime": {
+      "tests": 268,
+      "passed": 268,
+      "failed": 0,
+      "skipped": 0,
+      "scopeRegressionGreen": true,
+      "candidateScopeRegressionRed": true,
+      "runtimeRestoredToParent": true,
+      "revertCommit": "79313d0a8fba50acafd0bf06e37a0909549e2b2f"
+    }
+  },
+  "currentRuntimeState": "reverted to parent; no S1a runtime changes retained"
+}

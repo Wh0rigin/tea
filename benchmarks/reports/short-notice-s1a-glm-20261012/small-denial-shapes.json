@@ -1,0 +1,69 @@
+{
+  "runId": "short-notice-s1a-small-glm-20261012-1791791834935769200",
+  "kind": "read-only sanitized command-shape audit",
+  "results": [
+    {
+      "caseId": "small-unicode-r2",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": false,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    },
+    {
+      "caseId": "small-cache-key-r4",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": true,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    },
+    {
+      "caseId": "small-unicode-r4",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": true,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    },
+    {
+      "caseId": "small-unicode-r8",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": false,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    },
+    {
+      "caseId": "small-cache-key-r9",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": true,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    },
+    {
+      "caseId": "small-unicode-r9",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": true,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    },
+    {
+      "caseId": "small-unicode-r10",
+      "tool": "run_shell",
+      "reason": "shell-operators-or-multiline",
+      "inlineNodeEval": true,
+      "hasSemicolon": true,
+      "hasNewline": false,
+      "providerRequestsAdded": 0
+    }
+  ]
+}

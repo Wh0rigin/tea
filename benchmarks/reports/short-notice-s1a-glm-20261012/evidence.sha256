@@ -1,0 +1,17 @@
+36dcb5bdf91c44afddcfd57844588a58ec7ddcf507636445c523cce6520ef303  benchmarks/reports/short-notice-s1a-glm-20261012/approval-diagnostic.json
+0c8315561844c0afed2a9ecc03693f5db67b5a5f7fad0c4eeb7b9770fa8348cf  benchmarks/reports/short-notice-s1a-glm-20261012/frozen-config.json
+06ee4571c9893c3918642b8e6024063d2a9746c91bdf78d27349e12715fb56e2  benchmarks/reports/short-notice-s1a-glm-20261012/frozen-protocol.md
+8247c864b03d7fa385c6b7599497f727fdc9f1ced6ef8bb720ffc097d6666a53  benchmarks/reports/short-notice-s1a-glm-20261012/journal-audit.json
+2857296e41fe3495bcbee18812cfef5748e5fe7260351f53f0c0618fbf7ffcdf  benchmarks/reports/short-notice-s1a-glm-20261012/long-diagnosis.json
+f030bb0f32c8c2cbdffa3df80185789f1acc51ac79e88fc6664d442e52295eea  benchmarks/reports/short-notice-s1a-glm-20261012/README.md
+452a261b2d42ed465b5295c930cae168e9869c3569f3bb7f7b0d0fedf3daff82  benchmarks/reports/short-notice-s1a-glm-20261012/README.zh-CN.md
+b3268eedbf8da61bc0c85b4528c97c319d60760a9a6a98642bbed7cdf2f0b630  benchmarks/reports/short-notice-s1a-glm-20261012/results.json
+ad78afa832fa335dcec28abc8ca5898fe4b5b777af4a813cff048509dd031606  benchmarks/reports/short-notice-s1a-glm-20261012/s1a-long-tokens.png
+87ad56651dda8b124bd1a946fd96331910b8023c6202d7bc0ebba56697a087f5  benchmarks/reports/short-notice-s1a-glm-20261012/s1a-long-tokens.svg
+2100ec824d305da1484b2c26edc4f5f9ed8fb11eade196303a43c27eb08d7285  benchmarks/reports/short-notice-s1a-glm-20261012/s1a-tokens.png
+650eaa21f478f756e2cb58823934ba93abcc8059263a3bbd62c2dccba0a0eb33  benchmarks/reports/short-notice-s1a-glm-20261012/s1a-tokens.svg
+1d2e491567bea898f6d6c4ada496774eee057913e861c5f18f06735ec8453bcc  benchmarks/reports/short-notice-s1a-glm-20261012/small-denial-shapes.json
+b5a2ed4170aed42f11d967ac9a87c3ac0104fa0b150846ac38f846f2b421fee8  benchmarks/reports/short-notice-s1a-glm-20261012/source-audit.json
+a5e5239897051f0f704338327d0afa3d68c9558821d23d55c4974192fb1defcc  benchmarks/reports/short-notice-s1a-glm-20261012/summary.json
+bfc59098ef539fbd29d93cb3927d0d1abf7f9aeb87bd26ea1658dca164d7e6a8  scripts/plot-short-notice-s1a.py
+972b98e75b623cd2ef65fa7cb538d6ccf5e95bd5807e9716777c24aee0dde5e3  tests/capability-notice-scope.test.mjs

@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 1,
+  "stage": "S1a proposal 1",
+  "state": "complete",
+  "parentCommit": "eb39591bd7e6fcee354a5ee660abb356c936c701",
+  "candidateCommit": "efc942daab0d09da196d515c8f0e7799833bf417",
+  "combinedCapUsd": 8,
+  "perRunCapUsd": 1.4,
+  "plannedRuns": 108,
+  "plannedPairs": 54,
+  "acceptanceVersion": "native-positive-validation-v3",
+  "protocolPath": "docs/SHORT_CAPABILITY_NOTICE_EXPERIMENT.md",
+  "protocolGitSha256": "06ee4571c9893c3918642b8e6024063d2a9746c91bdf78d27349e12715fb56e2",
+  "cohorts": [
+    {
+      "name": "long",
+      "groups": "long-session",
+      "scales": "small",
+      "repeat": 6,
+      "runs": 12,
+      "preflightId": "s1a-prepare-long-1791791834935769200",
+      "runId": "short-notice-s1a-long-glm-20261012-1791791834935769200",
+      "started": true,
+      "guardUsd": 8,
+      "complete": true,
+      "paidRequests": 789,
+      "accountedUsd": 2.9908648000000264,
+      "exitCode": 0
+    },
+    {
+      "name": "small",
+      "groups": "fresh",
+      "scales": "small",
+      "repeat": 10,
+      "runs": 60,
+      "preflightId": "s1a-prepare-small-1791791834935769200",
+      "runId": "short-notice-s1a-small-glm-20261012-1791791834935769200",
+      "started": true,
+      "guardUsd": 5.009135199999974,
+      "complete": true,
+      "paidRequests": 304,
+      "accountedUsd": 0.44016519999999904,
+      "exitCode": 0
+    },
+    {
+      "name": "scale",
+      "groups": "fresh",
+      "scales": "medium,large",
+      "repeat": 3,
+      "runs": 36,
+      "preflightId": "s1a-prepare-scale-1791791834935769200",
+      "runId": "short-notice-s1a-scale-glm-20261012-1791791834935769200",
+      "started": true,
+      "guardUsd": 4.568969999999974,
+      "complete": true,
+      "paidRequests": 273,
+      "accountedUsd": 0.7294876000000022,
+      "exitCode": 0
+    }
+  ],
+  "manifests": [
+    {
+      "cohort": "long",
+      "tasks": [
+        {
+          "taskId": "long-30",
+          "scale": "long-session",
+          "family": "retry-budget",
+          "group": "long-session",
+          "entry": "src/services/retry-budget.mjs",
+          "commit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+          "sha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+          "fileCount": 120,
+          "bytes": 161366,
+          "lines": 2328,
+          "prompts": [
+            "Read src/generated/domain-00/module-0000.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0012.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0024.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0036.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0048.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0060.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0072.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0084.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0096.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-00/module-0108.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0001.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0013.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0025.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0037.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0049.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0061.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0073.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0085.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0097.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-01/module-0109.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0002.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0014.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0026.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0038.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0050.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0062.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0074.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0086.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0098.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Read src/generated/domain-02/module-0110.mjs completely using your native file-reading tool. Read-only inspection: do not edit or execute commands/tests. Reply in at most 12 words.",
+            "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 31
+        }
+      ],
+      "harnessSha256": "5e1fb03eb76728eeed3cccc68cb15b57521af457f437322a13658590e77d7b60",
+      "profile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 180000
+      },
+      "engineProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "engines": {
+        "baseline": {
+          "commit": "eb39591bd7e6fcee354a5ee660abb356c936c701",
+          "sourceSha256": "ca1fe15e8d38daaeddad932175689a437d616b8fad9c3c0e928ca78163a88786"
+        },
+        "candidate": {
+          "commit": "efc942daab0d09da196d515c8f0e7799833bf417",
+          "sourceSha256": "ea45fd18b84f412855a35c0b9c40912afebdf6d62338fa22b02957595c7a15f2"
+        }
+      }
+    },
+    {
+      "cohort": "small",
+      "tasks": [
+        {
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+          "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+          "fileCount": 12,
+          "bytes": 5456,
+          "lines": 112,
+          "prompts": [
+            "Fix cache key collisions between values of different primitive types. Preserve object key order independence and the current API. Read the project instructions, make the smallest relevant change, and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "commit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+          "sha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+          "fileCount": 12,
+          "bytes": 5433,
+          "lines": 113,
+          "prompts": [
+            "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "small-unicode",
+          "scale": "small",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "commit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+          "sha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+          "fileCount": 12,
+          "bytes": 5227,
+          "lines": 109,
+          "prompts": [
+            "Make the text truncation utility count Unicode code points instead of UTF-16 code units, including astral characters. Keep zero limits and shorter strings correct. Read the project instructions, preserve the API, and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        }
+      ],
+      "harnessSha256": "5e1fb03eb76728eeed3cccc68cb15b57521af457f437322a13658590e77d7b60",
+      "profile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 180000
+      },
+      "engineProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "engines": {
+        "baseline": {
+          "commit": "eb39591bd7e6fcee354a5ee660abb356c936c701",
+          "sourceSha256": "ca1fe15e8d38daaeddad932175689a437d616b8fad9c3c0e928ca78163a88786"
+        },
+        "candidate": {
+          "commit": "efc942daab0d09da196d515c8f0e7799833bf417",
+          "sourceSha256": "ea45fd18b84f412855a35c0b9c40912afebdf6d62338fa22b02957595c7a15f2"
+        }
+      }
+    },
+    {
+      "cohort": "scale",
+      "tasks": [
+        {
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "commit": "81ee31e86dfff14bc79e7e90db514263089221fb",
+          "sha256": "151ede096639b8215229215d9e836fc66340ca20df5dab32dd16b00aadf45b52",
+          "fileCount": 120,
+          "bytes": 70347,
+          "lines": 1408,
+          "prompts": [
+            "Fix cache key collisions between values of different primitive types. Preserve object key order independence and the current API. Read the project instructions, make the smallest relevant change, and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "commit": "3922f549375a05db5fe0ced58685d358f3d14684",
+          "sha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+          "fileCount": 120,
+          "bytes": 70324,
+          "lines": 1409,
+          "prompts": [
+            "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "commit": "eaa9e37575da3bdac2a5aa1b70cbec2676353eef",
+          "sha256": "f9cc2b9a8d91b76434ab73e3b7e152dde06edf452419de692d7dbaddaaca5757",
+          "fileCount": 120,
+          "bytes": 70118,
+          "lines": 1405,
+          "prompts": [
+            "Make the text truncation utility count Unicode code points instead of UTF-16 code units, including astral characters. Keep zero limits and shorter strings correct. Read the project instructions, preserve the API, and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "commit": "d75329958490887933052c1a00a3d56e548766f6",
+          "sha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+          "fileCount": 1200,
+          "bytes": 726176,
+          "lines": 14368,
+          "prompts": [
+            "Fix cache key collisions between values of different primitive types. Preserve object key order independence and the current API. Read the project instructions, make the smallest relevant change, and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "commit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+          "sha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+          "fileCount": 1200,
+          "bytes": 726153,
+          "lines": 14369,
+          "prompts": [
+            "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        },
+        {
+          "taskId": "large-unicode",
+          "scale": "large",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+          "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+          "fileCount": 1200,
+          "bytes": 725947,
+          "lines": 14365,
+          "prompts": [
+            "Make the text truncation utility count Unicode code points instead of UTF-16 code units, including astral characters. Keep zero limits and shorter strings correct. Read the project instructions, preserve the API, and run the public tests."
+          ],
+          "initialPublicPassed": true,
+          "initialHiddenPassed": false,
+          "plannedTurns": 1
+        }
+      ],
+      "harnessSha256": "5e1fb03eb76728eeed3cccc68cb15b57521af457f437322a13658590e77d7b60",
+      "profile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 180000
+      },
+      "engineProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "engines": {
+        "baseline": {
+          "commit": "eb39591bd7e6fcee354a5ee660abb356c936c701",
+          "sourceSha256": "ca1fe15e8d38daaeddad932175689a437d616b8fad9c3c0e928ca78163a88786"
+        },
+        "candidate": {
+          "commit": "efc942daab0d09da196d515c8f0e7799833bf417",
+          "sourceSha256": "ea45fd18b84f412855a35c0b9c40912afebdf6d62338fa22b02957595c7a15f2"
+        }
+      }
+    }
+  ],
+  "gates": {
+    "longTotalSavingsRequired": true,
+    "longReadOnlySavingsRequired": true,
+    "longPairedRepeatBootstrapLowerBoundAboveZero": true,
+    "bootstrapSeed": 20261012,
+    "bootstrapSamples": 10000,
+    "scaleTokenRegressionLimitPercent": 0,
+    "pairedQualityRegressionsAllowed": 0,
+    "candidateScopeRequired": true,
+    "p95LatencyRegressionLimitPercent": 10
+  },
+  "fixedAttemptsRetained": true,
+  "knownBillingRequired": true,
+  "preparedAtUtc": "2026-10-12T07:57:53.562151+00:00",
+  "accountedUsd": 4.160517600000028
+}
