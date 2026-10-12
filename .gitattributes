@@ -8,3 +8,7 @@ benchmarks/reports/small-task-s0*/*.json text eol=lf
 benchmarks/reports/small-task-s0*/*.md text eol=lf
 benchmarks/reports/small-task-s0*/*.svg text eol=lf
 benchmarks/reports/small-task-s0*/evidence.sha256 text eol=lf
+benchmarks/reports/small-task-s1*/*.json text eol=lf
+benchmarks/reports/small-task-s1*/*.md text eol=lf
+benchmarks/reports/small-task-s1*/*.svg text eol=lf
+benchmarks/reports/small-task-s1*/evidence.sha256 text eol=lf

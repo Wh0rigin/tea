@@ -2,7 +2,7 @@
 
 ## 当前专项计划（2026-10-12）
 
-小任务诊断后的近期优先级为：S0 评测记录 → S1 能力反馈 → S2 结构化补充验证 → S3 进度与结束判断 → S4 版本化补丁回执 → S5 泛化与整体确认。S0 已完成并停下，S1–S5 尚未实施；每候选单独与直接父版测量，失败则回退并保留证据。[S0 零付费验证报告](../benchmarks/reports/small-task-s0-20261012/README.zh-CN.md)、[完整计划与通过门槛](SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)。以下 V1–V5 保留原版本记录，S0 评测改进不表示新增 Token 优化已通过门槛。
+小任务诊断后的近期优先级为：S0 评测记录 → S1 能力反馈 → S2 结构化补充验证 → S3 进度与结束判断 → S4 版本化补丁回执 → S5 泛化与整体确认。S0、S1 已完成；S1 在 102 次真实对照中全体 Token 减少 11.38%，小任务减少 41.44%，长会话增加 3.67%，默认关闭并等待审核。S2–S5 尚未实施；每候选单独与直接父版测量，失败则回退并保留证据。[S1 结果与负向样本](../benchmarks/reports/small-task-s1-glm-20261012/README.zh-CN.md)、[S0 零付费报告](../benchmarks/reports/small-task-s0-20261012/README.zh-CN.md)、[完整计划](SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)。以下 V1–V5 保留原版本记录，专项实验不代表正式泛化门槛已通过。
 
 当前没有任何优化版本通过统一 Live Benchmark 门禁，因此版本分支和 release tag 仅保留用于既定流程；不能提前发布或移动 `main` 来暗示收益。
 

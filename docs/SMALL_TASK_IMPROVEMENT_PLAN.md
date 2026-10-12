@@ -2,7 +2,7 @@
 
 [中文](SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)
 
-Date: October 12, 2026. Status: S0 complete; stopped at the stage boundary. S1–S5 are not implemented. S0 made no paid calls and measured no provider token benefit. [S0 report](../benchmarks/reports/small-task-s0-20261012/README.md).
+Date: October 12, 2026. Status: S0 and S1 complete; S1 remains disabled by default awaiting review. S2–S5 are not implemented. [Measured S1 report](../benchmarks/reports/small-task-s1-glm-20261012/README.md), [zero-provider S0 report](../benchmarks/reports/small-task-s0-20261012/README.md).
 
 ## Objective and baseline
 
@@ -34,6 +34,8 @@ Completed checks cover nonzero exit, zero tests, early exit, missing tests, stal
 S0 verification: 254/254 complete tests; 18/18 committed parent/candidate native contract tasks; both TEA/Pi client contracts; 20/20 fault preflights across five real upstream repositories. Constructed equivalent-command confirmation changes from 0/18 to 18/18 (+100 percentage points), not token savings. The future 60+42 configurations are prepared with zero paid Agent runs. [Frozen task manifest](../benchmarks/holdouts/small-task-v1.json).
 
 ## S1 — capabilities and actionable errors
+
+Completed: candidate `efaca4129ae2ea1fe58510749ada7464439daff7` versus parent `c97b950`, 267/267 tests, 60 small + 42 protection runs, 1,062 known-usage requests. Small/medium/large provider tokens decrease 41.44%/37.11%/4.53%; long workflow increases 3.67%; full matrix saves 11.38%. Candidate full acceptance 51/51 versus 47/51, independent code 51/51 versus 50/51. Frozen scale-group gates pass. Retain opt-in `TEA_CAPABILITY_FEEDBACK=1`, disabled by default, awaiting review. Eleven small pairs increase tokens; large retry subgroup increases 5.19%. Grading effects and all negative outcomes remain explicit. [Complete evidence](../benchmarks/reports/small-task-s1-glm-20261012/README.md).
 
 Hypothesis: explicit unavailable capabilities and usable alternatives reduce repeated rejected syntax variants.
 
@@ -124,7 +126,7 @@ Initial candidate suite cap: **USD 8**, **USD 1.40/run**. Configure verified acc
 Each stage goes through a PR with its hypothesis/patch, actual verification, source/task/control identities, sanitized request evidence, positive/negative outcomes, PNG/SVG and limits. This plan is delivered with PR #3; merging/release follows repository maintenance policy.
 
 - [x] S0 Evaluation and records (complete; stopped; provider token benefit unmeasured)
-- [ ] S1 Capability/error feedback
+- [x] S1 Capability/error feedback (complete; disabled by default; awaiting review)
 - [ ] S2 Structured validation
 - [ ] S3 Progress/completion
 - [ ] S4 Versioned receipts

@@ -71,4 +71,9 @@ establish S5 holdout generalization or default full-history provider savings.
 Report every family, pair, quality dimension and positive/negative result,
 medians/P95, measured tokens and conservative spend. Cluster uncertainty by task,
 not repeated runs as separate projects. Stop after S1 for user review; do not
-begin S2. The live result is unmeasured until the corresponding report exists.
+begin S2.
+
+The completed [S1 report](../benchmarks/reports/small-task-s1-glm-20261012/README.md)
+records 102 runs, 11.38% fewer overall provider tokens, 41.44% fewer small-task
+tokens and 3.67% more long-workflow tokens. Planned scale-group gates pass. The
+option remains disabled by default while awaiting review; S2 has not started.

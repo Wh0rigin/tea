@@ -165,6 +165,8 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 
 [S0 评测检查](benchmarks/reports/small-task-s0-20261012/README.zh-CN.md) 已完成：254/254 测试、18/18 双提交原生合约任务、20/20 冻结故障任务预检。没有付费调用或真实 Token 收益，停在 S0，尚未进入 S1。
 
+[S1 反馈改进的真实对照](benchmarks/reports/small-task-s1-glm-20261012/README.zh-CN.md)：102 次父版/候选运行，实际 Token 全体**减少 11.38%**、小任务**减少 41.44%**、长会话**增加 3.67%**；候选完整验收 51/51 对 47/51。实验开关 `TEA_CAPABILITY_FEEDBACK=1` 默认关闭，等待审核；不表示每个任务或未见项目都省 Token。
+
 ![默认 24 次额度短任务](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![真实长会话累计 Token](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)

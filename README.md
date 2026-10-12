@@ -143,6 +143,8 @@ These are self-authored JavaScript bug fixtures; larger repositories add unrelat
 
 [S0 evaluation checks](benchmarks/reports/small-task-s0-20261012/README.md) are complete: 254/254 tests, 18/18 native revision contract tasks and 20/20 frozen fault preflights. No paid calls or measured token gains; stopped before S1.
 
+[S1 measured feedback experiment](benchmarks/reports/small-task-s1-glm-20261012/README.md): 102 parent/candidate runs, **11.38% fewer total provider tokens**, small **41.44% fewer**, long workflow **3.67% more**. Candidate acceptance 51/51 versus 47/51; default remains off pending review. Use `TEA_CAPABILITY_FEEDBACK=1` for the experimental option; this narrow result does not prove every-task or unseen-project savings.
+
 ![Default-24 fresh tasks](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![Actual long conversation](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)

@@ -1,0 +1,90 @@
+{
+  "stage": "S1",
+  "schemaVersion": 1,
+  "parentCommit": "c97b950797294f48e31752508af11a80814e66d8",
+  "candidateCommit": "efaca4129ae2ea1fe58510749ada7464439daff7",
+  "preflightId": "s1-prepare-small-1791781874601085700",
+  "smallRunId": "small-task-s1-glm-20261012-1791781874601085700",
+  "combinedCapUsd": 8.0,
+  "perRunCapUsd": 1.4,
+  "profile": {
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "maxRequestInputBound": 160000,
+    "totalBudgetUsd": null,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "maxRequestsPerAgentTask": 100,
+    "api": "anthropic-messages",
+    "apiVersion": "2023-06-01",
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "rateBasis": "User-supplied conservative rates; not invoice",
+    "turnTimeoutMs": 180000
+  },
+  "engineProfile": {
+    "memoryPolicy": "contextos",
+    "contextosTargetBytes": 32000,
+    "contextStrategy": "v1",
+    "compaction": "off",
+    "maxToolCallsPerTurn": 24,
+    "requestedCapabilityFeedback": true
+  },
+  "acceptanceVersion": "native-positive-validation-v3",
+  "harnessSha256": "8be80b4dd6c48665136eeb0473d1771c7288b32c528cf634c2b41cc33d1292f3",
+  "engines": {
+    "baseline": {
+      "commit": "c97b950797294f48e31752508af11a80814e66d8",
+      "sourceSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7"
+    },
+    "candidate": {
+      "commit": "efaca4129ae2ea1fe58510749ada7464439daff7",
+      "sourceSha256": "ca1fe15e8d38daaeddad932175689a437d616b8fad9c3c0e928ca78163a88786"
+    }
+  },
+  "tasks": [
+    {
+      "taskId": "small-cache-key",
+      "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+      "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+      "fileCount": 12,
+      "lines": 112,
+      "initialPublicPassed": true,
+      "initialHiddenPassed": false,
+      "plannedTurns": 1
+    },
+    {
+      "taskId": "small-retry-budget",
+      "sha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+      "commit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+      "fileCount": 12,
+      "lines": 113,
+      "initialPublicPassed": true,
+      "initialHiddenPassed": false,
+      "plannedTurns": 1
+    },
+    {
+      "taskId": "small-unicode",
+      "sha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+      "commit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+      "fileCount": 12,
+      "lines": 109,
+      "initialPublicPassed": true,
+      "initialHiddenPassed": false,
+      "plannedTurns": 1
+    }
+  ],
+  "smallRuns": 60,
+  "protectedRunsIfGatePasses": 42,
+  "smallThresholdPercent": 10,
+  "p95RegressionLimitPercent": 10,
+  "protectedTokenRegressionLimitPercent": 5,
+  "knownBillingRequired": true,
+  "retainedPaidAttempts": true,
+  "sourceFrozenBeforeFirstPaidRequest": true,
+  "protectedRunId": "small-task-s1-protected-glm-20261012-1791784495519984400",
+  "protectedPreflightId": "s1-prepare-protected-1791784495519984400",
+  "protectedCapUsd": 7.394917199999999,
+  "smallKnownSpendUsd": 0.6050828000000009
+}
