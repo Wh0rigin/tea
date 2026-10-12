@@ -4,16 +4,16 @@ import { createHash } from 'node:crypto';
 export function runtimeCapabilities({ platform = process.platform, approveCommand,
   stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY) } = {}) {
   const approval = typeof approveCommand === 'function' ? 'handler' : stdinIsTTY && stdoutIsTTY ? 'interactive' : 'unavailable';
-  const identity = { schemaVersion: 1, policyVersion: 1, noticeVersion: 2, platform, approval };
+  const identity = { schemaVersion: 1, policyVersion: 1, platform, approval };
   return { ...identity, version: `v1-${createHash('sha256').update(JSON.stringify(identity)).digest('hex').slice(0, 12)}` };
 }
 
 export function capabilityNotice(capabilities) {
   const approval = capabilities.approval === 'unavailable'
-    ? 'Unlisted run_shell cannot obtain approval; no retry variants.'
-    : 'Unlisted run_shell needs explicit approval; it may be refused.';
-  const windows = capabilities.platform === 'win32' ? ' Windows blocks quotes, (), %, !, ^.' : '';
-  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths. Tests (if installed): node --test; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest. No shell operators/newlines, even quoted.${windows} ${approval} Denial is not a code defect; report unverified checks.`;
+    ? 'Unlisted run_shell cannot obtain approval in this session; rephrasing cannot enable it.'
+    : 'Unlisted run_shell needs explicit approval; approval can be refused.';
+  const windows = capabilities.platform === 'win32' ? ' Windows allowlisted commands also reject quotes, parentheses, %, ! and ^.' : '';
+  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest; read-only git status/diff/log. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.`;
 }
 
 const actions = {
