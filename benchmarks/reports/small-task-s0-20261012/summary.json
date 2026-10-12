@@ -1,0 +1,286 @@
+{
+  "stage": "S0",
+  "state": "completed; stop before S1",
+  "date": "2026-10-12",
+  "kind": "evaluation infrastructure, no runtime optimization",
+  "parentCommit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+  "implementationCommit": "bc3d769cb5903e8a4f2230e1439ea024c109cae5",
+  "initialPlanBaseline": "97e8d5bdcd7e8e339247ad5ffb659bbb9c7683d9",
+  "acceptanceVersion": "native-positive-validation-v3",
+  "harnessSourceSha256": "fa64bc4e347c4715dcf913b9b5f9a7fc83259d65579897ab11f3de38f7afd02e",
+  "providerTokenReductionPercent": null,
+  "providerLatencyChangePercent": null,
+  "paidProviderRequests": 0,
+  "measuredProviderTokens": null,
+  "nativeContract": {
+    "runId": "s0-contract-1791776806248",
+    "runs": 18,
+    "requests": 72,
+    "accepted": 18,
+    "scriptedTokensPerArm": 5040,
+    "commonControlsMatched": true,
+    "allSourcesStable": true,
+    "ratiosWithheld": true,
+    "engines": {
+      "baseline": {
+        "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+        "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+      },
+      "candidate": {
+        "commit": "bc3d769cb5903e8a4f2230e1439ea024c109cae5",
+        "sourceSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7"
+      }
+    }
+  },
+  "qualityDimensions": {
+    "codeCorrect": {
+      "baseline": 9,
+      "candidate": 9
+    },
+    "scopeCorrect": {
+      "baseline": 9,
+      "candidate": 9
+    },
+    "declaredReadRequirements": {
+      "baseline": 9,
+      "candidate": 9
+    },
+    "nativePostEditValidation": {
+      "baseline": 9,
+      "candidate": 9
+    },
+    "nativeCompleted": {
+      "baseline": 9,
+      "candidate": 9
+    },
+    "usageComplete": {
+      "baseline": 9,
+      "candidate": 9
+    }
+  },
+  "equivalentCommandReplay": {
+    "kind": "constructed positive-output replay for the exact two commands used by the native contract; not old provider results",
+    "checks": 18,
+    "oldConfirmed": 0,
+    "v3Confirmed": 18,
+    "recognitionPercentagePointChange": 100,
+    "providerTokenReductionPercent": null
+  },
+  "unitTests": {
+    "tests": 254,
+    "passed": 254,
+    "failed": 0,
+    "skipped": 0
+  },
+  "nativePiPrintContract": {
+    "clientRuns": 2,
+    "requests": 8,
+    "complete": true,
+    "usageSource": "scripted-loopback"
+  },
+  "nativePiRpcContract": {
+    "clientRuns": 2,
+    "requests": 16,
+    "complete": true,
+    "usageSource": "scripted-loopback",
+    "turnsPerClient": 3
+  },
+  "holdoutPreflight": {
+    "tasks": 20,
+    "repositories": 5,
+    "passed": 20,
+    "originalChecks": 21,
+    "faultChecks": 21,
+    "agentRuns": 0,
+    "manifestSha256": "a30220e7386b826fdad0bae3492fd7d90b7beed5d32b06f5ead0d06e29f6406d",
+    "runtimes": {
+      "node": "v24.14.0",
+      "python": "Python 3.13.9",
+      "go": "go version go1.24.0 windows/amd64",
+      "typescript": "Version 5.9.3"
+    }
+  },
+  "futureCohortPreparation": {
+    "initialFixtures": 10,
+    "cohorts": 2,
+    "configuredAgentRuns": 102,
+    "executedAgentRuns": 0,
+    "complete": true
+  },
+  "unchangedNonComparisonModules": [
+    {
+      "path": "src/agent.mjs",
+      "sha256": "848aa3c5cbe9ad0ab2964d8773022ec2faac1699a5ea951dd27cf8e96e134f4c"
+    },
+    {
+      "path": "src/benchmark.mjs",
+      "sha256": "c5e52911bf7f38a9f33754a5c819a157daa5683e39cfeef905bbd6fdc10b6289"
+    },
+    {
+      "path": "src/cli.mjs",
+      "sha256": "4c59f78fe76f8db2d59db389d2152a89b9fe075583ae7eace056e5f94ab65af0"
+    },
+    {
+      "path": "src/compaction-experiment.mjs",
+      "sha256": "78769248909ef041ad6ec7cfc54df2a391ca74958d78406efa44927ce3b2633c"
+    },
+    {
+      "path": "src/compaction.mjs",
+      "sha256": "bae3d58421b3c10612e9fed313f2cdf2d03f551868197ef4e7827c751ea9c27b"
+    },
+    {
+      "path": "src/config.mjs",
+      "sha256": "0086ac337074634029b72b6fcb9b57ee0d61ff5cd06450f6e0afe7af7f090393"
+    },
+    {
+      "path": "src/context-assembler.mjs",
+      "sha256": "4c597a09ee562c44e2881881e4a12184b6138e91ed438f68602ef1ed2b340dff"
+    },
+    {
+      "path": "src/context.mjs",
+      "sha256": "fe3712bf50f965d8fdcf4a84290e7e78f58e70c96476865cd5cf4f6fa1f386ca"
+    },
+    {
+      "path": "src/contextos-benchmark.mjs",
+      "sha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c"
+    },
+    {
+      "path": "src/ledger.mjs",
+      "sha256": "7ac67058a32d247b2bf30492972a0bda0e5b59b321f4eddf8fad99e9f2852c87"
+    },
+    {
+      "path": "src/memory-benchmark.mjs",
+      "sha256": "9096cba9b8a6d96e26a9eb2f7e075aedc0901943636ef60a16c7450aa10c5543"
+    },
+    {
+      "path": "src/memory-handoff.mjs",
+      "sha256": "d553203cf5fdbf7c786747c8b54a18320bdc3d7621c682f984441738de2127f8"
+    },
+    {
+      "path": "src/memory.mjs",
+      "sha256": "0b215e127d7973d9fd164a334eecc5c986c3b5fcb2849d87fefdb642c8bb9692"
+    },
+    {
+      "path": "src/model.mjs",
+      "sha256": "74fbcc13a3ce31c9b498f20fff3259a275161dc6b4b7a7ab984341b7822e136b"
+    },
+    {
+      "path": "src/output.mjs",
+      "sha256": "d35dbc4031dbb94f9b6be11ad56ec28f369ebe5764c7fa01adf06a0515870def"
+    },
+    {
+      "path": "src/policy.mjs",
+      "sha256": "bf4c5c51c387a5c320de993e20f7cef998d37133d59cf51c7f663e27530354cd"
+    },
+    {
+      "path": "src/run-id.mjs",
+      "sha256": "13ed48178930c77d1b2b0ced0b320e6c5461bafc1a01ddb88b625e1ec579a475"
+    },
+    {
+      "path": "src/runtime-benchmark.mjs",
+      "sha256": "43efec1b45020144d011262d8c8641eee76877bef6e27f5920a489f771f3a28a"
+    },
+    {
+      "path": "src/session-journal.mjs",
+      "sha256": "7fbf901dd1d2d89696a504a29470d1935e6df0407d77d8ef8278e1e943413a4c"
+    },
+    {
+      "path": "src/session-memory.mjs",
+      "sha256": "371977762a7f72225ee71600385f593daa1aa9dabef6e59ae25e4b9b67d0f350"
+    },
+    {
+      "path": "src/terminal.mjs",
+      "sha256": "e5ca4b9974e867656e218247df94a9da4400bc729e88741d2e88f937bf4478f0"
+    },
+    {
+      "path": "src/tools.mjs",
+      "sha256": "b64d073b3a35a6652861d463de23dbc240934cd25949fa8f1094ee6932821992"
+    },
+    {
+      "path": "src/usage.mjs",
+      "sha256": "eb3e7f7b1f91dc9fc35d49b37d891d0db55a58ac2b5566f866f0298652c08bd4"
+    }
+  ],
+  "observerOverhead": {
+    "kind": "event receipt local observation, not provider latency experiment",
+    "turns": 18,
+    "totalMs": 228.322300000018,
+    "maxTurnMs": 15.69020000000819
+  },
+  "limits": [
+    "Scripted token equality is not actual token evidence.",
+    "Source observation is at controller event receipt, not atomic child-process timestamps.",
+    "Native recognition supports Node/npm only; Python/Go S5 adapters are pending.",
+    "Public seeded faults and acceptance without OS isolation are diagnostic, not confidential production holdout.",
+    "Historical paid acceptance is unchanged; no old unconfirmed Pi run is promoted.",
+    "No general no-regression guarantee follows from these checks."
+  ],
+  "contractAttempts": [
+    {
+      "runId": "s0-contract-1791775525742",
+      "runs": 18,
+      "requests": 72,
+      "accepted": 18,
+      "paidProviderRequests": 0,
+      "commonControlsMatched": true,
+      "allSourcesStable": true,
+      "ratiosWithheld": true,
+      "engines": {
+        "baseline": {
+          "commit": "97e8d5bdcd7e8e339247ad5ffb659bbb9c7683d9",
+          "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+        },
+        "candidate": {
+          "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+          "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+        }
+      }
+    },
+    {
+      "runId": "s0-contract-1791776554763",
+      "runs": 18,
+      "requests": 72,
+      "accepted": 18,
+      "paidProviderRequests": 0,
+      "commonControlsMatched": true,
+      "allSourcesStable": true,
+      "ratiosWithheld": true,
+      "engines": {
+        "baseline": {
+          "commit": "97e8d5bdcd7e8e339247ad5ffb659bbb9c7683d9",
+          "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+        },
+        "candidate": {
+          "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+          "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+        }
+      }
+    },
+    {
+      "runId": "s0-contract-1791776806248",
+      "runs": 18,
+      "requests": 72,
+      "accepted": 18,
+      "paidProviderRequests": 0,
+      "commonControlsMatched": true,
+      "allSourcesStable": true,
+      "ratiosWithheld": true,
+      "engines": {
+        "baseline": {
+          "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+          "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+        },
+        "candidate": {
+          "commit": "bc3d769cb5903e8a4f2230e1439ea024c109cae5",
+          "sourceSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7"
+        }
+      }
+    }
+  ],
+  "unitSetupFailure": {
+    "tests": 254,
+    "passed": 253,
+    "failed": 1,
+    "cause": "New remote-contract guard test omitted the required finite budget, so configuration rejected earlier than its expected assertion. Test setup corrected; final complete suite passed. No paid submission."
+  }
+}

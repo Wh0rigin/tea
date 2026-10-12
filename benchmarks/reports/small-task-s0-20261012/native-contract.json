@@ -1,0 +1,1016 @@
+{
+  "kind": "native frozen-revision loopback contract",
+  "usageSource": "scripted-loopback",
+  "paidProviderRequests": 0,
+  "runId": "s0-contract-1791776806248",
+  "runs": 18,
+  "requests": 72,
+  "accepted": 18,
+  "scriptedTokensPerArm": 5040,
+  "providerTokenImprovement": null,
+  "commonControlsMatched": true,
+  "allSourcesStable": true,
+  "ratiosWithheld": true,
+  "engines": {
+    "baseline": {
+      "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+      "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+    },
+    "candidate": {
+      "commit": "bc3d769cb5903e8a4f2230e1439ea024c109cae5",
+      "sourceSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7"
+    }
+  },
+  "quality": [
+    {
+      "caseId": "small-cache-key-r1",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-cache-key-r1",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-retry-budget-r1",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-retry-budget-r1",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-unicode-r1",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-unicode-r1",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-cache-key-r2",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-cache-key-r2",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-retry-budget-r2",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-retry-budget-r2",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-unicode-r2",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-unicode-r2",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-cache-key-r3",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-cache-key-r3",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+            "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+            "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-retry-budget-r3",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-retry-budget-r3",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+            "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+            "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-unicode-r3",
+      "agent": "baseline",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+            "program": "npm",
+            "argumentShape": [
+              "value"
+            ],
+            "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "small-unicode-r3",
+      "agent": "candidate",
+      "accepted": true,
+      "dimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "commands": [
+        {
+          "execution": {
+            "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+            "program": "node",
+            "argumentShape": [
+              "--test",
+              "--test-reporter",
+              "test-path"
+            ],
+            "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+            "approval": "not-reported",
+            "exitCode": 0,
+            "settled": true
+          },
+          "evidence": {
+            "recognized": true,
+            "framework": "node",
+            "targets": [
+              "tests/public.test.mjs"
+            ],
+            "reason": "declared-node-test-suite",
+            "summary": {
+              "tests": 1,
+              "pass": 1,
+              "fail": 0,
+              "positiveCompletion": true
+            },
+            "stableSources": true,
+            "passed": true
+          },
+          "sourceVersionsBefore": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          },
+          "sourceVersionsAfter": {
+            "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+            "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+            "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+          }
+        }
+      ]
+    }
+  ]
+}

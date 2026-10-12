@@ -1,0 +1,382 @@
+{
+  "kind": "frozen seeded-fault preflight; no agent execution",
+  "manifestSha256": "a30220e7386b826fdad0bae3492fd7d90b7beed5d32b06f5ead0d06e29f6406d",
+  "runtimes": {
+    "node": "v24.14.0",
+    "python": "Python 3.13.9",
+    "go": "go version go1.24.0 windows/amd64",
+    "typescript": "Version 5.9.3"
+  },
+  "paidProviderRequests": 0,
+  "tasks": [
+    {
+      "id": "p-map-pre-abort",
+      "taskSha256": "c52d254a2fd2d0c94bcd061589afc8ae120af2e2478cf3a181b1ed307ef7dd57",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "58e61629ba4a9a93212c60fb2c77017066a45288aec91feec88cdd59423ae0b9"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-map-error-order",
+      "taskSha256": "d8462103f33f19cf0bb3dc515aa2eceb16fc2879ed421666733cb28d02dee5c9",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "7b9215b0f52a6ec9e11beb4662f663a935cc2868f580a0ecd98aec85a3e36d8b"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-map-skip-index",
+      "taskSha256": "1ddb8730ee96d15b71fcd14b819cbcc85e9420e61bfafa250f1c040e23aa6b0c",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "bf4ffe25b8125aa89b8d664e5679611b5277b8984424f4eb5d700f21fa2ca537"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-map-backpressure-range",
+      "taskSha256": "72a85b98d74e76797f5195c1da89534fdff697c9b6a6109959930044a181f469",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "b29a010017de659de5fdb93bc521190ac981d14de67842cdac54cf85a1f4f9eb"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-limit-pending-count",
+      "taskSha256": "bd1e18c84dd5ba40527840b5a5826d7fd3f5fed748efeb2974713ca465c5f2cc",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "f08d89dacf96d39d2b88077ac594588941da2dcc42755030b0caaf23adec8485"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-limit-decrease-concurrency",
+      "taskSha256": "2c6ae677fa4c4eecdf0843af7cf7e1b841e3119f1b18a25314d25c675e1b16ff",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "1efde9ddaecb38b1af9c2f87904d1c68f9baf68fe4f6ced0a68ea6e6ca817936"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-limit-clear-rejections",
+      "taskSha256": "1a8ac90cca33f88b2a5c72916db09ce7a139b7130ada4ae5e8245ffd205aa9b6",
+      "language": "JavaScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "fc6930f50762e2e45ad450cda587bacd59cb86b25971e2da6a84eecdb8259a6a"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "p-limit-argument-types",
+      "taskSha256": "83e4b2ccabefa6675cc296091d992138f497ea091e1cffc494e2dfd3684abc2d",
+      "language": "JavaScript+TypeScript",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "0dc865bb47d297af36965651b5a7a94a7cd46c10a393e175fdbb48f378d35530"
+        },
+        {
+          "exitCode": 2,
+          "outputSha256": "1a157c89ef20382c3eeefe4e8cd393931d642692cfcd2cae1d352c6f412393e4"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "boltons-chunk-fill",
+      "taskSha256": "01ab67078dc84176c38ed0ad051304b13d451b88cdd89d99cffbcf18f6a73c56",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "9f0f29f76eb127321aead3f4c25d148e26e54eda788e8ee17cd5c7fcff6404a0"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "boltons-window-fill",
+      "taskSha256": "1964af82620934c1c5d80fed8fb63b7fcbd5edc3da738fea42dcbb6fe8720d48",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "c058791197c59966c3a28b0353aaa6285f0b0a611d174079ae1ab3de746323e6"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "boltons-maxsplit-tail",
+      "taskSha256": "5d53cb31ae2b9d5b0631bb9be60c1fbdaf91ea8b2448177cdc85d70fd7ea72c8",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "2bbd9504c4de0326b575dcebc4b917be32f9fc63f784cf95c417393ce4186b76"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "boltons-unique-key",
+      "taskSha256": "77b4e6d019bfecf651bbb2998c80a8bdd8f9c298569192919e3084a69d3e7843",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "cf1c7601151fd5fc75a83c0cf6eed4ae5b07d2a9a35d6465bb3c99d422cff509"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "more-itertools-prepend-order",
+      "taskSha256": "65f803e81932dfd0406e1b1d89e29541a3c149e376ac512ce2339ee69ebb1415",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "e82ebb10fe4bddbc4fe093967de15065e91234efe7cf9008bdf7f475ce510946"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "more-itertools-relative-seek",
+      "taskSha256": "832a39d93735c7e3b78e817127f9dc6a78914c8f657433bd26a0b8dfdb13f006",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "3bd6a7825ebeac1cf96215ad4fb0d400ea221ef1603f5fcfbb31e24e345d385b"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "more-itertools-collapse-depth",
+      "taskSha256": "e3759bc916c499be7a98136ed72fab9b1f000f10a80cb856ac1b33de44447034",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "2345146f566c9de415f456e6e4a83702f4279aad8e2f06db2d4442a4f8fb29bd"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "more-itertools-window-step-tail",
+      "taskSha256": "27504bb4d81da372ebc8aa69098ae7c3a901a144fa1a553e560322ebf457b360",
+      "language": "Python",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "9a5d53c4112883b954f996a772c221d94eef11474c930c09d32a4edecf9f3aac"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "govalidator-port-upper-bound",
+      "taskSha256": "a398ccfef37d2d59c7458a285f8c3cc0baeedfb082845528d885a62fc7086009",
+      "language": "Go",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "5070c1a048b3beb6a1b40d12c4b3f468019f8b72ac4ac61ea8d69b09c488d8cb"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "b8653eac567c725bf23dbe925be61439f55f291b92d0a3b0292e237946d10c6c"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "govalidator-ip-version",
+      "taskSha256": "ebecc39bb43b12f8d6a4ab792cfd7d7ebb956a407e513e942a5b018e3d0dde28",
+      "language": "Go",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "5070c1a048b3beb6a1b40d12c4b3f468019f8b72ac4ac61ea8d69b09c488d8cb"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "c2da8115588fc019151025112f76c36f6e755077560c56c57600dddb0fb0e399"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "govalidator-cidr-prefix",
+      "taskSha256": "70354b2d36090ae2fb06ee3c5778c926338e8a723d547ad725df22e5f6ac42a1",
+      "language": "Go",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "33b5e317a114c82ed5fff12e221fde63c10e5532c04823f4970bccd5f2343f93"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "b752b44c565df288816506f6d8384a001f3fd9ccdd24a72357ffecddeff9e4c1"
+        }
+      ],
+      "preflightPassed": true
+    },
+    {
+      "id": "govalidator-hash-algorithm",
+      "taskSha256": "0827a376340ab28c22a4ca2f95c4b088644ad2f6d0de3ae5a7997581cc49d0d7",
+      "language": "Go",
+      "original": [
+        {
+          "exitCode": 0,
+          "outputSha256": "110c1ac39d56f845c019811e3dd229e43d07eb4cccd8496430ea8abc65fd5e8f"
+        }
+      ],
+      "seededFault": [
+        {
+          "exitCode": 1,
+          "outputSha256": "2870c134e76b3ec8fbe8740b230c679c26eb78471423b6b0c247a9df18808e57"
+        }
+      ],
+      "preflightPassed": true
+    }
+  ],
+  "complete": true
+}

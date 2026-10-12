@@ -2,7 +2,7 @@
 
 [中文](SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)
 
-Date: October 12, 2026. Status: planning complete; implementation and new paid measurements have not started. Improve validation and recovery first, then reconsider context policy using evidence.
+Date: October 12, 2026. Status: S0 complete; stopped at the stage boundary. S1–S5 are not implemented. S0 made no paid calls and measured no provider token benefit. [S0 report](../benchmarks/reports/small-task-s0-20261012/README.md).
 
 ## Objective and baseline
 
@@ -20,7 +20,7 @@ Develop and measure each separately. Reject and roll back a failed runtime chang
 
 ## S0 — evaluation and recording
 
-- Extend the paired harness to load named baseline/candidate Git revisions, separately frozen under a shared gateway, controls, initial snapshots and acceptance version. Arbitrary two-revision comparison is not implemented yet.
+- Extend the paired harness to load named baseline/candidate Git revisions, separately frozen under a shared gateway, controls, initial snapshots and acceptance version. S0 implements this for TEA commits exposing the supported native session APIs.
 - Record sanitized executable/argument information, command hashes, authorization outcomes, exit/completion status and source versions. Full sensitive content stays in encrypted local storage.
 - Report independent code acceptance, scope, user obligations, native post-edit validation, native completion and complete usage separately.
 - Replace overly narrow native-test recognition with positive completion evidence covering relative/space-containing paths, argument order and actual scripts. Unknown remains unconfirmed; neither command text nor exit code alone establishes valid tests.
@@ -29,7 +29,9 @@ Develop and measure each separately. Reject and roll back a failed runtime chang
 
 Areas: [paired harness](../scripts/compare-contextos-pi.mjs), [turn audit](../src/comparison-turn-audit.mjs), [report](../src/comparison-report.mjs), [independent acceptance](../src/contextos-benchmark.mjs).
 
-Future checks cover nonzero exit, zero tests, early exit, missing tests, stale validation, partial reads and unknown billing, plus actual-client loopback contracts. Deliver a frozen manifest/config/revision/acceptance package and zero-provider preflight. No token improvement claim at this stage.
+Completed checks cover nonzero exit, zero tests, early exit, missing tests, stale validation, partial reads and unknown billing, plus actual-client loopback contracts. S0 delivers the frozen manifest/config/revision/acceptance package and zero-provider preflight. No token improvement claim at this stage.
+
+S0 verification: 254/254 complete tests; 18/18 committed parent/candidate native contract tasks; both TEA/Pi client contracts; 20/20 fault preflights across five real upstream repositories. Constructed equivalent-command confirmation changes from 0/18 to 18/18 (+100 percentage points), not token savings. The future 60+42 configurations are prepared with zero paid Agent runs. [Frozen task manifest](../benchmarks/holdouts/small-task-v1.json).
 
 ## S1 — capabilities and actionable errors
 
@@ -97,7 +99,7 @@ Future checks cover unique/missing/ambiguous matches, no-op edits, external chan
 
 ## Frozen matrix per candidate
 
-First perform future offline regression/protocol/resume/budget checks, including default full history, ContextOS and existing compaction compatibility, and the deterministic suite plus six CI jobs. This planning request does not execute those future tests. Paid default-full-history confirmation is a separate profile, not mixed into the ContextOS matrix below.
+First perform offline regression/protocol/resume/budget checks, including default full history, ContextOS and existing compaction compatibility, and the deterministic suite plus six CI jobs. S0's new evaluation checks have run; S1–S5 add and execute their own focused tests. Paid default-full-history confirmation is a separate profile, not mixed into the ContextOS matrix below.
 
 1. Small pilot: 3 existing small configurations × 10 repeats × parent/candidate = **60 runs / 30 pairs**. Select all families.
 2. If it passes: 6 medium/large configurations × 3 × 2 = **36 runs**; actual empty-start 30 full inspections plus repair × 3 × 2 = **6 runs**. Full candidate confirmation: **102 runs / 51 pairs**. Both long-session arms use 24 tools; do not insert older 10-tool results.
@@ -121,7 +123,7 @@ Initial candidate suite cap: **USD 8**, **USD 1.40/run**. Configure verified acc
 
 Each stage goes through a PR with its hypothesis/patch, actual verification, source/task/control identities, sanitized request evidence, positive/negative outcomes, PNG/SVG and limits. This plan is delivered with PR #3; merging/release follows repository maintenance policy.
 
-- [ ] S0 Evaluation and records
+- [x] S0 Evaluation and records (complete; stopped; provider token benefit unmeasured)
 - [ ] S1 Capability/error feedback
 - [ ] S2 Structured validation
 - [ ] S3 Progress/completion

@@ -163,6 +163,8 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 
 [改进计划](docs/SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)：先完善评测，再逐项处理能力反馈、结构化验证、进度与结束判断、版本化补丁回执，最后做独立任务确认。每项与直接父版对照，计划目标不写成已实现收益。
 
+[S0 评测检查](benchmarks/reports/small-task-s0-20261012/README.zh-CN.md) 已完成：254/254 测试、18/18 双提交原生合约任务、20/20 冻结故障任务预检。没有付费调用或真实 Token 收益，停在 S0，尚未进入 S1。
+
 ![默认 24 次额度短任务](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![真实长会话累计 Token](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)

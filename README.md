@@ -141,6 +141,8 @@ These are self-authored JavaScript bug fixtures; larger repositories add unrelat
 
 [Improvement plan](docs/SMALL_TASK_IMPROVEMENT_PLAN.md): evaluation, capability feedback, structured validation, progress/completion, versioned patch receipts and independent confirmation. Each candidate is measured separately against its direct parent; targets are not measured gains.
 
+[S0 evaluation checks](benchmarks/reports/small-task-s0-20261012/README.md) are complete: 254/254 tests, 18/18 native revision contract tasks and 20/20 frozen fault preflights. No paid calls or measured token gains; stopped before S1.
+
 ![Default-24 fresh tasks](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
 
 ![Actual long conversation](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
