@@ -1111,7 +1111,8 @@
     },
     "restoredFullTests": 268,
     "restoredPassedTests": 268,
-    "finalCiStatus": "pending final documentation head"
+    "finalCiStatus": "See current PR head checks; candidate and restored deterministic results recorded separately",
+    "finalCiUrl": "https://github.com/Wh0rigin/tea/pull/3/checks"
   },
   "offlinePreparationCorrection": "First zero-paid preflight omitted capability feedback; retained, then corrected before all paid requests."
 }

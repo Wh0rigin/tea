@@ -24,5 +24,7 @@ for ax,task,title in zip(axes,['small-cache-key','small-retry-budget','small-uni
 axes[0].set_ylabel('Mean provider tokens/run — known paired subset only')
 fig.suptitle('B1 interrupted pilot — NO full-experiment performance conclusion',fontsize=15)
 fig.supxlabel('21 known pairs shown; one additional pair has unknown baseline usage and is retained in the report.\n44/102 planned runs attempted; timeout halted paid calls. Runtime reverted. Dots show every sample in this subset.',fontsize=10)
-for extension in ['png','svg']:fig.savefig(p/('b1-tokens.'+extension),dpi=170)
+for extension in ['png','svg']:
+ target=p/('b1-tokens.'+extension);fig.savefig(target,dpi=170)
+ if extension=='svg':target.write_bytes(target.read_bytes().replace(b'\r\n',b'\n'))
 print('Generated explicitly incomplete B1 diagnostic plot')
