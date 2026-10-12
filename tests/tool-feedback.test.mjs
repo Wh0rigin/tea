@@ -7,6 +7,7 @@ import { runtimeCapabilities, capabilityNotice, ToolFeedbackError, toolFailureFe
 import { WorkspaceTools } from '../src/tools.mjs';
 import { createAgentSession, runTask, resetConversation } from '../src/agent.mjs';
 import { loadConfig } from '../src/config.mjs';
+import { attachSessionJournal, appendSessionMessage, persistRuntimeState, closeSessionJournal } from '../src/session-memory.mjs';
 
 const unavailable = { platform: 'win32', stdinIsTTY: false, stdoutIsTTY: false };
 const done = { content: [{ type: 'text', text: 'Finished.' }], stop_reason: 'end_turn' };
@@ -26,9 +27,10 @@ async function fixture({ persistent = false, policy = 'full-history' } = {}) {
 }
 const notices = captured => JSON.stringify(captured.messages).match(/Runtime capabilities v1-/g)?.length || 0;
 
-test('capability identity is stable and changes only for platform, policy or approval availability', () => {
+test('capability identity is stable and includes the notice format version', () => {
   const a = runtimeCapabilities(unavailable), b = runtimeCapabilities({ ...unavailable });
   assert.deepEqual(a, b); assert.match(a.version, /^v1-[a-f0-9]{12}$/);
+  assert.equal(a.policyVersion, 1); assert.equal(a.noticeVersion, 2);
   for (const change of [{ platform: 'linux' }, { stdinIsTTY: true, stdoutIsTTY: true }, { approveCommand: () => false }]) {
     assert.notEqual(runtimeCapabilities({ ...unavailable, ...change }).version, a.version);
   }
@@ -60,11 +62,50 @@ test('disabled S1 preserves exact parent model requests, denial flags, tool IDs 
 
 test('capability notices describe headless/interactive Windows and other platforms without granting runners', () => {
   const windows = capabilityNotice(runtimeCapabilities(unavailable));
-  assert.match(windows, /cannot obtain approval/); assert.match(windows, /including quoted JavaScript/);
-  assert.match(windows, /Windows allowlisted commands/); assert.match(windows, /Installed runners depend on the project/);
+  assert.match(windows, /cannot obtain approval/); assert.match(windows, /No shell operators\/newlines, even quoted/);
+  assert.match(windows, /Windows blocks quotes, \(\), %, !, \^/); assert.match(windows, /Tests \(if installed\)/);
+  assert.match(windows, /no retry variants/); assert.match(windows, /Denial is not a code defect; report unverified checks/);
+  for (const form of ['node --test', 'npm test/run test|lint|check|typecheck', 'python -m pytest|unittest', 'pytest']) assert.ok(windows.includes(form));
   const interactive = capabilityNotice(runtimeCapabilities({ ...unavailable, stdinIsTTY: true, stdoutIsTTY: true }));
   assert.match(interactive, /needs explicit approval/); assert.doesNotMatch(interactive, /cannot obtain approval/);
-  assert.doesNotMatch(capabilityNotice(runtimeCapabilities({ ...unavailable, platform: 'linux' })), /Windows allowlisted/);
+  assert.doesNotMatch(capabilityNotice(runtimeCapabilities({ ...unavailable, platform: 'linux' })), /Windows blocks/);
+});
+
+test('compact notices are shorter than the frozen parent for every tested platform and approval mode', async () => {
+  const fixture = JSON.parse(await readFile(new URL('./fixtures/s1-full-capability-notices.json', import.meta.url), 'utf8'));
+  assert.equal(fixture.parentCommit, 'eb39591bd7e6fcee354a5ee660abb356c936c701');
+  for (const row of fixture.rows) {
+    const options = { platform: row.platform, stdinIsTTY: row.approval === 'interactive', stdoutIsTTY: row.approval === 'interactive',
+      ...(row.approval === 'handler' ? { approveCommand: () => false } : {}) };
+    const capabilities = runtimeCapabilities(options), compact = capabilityNotice(capabilities);
+    assert.equal(capabilities.approval, row.approval);
+    assert.notEqual(capabilities.version, row.capabilities.version);
+    assert.ok(Buffer.byteLength(compact) < Buffer.byteLength(row.notice) * .75);
+    assert.match(compact, /workspace-relative paths/);
+  }
+});
+
+test('legacy persistent sessions declare the compact format once while retaining original user messages', async () => {
+  const { config } = await fixture({ persistent: true }), legacy = createAgentSession(config);
+  const rows = JSON.parse(await readFile(new URL('./fixtures/s1-full-capability-notices.json', import.meta.url), 'utf8')).rows;
+  const old = rows.find(row => row.platform === process.platform && row.approval === 'unavailable');
+  // This deterministic fixture covers the supported CI platforms.
+  const previous = old || rows.find(row => row.platform === 'linux' && row.approval === 'unavailable');
+  const original = { role: 'user', content: `Inspect\n\n${previous.notice}` };
+  await attachSessionJournal(legacy, config);
+  try {
+    legacy.capabilities = previous.capabilities; legacy.offline = true;
+    await appendSessionMessage(legacy, original);
+    await appendSessionMessage(legacy, { role: 'assistant', content: done.content });
+    await persistRuntimeState(legacy);
+  } finally { await closeSessionJournal(legacy); }
+  const next = { ...config, sessionId: undefined, resume: 'feedback-session', runId: 'legacy-resume' }, restored = createAgentSession(next), captured = [];
+  await runTask('Continue', next, { session: restored, adapterFactory: adapter([done, done], captured) });
+  assert.deepEqual(restored.messages[0], original);
+  assert.equal(restored.capabilities.noticeVersion, 2); assert.notEqual(restored.capabilities.version, previous.capabilities.version);
+  assert.equal(notices(captured[0]), 2);
+  await runTask('Continue again', { ...next, runId: 'legacy-resume-next' }, { session: restored, adapterFactory: adapter() });
+  assert.equal(notices(captured[1]), 2);
 });
 
 test('failure categories distinguish policy, approval, input, source, tests and transient execution', () => {
