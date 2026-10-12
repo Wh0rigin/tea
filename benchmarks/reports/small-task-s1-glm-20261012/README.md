@@ -6,6 +6,8 @@ October 12, 2026. **S1 implementation and testing complete; awaiting maintainer
 review. S2 has not started.** Experimental feedback is disabled by default;
 enable using `TEA_CAPABILITY_FEEDBACK=1`.
 
+Follow-up: [read-only long-session diagnosis](../small-task-s1-long-diagnosis-20261012/README.md) reconstructs all 393 long-session requests, explains repeated capability input, historical replies and repair grouping, and adds no provider calls or runtime changes. Frozen totals and acceptance remain unchanged.
+
 ## Result: net savings with a long-workflow cost
 
 All **102 runs / 51 pairs**, including failures and retries: **1,833,377 →
