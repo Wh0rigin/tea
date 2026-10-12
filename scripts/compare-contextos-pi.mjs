@@ -65,7 +65,8 @@ const report = { schemaVersion: 3, acceptanceVersion: 'native-positive-validatio
     inputRateUsdPerMillion: config.inputRateUsdPerMillion ?? null, outputRateUsdPerMillion: config.outputRateUsdPerMillion ?? null,
     maxRequestsPerAgentTask: config.comparisonMaxRequests, api: 'anthropic-messages', apiVersion: config.apiVersion,
     endpointSha256: hash(config.baseUrl), rateBasis: 'User-supplied conservative rates; not invoice', turnTimeoutMs: timeoutMs },
-  teaProfile: { memoryPolicy: config.memoryPolicy, contextosTargetBytes: config.contextosTargetBytes, contextStrategy: config.contextStrategy, compaction: config.compaction, maxToolCallsPerTurn: config.maxToolCalls },
+  teaProfile: { memoryPolicy: config.memoryPolicy, contextosTargetBytes: config.contextosTargetBytes, contextStrategy: config.contextStrategy, compaction: config.compaction, maxToolCallsPerTurn: config.maxToolCalls,
+    requestedCapabilityFeedback: Boolean(config.capabilityFeedback) },
   piProfile: { nativeRpc: true, autoCompaction: true, contextWindow: 200000, automaticRetry: false, cacheWarming: false, persistedSession: false, extensions: false, skills: false },
   profileNote: 'Gateway normalizes model/thinking/effort/output, preserves native prompts/tools and cache directives. Pi native auto-compaction is enabled; TEA uses deterministic ContextOS and semantic compaction off. Sessions start empty. No scripted seed history. Native tool limits differ; shared 100-request/1.4 USD per-run and configured suite guard apply.',
   perAgentTaskBudgetUsd: perCaseBudget, workspaceContextIsolated: true, workspaceRoot, tasks: [], runs: [], requests: [], repeat, complete: false };

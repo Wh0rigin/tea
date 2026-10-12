@@ -1,0 +1,338 @@
+{
+  "kind": "exact parent native requests using an offline scripted read/denied-command scenario; paths normalized; no provider calls",
+  "parentCommit": "c97b950797294f48e31752508af11a80814e66d8",
+  "parentEngineSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7",
+  "requests": [
+    {
+      "system": "You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Inspect value\n\nWorkspace: [WORKSPACE]\nText-file inventory: 2 indexed; showing 2 paths (complete).\nvalue.mjs\nvalue.test.mjs\nInventory covers a bounded default-filter scan (up to 700 paths, depth 12), not necessarily the entire workspace. Use scoped list_files/search_code and includeOmitted when relevant paths are absent."
+        }
+      ],
+      "tools": [
+        {
+          "name": "list_files",
+          "description": "List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "maxFiles": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 250
+              },
+              "offset": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              },
+              "path": {
+                "type": "string"
+              },
+              "includeOmitted": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "search_code",
+          "description": "Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string"
+              },
+              "maxResults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 80
+              },
+              "path": {
+                "type": "string"
+              },
+              "includeOmitted": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "read_file",
+          "description": "Read a text file, optionally selecting a line range.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "startLine": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "endLine": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "apply_patch",
+          "description": "Replace one unique exact text span in a workspace file.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "search": {
+                "type": "string"
+              },
+              "replace": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "search",
+              "replace"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "run_tests",
+          "description": "Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "run_shell",
+          "description": "Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    },
+    {
+      "system": "You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Inspect value\n\nWorkspace: [WORKSPACE]\nText-file inventory: 2 indexed; showing 2 paths (complete).\nvalue.mjs\nvalue.test.mjs\nInventory covers a bounded default-filter scan (up to 700 paths, depth 12), not necessarily the entire workspace. Use scoped list_files/search_code and includeOmitted when relevant paths are absent."
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "call-0",
+              "name": "read_file",
+              "input": {
+                "path": "value.mjs"
+              }
+            },
+            {
+              "type": "tool_use",
+              "id": "call-1",
+              "name": "run_shell",
+              "input": {
+                "command": "node --version"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call-0",
+              "content": "[evidence ref=value.mjs#L1-L2@5d8f65d2774e206b sha256=5d8f65d2774e206bc9f7a7a4ad39ca2dc563b5c31e46ab57ef4874961237ce29]\n1: export const value = 1;\n2: ",
+              "is_error": false
+            },
+            {
+              "type": "tool_result",
+              "tool_use_id": "call-1",
+              "content": "Command denied by user.",
+              "is_error": false
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "list_files",
+          "description": "List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "maxFiles": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 250
+              },
+              "offset": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              },
+              "path": {
+                "type": "string"
+              },
+              "includeOmitted": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "search_code",
+          "description": "Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string"
+              },
+              "maxResults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 80
+              },
+              "path": {
+                "type": "string"
+              },
+              "includeOmitted": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "read_file",
+          "description": "Read a text file, optionally selecting a line range.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "startLine": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "endLine": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "apply_patch",
+          "description": "Replace one unique exact text span in a workspace file.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "search": {
+                "type": "string"
+              },
+              "replace": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "search",
+              "replace"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "run_tests",
+          "description": "Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "run_shell",
+          "description": "Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    }
+  ],
+  "outcome": [
+    "completed",
+    2,
+    false
+  ]
+}

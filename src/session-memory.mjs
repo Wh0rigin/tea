@@ -5,7 +5,7 @@ import { validateRunId } from './run-id.mjs';
 export function memorySessionFields(config) {
   return { sessionId: validateRunId(config.resume || config.sessionId || randomUUID()), journal: null,
     persistent: Boolean(config.resume || config.sessionId || config.memoryPolicy === 'contextos'),
-    persisted: false, journalHead: null, restoredBudget: null, memoryDiagnostics: null };
+    persisted: false, journalHead: null, restoredBudget: null, memoryDiagnostics: null, capabilities: null };
 }
 
 export async function attachSessionJournal(session, config) {
@@ -44,6 +44,7 @@ export async function attachSessionJournal(session, config) {
       validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
       compaction: state.compaction, compactionCount: state.compactionCount, restoredTools: state.tools, offline: state.offline });
     session.taskState = state?.taskState || null;
+    session.capabilities = state?.capabilities || null;
     session.memoryDiagnostics = state?.memoryDiagnostics || null;
     for (const intent of inflight.values()) {
       budget = { ...budget, spentUsd: budget.spentUsd + intent.reservedUsd,
@@ -101,6 +102,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
     validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
     compaction: session.compaction, compactionCount: session.compactionCount, offline: session.offline,
     taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
+    capabilities: session.capabilities || null,
     identity,
     tools: tools ? { sessionTerms: [...tools.sessionTerms], unresolvedQueries: [...tools.unresolvedQueries],
       readEvidence: [...tools.readEvidence], searchEvidence: [...tools.searchEvidence], sourceEvidence: [...tools.sourceEvidence], presentedSource: [...tools.presentedSource].map(([key, value]) =>
@@ -132,6 +134,7 @@ export async function resetPersistentConversation(session, config) {
     session.contextMemory = null;
     if (session.tools) session.tools.contextMemory = null;
     session.taskState = null; session.memoryDiagnostics = null;
+    session.capabilities = null;
     await persistRuntimeState(session);
   } finally { await closeSessionJournal(session); }
 }

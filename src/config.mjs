@@ -87,6 +87,7 @@ export function loadConfig(options = {}, env = process.env) {
     maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, 1200, 'TEA_MAX_OUTPUT_TOKENS')),
     maxRequestInputTokens,
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
+    capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === '1',
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
     effort,
     thinkingMode,

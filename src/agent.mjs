@@ -10,6 +10,7 @@ import { compactConversation, requestBytes, sessionContext } from './compaction.
 import { memorySessionFields, attachSessionJournal, appendSessionMessage, restoreToolMemory,
   persistRuntimeState, closeSessionJournal, resetPersistentConversation } from './session-memory.mjs';
 import { ContextMemory } from './context-assembler.mjs';
+import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -60,6 +61,7 @@ export function resetConversation(session, config) {
   session.contextMemory = null;
   if (session.tools) session.tools.contextMemory = null;
   session.taskState = null; session.memoryDiagnostics = null;
+  session.capabilities = null;
   // Keep adapter spending and outstanding edits across /new.
 }
 
@@ -174,8 +176,13 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const userMessage = firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
-    + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand }) : null;
+  const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
+  const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
+    + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)
+    + (capabilities && (firstTurn || capabilitiesChanged) ? `\n\n${capabilityNotice(capabilities)}` : '');
+  session.capabilities = capabilities;
+  if (capabilities && (firstTurn || capabilitiesChanged)) await session.journal?.append('capabilities_declared', capabilities);
   const messages = session.messages;
   if (session.resumeNotice) {
     await appendSessionMessage(session, { role: 'user', content: session.resumeNotice });
@@ -302,6 +309,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const started = Date.now();
         let output;
         let isError = false;
+        let toolError;
         emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
         await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
@@ -318,6 +326,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           }
         } catch (error) {
           isError = true;
+          toolError = error;
           output = error.message;
           if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
             validationAttempts += 1;
@@ -325,16 +334,19 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
             if (changedFiles.length) pendingValidation = true;
           }
         }
+        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
+        output = appendFailureFeedback(output, feedback);
+        if (feedback) isError = true;
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
-        const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError });
+        const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError, ...(feedback ? { feedback } : {}) });
         if (session.taskState) {
           const taskState = session.taskState;
           taskState.phase = call.name === 'apply_patch' ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
           if (call.input?.path && !taskState.active_files.includes(call.input.path)) taskState.active_files.push(call.input.path);
           const finding = { toolId: call.id, tool: call.name, provenance: 'observed', sourceEventId: observedEvent?.eventId || null,
-            outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError };
+            outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError, ...(feedback ? { feedback } : {}) };
           taskState.confirmed_findings.push(finding);
-          if (isError || /^exit=[^0]/.test(output)) taskState.failed_attempts.push(finding);
+          if (isError || /^exit=[^0]/.test(output) || feedback) taskState.failed_attempts.push(finding);
           taskState.validation = runtimeState();
           taskState.pending_steps = pendingValidation ? [{ action: 'Run relevant validation on current source', provenance: 'observed', sourceEventId: observedEvent?.eventId || null }] : [];
           taskState.budget_remaining = Math.max(0, (adapter.config?.maxCostUsd ?? config.maxCostUsd) - (adapter.spentUsd || 0));
