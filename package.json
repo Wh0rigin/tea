@@ -19,7 +19,8 @@
     "benchmark:contextos-pi:check": "node scripts/check-contextos-pi-protocol.mjs",
     "benchmark:revisions:check": "node scripts/check-revision-comparison.mjs",
     "benchmark:three-agents": "node scripts/compare-three-agents.mjs",
-    "benchmark:three-agents:check": "node scripts/check-three-agent-protocol.mjs"
+    "benchmark:three-agents:check": "node scripts/check-three-agent-protocol.mjs",
+    "benchmark:three-agents:long-check": "node scripts/check-three-agent-protocol.mjs --long-continuation"
   },
   "engines": {
     "node": ">=20"

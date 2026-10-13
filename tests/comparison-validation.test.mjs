@@ -3,11 +3,26 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { mkdtemp, writeFile } from 'node:fs/promises';
 import os from 'node:os';
-import { commandArguments, recognizeValidation, nodeTestSummary, acceptanceDimensions } from '../src/comparison-validation.mjs';
+import { commandArguments, recognizeValidation, nodeTestSummary, acceptanceDimensions, shouldStopComparisonTurn } from '../src/comparison-validation.mjs';
 import { createComparisonTurnAudit } from '../src/comparison-turn-audit.mjs';
 import { createSourceCapture, createPackageScriptReader } from '../src/comparison-source-capture.mjs';
 
 const workspace = path.resolve('fixture'), positive = 'exit=0\n# tests 1\n# pass 1\n# fail 0\n';
+test('a missed inspection continues without granting read compliance or acceptance', () => {
+  const requirements = { passed: false, fullSourceRead: false, readOnlyHonored: true, unchangedWorkspace: true, eventsComplete: true };
+  assert.equal(shouldStopComparisonTurn({ status: 'completed', requirements, requiredPath: 'src/a.mjs' }), false);
+  const graded = acceptanceDimensions({ evaluation: { publicPassed: true, hiddenPassed: true, hiddenCompleted: true, scopePassed: true },
+    turns: [{ status: 'completed', nativeValidationPassed: true, requirements: { ...requirements, validatedAfterEdit: true } }],
+    plannedTurns: 1, status: 'completed', usageComplete: true });
+  assert.equal(graded.dimensions.nativeCompleted, true); assert.equal(graded.dimensions.declaredReadRequirements, false); assert.equal(graded.accepted, false);
+});
+test('continuation still stops native failures, mutations and incomplete tool events', () => {
+  const input = { status: 'completed', requiredPath: 'src/a.mjs', requirements: { passed: false, readOnlyHonored: true, unchangedWorkspace: true, eventsComplete: true } };
+  for (const patch of [{ status: 'timeout' }, { requiredPath: null },
+    ...['readOnlyHonored','unchangedWorkspace','eventsComplete'].map(k => ({ requirements: { ...input.requirements, [k]: false } }))]) {
+    assert.equal(shouldStopComparisonTurn({ ...input, ...patch }), true);
+  }
+});
 test('validation recognizes quoted relative paths, option order and npm scripts', () => {
   for (const command of ['node --test "./tests/public.test.mjs"', 'node --test --test-reporter=spec tests\\public.test.mjs',
     '& node.exe --test .\\tests\\public.test.mjs', 'node --test tests/public.test.mjs --test-reporter spec', 'npm test', 'npm run verify']) {
