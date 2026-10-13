@@ -22,7 +22,7 @@ function blocks(message, type) {
 }
 
 /** Check preservation independently of the optimizer's diagnostics or summary format. */
-export function checkMemoryPreservation(full, compact, { keepRecentRounds = 2, sourceEvidence } = {}) {
+export function checkMemoryPreservation(full, compact, { keepRecentRounds = 2 } = {}) {
   const problems = [];
   const report = (condition, label) => { if (!condition) problems.push(label); };
   report(full.length === compact.length, 'message count changed');
@@ -66,8 +66,6 @@ export function checkMemoryPreservation(full, compact, { keepRecentRounds = 2, s
         readResults += 1;
         report(next?.content === result.content, `read evidence changed for ${result.tool_use_id}`);
         for (const match of String(result.content).matchAll(/sha256=([a-f0-9]{64})/g)) evidenceHashes.add(match[1]);
-        const sourceHash = sourceEvidence?.get(sha256(String(result.content)))?.sourceHash;
-        if (/^[a-f0-9]{64}$/.test(sourceHash || '')) evidenceHashes.add(sourceHash);
       }
       if (call?.name === 'apply_patch') report(next?.content === result.content, `edit receipt changed for ${result.tool_use_id}`);
     }
@@ -164,7 +162,7 @@ export async function runMemoryBenchmark({ runId = `memory-${new Date().toISOStr
       const measure = (index) => {
         const full = measureHistory(messages);
         const result = compactToolHistory(messages, { keepRecentRounds });
-        const preservation = checkMemoryPreservation(messages, result.messages, { keepRecentRounds, sourceEvidence: tools.sourceEvidence });
+        const preservation = checkMemoryPreservation(messages, result.messages, { keepRecentRounds });
         if (!preservation.passed) throw new Error(`Unsafe memory compaction: ${preservation.problems.join('; ')}`);
         requests.push({ requestIndex: index, full, compact: measureHistory(result.messages), preservation, diagnostics: result.diagnostics });
       };

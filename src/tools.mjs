@@ -168,7 +168,7 @@ export class WorkspaceTools {
     const rangeKey = `${relative}:${start}-${end}`;
     const sourceHash = createHash('sha256').update(source).digest('hex');
     const evidenceRef = `${relative}#L${start}-L${end}@${sourceHash.slice(0, 16)}`;
-    const fullEvidence = `[evidence ref=${evidenceRef}]\n${lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')}`;
+    const fullEvidence = `[evidence ref=${evidenceRef} sha256=${sourceHash}]\n${lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')}`;
     const complete = fullEvidence.length <= MAX_TOOL_OUTPUT;
     const partialHint = '\nOnly a prefix of the requested lines is shown. Use smaller startLine/endLine ranges to read omitted lines; this range is not cached as complete evidence.';
     const evidence = complete ? fullEvidence : `${truncate(fullEvidence, MAX_TOOL_OUTPUT - partialHint.length - 80)}${partialHint}`;
@@ -191,8 +191,7 @@ export class WorkspaceTools {
 
   recordSourceSnapshot(output,relative,sourceHash) {
     this.sourceEvidence.set(createHash('sha256').update(output).digest('hex'),{path:relative,sourceHash});
-    // Compact headers rely on this full-hash sidecar. Retain it for as long as
-    // canonical conversation evidence; /new clears both, including on resume.
+    if(this.sourceEvidence.size>128)this.sourceEvidence.delete(this.sourceEvidence.keys().next().value);
   }
 
   async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false } = {}) {

@@ -75,15 +75,12 @@ export class ContextMemory {
           }
           const searchSnapshot = call.name === 'search_code' ? this.tools.searchEvidence.get(digest(block.content)) : null;
           const sourceSnapshot = call.name === 'read_file' ? this.tools.sourceEvidence.get(digest(block.content)) : null;
-          const unversionedSource = call.name === 'read_file' && !sourceSnapshot
-            && /^\[evidence ref=[^\n]+@[a-f0-9]{16}\]/.test(block.content);
           if (searchSnapshot) dependencies = searchSnapshot;
           const failed = Boolean(block.is_error) || (['run_tests','run_shell'].includes(call.name) && /^exit=(?!0\b)/.test(block.content));
           const unit = { ref, kind: call.name === 'read_file' ? 'source_evidence' : block.is_error ? 'test_failure' : 'tool_result',
             provenance: inherited?.provenance || 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
             error: failed, path: inherited?.path || sourceSnapshot?.path || (call.name === 'read_file' ? (typeof call.input?.path==='string' ? path.posix.normalize(call.input.path.replaceAll('\\','/')) : null) : null),
             sourceHash: inherited?.sourceHash || sourceSnapshot?.sourceHash || evidence?.[2] || cached?.[2] || null, sourceDependencies: dependencies,
-            unversionedSource,
             unversionedSearch: call.name==='search_code' && !searchSnapshot && /^[^\n]+:\d+:\s/m.test(block.content),
             messageIndex: index + 1, bytes: bytes(block.content), validity: inherited?.validity || 'historical' };
           if (inherited?.sourceHash) unit.kind='source_evidence';
@@ -99,7 +96,7 @@ export class ContextMemory {
     this.units = units;
   }
   async freshness(unit, cache = new Map()) {
-    if (unit.unversionedSearch || unit.unversionedSource) return unit.validity='stale';
+    if (unit.unversionedSearch) return unit.validity='stale';
     const dependencies=[...(unit.sourceDependencies || []),...(unit.sourceHash ? [{path:unit.path,sourceHash:unit.sourceHash}] : [])];
     if (!dependencies.length) return unit.validity;
     for (const dependency of dependencies) {

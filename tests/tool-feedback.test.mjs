@@ -42,7 +42,7 @@ test('S1 is explicitly opt-in and disabled by default', () => {
   assert.equal(loadConfig({}, { TEA_CAPABILITY_FEEDBACK: '1' }).capabilityFeedback, true);
 });
 
-test('disabled S1 preserves parent requests except the explicit E1 compact evidence header', async () => {
+test('disabled S1 preserves exact parent model requests, denial flags, tool IDs and outcomes', async () => {
   const { root, config } = await fixture();
   const requests = [];
   const steps = () => [calls([{ name: 'read_file', input: { path: 'value.mjs' } }, { name: 'run_shell', input: { command: 'node --version' } }]), done];
@@ -53,15 +53,7 @@ test('disabled S1 preserves parent requests except the explicit E1 compact evide
     : Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,normalize(v)])) : value;
   const baseline = JSON.parse(await readFile(new URL('./fixtures/s1-default-parent-requests.json', import.meta.url), 'utf8'));
   assert.equal(baseline.parentCommit, 'c97b950797294f48e31752508af11a80814e66d8');
-  const expected = structuredClone(baseline.requests);
-  for (const request of expected) for (const message of request.messages) {
-    if (Array.isArray(message.content)) for (const block of message.content) {
-      if (block.type === 'tool_result' && typeof block.content === 'string') {
-        block.content = block.content.replace(/^(\[evidence ref=[^\n]+) sha256=[a-f0-9]{64}\]/, '$1]');
-      }
-    }
-  }
-  assert.deepEqual(normalize(payloads(requests)), expected);
+  assert.deepEqual(normalize(payloads(requests)), baseline.requests);
   assert.equal(notices(requests[0]), 0); assert.equal(requests[1].messages.at(-1).content[1].is_error, false);
   assert.deepEqual([current.status, current.toolCalls, current.validationPassed], baseline.outcome);
 });

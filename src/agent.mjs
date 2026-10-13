@@ -344,10 +344,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           taskState.phase = call.name === 'apply_patch' ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
           if (call.input?.path && !taskState.active_files.includes(call.input.path)) taskState.active_files.push(call.input.path);
           const finding = { toolId: call.id, tool: call.name, provenance: 'observed', sourceEventId: observedEvent?.eventId || null,
-            outputSha256: createTaskHash(output), fileVersion: call.name === 'read_file'
-              ? tools.sourceEvidence.get(createTaskHash(output))?.sourceHash
-                || String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null
-              : null, isError, ...(feedback ? { feedback } : {}) };
+            outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError, ...(feedback ? { feedback } : {}) };
           taskState.confirmed_findings.push(finding);
           if (isError || /^exit=[^0]/.test(output) || feedback) taskState.failed_attempts.push(finding);
           taskState.validation = runtimeState();
