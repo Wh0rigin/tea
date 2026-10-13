@@ -32,6 +32,8 @@ for ax,scale,title in zip(axes,scales,titles):
                 ax.scatter(pos+offset,y,s=30,marker=marker,color='white' if marker!='x' else '#333333',edgecolors=color if marker!='x' else None,zorder=3,clip_on=False)
         count=sum(not r['usageComplete'] for r in arm)
         if count:ax.text(pos,.1,f'{count} unknown',ha='center',transform=ax.get_xaxis_transform(),color='#ab3b36',fontsize=9)
+        if not arm:ax.text(pos,.1,'Not started',ha='center',transform=ax.get_xaxis_transform(),color='#666666',fontsize=8)
+    ax.set_xlim(-.5,2.5)
     vals=[r['totalTokens']/1000 for r in xs if r['usageComplete'] and r['totalTokens'] is not None];ax.set_ylim(0,max(vals)*1.3 if vals else 1)
     if stats:
         def text(v):return 'incomplete' if v is None else f"{abs(v):.2f}% "+('fewer' if v>=0 else 'more')
@@ -46,7 +48,9 @@ for ax,scale,title in zip(axes,scales,titles):
         acc=' · '.join(f"{stats['roles'][a]['accepted']}/{expected}" for a in agents)
         code=' · '.join(f"{stats['roles'][a]['qualityDimensions']['codeCorrect']}/{expected}" for a in agents)
         ax.text(.5,-.24,'TEA / Pi / Claude\nAccepted: '+acc+'\nCode behavior: '+code,ha='center',transform=ax.transAxes,fontsize=9)
-fig.suptitle('Three native coding agents — same GLM-5.3-flash, enabled/low; three repeats',fontsize=16)
+title='Three native coding agents — same GLM-5.3-flash, enabled/low; three repeats'
+if s.get('panelVersions'):title+='\nFresh: v5 · Long: v6 (separately frozen; '+('complete' if s['complete'] else 'Long incomplete')+')'
+fig.suptitle(title,fontsize=16)
 fig.text(.5,.03,'Bars exclude × failures; △ validation-unconfirmed attempts remain eligible. Long bars additionally require all workflow phases.\nEvery known attempt remains a point. ○: accepted; △: final validation unconfirmed; ×: other acceptance failure. Historical grades/tokens unchanged.',ha='center',fontsize=10)
 fig.subplots_adjust(left=.055,right=.99,top=.81,bottom=.29,wspace=.35)
 fig.savefig(folder/'three-agents.png',dpi=160);fig.savefig(folder/'three-agents.svg',metadata={'Date':None});plt.close(fig)

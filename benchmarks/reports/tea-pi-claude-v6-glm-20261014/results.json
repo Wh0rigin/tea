@@ -1,0 +1,5506 @@
+{
+  "usageSource": "provider-wire",
+  "allAttemptsRetained": true,
+  "runs": [
+    {
+      "cohort": "long",
+      "taskId": "long-30",
+      "caseId": "long-30-r1",
+      "agent": "tea",
+      "repetition": 1,
+      "scale": "long-session",
+      "group": "long-session",
+      "initialSha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+      "initialCommit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+      "status": "completed",
+      "accepted": true,
+      "recoveryCalls": 0,
+      "compactions": 0,
+      "toolCalls": 36,
+      "engineCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+      "engineSha256": "cb7dcbe190449dd92cc7c505db557f10fffef3e23a95ac3cce1cd87ad4a6b011",
+      "elapsedMs": 381299,
+      "requests": 66,
+      "inputTokens": 307644,
+      "outputTokens": 1813,
+      "totalTokens": 309457,
+      "usageComplete": true,
+      "qualityDimensions": {
+        "codeCorrect": true,
+        "scopeCorrect": true,
+        "declaredReadRequirements": true,
+        "nativePostEditValidation": true,
+        "nativeCompleted": true,
+        "usageComplete": true
+      },
+      "accountedUsd": 0.2511916,
+      "guards": [],
+      "processClosed": null,
+      "observedTools": null,
+      "stdoutSha256": null,
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 2930,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 6783,
+            "sentWireBytes": 6783,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "e994fb2758a30417cdc29ca5b09ac1522faed6a36bb70ecdd60bd2e03e782fd8"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0000.mjs",
+              "success": true,
+              "outputSha256": "e994fb2758a30417cdc29ca5b09ac1522faed6a36bb70ecdd60bd2e03e782fd8",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 2,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 3937,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 9080,
+            "sentWireBytes": 9080,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "9e2a91714aea367d0fba90057740031c9c78ca8e7eb769b5d89152ea91e1d74d"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0012.mjs",
+              "success": true,
+              "outputSha256": "9e2a91714aea367d0fba90057740031c9c78ca8e7eb769b5d89152ea91e1d74d",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 3,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 4923,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 11318,
+            "sentWireBytes": 11318,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "1dd90d76189cfa9175df3e05ab23c7935776a111074c14380aa84032edcbe3e0"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0024.mjs",
+              "success": true,
+              "outputSha256": "1dd90d76189cfa9175df3e05ab23c7935776a111074c14380aa84032edcbe3e0",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 4,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 5909,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 13542,
+            "sentWireBytes": 13542,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "79a7cc0c991af64ab88dab2e3193281a8238965cb52cadf57deaff90cba3b98e"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0036.mjs",
+              "success": true,
+              "outputSha256": "79a7cc0c991af64ab88dab2e3193281a8238965cb52cadf57deaff90cba3b98e",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 5,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 6896,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 15766,
+            "sentWireBytes": 15766,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "2c8f5c45633532fca6e0a01c6b09ba44caab166b75cbfb8f71713c224eeb736b"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0048.mjs",
+              "success": true,
+              "outputSha256": "2c8f5c45633532fca6e0a01c6b09ba44caab166b75cbfb8f71713c224eeb736b",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 6,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 7884,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 17990,
+            "sentWireBytes": 17990,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "4916d092caec9bb7953376f8ab3f5d7ae220f0032cef2ad1d4a8d0f5ef8640b8"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0060.mjs",
+              "success": true,
+              "outputSha256": "4916d092caec9bb7953376f8ab3f5d7ae220f0032cef2ad1d4a8d0f5ef8640b8",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 7,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8866,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 20214,
+            "sentWireBytes": 20214,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "4eb18b7b21292f07ed8ca2331f96bf05e42e8782a7e0f9e523da9fab2a9879a8"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0072.mjs",
+              "success": true,
+              "outputSha256": "4eb18b7b21292f07ed8ca2331f96bf05e42e8782a7e0f9e523da9fab2a9879a8",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 8,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9849,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 22438,
+            "sentWireBytes": 22438,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "aabdaea7264bcc80bc9f583ed2a314c9c535f204af8d7e102c3d010b3ed43192"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0084.mjs",
+              "success": true,
+              "outputSha256": "aabdaea7264bcc80bc9f583ed2a314c9c535f204af8d7e102c3d010b3ed43192",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 9,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10834,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 24662,
+            "sentWireBytes": 24662,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "88a9c2056d7c1c01124d94dbd7a8a3ed73e5f57b9c44320d2fb0a45bd0c9964d"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0096.mjs",
+              "success": true,
+              "outputSha256": "88a9c2056d7c1c01124d94dbd7a8a3ed73e5f57b9c44320d2fb0a45bd0c9964d",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 10,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 11815,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 26892,
+            "sentWireBytes": 26892,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "272adf1e0886ed69f85d79441bb2627d7d07b9ee3f9ada73af4954b70ebec318"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0108.mjs",
+              "success": true,
+              "outputSha256": "272adf1e0886ed69f85d79441bb2627d7d07b9ee3f9ada73af4954b70ebec318",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 11,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 12796,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 29121,
+            "sentWireBytes": 29121,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "091ad43a923790b3a3df5c2a403db3d52538db175fb422495dab9d06ef2f9cf6"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0001.mjs",
+              "success": true,
+              "outputSha256": "091ad43a923790b3a3df5c2a403db3d52538db175fb422495dab9d06ef2f9cf6",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 12,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 13776,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 31351,
+            "sentWireBytes": 31351,
+            "evictedUnits": 0
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "0e2ee3208daaaa462f9e1e3e7463b0a57504e60d60b1324e57c7d92b6acef943"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0013.mjs",
+              "success": true,
+              "outputSha256": "0e2ee3208daaaa462f9e1e3e7463b0a57504e60d60b1324e57c7d92b6acef943",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 13,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10976,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 33584,
+            "sentWireBytes": 16595,
+            "evictedUnits": 11
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "a5ce5f79e23993c5456102424489a5fd9098d6a1d7064db39a1384f1f5209a78"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0025.mjs",
+              "success": true,
+              "outputSha256": "a5ce5f79e23993c5456102424489a5fd9098d6a1d7064db39a1384f1f5209a78",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 14,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 7806,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 35817,
+            "sentWireBytes": 17110,
+            "evictedUnits": 12
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "1ae75f380d07299d3371899e48e9d68ec2dd666cd0f59e9cef2d938eb9659412"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0037.mjs",
+              "success": true,
+              "outputSha256": "1ae75f380d07299d3371899e48e9d68ec2dd666cd0f59e9cef2d938eb9659412",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 15,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8034,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 38050,
+            "sentWireBytes": 17625,
+            "evictedUnits": 13
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "0c956f7f95d88fca8fcff62eb88100c1b687257cfaa7efbcf330d97c028307c4"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0049.mjs",
+              "success": true,
+              "outputSha256": "0c956f7f95d88fca8fcff62eb88100c1b687257cfaa7efbcf330d97c028307c4",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 16,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8258,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 40283,
+            "sentWireBytes": 18140,
+            "evictedUnits": 14
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "d29a1cdce7391a287434427a170aa8a6788b95f1f7bf3c5c70c19632dff4f6bf"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0061.mjs",
+              "success": true,
+              "outputSha256": "d29a1cdce7391a287434427a170aa8a6788b95f1f7bf3c5c70c19632dff4f6bf",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 17,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8477,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 42516,
+            "sentWireBytes": 18655,
+            "evictedUnits": 15
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "24b10b27f243bd9b0b689e5ef28b1543908b80c2c57012d45f1de3a2f6730bfa"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0073.mjs",
+              "success": true,
+              "outputSha256": "24b10b27f243bd9b0b689e5ef28b1543908b80c2c57012d45f1de3a2f6730bfa",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 18,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8709,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 44749,
+            "sentWireBytes": 19170,
+            "evictedUnits": 16
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "a3e7a50daef032a3858e7912194bb06d34c51a31ad56d69a692ab2f3c5eafe72"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0085.mjs",
+              "success": true,
+              "outputSha256": "a3e7a50daef032a3858e7912194bb06d34c51a31ad56d69a692ab2f3c5eafe72",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 19,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8942,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 46982,
+            "sentWireBytes": 19685,
+            "evictedUnits": 17
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "d95dff753748b0135ea188549094fc59f75fe3350a7a01179ff7d5d5dd1ed306"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0097.mjs",
+              "success": true,
+              "outputSha256": "d95dff753748b0135ea188549094fc59f75fe3350a7a01179ff7d5d5dd1ed306",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 20,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9173,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 49221,
+            "sentWireBytes": 20206,
+            "evictedUnits": 18
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "d2cd598c6649c7ad1117a784f1da41c2cc0a7519d78d0d41aa70c4f3caed5081"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0109.mjs",
+              "success": true,
+              "outputSha256": "d2cd598c6649c7ad1117a784f1da41c2cc0a7519d78d0d41aa70c4f3caed5081",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 21,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9402,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 51537,
+            "sentWireBytes": 20804,
+            "evictedUnits": 19
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "045a5f900a5d8b062d609c98637ac7391a17b0dac3bccad0a450b612c7cd38be"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0002.mjs",
+              "success": true,
+              "outputSha256": "045a5f900a5d8b062d609c98637ac7391a17b0dac3bccad0a450b612c7cd38be",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 22,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9620,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 53767,
+            "sentWireBytes": 21310,
+            "evictedUnits": 20
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "2fecf53622e1a66677f158e8de4b0f9659de449d9ced65648586d25d884380ec"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0014.mjs",
+              "success": true,
+              "outputSha256": "2fecf53622e1a66677f158e8de4b0f9659de449d9ced65648586d25d884380ec",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 23,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9840,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 56000,
+            "sentWireBytes": 21831,
+            "evictedUnits": 21
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "6f330ffae8cf69e19f5018d353e8b843a1468f8e22409860d21133b99f326a34"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0026.mjs",
+              "success": true,
+              "outputSha256": "6f330ffae8cf69e19f5018d353e8b843a1468f8e22409860d21133b99f326a34",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 24,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10076,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 58233,
+            "sentWireBytes": 22346,
+            "evictedUnits": 22
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "d8d54fdbb3ff8f93569d0d948664a44fb4c7f0f7e840ef908ce3d58d7895ab26"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0038.mjs",
+              "success": true,
+              "outputSha256": "d8d54fdbb3ff8f93569d0d948664a44fb4c7f0f7e840ef908ce3d58d7895ab26",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 25,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10314,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 60466,
+            "sentWireBytes": 22861,
+            "evictedUnits": 23
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "3dd0191dfb9303dee82973cb3eaa81f28a0cecf2688568da9711e67331797344"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0050.mjs",
+              "success": true,
+              "outputSha256": "3dd0191dfb9303dee82973cb3eaa81f28a0cecf2688568da9711e67331797344",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 26,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10550,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 62699,
+            "sentWireBytes": 23376,
+            "evictedUnits": 24
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "27e9a86fa9f62c041ee5d5d46fadc4e66e89bea71d1a9231365e4748f1b9af74"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0062.mjs",
+              "success": true,
+              "outputSha256": "27e9a86fa9f62c041ee5d5d46fadc4e66e89bea71d1a9231365e4748f1b9af74",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 27,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10775,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 64932,
+            "sentWireBytes": 23891,
+            "evictedUnits": 25
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "fbccb239a556266cd8cb7d44f58c10ff33d4936680dd5c2c18fd42c743868e23"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0074.mjs",
+              "success": true,
+              "outputSha256": "fbccb239a556266cd8cb7d44f58c10ff33d4936680dd5c2c18fd42c743868e23",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 28,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 11006,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 67165,
+            "sentWireBytes": 24406,
+            "evictedUnits": 26
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "4722f9745876934cd5f92ac01d6de87dbd45bae492f0cef99d8bde477f187e4b"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0086.mjs",
+              "success": true,
+              "outputSha256": "4722f9745876934cd5f92ac01d6de87dbd45bae492f0cef99d8bde477f187e4b",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 29,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 11237,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 69398,
+            "sentWireBytes": 24921,
+            "evictedUnits": 27
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "935659d0a4534f6e744c7fc5c198ac87df9d37613c48e6fc3a41d57842a492d2"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0098.mjs",
+              "success": true,
+              "outputSha256": "935659d0a4534f6e744c7fc5c198ac87df9d37613c48e6fc3a41d57842a492d2",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 30,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 11465,
+          "nativeValidationPassed": false,
+          "context": {
+            "fullWireBytes": 71637,
+            "sentWireBytes": 25442,
+            "evictedUnits": 28
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "e9387e5749a80117db17becb460db7229ef3ff435d658cec86e0393694b5f249"
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/generated/domain-02/module-0110.mjs",
+              "success": true,
+              "outputSha256": "e9387e5749a80117db17becb460db7229ef3ff435d658cec86e0393694b5f249",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 31,
+          "status": "completed",
+          "requests": 6,
+          "totalTokens": 34382,
+          "nativeValidationPassed": true,
+          "context": {
+            "fullWireBytes": 76391,
+            "sentWireBytes": 26248,
+            "evictedUnits": 32
+          },
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": true,
+            "unchangedWorkspace": null,
+            "expectedOutputSha256": null
+          },
+          "calls": [
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "AGENTS.md",
+              "success": true,
+              "outputSha256": "61be2b9d205b8eb57b1c66ce5374a524f827fd1dc5ebc0a856f1702250ca6e70",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            },
+            {
+              "name": "search_code",
+              "kind": "other",
+              "relativePath": null,
+              "success": true,
+              "outputSha256": "67a436b4e0bcf429ec89af392b3e046f5121db8a6beff80dd1a17c21eb3b4ae0",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            },
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/services/retry-budget.mjs",
+              "success": true,
+              "outputSha256": "f0c8f597f37d943e264fa0b30fcecfeb3e4301e3b15068351675c4063df75a2e",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            },
+            {
+              "name": "apply_patch",
+              "kind": "edit",
+              "relativePath": "src/services/retry-budget.mjs",
+              "success": true,
+              "outputSha256": "54fdc460aa49495dbd6cd88fbc1dae2faeca99bd7cf74ea0b91fd56d8990495e",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": false,
+                "passed": false
+              }
+            },
+            {
+              "name": "read_file",
+              "kind": "read",
+              "relativePath": "src/services/retry-budget.mjs",
+              "success": true,
+              "outputSha256": "efc610eb839ab26a97d686a520f52246726e3fb1a761f3691830b5dd4601f359",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            },
+            {
+              "name": "run_tests",
+              "kind": "shell",
+              "relativePath": null,
+              "success": true,
+              "outputSha256": "5e138e6c28a685209b0cb1b582b4bb6007bd1d0d21fb662bb884f368780447b7",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": true,
+              "execution": {
+                "commandSha256": "041a6a3dd82ea6d4230deeb84d7435403db775acf0af6f7b23482512c7faa342",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "test-path"
+                ],
+                "argumentsSha256": "25fb2ee91efd27a17108282372fd95c16e3e09c445f5f6aa370505f284208b00",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cohort": "long",
+      "taskId": "long-30",
+      "caseId": "long-30-r1",
+      "agent": "pi",
+      "repetition": 1,
+      "scale": "long-session",
+      "group": "long-session",
+      "initialSha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+      "initialCommit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+      "status": "failed",
+      "accepted": false,
+      "recoveryCalls": 0,
+      "compactions": 0,
+      "toolCalls": 11,
+      "engineCommit": null,
+      "engineSha256": null,
+      "elapsedMs": 113029,
+      "requests": 22,
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "usageComplete": false,
+      "qualityDimensions": {
+        "codeCorrect": false,
+        "scopeCorrect": true,
+        "declaredReadRequirements": false,
+        "nativePostEditValidation": false,
+        "nativeCompleted": false,
+        "usageComplete": false
+      },
+      "accountedUsd": 0.32987120000000003,
+      "guards": [],
+      "processClosed": null,
+      "observedTools": null,
+      "stdoutSha256": "a0e79f688113dac5466bc4570bef47b2e9f65d40d7a461cb1a07fcbad75ee31d",
+      "turns": [
+        {
+          "phase": 1,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 3508,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "825c7f8c7c86727a8c01d3fbfe57d2296d5c35ab765ce517d4ae74fad1f069b0"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0000.mjs",
+              "success": true,
+              "outputSha256": "825c7f8c7c86727a8c01d3fbfe57d2296d5c35ab765ce517d4ae74fad1f069b0",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 2,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 4312,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "9d4aaf6164d7f1d38002a4aece32929a807ecf24ef7752f36b95fbace41867e1"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0012.mjs",
+              "success": true,
+              "outputSha256": "9d4aaf6164d7f1d38002a4aece32929a807ecf24ef7752f36b95fbace41867e1",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 3,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 5116,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "4e08d53c46540298d81b444ed97f0bafe6d4b4a75e18aa407771c2ab0d01de4c"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0024.mjs",
+              "success": true,
+              "outputSha256": "4e08d53c46540298d81b444ed97f0bafe6d4b4a75e18aa407771c2ab0d01de4c",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 4,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 5925,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "dce823c4471e910a39faec159e8468cb792059d6edacafd39c638dfc6dfc792d"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0036.mjs",
+              "success": true,
+              "outputSha256": "dce823c4471e910a39faec159e8468cb792059d6edacafd39c638dfc6dfc792d",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 5,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 6735,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "471164e1eb2a8aaa124352ae2f00bdbe4b0da6d151849628b4454f9d3679cbb5"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0048.mjs",
+              "success": true,
+              "outputSha256": "471164e1eb2a8aaa124352ae2f00bdbe4b0da6d151849628b4454f9d3679cbb5",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 6,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 7545,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "23a7bc5e8c38660a33309f8530372b3476c8fa1dbfdae09d2c0bf1f90934d602"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0060.mjs",
+              "success": true,
+              "outputSha256": "23a7bc5e8c38660a33309f8530372b3476c8fa1dbfdae09d2c0bf1f90934d602",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 7,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 8350,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "fc73f0551ad4baab3581cb33a3cfd620912b48f12777ea1ea6cc1caf25a36b3c"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0072.mjs",
+              "success": true,
+              "outputSha256": "fc73f0551ad4baab3581cb33a3cfd620912b48f12777ea1ea6cc1caf25a36b3c",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 8,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9159,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "ec35028a7ce665298f113033b374cd929398469b76fd79e8f1b3c3ffcb7ab7b1"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0084.mjs",
+              "success": true,
+              "outputSha256": "ec35028a7ce665298f113033b374cd929398469b76fd79e8f1b3c3ffcb7ab7b1",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 9,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 9969,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "70f08ff8603d215fae3b17867d31935927398e4579da8fb59e941b2480d6b852"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0096.mjs",
+              "success": true,
+              "outputSha256": "70f08ff8603d215fae3b17867d31935927398e4579da8fb59e941b2480d6b852",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 10,
+          "status": "completed",
+          "requests": 2,
+          "totalTokens": 10774,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "37138354cb2c1d672118be17a16a7c72d0d58a3ea673236871aff183cbdbeaf5"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-00/module-0108.mjs",
+              "success": true,
+              "outputSha256": "37138354cb2c1d672118be17a16a7c72d0d58a3ea673236871aff183cbdbeaf5",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        },
+        {
+          "phase": 11,
+          "status": "failed",
+          "requests": 2,
+          "totalTokens": null,
+          "nativeValidationPassed": false,
+          "context": null,
+          "requirements": {
+            "passed": true,
+            "fullSourceRead": true,
+            "readOnlyHonored": true,
+            "validatedAfterEdit": false,
+            "unchangedWorkspace": true,
+            "expectedOutputSha256": "065ad6c75f5d93c44c9247ee591719f71eb9767fab318fc245fd3fdd88e04908"
+          },
+          "calls": [
+            {
+              "name": "read",
+              "kind": "read",
+              "relativePath": "src/generated/domain-01/module-0001.mjs",
+              "success": true,
+              "outputSha256": "065ad6c75f5d93c44c9247ee591719f71eb9767fab318fc245fd3fdd88e04908",
+              "nativeOutputSha256": null,
+              "readNumberingDecoded": null,
+              "relevantValidation": false,
+              "execution": null,
+              "sourceVersionsBefore": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "71ee2ef5b1284f25acf217b507850b33a1e4f3c2f6549d4c81025b0b0b125c2e",
+                "src/services/retry-budget.mjs": "04c23cabcec01b15202bcec5c7ff22a6a4d97b98b3094912335295f7fcfa118b",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "validationEvidence": {
+                "recognized": false,
+                "summary": null,
+                "stableSources": true,
+                "passed": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 1220,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 0,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 1220,
+      "outputTokens": 22,
+      "totalTokens": 1242,
+      "reportedTokenLowerBound": 1242,
+      "requestSha256": "83499d047a4dab359a61c82ff912c8c9d5ef339d6c107051a33c07434130557d",
+      "bytes": 4935,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "4426762b47716f0a1c4102de67561ffe914ef28dd100e8cbbde7ed5a222b29b8",
+      "elapsedMs": 5999,
+      "accountedUsd": 0.0010375999999999999,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 426,
+        "output_tokens": 46,
+        "cache_read_input_tokens": 1216,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 1642,
+      "outputTokens": 46,
+      "totalTokens": 1688,
+      "reportedTokenLowerBound": 1688,
+      "requestSha256": "d18877b144982b77702c3ca0be14a32653e7afc39e701be6f2d19caf0376bf48",
+      "bytes": 6783,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "d3aa2f7bcad22817e89a09e021d2814406d18c1d4c60955d7e5e0f721c000f4b",
+      "elapsedMs": 5445,
+      "accountedUsd": 0.0014424000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 131,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 1600,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 1731,
+      "outputTokens": 22,
+      "totalTokens": 1753,
+      "reportedTokenLowerBound": 1753,
+      "requestSha256": "75c268ced504276928a3dc3e58ba3751e3eb1d9a40e86b5f776dc34d878f3016",
+      "bytes": 7226,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "681a54d8019841d733dd386ceb6f07828ed18bfc7813711c8fac3fe67eae5587",
+      "elapsedMs": 5007,
+      "accountedUsd": 0.0014464,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 426,
+        "output_tokens": 30,
+        "cache_read_input_tokens": 1728,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2154,
+      "outputTokens": 30,
+      "totalTokens": 2184,
+      "reportedTokenLowerBound": 2184,
+      "requestSha256": "a043fdc5415c6ea51bba4895f216b26c0aaa472f251f0b832d79c1a4140a354f",
+      "bytes": 9080,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "ea1c253b326daced6c7e808c3192ad9143b5240545c0befa02832114c4029efb",
+      "elapsedMs": 5002,
+      "accountedUsd": 0.0018072000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 115,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 2112,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2227,
+      "outputTokens": 22,
+      "totalTokens": 2249,
+      "reportedTokenLowerBound": 2249,
+      "requestSha256": "3212726ef2364a098518da4835cf93bd9188485cbdb2edca2d45cbf3e40bfd9c",
+      "bytes": 9464,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "b0f0b08847acd9f3d3e72f72f30992f4ccfd1ca0c750c4e61752d2eecb769bbd",
+      "elapsedMs": 4934,
+      "accountedUsd": 0.0018432000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 471,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2176,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2647,
+      "outputTokens": 27,
+      "totalTokens": 2674,
+      "reportedTokenLowerBound": 2674,
+      "requestSha256": "6bf4b4126f5c2b7f8394249c337f5d899da1f7ae7200efdf397b86bec42f9861",
+      "bytes": 11318,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "23a75b8bf4d14dcef238939c6d7dc119f786038653ca0dedb8542f0d34d785e1",
+      "elapsedMs": 4853,
+      "accountedUsd": 0.0021931999999999998,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 94,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 2624,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2718,
+      "outputTokens": 23,
+      "totalTokens": 2741,
+      "reportedTokenLowerBound": 2741,
+      "requestSha256": "b25c859160d68e6f620a54533d46b8a11cc73839666390364a4011f091299d50",
+      "bytes": 11688,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "07145ee12709f067851bd61de702363f065ddaa4fbcc2a6af23a36085b0ab2f7",
+      "elapsedMs": 5032,
+      "accountedUsd": 0.0022388,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 453,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2688,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3141,
+      "outputTokens": 27,
+      "totalTokens": 3168,
+      "reportedTokenLowerBound": 3168,
+      "requestSha256": "de15eaae7f4686d1b843cb575fb49c3bf80e8d133fd8d3d7aa1742fcbc5a3b3b",
+      "bytes": 13542,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "a5f09f7eea2fd326e69fbd26914935455fe2a366009b61fe229b782833aced58",
+      "elapsedMs": 1926,
+      "accountedUsd": 0.0025884000000000002,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 76,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 3136,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3212,
+      "outputTokens": 23,
+      "totalTokens": 3235,
+      "reportedTokenLowerBound": 3235,
+      "requestSha256": "0df938f33b2a8e72c92332186d429c479833cb63c033ef83958c22b39ad42da8",
+      "bytes": 13912,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "2dcd645221975d771914ded05f7d63fda4e7f2283feeda1d34904e06ce1beb28",
+      "elapsedMs": 5248,
+      "accountedUsd": 0.0026340000000000005,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 434,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 3200,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3634,
+      "outputTokens": 27,
+      "totalTokens": 3661,
+      "reportedTokenLowerBound": 3661,
+      "requestSha256": "4f7c39b7ff7ea34dfec62469d88f5ba5f1fe37860e2a2945dc41e1f7a4f88a71",
+      "bytes": 15766,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "21a05aa69f3d4db443ffbbfef75f1ec03628c1fc81c20d07cea29c293452b9bc",
+      "elapsedMs": 5211,
+      "accountedUsd": 0.0029828000000000003,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 121,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 3584,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3705,
+      "outputTokens": 23,
+      "totalTokens": 3728,
+      "reportedTokenLowerBound": 3728,
+      "requestSha256": "0cc482ea9f9f32cd9ed9002ef5d5a8d6829ce22ae0fb57e207ce0631799fd402",
+      "bytes": 16136,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "a9bdea7f414c75f20305cdbb092f06cd16ad99283206a9d873c80974ce76634c",
+      "elapsedMs": 5310,
+      "accountedUsd": 0.0030284,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 481,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 3648,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4129,
+      "outputTokens": 27,
+      "totalTokens": 4156,
+      "reportedTokenLowerBound": 4156,
+      "requestSha256": "8d728538fbbbf4d9b7e8c830baf08ccc82dd0bc0e838ee637cea5355f479d176",
+      "bytes": 17990,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "7281e2c109e19b1cf54376a44085d10c204c74103b18e0589251dc7e0416dca3",
+      "elapsedMs": 5127,
+      "accountedUsd": 0.0033788000000000004,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 103,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 4096,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4199,
+      "outputTokens": 22,
+      "totalTokens": 4221,
+      "reportedTokenLowerBound": 4221,
+      "requestSha256": "68d2789f4124c85e535f1cdcb2941be945b981ce1972203da6c56e9e6f3349f5",
+      "bytes": 18360,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "ab80642f059cfcc27b253946e6f49b045b02e22016a9027e2984307fa8248ff3",
+      "elapsedMs": 5259,
+      "accountedUsd": 0.0034208000000000003,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 458,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 4160,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4618,
+      "outputTokens": 27,
+      "totalTokens": 4645,
+      "reportedTokenLowerBound": 4645,
+      "requestSha256": "942ce6791610acf2434110f8e3c532b8cd6f5ef6c4448832a5118120b67cbf53",
+      "bytes": 20214,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "d592119b0bb2f55a13bdf5e5d6ebeb30af97fff8de5280941131870fed8c1078",
+      "elapsedMs": 5443,
+      "accountedUsd": 0.00377,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 81,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 4608,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4689,
+      "outputTokens": 23,
+      "totalTokens": 4712,
+      "reportedTokenLowerBound": 4712,
+      "requestSha256": "b5aa37eba2256ea19adf078eb440a5f952d804cacc421a8dd224090657ac8cfb",
+      "bytes": 20584,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "b239b22706f1c1d4ba9da0e084869e6568e4fb7fab7f5f56bce657fdb9e1ce21",
+      "elapsedMs": 5684,
+      "accountedUsd": 0.0038156,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 438,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 4672,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5110,
+      "outputTokens": 27,
+      "totalTokens": 5137,
+      "reportedTokenLowerBound": 5137,
+      "requestSha256": "69d19c4a322e74ab9cce92f44ebd96bed2c34b29c5fcdd66e2449b88bddc70fd",
+      "bytes": 22438,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "5cbb8921935de76fc9b2f5bc0272da7d2ee10d85341958a65fa1d5ab82be3ed3",
+      "elapsedMs": 5249,
+      "accountedUsd": 0.0041636,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 125,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 5056,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5181,
+      "outputTokens": 23,
+      "totalTokens": 5204,
+      "reportedTokenLowerBound": 5204,
+      "requestSha256": "6a4feba01c721ebd3106534b67c7076c95688916d545fc8dd2ec1c828ed39319",
+      "bytes": 22808,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "89a0396169751491114186ce815e1c44715bbbfdcb672fc9193abf6c66369cc7",
+      "elapsedMs": 5624,
+      "accountedUsd": 0.0042092,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 483,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 5120,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5603,
+      "outputTokens": 27,
+      "totalTokens": 5630,
+      "reportedTokenLowerBound": 5630,
+      "requestSha256": "5c2f4ec365cb4cc5402bc9f178fd1e521693ed55f2e81b2d14bbb6f69805b835",
+      "bytes": 24662,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "bdede16cfd07ef67dfa952ff7f177359e69adce0eb799fce979eb0138cba8bee",
+      "elapsedMs": 5197,
+      "accountedUsd": 0.004558000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 105,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 5568,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5673,
+      "outputTokens": 22,
+      "totalTokens": 5695,
+      "reportedTokenLowerBound": 5695,
+      "requestSha256": "de030c24a82a970301913c38bb11a9cb026b09f8eeb3a7c205a7e134738659da",
+      "bytes": 25032,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "17a427cff72ef796510e11f3f8172e069ee3f1ab10d0b4a7e8eb97c9dfe3a39e",
+      "elapsedMs": 5861,
+      "accountedUsd": 0.004600000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 461,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 5632,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 6093,
+      "outputTokens": 27,
+      "totalTokens": 6120,
+      "reportedTokenLowerBound": 6120,
+      "requestSha256": "0abc9d4f8124fb8530d903fae3609f01ad6fce94c9733966da972b1a1a14cc20",
+      "bytes": 26892,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "444f1bbd0d7d5359561ce42b06888c1f65095f64c6a0528bed9ffc78f2d2e336",
+      "elapsedMs": 5693,
+      "accountedUsd": 0.004950000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 83,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 6080,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 6163,
+      "outputTokens": 22,
+      "totalTokens": 6185,
+      "reportedTokenLowerBound": 6185,
+      "requestSha256": "4ab94069301ea0b77b13cfebdfd8620ee673b597f4a6f5e67bf919900000a2f9",
+      "bytes": 27265,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "a2e3dceaea8ba6e6d2a1e08cf6245956503ac402b5bdb54a0d7e5f9528b06332",
+      "elapsedMs": 5227,
+      "accountedUsd": 0.004992000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 440,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 6144,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 6584,
+      "outputTokens": 27,
+      "totalTokens": 6611,
+      "reportedTokenLowerBound": 6611,
+      "requestSha256": "bd4ae69e6397bc10b076bec328640c2a54e54813f064ea67da70297796cc5ac7",
+      "bytes": 29121,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "7b6d90624b07155fb82bb036abe86529093ddf4dbbe1402fc7d138e6e9b6bc86",
+      "elapsedMs": 5690,
+      "accountedUsd": 0.005342800000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 126,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 6528,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 6654,
+      "outputTokens": 22,
+      "totalTokens": 6676,
+      "reportedTokenLowerBound": 6676,
+      "requestSha256": "1661f901fbbdbfd653617737df690efe6bb34a6b1d840bb4325c8dfa3155243b",
+      "bytes": 29489,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "c1edbab6c6a06ced4ea231fe4ec8c345f3b765964ad55e56b2a7b970af6e477d",
+      "elapsedMs": 6103,
+      "accountedUsd": 0.005384800000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 481,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 6592,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 7073,
+      "outputTokens": 27,
+      "totalTokens": 7100,
+      "reportedTokenLowerBound": 7100,
+      "requestSha256": "0d190f0e2b4355bf52e4f265db24d9ccecba4343ff39198d384f76a1de9a99d4",
+      "bytes": 31351,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "93b38ca23221f2825c8fe8c60b4b7572c7124c150b7739549b71b90d44bb2221",
+      "elapsedMs": 5633,
+      "accountedUsd": 0.005734000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 103,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 7040,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 7143,
+      "outputTokens": 22,
+      "totalTokens": 7165,
+      "reportedTokenLowerBound": 7165,
+      "requestSha256": "58e3cec8a9dcc7d99489a52df024f6006bd304fa54a2b696293584e09809302d",
+      "bytes": 31722,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "7792ab2ebe4c3411bafff26a56c3e7535d208d5743801bb925f9499076339560",
+      "elapsedMs": 6662,
+      "accountedUsd": 0.005776000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3784,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 0,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3784,
+      "outputTokens": 27,
+      "totalTokens": 3811,
+      "reportedTokenLowerBound": 3811,
+      "requestSha256": "f174aa1ae4d0d7749ea250b5725d5633da52180006ae1297b6dcb10db11c0d9e",
+      "bytes": 16595,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "5309952daa85cf15d2f6093c49953255d083c953216daa2f53ffada8fa89f219",
+      "elapsedMs": 6073,
+      "accountedUsd": 0.0031028,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3280,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 576,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3856,
+      "outputTokens": 23,
+      "totalTokens": 3879,
+      "reportedTokenLowerBound": 3879,
+      "requestSha256": "b164575ebc2b5c35f68cfa7bc04ad2ebcce5cd3419fae91c7fee4205327e7aba",
+      "bytes": 16969,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "8f6782c589162bc77a71eb0d66f769382d5c996b0472671e3afdc975764e80b6",
+      "elapsedMs": 5186,
+      "accountedUsd": 0.0031492000000000004,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3324,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 576,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3900,
+      "outputTokens": 27,
+      "totalTokens": 3927,
+      "reportedTokenLowerBound": 3927,
+      "requestSha256": "e27a801fc22044455be018c7114d65865ccd624224fd508b195f4412e421f021",
+      "bytes": 17110,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "a3d2714fa8d4d8cf1ab387022ff80877411844c6083eee890ed95401dbe7796b",
+      "elapsedMs": 5710,
+      "accountedUsd": 0.0031956,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2371,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 1600,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3971,
+      "outputTokens": 23,
+      "totalTokens": 3994,
+      "reportedTokenLowerBound": 3994,
+      "requestSha256": "6d53ab7da6d99539d2b310bbcc2b3d334ae0d0cb61f31e2e22cfa8b17c0631a6",
+      "bytes": 17484,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "725fbb6eaedee4238fe3372105da6767e264367839924d997ee0a81aaf574233",
+      "elapsedMs": 5270,
+      "accountedUsd": 0.0032412,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2413,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1600,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4013,
+      "outputTokens": 27,
+      "totalTokens": 4040,
+      "reportedTokenLowerBound": 4040,
+      "requestSha256": "5f60b5bda1f1e4bb3d67f18b5363e1e44ef18db6dcf44e0979980c3379337069",
+      "bytes": 17625,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "5c89fa7f56fa3d7768f1a1bed416d91f1fabff014293cded5fa0d5db04dbdb40",
+      "elapsedMs": 5262,
+      "accountedUsd": 0.003286,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2420,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 1664,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4084,
+      "outputTokens": 23,
+      "totalTokens": 4107,
+      "reportedTokenLowerBound": 4107,
+      "requestSha256": "53be0baf4488ca3536fd45879107908643568225ac3c0eb5b5af29c267761575",
+      "bytes": 17999,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "4feeff3e75f267f03ea1814782ae128dca7deed49dcf11f0f1f4e96cc0f845d1",
+      "elapsedMs": 2734,
+      "accountedUsd": 0.0033316000000000005,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2460,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1664,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4124,
+      "outputTokens": 27,
+      "totalTokens": 4151,
+      "reportedTokenLowerBound": 4151,
+      "requestSha256": "ea60491e1e30dcb8e39717ce3a12e6750ee8a78dff4c09e58659da4593979c2a",
+      "bytes": 18140,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "d8335e5c255fd7c679be10ae1d4506e3ae983763d271aa738f3cc2ae4e91f3b5",
+      "elapsedMs": 5292,
+      "accountedUsd": 0.0033748000000000003,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2529,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 1664,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4193,
+      "outputTokens": 22,
+      "totalTokens": 4215,
+      "reportedTokenLowerBound": 4215,
+      "requestSha256": "f6b979411cc634df68f55f57f3d2e7a45de3c9cfa5e01600ca25f95d0f97fcc5",
+      "bytes": 18514,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "f445ba66251f4ba400a7a7fa036706e58807f920292bbb2335381a1dd5560c18",
+      "elapsedMs": 5760,
+      "accountedUsd": 0.003416,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2571,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1664,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4235,
+      "outputTokens": 27,
+      "totalTokens": 4262,
+      "reportedTokenLowerBound": 4262,
+      "requestSha256": "bcd55e075f18d68a72ea5e756714e373301c52eb394090d0dd504445e937b61d",
+      "bytes": 18655,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "ee1e3d6e17a8d3337cbd6670753cf97c46409ec94f09094dcd28a895d88159bc",
+      "elapsedMs": 5776,
+      "accountedUsd": 0.0034636,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2579,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 1728,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4307,
+      "outputTokens": 23,
+      "totalTokens": 4330,
+      "reportedTokenLowerBound": 4330,
+      "requestSha256": "59dd2d093c1e3f27e463e1e6cfd2d6e6a2183f0b0e6c93509d986bd3463f7db9",
+      "bytes": 19029,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "57fa5178a8507000e5ed2cc0f61839cb4536e30986b63d5679adddf884d2ce09",
+      "elapsedMs": 5285,
+      "accountedUsd": 0.0035100000000000005,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2624,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1728,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4352,
+      "outputTokens": 27,
+      "totalTokens": 4379,
+      "reportedTokenLowerBound": 4379,
+      "requestSha256": "0ba9afe90251aac114b1440057a88802ddebb53358e85fcaf5bae684935c1166",
+      "bytes": 19170,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "683c293b70cb0c52feb03dd7e8c476120c408505bf68ba0c48ec51cbc0474792",
+      "elapsedMs": 5221,
+      "accountedUsd": 0.0035572000000000004,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2631,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 1792,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4423,
+      "outputTokens": 23,
+      "totalTokens": 4446,
+      "reportedTokenLowerBound": 4446,
+      "requestSha256": "c0a6d7f1f94a24c99577ba263de524eb02a91337619399fc0a5b9b222370963d",
+      "bytes": 19544,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "395fff3fb3d11c40694c26e8438af6bcfcecaa023ac59f288023a5f350386dfb",
+      "elapsedMs": 5644,
+      "accountedUsd": 0.0036028,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2677,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1792,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4469,
+      "outputTokens": 27,
+      "totalTokens": 4496,
+      "reportedTokenLowerBound": 4496,
+      "requestSha256": "62b6bb6293d312bc4f5be25b7be4535e35fdbd773846ff4c0148181b85effdb4",
+      "bytes": 19685,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "e47c214733d7072bcc607b3a7a48bfc796bc9571ef7349fa5e82a3364cab6afe",
+      "elapsedMs": 5214,
+      "accountedUsd": 0.0036508,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2746,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 1792,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4538,
+      "outputTokens": 22,
+      "totalTokens": 4560,
+      "reportedTokenLowerBound": 4560,
+      "requestSha256": "858d5d48e08eab566003b3f2bce617b20630af78f9c06176071c00f5ff48671a",
+      "bytes": 20059,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "eb5f1597aab9affeb983fb281a5331f90eb22e70b6d97abe95a6f6ef86d4027c",
+      "elapsedMs": 5580,
+      "accountedUsd": 0.003692,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2791,
+        "output_tokens": 30,
+        "cache_read_input_tokens": 1792,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4583,
+      "outputTokens": 30,
+      "totalTokens": 4613,
+      "reportedTokenLowerBound": 4613,
+      "requestSha256": "5bed2aba0a5364bc70c09b3d5e717f893b43824bfed9d322d95b6710e29b863c",
+      "bytes": 20206,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "787ecf86947f8fe5873a4053e9d4ad1b0edc4f709f90d220215d7b36e267ebd6",
+      "elapsedMs": 2720,
+      "accountedUsd": 0.0037504,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2800,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 1856,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4656,
+      "outputTokens": 22,
+      "totalTokens": 4678,
+      "reportedTokenLowerBound": 4678,
+      "requestSha256": "e62a11c9f451e1dac24462a9b1bce89624533ded96299c629b0a25452316c45c",
+      "bytes": 20669,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "d5b02f89a38ed32fd914134112e833d60da638691c00f7394421dbc03711fdf7",
+      "elapsedMs": 5224,
+      "accountedUsd": 0.0037864,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2841,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1856,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4697,
+      "outputTokens": 27,
+      "totalTokens": 4724,
+      "reportedTokenLowerBound": 4724,
+      "requestSha256": "28f519dbccd1448c762c4b9e9e7678f40d9512624e394187b667fa2000b58681",
+      "bytes": 20804,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "6f94ace3914f8f367c9c28788cd98a056fe1e1cc37310bb27f20cdf5799d9102",
+      "elapsedMs": 5378,
+      "accountedUsd": 0.0038332,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2847,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 1920,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4767,
+      "outputTokens": 22,
+      "totalTokens": 4789,
+      "reportedTokenLowerBound": 4789,
+      "requestSha256": "cfe464a24faddab441582fa69025f3dbd7df8a336e7d9f2a16538abab11f4846",
+      "bytes": 21175,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "49b657388a8ac5d67335a2d9b1e20b8b7568e1c016af717c275a1116780c1b3c",
+      "elapsedMs": 2720,
+      "accountedUsd": 0.0038752,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2884,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1920,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4804,
+      "outputTokens": 27,
+      "totalTokens": 4831,
+      "reportedTokenLowerBound": 4831,
+      "requestSha256": "b5a9ada68b8076b99b43c446a53892b12108ab3c806d5769b0d05fca2a95e808",
+      "bytes": 21310,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "28211c3ce961193f7d6f377142d67bb3b68cc1f7f5156b68994b329f20ad3326",
+      "elapsedMs": 5461,
+      "accountedUsd": 0.0039188,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2954,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 1920,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4874,
+      "outputTokens": 22,
+      "totalTokens": 4896,
+      "reportedTokenLowerBound": 4896,
+      "requestSha256": "0bb2c3351501a2e9a0d8eef042adc719d79490c713213b574a34f28761fd7c3d",
+      "bytes": 21684,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "502e22e7e7251824002716f5ce85bc7351b7934438c2a54d7b51aa24e77ac02b",
+      "elapsedMs": 5802,
+      "accountedUsd": 0.0039608,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 2997,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1920,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4917,
+      "outputTokens": 27,
+      "totalTokens": 4944,
+      "reportedTokenLowerBound": 4944,
+      "requestSha256": "7886de96b0706f9dd48ea8fd835944954d1c7ae1d47e979ac72b0ffbeb2e4d9c",
+      "bytes": 21831,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "d13cfaeaaa9edbc7b53487a1ae0d93e7fba4d642716d3f2bcd7014fc996da552",
+      "elapsedMs": 5201,
+      "accountedUsd": 0.0040092,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3005,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 1984,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4989,
+      "outputTokens": 23,
+      "totalTokens": 5012,
+      "reportedTokenLowerBound": 5012,
+      "requestSha256": "4ddb759d85ab7a415bf6e9bb17f2535f02072ca7e014a493256a82d576224a6f",
+      "bytes": 22205,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "952728c24002453ce19767ec7174727b6bf1657658283e07d4683a97fc4786fb",
+      "elapsedMs": 6160,
+      "accountedUsd": 0.0040556,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3053,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 1984,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5037,
+      "outputTokens": 27,
+      "totalTokens": 5064,
+      "reportedTokenLowerBound": 5064,
+      "requestSha256": "e87c2213a5de641463816becff1737b9b8afe3d8315ebcf5daf5143a0d89cdfb",
+      "bytes": 22346,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "30c2507034152c85b0524c8eadadccf255534ade932ced246b7dfd2d7220ebd1",
+      "elapsedMs": 5306,
+      "accountedUsd": 0.004105200000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3060,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 2048,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5108,
+      "outputTokens": 23,
+      "totalTokens": 5131,
+      "reportedTokenLowerBound": 5131,
+      "requestSha256": "178f476611733222d1d4bd5099cb6fd28b72779ed3a4c5974c1633574ec89ae3",
+      "bytes": 22720,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "6452f7865debd2a2daa91a26a79d7db4dfc0ef231b98eeefc54ce9d89c780df0",
+      "elapsedMs": 5199,
+      "accountedUsd": 0.0041508000000000005,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3108,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2048,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5156,
+      "outputTokens": 27,
+      "totalTokens": 5183,
+      "reportedTokenLowerBound": 5183,
+      "requestSha256": "4607b0f4181a57f380aab037da15d963a221b6ebd50cdcd8ed9be4a51d2a6892",
+      "bytes": 22861,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "cdc63d4ba59cee61c6878a65e83a0494ebe04bd1a9fa240f6fa9e31fe72b5f36",
+      "elapsedMs": 5767,
+      "accountedUsd": 0.004200400000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3179,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 2048,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5227,
+      "outputTokens": 23,
+      "totalTokens": 5250,
+      "reportedTokenLowerBound": 5250,
+      "requestSha256": "f8d35aa4763dbd54c6053fd3515213e868daf9a547e917518701eb85c9a0e63f",
+      "bytes": 23235,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "e234ce1f13c90656803a7c4ee24086571851953c66ba8e8529714aa156737dfa",
+      "elapsedMs": 6120,
+      "accountedUsd": 0.004246,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3225,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2048,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5273,
+      "outputTokens": 27,
+      "totalTokens": 5300,
+      "reportedTokenLowerBound": 5300,
+      "requestSha256": "d5cb7952e7def62a3c5d60d272ef4bca6b915b6482439f64422b028ac9d3a0bd",
+      "bytes": 23376,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "be3f5934a8d51b8e67fd6e810569c3d87a6b2cd8d1802330653a08772ba31b57",
+      "elapsedMs": 5216,
+      "accountedUsd": 0.004294000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3230,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 2112,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5342,
+      "outputTokens": 22,
+      "totalTokens": 5364,
+      "reportedTokenLowerBound": 5364,
+      "requestSha256": "b3d2ae428958ea7b93d04ecf9b36e685f34bbb60813004c2c29fb0ebdec80e71",
+      "bytes": 23750,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "30d1f40d5c1163967b43e2211feb04aafcd21485af3807575b806c287cecd653",
+      "elapsedMs": 5262,
+      "accountedUsd": 0.004335200000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3272,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2112,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5384,
+      "outputTokens": 27,
+      "totalTokens": 5411,
+      "reportedTokenLowerBound": 5411,
+      "requestSha256": "f7ee34e9f1ffec60c80478adb570ad269f08898f24a6b1d7908fe83c62988c97",
+      "bytes": 23891,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "0974edccab0982331dcf5e83e64a57a5aea06466ffe8d995f5cdfea766b9509f",
+      "elapsedMs": 5252,
+      "accountedUsd": 0.0043828,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3280,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 2176,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5456,
+      "outputTokens": 23,
+      "totalTokens": 5479,
+      "reportedTokenLowerBound": 5479,
+      "requestSha256": "6553e794addf29a215dcadc5dd12a5974c80c91e5728159be280eca4a94e71dc",
+      "bytes": 24265,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "1db9fd194d826f20232a6a13a2b4edfeb376127d769d895ddc02c181eb8dea51",
+      "elapsedMs": 5683,
+      "accountedUsd": 0.0044291999999999995,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3324,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2176,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5500,
+      "outputTokens": 27,
+      "totalTokens": 5527,
+      "reportedTokenLowerBound": 5527,
+      "requestSha256": "7763e795b3e0b93a452d84f9aa1883a3a5c78325feb56d82dc26c08407ff9181",
+      "bytes": 24406,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "8db27d60ab6e6974e9befb3174b993e88efc740968db60701bc5daceb89f47bf",
+      "elapsedMs": 5529,
+      "accountedUsd": 0.004475600000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3395,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 2176,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5571,
+      "outputTokens": 23,
+      "totalTokens": 5594,
+      "reportedTokenLowerBound": 5594,
+      "requestSha256": "54a56073aa6cd61695e48195e5a4b3bafb09454bfacb9fea9ad24e21082f59e9",
+      "bytes": 24780,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "7f779663ae37a39d48835bb5d741e7aa7aa35454856c278b68f875e451cf07c3",
+      "elapsedMs": 5992,
+      "accountedUsd": 0.0045211999999999995,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3440,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2176,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5616,
+      "outputTokens": 27,
+      "totalTokens": 5643,
+      "reportedTokenLowerBound": 5643,
+      "requestSha256": "610db37091742f0923c670afd77f6c27726c7414b17d41fe386e620a87493b12",
+      "bytes": 24921,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "ca08f7f89c19538e7d31ab8efba2f61c1180a9547715a7aa6f3775c938a14a11",
+      "elapsedMs": 5819,
+      "accountedUsd": 0.0045684,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3447,
+        "output_tokens": 23,
+        "cache_read_input_tokens": 2240,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5687,
+      "outputTokens": 23,
+      "totalTokens": 5710,
+      "reportedTokenLowerBound": 5710,
+      "requestSha256": "91796e40f78855a9bdc5ea4e65d89e3a0677f4880983f55b9a5a32289f356830",
+      "bytes": 25295,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "f5c1675501730acce66b52796476f4b504172f36c263ffbd8a37f62f28b3ff52",
+      "elapsedMs": 5710,
+      "accountedUsd": 0.004614,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3488,
+        "output_tokens": 27,
+        "cache_read_input_tokens": 2240,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5728,
+      "outputTokens": 27,
+      "totalTokens": 5755,
+      "reportedTokenLowerBound": 5755,
+      "requestSha256": "2f754d8ecc6f4a19965368180530c19768f8b89067340494e852b9d308b968f3",
+      "bytes": 25442,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "f0159db465be182fb869c70e6d19c4a6b70bbf7981693582903051da74d45402",
+      "elapsedMs": 6044,
+      "accountedUsd": 0.004658000000000001,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3509,
+        "output_tokens": 31,
+        "cache_read_input_tokens": 2304,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5813,
+      "outputTokens": 31,
+      "totalTokens": 5844,
+      "reportedTokenLowerBound": 5844,
+      "requestSha256": "d0a2a086a78cc796f3115bc126afc986be71cbf0992f2170568458155899c480",
+      "bytes": 25959,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "e260bef3b77ac591827d5ee53cbcc017051b82ede66ac441211ed99694268f58",
+      "elapsedMs": 3238,
+      "accountedUsd": 0.0047372000000000004,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3550,
+        "output_tokens": 18,
+        "cache_read_input_tokens": 2304,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5854,
+      "outputTokens": 18,
+      "totalTokens": 5872,
+      "reportedTokenLowerBound": 5872,
+      "requestSha256": "2eb301789d1920679c1ada20497784e4fe3d837e8ac26a4dc79b6e6df18d0845",
+      "bytes": 26290,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "9bef47770850d8da3ffab9da4d5d650473d27d3d0195d9569b3e381a002b3f25",
+      "elapsedMs": 5913,
+      "accountedUsd": 0.004733599999999999,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 3302,
+        "output_tokens": 60,
+        "cache_read_input_tokens": 2304,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5606,
+      "outputTokens": 60,
+      "totalTokens": 5666,
+      "reportedTokenLowerBound": 5666,
+      "requestSha256": "5541404f9d88f9071529f1a84c2fe0a0d27e51689ef63c543c6af944bf74bd19",
+      "bytes": 25198,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "4a329b3d02d81072f483f668497ec988589d69e0595d27f2066f019e3a3ba0c8",
+      "elapsedMs": 5602,
+      "accountedUsd": 0.0046528,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 4877,
+        "output_tokens": 60,
+        "cache_read_input_tokens": 576,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5453,
+      "outputTokens": 60,
+      "totalTokens": 5513,
+      "reportedTokenLowerBound": 5513,
+      "requestSha256": "2eb0d38905bac47777b9110834c2548824ed077c4c9bbb7cbc22fe810361f8d1",
+      "bytes": 24749,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "2bd4a34b42f605bb693efdce1f3bd6ec92c2f8e1e626a9bdc06f28ba3bba672b",
+      "elapsedMs": 6187,
+      "accountedUsd": 0.0045304,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 4538,
+        "output_tokens": 28,
+        "cache_read_input_tokens": 1088,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5626,
+      "outputTokens": 28,
+      "totalTokens": 5654,
+      "reportedTokenLowerBound": 5654,
+      "requestSha256": "6b9c36fe9241d0a1da8699adb3d8d57b2b6899fd8e573b9005aa957ceee7f1d3",
+      "bytes": 25651,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "09d6c85e959c55093536166978836bd74571562e671b1a752f9ce054b23291ee",
+      "elapsedMs": 5743,
+      "accountedUsd": 0.004579199999999999,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "tea",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 4640,
+        "output_tokens": 105,
+        "cache_read_input_tokens": 1088,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5728,
+      "outputTokens": 105,
+      "totalTokens": 5833,
+      "reportedTokenLowerBound": 5833,
+      "requestSha256": "09ff7a508eba795edf0edce9182703703c8a2bb3a6041c6c0a4516ab90e027be",
+      "bytes": 26248,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "a4b8067caf3edca8b6ea86e63e77b406cbdb3da3b8e015c9ec4dd38c86556148",
+      "elapsedMs": 7378,
+      "accountedUsd": 0.0048764,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 1564,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 0,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 1564,
+      "outputTokens": 21,
+      "totalTokens": 1585,
+      "reportedTokenLowerBound": 1585,
+      "requestSha256": "2baadea3781b40b68b96b6fb8a8a1d8b6ee1b49f78c9ad9d09f62bb77060e2d7",
+      "bytes": 6739,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "7427b4a8aed1fcf92cef4360b79cf9695a6558882b47f0ac65cf80fc6be17f4f",
+      "elapsedMs": 5621,
+      "accountedUsd": 0.00131,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 1843,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 64,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 1907,
+      "outputTokens": 16,
+      "totalTokens": 1923,
+      "reportedTokenLowerBound": 1923,
+      "requestSha256": "87eef25549dd715790024bfc3d9be030af6680c41a1c536bac6c4b9532da0e8b",
+      "bytes": 8427,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "b6c7afa09e8b18533b02fd3050cd51702e1251cf5f64ae1747f720953e58e7a5",
+      "elapsedMs": 4845,
+      "accountedUsd": 0.0015704,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 110,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 1856,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 1966,
+      "outputTokens": 21,
+      "totalTokens": 1987,
+      "reportedTokenLowerBound": 1987,
+      "requestSha256": "0c85ffb7f5a12b6753a101335748865bbe95efb2e446aec9d2139d556111b753",
+      "bytes": 8787,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "0c53aea200fdfb4d6bf6b710b8647094c2c19f9161c85d317911f8f722ba3dbe",
+      "elapsedMs": 4999,
+      "accountedUsd": 0.0016316000000000002,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 389,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 1920,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2309,
+      "outputTokens": 16,
+      "totalTokens": 2325,
+      "reportedTokenLowerBound": 2325,
+      "requestSha256": "dfb6e6bb0ac84740b2f4bdacf8900ac1f76b685b3e86634ea4714874929a0514",
+      "bytes": 10481,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "264454926af69b1c3b2dbf647b813b87b40f591cf2e871a73cbdbea4aac7ed38",
+      "elapsedMs": 4895,
+      "accountedUsd": 0.001892,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 64,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 2304,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2368,
+      "outputTokens": 21,
+      "totalTokens": 2389,
+      "reportedTokenLowerBound": 2389,
+      "requestSha256": "acff5cabb68fe1515e0cccb973365fb88497a87a44349e378600b3345b6836e8",
+      "bytes": 10844,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "c5d6163af652b5ff7721b925992e20bf86466bc2a748d76af99e3e1a34706447",
+      "elapsedMs": 5083,
+      "accountedUsd": 0.0019532,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 343,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 2368,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2711,
+      "outputTokens": 16,
+      "totalTokens": 2727,
+      "reportedTokenLowerBound": 2727,
+      "requestSha256": "75d3f98c6301bab8290eff41050875eb378f2df22479e1b60f00ba16b66610b4",
+      "bytes": 12538,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "7ffc879e7559fe7507c90e4ebadbfe4c6ca274a6cb410c088af90b500b408aa2",
+      "elapsedMs": 5109,
+      "accountedUsd": 0.0022136000000000005,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 83,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 2688,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 2771,
+      "outputTokens": 22,
+      "totalTokens": 2793,
+      "reportedTokenLowerBound": 2793,
+      "requestSha256": "49b957b3e29f7f0828a80e7ba959d9c030a93e698528e52beef577a52aabaa67",
+      "bytes": 12901,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "b4d19dff3cd9bc7d826f757960cf8f538028ad3727341b16b3358d41a35d7ea6",
+      "elapsedMs": 5812,
+      "accountedUsd": 0.0022784000000000003,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 364,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 2752,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3116,
+      "outputTokens": 16,
+      "totalTokens": 3132,
+      "reportedTokenLowerBound": 3132,
+      "requestSha256": "ce0936a5992f309ba9cea19487acf1e4ea20fb03826263262142c21d4f4a7630",
+      "bytes": 14595,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "34a219f3b40e439123f63fc2a1444dd629a298bdccb2a1f5d0f0431486a79eb6",
+      "elapsedMs": 5060,
+      "accountedUsd": 0.0025376000000000005,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 104,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 3072,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3176,
+      "outputTokens": 22,
+      "totalTokens": 3198,
+      "reportedTokenLowerBound": 3198,
+      "requestSha256": "3bf6793522d6edd6ad1b648db93e824094603a48a7f3e2a93e1fe7d55d6daf46",
+      "bytes": 14958,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "4de01ca0bc0603dc0352bd0d4101a5af519f848d9595f4a0fc94f27e3527bf56",
+      "elapsedMs": 5752,
+      "accountedUsd": 0.0026024,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 385,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 3136,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3521,
+      "outputTokens": 16,
+      "totalTokens": 3537,
+      "reportedTokenLowerBound": 3537,
+      "requestSha256": "add0292584e8fc3cba35593ed90972d454dc4a2821c6fcd620c28cdc52b0cb7f",
+      "bytes": 16652,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "4252af8ba4e6555431233c3775baa4eaa3976f454953f87f83e8a3a49096d359",
+      "elapsedMs": 5337,
+      "accountedUsd": 0.0028616,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 61,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 3520,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3581,
+      "outputTokens": 22,
+      "totalTokens": 3603,
+      "reportedTokenLowerBound": 3603,
+      "requestSha256": "c1dc70c5ee8d68686c1b46f2233f8366d64541c7cb9d2ccb585fbd335c611e6b",
+      "bytes": 17015,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "ac8ef99789dd56dcdc0ae334f3c9621ada9ef756e874e84fbf45f54935048eff",
+      "elapsedMs": 5377,
+      "accountedUsd": 0.0029264,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 406,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 3520,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3926,
+      "outputTokens": 16,
+      "totalTokens": 3942,
+      "reportedTokenLowerBound": 3942,
+      "requestSha256": "38dd3764e44b58a2117ca4b91fc71d2033dbd87592a9cf623c6cae8132ca602a",
+      "bytes": 18709,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "34f5f0560e44b23c1397d5b051a22f83205fcd9d1b81c25b6d9d2213b399e5a1",
+      "elapsedMs": 5135,
+      "accountedUsd": 0.0031856000000000002,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 81,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 3904,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 3985,
+      "outputTokens": 21,
+      "totalTokens": 4006,
+      "reportedTokenLowerBound": 4006,
+      "requestSha256": "37b348d888edf9d6b09cdf832dcd332dbdd75684cd21258306fa8b2bccb8d40f",
+      "bytes": 19072,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "1374033277e56e7cd8bc13b5ac22bfd7576c316183a75acd5aeaef592a83fe34",
+      "elapsedMs": 5559,
+      "accountedUsd": 0.0032468,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 360,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 3968,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4328,
+      "outputTokens": 16,
+      "totalTokens": 4344,
+      "reportedTokenLowerBound": 4344,
+      "requestSha256": "24b88194ae5cee95caf010bec726034e30ba9bfc3e3e34472e89b8620dfb8c2a",
+      "bytes": 20766,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "c5e9ad45bdb053affc129d2478070a8249c7d00acd5102d49ab7a3d7e35e6685",
+      "elapsedMs": 5271,
+      "accountedUsd": 0.0035072000000000002,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 100,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 4288,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4388,
+      "outputTokens": 22,
+      "totalTokens": 4410,
+      "reportedTokenLowerBound": 4410,
+      "requestSha256": "0595a592ed4bc594d8b4156ab80ab33386d86c3a06d51c686262626ae0ad8b67",
+      "bytes": 21129,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "153a5cee835ddb4de2b6141c734f18aa9e26be2c39a7c89c07496f0ee1dc1a2f",
+      "elapsedMs": 5611,
+      "accountedUsd": 0.003572,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 381,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 4352,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4733,
+      "outputTokens": 16,
+      "totalTokens": 4749,
+      "reportedTokenLowerBound": 4749,
+      "requestSha256": "882c685d5537f6f869c118f119729c0e4eb99aef45b97f3b6a218f91e803ad3b",
+      "bytes": 22823,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "f4fdfbfad0b0ad14f893f415451fea709ef913c62c269a56fa4b4e011d51dff4",
+      "elapsedMs": 5241,
+      "accountedUsd": 0.0038312000000000003,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 121,
+        "output_tokens": 22,
+        "cache_read_input_tokens": 4672,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 4793,
+      "outputTokens": 22,
+      "totalTokens": 4815,
+      "reportedTokenLowerBound": 4815,
+      "requestSha256": "321cf7656a112751ddc8a375fe2b4ff4e4c1ee3f7843d54f1dad45012a0b444d",
+      "bytes": 23186,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "d4ffe9b9e222c79ad1d5c410e3430981793540a950b01b7f2e110f50d888c179",
+      "elapsedMs": 5465,
+      "accountedUsd": 0.003896,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 402,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 4736,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5138,
+      "outputTokens": 16,
+      "totalTokens": 5154,
+      "reportedTokenLowerBound": 5154,
+      "requestSha256": "dd8da39d8f4d9f55f9240eff5b1758beb4c0eec1af067783706c45c612e148e6",
+      "bytes": 24880,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "a38ccad793bcdb7fd84ad6a8277f11bd38089aa86d0cc9538c2cc29c2f63b6ca",
+      "elapsedMs": 5088,
+      "accountedUsd": 0.0041552,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 77,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 5120,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5197,
+      "outputTokens": 21,
+      "totalTokens": 5218,
+      "reportedTokenLowerBound": 5218,
+      "requestSha256": "7a37ff03c40498fb9e99622ea26a66568b48367bbe46576dc61a8fc4425a5976",
+      "bytes": 25243,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "e84ab0f8bcae6777f7dc0b38e1b370ca6f0e786840ab1bcde40c5ad976dbfd2b",
+      "elapsedMs": 5122,
+      "accountedUsd": 0.0042164,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 356,
+        "output_tokens": 16,
+        "cache_read_input_tokens": 5184,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5540,
+      "outputTokens": 16,
+      "totalTokens": 5556,
+      "reportedTokenLowerBound": 5556,
+      "requestSha256": "16685d40889203e4397e6f6d4b190a9ae459064a8b8d70a3b9c9001c012fd63a",
+      "bytes": 26943,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "bf9131564266c194ad44f88d3ebdc65899465bb5b035338b6ca9de662b42170e",
+      "elapsedMs": 5633,
+      "accountedUsd": 0.0044768,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": true,
+      "usage": {
+        "input_tokens": 95,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 5504,
+        "server_tool_use": {
+          "web_search_requests": 0
+        }
+      },
+      "inputTokens": 5599,
+      "outputTokens": 21,
+      "totalTokens": 5620,
+      "reportedTokenLowerBound": 5620,
+      "requestSha256": "ce1dc8af32822dd0eeb384afedc9e30148381838f9691ced83c0ee4041b34baa",
+      "bytes": 27309,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": "e09eb9444c0219bc12ab94e53ccf28451e5b1e5af1b6847983f5a4304f55eba9",
+      "elapsedMs": 5738,
+      "accountedUsd": 0.004538,
+      "limitExceeded": null,
+      "guard": null
+    },
+    {
+      "cohort": "long",
+      "agent": "pi",
+      "caseId": "long-30-r1",
+      "submitted": true,
+      "complete": false,
+      "usage": {},
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "reportedTokenLowerBound": 0,
+      "requestSha256": "3227ef4c1ccec47b33cd99426f65419eb8b64e9a38f00d755e1aef3bd748780c",
+      "bytes": 29005,
+      "normalizedControls": {
+        "model": "glm-5.3-flash",
+        "maxTokens": 4096,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 4095
+        },
+        "outputConfig": {
+          "effort": "low"
+        }
+      },
+      "responseSha256": null,
+      "elapsedMs": 188,
+      "accountedUsd": 0.2674688,
+      "limitExceeded": null,
+      "guard": null,
+      "errorCategory": "Transmission/protocol failure"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "barPolicy": "Exclude failed crosses, retain separately marked validation uncertainty, require complete workflow for Long. No missing-to-zero imputation. Full totals stay in reports.",
+  "sourceControlsMatched": true,
+  "separateSourceFreezes": true,
+  "bars": [
+    {
+      "scale": "small",
+      "agent": "tea",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 8763.555555555555,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "small",
+      "agent": "pi",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 11885.444444444445,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "small",
+      "agent": "claude",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 29229.444444444445,
+      "unconfirmed": 3,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "medium",
+      "agent": "tea",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 7993.888888888889,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "medium",
+      "agent": "pi",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 35023.11111111111,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "medium",
+      "agent": "claude",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 33989.11111111111,
+      "unconfirmed": 3,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "large",
+      "agent": "tea",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 37396.77777777778,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "large",
+      "agent": "pi",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 62713.88888888889,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "large",
+      "agent": "claude",
+      "eligible": 9,
+      "attempted": 9,
+      "barMeanTokens": 41450.77777777778,
+      "unconfirmed": 3,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "long-session",
+      "agent": "tea",
+      "eligible": 1,
+      "attempted": 1,
+      "barMeanTokens": 309457.0,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    },
+    {
+      "scale": "long-session",
+      "agent": "pi",
+      "eligible": 0,
+      "attempted": 1,
+      "barMeanTokens": null,
+      "unconfirmed": 0,
+      "failedExcluded": 1
+    },
+    {
+      "scale": "long-session",
+      "agent": "claude",
+      "eligible": 0,
+      "attempted": 0,
+      "barMeanTokens": null,
+      "unconfirmed": 0,
+      "failedExcluded": 0
+    }
+  ],
+  "oldClaudeFreshUnconfirmed": 26,
+  "newClaudeFreshUnconfirmed": 9
+}

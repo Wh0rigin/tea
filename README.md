@@ -16,6 +16,32 @@ Our mission is to reduce token consumption while preserving task correctness, co
 
 ## Measured token usage
 
+### TEA / Pi / Claude Code — updated measurements
+
+Measured October 13–14, 2026 with the same **GLM-5.3-flash, enabled/low, 4096/4095 output/thinking caps**, tasks and initial source. **TEA archived candidate bd41742, Pi 0.87.1 and native Claude Code 2.1.281 safe-mode CLI**. Claude Code uses GLM here, not an Anthropic Claude model.
+
+81 fresh v5 runs and a planned nine-run Long v6 cohort were independently frozen. v6 records unmet inspection requirements and continues normally completed turns; missed reads/read-only noncompliance do not truncate the workflow. Superseded v5 Long evidence is retained. This is not one unified 90-run source freeze.
+
+![Three native coding agents](benchmarks/reports/tea-pi-claude-current-glm-20261014/three-agents.png)
+
+- **12 files**: TEA vs Pi 26.27% fewer; vs Claude Code 70.02% fewer.
+- **120 files**: TEA vs Pi 77.18% fewer; vs Claude Code 76.48% fewer.
+- **1,200 files**: TEA vs Pi 40.37% fewer; vs Claude Code 9.78% fewer.
+
+Fresh all-attempt token totals: TEA vs Pi **50.60% fewer**, vs Claude Code **48.26% fewer**.
+
+Claude Code full acceptance increased from **1/27 to 18/27**; uncertainty triangles decreased from **26 to nine**. Common command recognition is fixed; remaining complex commands stay unconfirmed. Fresh behavior checks: **27/27 for every agent**. Full acceptance TEA/Pi/Claude: **27/27, 27/27, 18/27**.
+
+**Long v6 is incomplete: two of nine planned runs attempted. TEA completed one run; a Pi streaming request has unknown usage and triggered the halt. Claude Code was not started. Unknown usage is never zero; USD 0.2674688 remains reserved with no automatic paid retry. No complete Long reduction is calculated.**
+
+Circles passed; triangles have only final validation unconfirmed; failure crosses are excluded from bar means but retained as points and records. Long bars require full workflow completion, with actual eligible counts shown. Unfiltered ratios are not annotated on failure-filtered bars. All cache input and thinking output included. Self-authored JavaScript defects and unrelated-module scaling do not establish production generalization. **The archived TEA candidate remains reverted in the default runtime.**
+
+[Full report](benchmarks/reports/tea-pi-claude-current-glm-20261014/README.md)
+[All displayed records](benchmarks/reports/tea-pi-claude-current-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-glm-20261014/chart-audit.json)
+
+<details>
+<summary>Earlier v3 comparison (historical evidence)</summary>
+
 ### TEA / Pi / Claude Code
 
 Measured October 13, 2026 with the same **GLM-5.3-flash, enabled/low thinking, 4096/4095 output/thinking caps**, task prompts and initial source snapshots. All three arms were newly measured.
@@ -60,6 +86,8 @@ For the **30-read + repair long conversations**, TEA used **11.85% fewer tokens 
 These are three self-authored JavaScript defects, three repeats at each repository size, and one long-conversation workflow. Added files are unrelated modules; this is sample evidence rather than a production-wide savings guarantee. Results compare the complete experimental TEA configuration with Pi, including native prompt/tool differences, and do not isolate metadata shortening. TEA enabled ContextOS and capability feedback; model summaries were not executed by either agent. **The measured candidate `bd41742` remains reverted in this branch; these figures describe its archived implementation.**
 
 [Full report](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.md) · [All attempts and usage](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/results.json) · [Frozen protocol](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/frozen-protocol.md) · [Source and verification](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/source-audit.json)
+
+</details>
 
 </details>
 

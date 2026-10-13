@@ -1,0 +1,232 @@
+{
+  "stage": "Native TEA / Pi / Claude Code v6 long-only remeasurement",
+  "complete": false,
+  "plannedRuns": 9,
+  "attemptedRuns": 2,
+  "submittedRequests": 88,
+  "completeUsageRequests": 87,
+  "unknownUsageRequests": 1,
+  "teaCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "harnessCommit": "79dba7493c5be12ef00e8b0c92eb3a5ee4a1124e",
+  "pi": {
+    "name": "@earendil-works/pi-coding-agent",
+    "version": "0.87.1",
+    "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+  },
+  "claude": {
+    "version": "2.1.281",
+    "binarySha256": "39be063c2512b43347fe7b0ab18c46f1596141701c9c5fc895ddfca9a051067c"
+  },
+  "cohorts": [
+    {
+      "name": "long",
+      "started": true,
+      "complete": false,
+      "attemptedRuns": 2,
+      "plannedRuns": 9,
+      "runId": "tea-pi-claude-v5-long-glm-20261014-1791912707686513300",
+      "roles": {
+        "tea": {
+          "runs": 1,
+          "expectedRuns": 3,
+          "accepted": 1,
+          "qualityDimensions": {
+            "codeCorrect": 1,
+            "scopeCorrect": 1,
+            "declaredReadRequirements": 1,
+            "nativePostEditValidation": 1,
+            "nativeCompleted": 1,
+            "usageComplete": 1
+          },
+          "totalTokens": null,
+          "knownUsageTokens": 309457,
+          "submittedRequests": 66,
+          "unknownRequests": 0,
+          "knownCostUsd": 0.2511916,
+          "reservedUsd": 0,
+          "compactions": 0
+        },
+        "pi": {
+          "runs": 1,
+          "expectedRuns": 3,
+          "accepted": 0,
+          "qualityDimensions": {
+            "codeCorrect": 0,
+            "scopeCorrect": 1,
+            "declaredReadRequirements": 0,
+            "nativePostEditValidation": 0,
+            "nativeCompleted": 0,
+            "usageComplete": 0
+          },
+          "totalTokens": null,
+          "knownUsageTokens": 77013,
+          "submittedRequests": 22,
+          "unknownRequests": 1,
+          "knownCostUsd": 0.062402400000000004,
+          "reservedUsd": 0.2674688,
+          "compactions": 0
+        },
+        "claude": {
+          "runs": 0,
+          "expectedRuns": 3,
+          "accepted": 0,
+          "qualityDimensions": {
+            "codeCorrect": 0,
+            "scopeCorrect": 0,
+            "declaredReadRequirements": 0,
+            "nativePostEditValidation": 0,
+            "nativeCompleted": 0,
+            "usageComplete": 0
+          },
+          "totalTokens": null,
+          "knownUsageTokens": 0,
+          "submittedRequests": 0,
+          "unknownRequests": 0,
+          "knownCostUsd": 0,
+          "reservedUsd": 0,
+          "compactions": 0
+        }
+      },
+      "scales": [
+        {
+          "scale": "long-session",
+          "roles": {
+            "tea": {
+              "runs": 1,
+              "expectedRuns": 3,
+              "accepted": 1,
+              "qualityDimensions": {
+                "codeCorrect": 1,
+                "scopeCorrect": 1,
+                "declaredReadRequirements": 1,
+                "nativePostEditValidation": 1,
+                "nativeCompleted": 1,
+                "usageComplete": 1
+              },
+              "totalTokens": null,
+              "knownUsageTokens": 309457,
+              "submittedRequests": 66,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.2511916,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "pi": {
+              "runs": 1,
+              "expectedRuns": 3,
+              "accepted": 0,
+              "qualityDimensions": {
+                "codeCorrect": 0,
+                "scopeCorrect": 1,
+                "declaredReadRequirements": 0,
+                "nativePostEditValidation": 0,
+                "nativeCompleted": 0,
+                "usageComplete": 0
+              },
+              "totalTokens": null,
+              "knownUsageTokens": 77013,
+              "submittedRequests": 22,
+              "unknownRequests": 1,
+              "knownCostUsd": 0.062402400000000004,
+              "reservedUsd": 0.2674688,
+              "compactions": 0
+            },
+            "claude": {
+              "runs": 0,
+              "expectedRuns": 3,
+              "accepted": 0,
+              "qualityDimensions": {
+                "codeCorrect": 0,
+                "scopeCorrect": 0,
+                "declaredReadRequirements": 0,
+                "nativePostEditValidation": 0,
+                "nativeCompleted": 0,
+                "usageComplete": 0
+              },
+              "totalTokens": null,
+              "knownUsageTokens": 0,
+              "submittedRequests": 0,
+              "unknownRequests": 0,
+              "knownCostUsd": 0,
+              "reservedUsd": 0,
+              "compactions": 0
+            }
+          },
+          "reductionVsPi": null,
+          "reductionVsClaude": null,
+          "knownPairsVsPi": 0,
+          "knownPairsVsClaude": 0
+        }
+      ],
+      "comparisons": {
+        "teaVsPi": {
+          "overall": {
+            "expectedPairs": 3,
+            "measuredPairs": 0,
+            "bothAcceptedPairs": 0,
+            "teaAccepted": 1,
+            "piAccepted": 0,
+            "teaMeasuredTokens": null,
+            "piMeasuredTokens": null,
+            "allPairsTokenReductionPercent": null,
+            "bothAcceptedTeaTokens": null,
+            "bothAcceptedPiTokens": null,
+            "bothAcceptedTokenReductionPercent": null
+          },
+          "scales": [
+            {
+              "scale": "long-session",
+              "expectedPairs": 3,
+              "measuredPairs": 0,
+              "bothAcceptedPairs": 0,
+              "teaAccepted": 1,
+              "piAccepted": 0,
+              "teaMeasuredTokens": null,
+              "piMeasuredTokens": null,
+              "allPairsTokenReductionPercent": null,
+              "bothAcceptedTeaTokens": null,
+              "bothAcceptedPiTokens": null,
+              "bothAcceptedTokenReductionPercent": null
+            }
+          ]
+        },
+        "teaVsClaude": {
+          "overall": {
+            "expectedPairs": 3,
+            "measuredPairs": 0,
+            "bothAcceptedPairs": 0,
+            "teaAccepted": 1,
+            "piAccepted": 0,
+            "teaMeasuredTokens": null,
+            "piMeasuredTokens": null,
+            "allPairsTokenReductionPercent": null,
+            "bothAcceptedTeaTokens": null,
+            "bothAcceptedPiTokens": null,
+            "bothAcceptedTokenReductionPercent": null
+          },
+          "scales": [
+            {
+              "scale": "long-session",
+              "expectedPairs": 3,
+              "measuredPairs": 0,
+              "bothAcceptedPairs": 0,
+              "teaAccepted": 1,
+              "piAccepted": 0,
+              "teaMeasuredTokens": null,
+              "piMeasuredTokens": null,
+              "allPairsTokenReductionPercent": null,
+              "bothAcceptedTeaTokens": null,
+              "bothAcceptedPiTokens": null,
+              "bothAcceptedTokenReductionPercent": null
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "knownConservativeCostUsd": 0.31359400000000004,
+  "reservedUsd": 0.2674688,
+  "priceBasis": "Configured conservative rates, not invoice",
+  "defaultRuntimeCandidateReenabled": false,
+  "earlierUnknownReservationsRemainSeparate": true
+}

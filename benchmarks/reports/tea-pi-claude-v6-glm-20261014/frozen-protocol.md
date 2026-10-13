@@ -1,0 +1,66 @@
+# Three coding agents: frozen comparison protocol
+
+Compare TEA's archived compact-evidence candidate `bd41742d683dfcda69f240223ff6b27815f3dd08`, Pi 0.87.1 and Claude Code 2.1.281. This measures coding-agent software with a common GLM model through an Anthropic Messages compatible endpoint; it does not compare GLM with Anthropic's Claude models or reproduce personalized interactive configurations.
+
+## Fixed workload and controls
+
+- Freeze all task source fingerprints, prompts, loaded TEA revision, Pi CLI hash, Claude executable version/hash and harness source before paid calls. Use newly measured runs for all three agents; never splice historical two-agent data into this experiment.
+- Fresh tasks: primitive cache keys, retry budgets and Unicode truncation at 12/120/1,200 files, three repetitions each: 27 cases per agent, 81 runs. Extra files are unrelated modules; defect complexity does not scale with file count.
+- Long workflow: start empty, perform 30 native full-file read-only inspections, then repair and validate; three repetitions per agent, nine runs. Total: 90 runs / 30 matched sets.
+- Shared GLM-5.3-flash, enabled thinking, low effort, task output/thinking caps 4096/4095. The common wire gateway enforces these controls and removes temperature/top-p/top-k overrides while preserving native prompts, tools and cache directives.
+- Rotate order among TEA/Pi/Claude for each task and repetition so each agent occupies each position across the three repeats. Provider cache state cannot be reset; record all cache input exactly once and reasoning inside output.
+- Shared suite guard USD 12, USD 1.4 per agent/case, 100 requests per agent/case, 160000 UTF-8-byte payload guard, request timeout 180 seconds, native turn timeout 300 seconds. Configured conservative input/cache-read USD 0.80 and output USD 2.80 per million tokens; cache creation defaults to twice input. These are usage estimates, not invoices. Previous unknown reservations remain separate.
+
+## Native profiles and observation
+
+TEA uses its frozen native engine: v1 discovery/read reuse, ContextOS target 32000 bytes, semantic summaries off, capability feedback on, 24 tools/turn. The compact-metadata candidate remains reverted in the current default runtime.
+
+Pi uses its native RPC client with read, platform shell, edit and write; native auto-compaction on, advertised model window 200000, provider retries and cache warming off. Extensions, skills, prompt templates, themes and persisted sessions are disabled.
+
+Claude Code uses its native stream-JSON CLI in safe mode, not bare mode, with its original core system prompt and Bash/Edit/Glob/Grep/Read/Write tools. Separate empty configuration directories, no persisted sessions, no hooks/skills/plugins/MCP, automatic cross-session memory disabled, telemetry/update/background nonessential traffic disabled. Native conversation history and auto-compaction remain available. Agent delegation is outside this single-agent core comparison. Child processes receive only the local gateway credential, not the upstream credential. SDK retries may occur locally; after unknown submitted usage the gateway blocks further paid submissions.
+
+Windows temporary roots are resolved to their full canonical paths for all agents. Local probes found that DOS short aliases caused Claude's permission checks to reject writes. Resolve the path rather than bypassing permissions. Read output is normalized only by removing verified contiguous line numbers from Claude's actual output; never read source to fill gaps. Retain both native and normalized output hashes. Missing, partial or malformed reads remain unconfirmed.
+
+## Quality, accounting and decisions
+
+Use the same native-positive-validation-v3 observer and independent public/hidden behavior, completion witness, scope and source-version checks. Map only native Claude tool event names/argument fields and line-number presentation. Do not alter model prompts or silently loosen validation. Formal acceptance, code behavior, required full reads and native post-edit verification remain separate dimensions. Preserve conservative recognition failures without regrading or calling them code failures.
+
+Retain every attempt, unsuccessful tool call, interrupted conversation and negative result. Submitted unknown usage remains null with its reservation held; stop the remaining cohort and later cohorts. Do not retry a paid failure, release unknown reservations or count missing runs as zero. A complete-usage task failure remains in the primary totals and does not trigger a selective rerun.
+
+Report each size and long workflows separately. Pairwise full-workload ratios require all planned usage-known pairs; include failures. Both-accepted subsets are diagnostic and do not replace full totals. Unequal completion means token totals are not an equal-completed-work efficiency claim. This is a small self-authored JavaScript experiment, not production generalization, official default-agent pricing or an isolated metadata optimization gate. No runtime reenablement, next optimization or merge is automatic.
+
+## Before paid calls
+
+Run the deterministic suite and native three-agent loopback contract. Separately verify Claude multi-turn history, full source reads and positive post-edit validation. Scripted local usage is never performance evidence. Retain local setup failures; one initial mock omitted SSE event headers and was corrected before paid calls. Freeze the complete source and plan only after these checks pass.
+
+References: [Claude CLI](https://code.claude.com/docs/en/cli-reference), [programmatic execution](https://code.claude.com/docs/en/headless), [automatic memory controls](https://code.claude.com/docs/en/memory).
+
+## Observer compatibility amendment: v4
+
+New runs use `native-positive-validation-v4` for all agents. Recognize one optional `cd` to the exact workspace (including Windows Git Bash drive spelling) followed by `&&` and the declared Node test runner, plus an optional terminal `2>&1`. Require the existing positive test counts, successful settled result and unchanged source versions. This is command observation, not a change to execution permissions or agent prompts. Pipelines, status masking, substitutions, outside directories, filtered tests and arbitrary command chains remain unconfirmed.
+
+Keep sanitized test counts for unrecognized shell commands without granting acceptance. Existing October 13 v3 records retain their original grading and token totals: unrecognized commands previously had only command/output hashes, not result summaries, so command hash reconstruction cannot prove the original tests passed. The historical chart now separates final validation unconfirmed (triangle) from other acceptance failures (cross). Native loopback checks establish adapter compatibility, not new token savings. See [the compatibility audit](../tea-pi-claude-glm-20261013/validation-compatibility.json).
+
+## Long-workflow continuation amendment: v5
+
+For all agents, a settled read-only inspection that fails the full-file read requirement no longer stops the workflow. Record the failure and continue the remaining scheduled prompts, including final repair. Acceptance still requires every declared read; continuation does not turn missing reads into passes. Native completion means all scheduled turns completed, separately from read/validation quality. Continue only with complete native tool events, unchanged workspace and honored read-only restrictions. Native turn failures, mutations, protocol failures, usage/budget guards and timeouts still stop execution.
+
+The first historical inspection requested `src/generated/domain-00/module-0000.mjs`, a 1,378-byte synthetic unrelated utility. Pi r1/r2 had no recorded tool calls and stopped under v3 after one request (1,586/1,577 tokens, not zero). Historical records cannot be extended after the fact. Main chart Long bars now average only workflows that reached all scheduled phases, with unequal sample counts explicitly shown and no aggregate ratio; interrupted attempts remain visible points and remain in the full all-attempt totals/report. The previous all-attempt chart is preserved as [historical evidence](../tea-pi-claude-glm-20261013/three-agents-all-attempts.png). New v5 token results require a fresh matched three-agent long cohort, not selective replacement of Pi's failed attempts.
+
+All main-chart panels exclude cross-marked acceptance failures from bar means. These attempts remain points, with their original tokens and failure counts retained in the full report. Triangle-marked final-validation uncertainty is distinct: all other dimensions passed, so these samples remain eligible with their uncertainty visible. Suppress full-workload ratio annotations when failures have been excluded; do not compare a filtered mean against an unfiltered total. Long bars also require completion of every scheduled phase.
+
+## v5 remeasurement plan
+
+Rerun all 90 planned attempts under the v5 observer with the same archived TEA engine, native Pi/Claude versions, task prompts, source snapshots, common GLM/low controls, rotating order and USD12 shared guard defined above. Do not reuse historical tokens or replace only failed attempts. Preserve native positive test summaries and source-version receipts; unknown usage still halts remaining submissions with reservations held. Publish this as a separate measured cohort, retaining v3 historical reports. Passing new receipts can replace triangles only in the new measured chart, not retroactively rewrite historical grades.
+
+Before paid calls: 280/280 deterministic tests passed; `npm run benchmark:three-agents:check` verified 27/27 native tasks and 108 local scripted requests. `npm run benchmark:three-agents:long-check` deliberately omitted phase-1 reads in nine native workflows: all reached 31 phases and passed repair/verification while acceptance remained failed for the missing read. Its 567 scripted requests are functional evidence, not performance tokens.
+
+## v6 long-only correction and remeasurement
+
+The complete v5 cohort is retained separately. Its fresh cases confirmed 18/27 Claude Code native validations versus 1/27 historically; nine fresh validations remain unconfirmed under the frozen grammar. All three agents passed 27/27 independent fresh behavior checks. One v5 Pi long workflow still stopped after a complete read plus an extra PowerShell command, despite an unchanged workspace. Treating read-only noncompliance as a stop caused another short-work bias.
+
+For v6, any normally completed turn with complete native tool events continues, regardless of grading failures. Record all missing reads, read-only violations and workspace changes; none become passing grades. Incomplete native turns/protocol, exceptions, timeouts and wire usage/budget guards still stop. Completion and compliance remain separate dimensions.
+
+Rerun all nine Long attempts, three per agent, on the same archived engine, native CLI versions, tasks and GLM/low controls. Shared guard USD6, per-case USD1.4, 100 requests/case, 160000-byte payload guard, output/thinking 4096/4095, request/turn timeout 180/300s; no paid retries after unknown usage. Freeze this new cohort before calls. Fresh v5 results are not remeasured because this continuation correction applies to inspection phases; show fresh-v5 and long-v6 identities separately, without claiming a single 90-run source freeze or changing v5 historical records.
+
+Before v6 paid calls, 280/280 tests and 27/27 native fresh loopback checks passed. The extra-shell continuation contract deliberately combined a valid first read with a shell command: all nine native workflows reached repair and verification (576 local scripted requests) while their compliance grades stayed failed. These are zero-paid functional checks. The new Long cohort must be measured for all agents, never selectively replace a failed Pi attempt.
