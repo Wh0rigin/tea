@@ -1,0 +1,107 @@
+{
+  "kind": "Additional read-only historical observation audit; frozen native grades remain unchanged",
+  "paidRequestsAdded": 0,
+  "runId": "bounded-directory-s1b-recovery-glm-20261012-1791805441427116200",
+  "originalReceiptRef": "ctx-ee7298783ce05d8b05b8",
+  "allObservedValuesRetrieved": true,
+  "allObservedSourcesAuthenticated": true,
+  "freshOldObservationSignals": 0,
+  "records": [
+    {
+      "caseId": "historical-recall-r1",
+      "agent": "baseline",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r1",
+      "agent": "candidate",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r2",
+      "agent": "candidate",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r2",
+      "agent": "baseline",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r3",
+      "agent": "baseline",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r3",
+      "agent": "candidate",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r4",
+      "agent": "candidate",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r4",
+      "agent": "baseline",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r5",
+      "agent": "baseline",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r5",
+      "agent": "candidate",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r6",
+      "agent": "candidate",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    },
+    {
+      "caseId": "historical-recall-r6",
+      "agent": "baseline",
+      "retrievedActualObservedValue": true,
+      "authenticatedObservedSourceRetrieved": true,
+      "potentialFreshOldObservationAccess": [],
+      "journalUnchanged": true
+    }
+  ]
+}

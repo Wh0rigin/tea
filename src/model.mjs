@@ -174,7 +174,7 @@ export class AnthropicMessagesAdapter {
     const requestBytes = Buffer.byteLength(JSON.stringify(body), 'utf8');
     const conservativeInputBound = requestBytes;
     if (conservativeInputBound > config.maxRequestInputTokens) {
-      throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request input limit is ${config.maxRequestInputTokens} tokens`);
+      throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`);
     }
     // Cache reads are charged without their discount; unknown write TTL uses
     // the standard Anthropic 1-hour (2x input) rate as a conservative default.
@@ -197,6 +197,7 @@ export class AnthropicMessagesAdapter {
     let response;
     let result;
     let recorded = false;
+    let submitted = false;
     this.requestInFlight = true;
     const controller = new AbortController();
     const cancel = () => controller.abort(signal.reason);
@@ -204,6 +205,10 @@ export class AnthropicMessagesAdapter {
     const timer = setTimeout(() => controller.abort(new Error('Request timeout')), config.timeoutMs);
     if (signal?.aborted) cancel();
     try {
+      // A durable session can record the worst-case liability before submission.
+      await this.onBeforeRequest?.({ requestId, reservedUsd: reserveUsd, inputBound: conservativeInputBound });
+      signal?.throwIfAborted();
+      submitted = true;
       response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -244,6 +249,7 @@ export class AnthropicMessagesAdapter {
       }
       return result;
     } catch (error) {
+      if (!submitted) throw error;
       if (!recorded) {
         // Keep the full preflight reservation after a transport error: the provider may have processed the request.
         const usage = error.usage || {};

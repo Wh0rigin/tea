@@ -1,0 +1,168 @@
+{
+  "candidateCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "deterministicTests": {
+    "tests": 276,
+    "passed": 276,
+    "failed": 0,
+    "skipped": 0,
+    "newMetadataTests": 8
+  },
+  "nativeStreamingContract": {
+    "runId": "s0-contract-1791862058111",
+    "runs": 18,
+    "requests": 72,
+    "accepted": 18,
+    "paidProviderRequests": 0,
+    "providerTokenImprovement": null,
+    "commonControlsMatched": true,
+    "allSourcesStable": true,
+    "ratiosWithheld": true
+  },
+  "combinationContract": {
+    "kind": "scripted native combination checks; no provider token claim",
+    "profile": {
+      "requestGuardBytes": 80000,
+      "triggerRatio": 0.8,
+      "keepRecentBytes": 8000,
+      "contextosTargetBytes": 32000
+    },
+    "paidRequestsAdded": 0,
+    "runs": [
+      {
+        "variant": "full-history-off",
+        "taskRequests": 5,
+        "summaryRequests": 0,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 0,
+        "recovery": null
+      },
+      {
+        "variant": "full-history-auto",
+        "taskRequests": 5,
+        "summaryRequests": 1,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 1,
+        "recovery": null
+      },
+      {
+        "variant": "contextos-off",
+        "taskRequests": 5,
+        "summaryRequests": 0,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 0,
+        "recovery": {
+          "originalRecovered": true,
+          "searchAdvertised": false
+        }
+      },
+      {
+        "variant": "contextos-auto",
+        "taskRequests": 5,
+        "summaryRequests": 1,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 1,
+        "recovery": {
+          "originalRecovered": true,
+          "searchAdvertised": false
+        }
+      }
+    ],
+    "checks": [
+      {
+        "name": "full-history-off: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "full-history-off: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "full-history-off: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "full-history-auto: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "full-history-auto: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "full-history-auto: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: original indexed source remains recoverable internally",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: original indexed source remains recoverable internally",
+        "passed": true
+      },
+      {
+        "name": "combined auto: history search advertised after checkpoint",
+        "passed": false,
+        "detail": "Compatibility expectation; a false result records the conditional retrieval-entry gap, not a harness error."
+      },
+      {
+        "name": "combined auto: authoritative pending state overrides summary",
+        "passed": true
+      },
+      {
+        "name": "combined auto: stale source withheld",
+        "passed": true
+      },
+      {
+        "name": "combined auto: checkpoint survives unchanged-workspace resume",
+        "passed": true
+      }
+    ],
+    "passed": 17,
+    "total": 18,
+    "combinationFullyCompatible": false
+  },
+  "initialZeroPaidFailuresRetained": {
+    "formatDependentAssertionsAdapted": true,
+    "unrelatedLoopbackBadPortFailureRetained": true
+  },
+  "finalRuntimeTests": {
+    "tests": 268,
+    "passed": 268,
+    "failed": 0,
+    "skipped": 0,
+    "restoredRuntimeMatchesBaseline": true
+  }
+}

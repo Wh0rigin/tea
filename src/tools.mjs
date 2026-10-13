@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
 import { BoundedOutput } from './output.mjs';
+import { ToolFeedbackError } from './tool-feedback.mjs';
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -38,7 +39,7 @@ export function isValidationCommand(command) {
 
 function assertWindowsCommand(command) {
   if (process.platform === 'win32' && /[%!^()\"']/.test(command)) {
-    throw new Error('CMD metacharacters are not allowed in Windows validation commands');
+    throw new ToolFeedbackError('CAPABILITY_DENIED', 'CMD metacharacters are not allowed in Windows validation commands');
   }
 }
 
@@ -51,12 +52,12 @@ export function redactText(text) {
   return String(text).replace(SECRET_TEXT, '[REDACTED]').replace(SECRET_ASSIGNMENT, '$1$2[REDACTED]');
 }
 
-function isSensitivePath(relativePath) {
+export function isSensitivePath(relativePath) {
   return relativePath.split(/[\\/]/).some((part) => SENSITIVE_FILE.test(part)) || /\.(?:pem|key|p12|pfx)$/i.test(relativePath);
 }
 
 // Inspect bytes rather than requiring a language-specific filename suffix.
-function decodeText(buffer) {
+export function decodeText(buffer) {
   if (buffer.includes(0)) return null;
   try { return new TextDecoder('utf-8', { fatal: true }).decode(buffer); }
   catch { return null; }
@@ -73,6 +74,8 @@ export class WorkspaceTools {
     this.sessionTerms = new Map();
     this.unresolvedQueries = new Set();
     this.presentedSource = new Map();
+    this.searchEvidence = new Map();
+    this.sourceEvidence = new Map();
   }
 
   async init() {
@@ -83,15 +86,15 @@ export class WorkspaceTools {
   }
 
   async resolveFile(relativePath, { mustExist = true } = {}) {
-    if (typeof relativePath !== 'string' || !relativePath.trim()) throw new Error('path must be a non-empty relative path');
-    if (path.isAbsolute(relativePath)) throw new Error('Absolute paths are not allowed');
+    if (typeof relativePath !== 'string' || !relativePath.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'path must be a non-empty relative path');
+    if (path.isAbsolute(relativePath)) throw new ToolFeedbackError('INPUT_INVALID', 'Absolute paths are not allowed');
     const candidate = path.resolve(this.workspace, relativePath);
     const rel = path.relative(this.workspace, candidate);
-    if (rel === '..' || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel)) throw new Error('Path escapes the workspace');
+    if (rel === '..' || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Path escapes the workspace');
     if (mustExist) {
       const resolved = await realpath(candidate);
       const realRel = path.relative(this.workspace, resolved);
-      if (realRel === '..' || realRel.startsWith(`..${path.sep}`) || path.isAbsolute(realRel)) throw new Error('Symlink target escapes the workspace');
+      if (realRel === '..' || realRel.startsWith(`..${path.sep}`) || path.isAbsolute(realRel)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Symlink target escapes the workspace');
       return resolved;
     }
     return candidate;
@@ -150,7 +153,8 @@ export class WorkspaceTools {
   async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
     const filename = await this.resolveFile(relativePath);
     const normalizedPath = path.relative(this.workspace, filename);
-    if (isSensitivePath(normalizedPath)) throw new Error('Reading credential and key files is blocked');
+    if (normalizedPath.split(path.sep).some(part => ['.tea', '.git'].includes(part))) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Reading agent storage and Git metadata is blocked');
+    if (isSensitivePath(normalizedPath)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Reading credential and key files is blocked');
     const info = await stat(filename);
     if (!info.isFile() || info.size > MAX_READ_BYTES) throw new Error(`File must be a regular text file smaller than ${MAX_READ_BYTES} bytes`);
     const decoded = decodeText(await readFile(filename));
@@ -175,13 +179,19 @@ export class WorkspaceTools {
     if (this.presentedSource.size > 32) this.presentedSource.delete(this.presentedSource.keys().next().value);
     if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
       const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
-      return reference.length < evidence.length ? reference : evidence;
+      const output = reference.length < evidence.length ? reference : evidence;
+      this.recordSourceSnapshot(output,relative,sourceHash);return output;
     }
     if (this.deduplicateReads) {
       if (complete) this.readEvidence.set(rangeKey, sourceHash);
       else this.readEvidence.delete(rangeKey);
     }
-    return evidence;
+    this.recordSourceSnapshot(evidence,relative,sourceHash);return evidence;
+  }
+
+  recordSourceSnapshot(output,relative,sourceHash) {
+    this.sourceEvidence.set(createHash('sha256').update(output).digest('hex'),{path:relative,sourceHash});
+    if(this.sourceEvidence.size>128)this.sourceEvidence.delete(this.sourceEvidence.keys().next().value);
   }
 
   async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false } = {}) {
@@ -206,6 +216,7 @@ export class WorkspaceTools {
     const root = await this.resolveFile(scope);
     if (!(await stat(root)).isDirectory() || (isSensitivePath(path.relative(this.workspace, root)) || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part)))) throw new Error('Search scope must be a non-sensitive workspace directory');
     const results = [];
+    const dependencies = new Map();
     let filesScanned = 0;
     let bytesScanned = 0;
     const walk = async (directory, depth) => {
@@ -229,6 +240,8 @@ export class WorkspaceTools {
         const lines = decoded.split(/\r?\n/);
         for (let index = 0; index < lines.length; index += 1) {
           if (needles.some(term => lines[index].toLowerCase().includes(term))) {
+            const relative = path.relative(this.workspace, full).replaceAll(path.sep, '/');
+            dependencies.set(relative, { path: relative, sourceHash: createHash('sha256').update(redactText(decoded)).digest('hex') });
             results.push(redactText(`${path.relative(this.workspace, full).replaceAll(path.sep, '/')}:${index + 1}: ${lines[index].trim()}`));
             if (results.length >= Math.min(Number(maxResults) || 30, 80)) break;
           }
@@ -243,11 +256,15 @@ export class WorkspaceTools {
     }
     this.unresolvedQueries.delete(needle);
     const mappingHint = learned.length ? `Session query mapping: ${query} -> ${learned.map(item => item.target).join(', ')}\n` : '';
-    return mappingHint + results.join('\n') + '\n' + coverage;
+    const output = mappingHint + results.join('\n') + '\n' + coverage;
+    this.searchEvidence.set(createHash('sha256').update(output).digest('hex'), [...dependencies.values()]);
+    if (this.searchEvidence.size > 128) this.searchEvidence.delete(this.searchEvidence.keys().next().value);
+    return output;
   }
 
-  modelToolDefinitions() {
-    return this.unresolvedQueries.size ? [...TOOL_DEFINITIONS, TERM_MAPPING_TOOL] : TOOL_DEFINITIONS;
+  modelToolDefinitions({ includeMemory = true } = {}) {
+    const definitions = this.unresolvedQueries.size ? [...TOOL_DEFINITIONS, TERM_MAPPING_TOOL] : TOOL_DEFINITIONS;
+    return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
 
   async rememberTermMapping({ query, target, path: relativePath, line } = {}) {
@@ -282,40 +299,42 @@ export class WorkspaceTools {
 
   async applyPatch({ path: relativePath, search, replace } = {}) {
     if (typeof search !== 'string' || !search.length || typeof replace !== 'string') {
-      throw new Error('apply_patch requires a non-empty search string and a replace string');
+      throw new ToolFeedbackError('INPUT_INVALID', 'apply_patch requires a non-empty search string and a replace string');
     }
     if (typeof relativePath === 'string' && (relativePath === '.git' || relativePath.startsWith('.git/') || relativePath === '.env' || relativePath.startsWith('.env.'))) {
-      throw new Error('Patching Git metadata and environment files is blocked');
+      throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
     const filename = await this.resolveFile(relativePath);
     const fileStat = await lstat(filename);
     if (!fileStat.isFile() || fileStat.size > MAX_READ_BYTES) throw new Error('Patch target must be a regular file smaller than 160 KB');
     const normalizedPath = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
-    if (isSensitivePath(normalizedPath)) throw new Error('Patching credential and key files is blocked');
+    if (normalizedPath.split('/').includes('.tea')) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching agent storage is blocked');
+    if (isSensitivePath(normalizedPath)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching credential and key files is blocked');
     if (normalizedPath === '.git' || normalizedPath.startsWith('.git/') || normalizedPath === '.env' || normalizedPath.startsWith('.env.')) {
-      throw new Error('Patching Git metadata and environment files is blocked');
+      throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
     const source = await readFile(filename, 'utf8');
     const first = source.indexOf(search);
-    if (first < 0) throw new Error('Patch search text was not found');
-    if (source.indexOf(search, first + search.length) >= 0) throw new Error('Patch search text is ambiguous; include more surrounding lines');
+    if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
+    if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text is ambiguous; include more surrounding lines');
     await writeFile(filename, source.slice(0, first) + replace + source.slice(first + search.length), 'utf8');
     return `Updated ${normalizedPath}`;
   }
 
   async runTests({ command } = {}) {
+    if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
     if (!isAllowedCommand(command)) {
-      throw new Error('Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests');
+      throw new ToolFeedbackError('CAPABILITY_DENIED', 'Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests');
     }
     assertWindowsCommand(command);
     return this.#spawnCommand(command.trim(), this.maxCommandMs);
   }
 
   async runShell({ command } = {}) {
-    if (typeof command !== 'string' || !command.trim()) throw new Error('command must be a non-empty string');
+    if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
     const value = command.trim();
-    if (BLOCKED_SHELL.test(value)) throw new Error('Destructive commands and Git history mutations are blocked');
-    if (/[;&|<>`\n\r]/.test(value)) throw new Error('Shell operators and multiline commands are blocked');
+    if (BLOCKED_SHELL.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Destructive commands and Git history mutations are blocked');
+    if (/[;&|<>`\n\r]/.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Shell operators and multiline commands are blocked');
     if (isAllowedCommand(value)) {
       assertWindowsCommand(value);
       return this.#spawnCommand(value, this.maxCommandMs);
@@ -325,7 +344,7 @@ export class WorkspaceTools {
       this.signal?.throwIfAborted();
       return this.#spawnCommand(value, this.maxCommandMs);
     }
-    if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('Unlisted shell commands require an interactive terminal for approval');
+    if (!process.stdin.isTTY || !process.stdout.isTTY) throw new ToolFeedbackError('APPROVAL_UNAVAILABLE', 'Unlisted shell commands require an interactive terminal for approval');
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     let answer;
     try { answer = await rl.question(`Allow this command in the workspace?\n  ${value}\nType yes to continue: `); }
@@ -421,6 +440,10 @@ export const TERM_MAPPING_TOOL = {
 };
 
 export async function dispatchTool(tools, name, input) {
+  if (['recall_context', 'search_history'].includes(name)) {
+    if (!tools.contextMemory) throw new Error('ContextOS retrieval is unavailable in this session');
+    return name === 'recall_context' ? tools.contextMemory.recall(input) : tools.contextMemory.search(input);
+  }
   switch (name) {
     case 'list_files': return tools.listFiles(input);
     case 'search_code': return tools.searchCode(input);

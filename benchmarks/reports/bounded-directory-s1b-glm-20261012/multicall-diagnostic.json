@@ -1,0 +1,26 @@
+{
+  "kind": "Scripted frozen-revision multi-call directory diagnostic",
+  "paidRequestsAdded": 0,
+  "providerTokenImprovement": null,
+  "parentCommit": "d40056a66212c6e901f09254f5949bd78dc31694",
+  "candidateCommit": "a7ac3b3e2b26f9718b971c1b8e07e1c87b4fba2c",
+  "canonicalUnchanged": true,
+  "roles": {
+    "baseline": {
+      "nativeRequestSha256": "9dcc881cd2f380b691fb861db8c5cdc6b8311afec6c5d6bde9061542e6b2d897",
+      "wireBytes": 13162,
+      "coldRounds": 40,
+      "visibleEntries": 80,
+      "omittedRecordRecoverable": true,
+      "toolProtocolValid": true
+    },
+    "candidate": {
+      "nativeRequestSha256": "222eef2b079d9675337529822668d315cf7e4a4e6ccfa781707e1d86e62a9998",
+      "wireBytes": 5936,
+      "coldRounds": 40,
+      "visibleEntries": 8,
+      "omittedRecordRecoverable": true,
+      "toolProtocolValid": true
+    }
+  }
+}

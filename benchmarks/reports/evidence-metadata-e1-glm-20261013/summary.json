@@ -1,0 +1,558 @@
+{
+  "stage": "E1 compact source evidence metadata",
+  "parentCommit": "f4589fa9bb0858902a804d926c142055bf135af2",
+  "candidateCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "complete": false,
+  "cohorts": [
+    {
+      "name": "small",
+      "runId": "evidence-metadata-e1-small-glm-20261013-1791862058278049700",
+      "complete": true,
+      "eligible": true,
+      "usageKnown": true,
+      "attemptedRuns": 60,
+      "plannedRuns": 60,
+      "paidRequests": 302,
+      "accountedUsd": 0.4297452,
+      "roles": {
+        "baseline": {
+          "inputTokens": 242757,
+          "outputTokens": 9119,
+          "totalTokens": 251876,
+          "runs": 30,
+          "accepted": 30,
+          "requests": 151,
+          "toolCalls": 157,
+          "usageComplete": true,
+          "elapsedMedianMs": 23689.5,
+          "elapsedP95Ms": 37165.099999999984,
+          "qualityDimensions": {
+            "codeCorrect": 30,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 30,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          }
+        },
+        "candidate": {
+          "inputTokens": 231302,
+          "outputTokens": 8916,
+          "totalTokens": 240218,
+          "runs": 30,
+          "accepted": 29,
+          "requests": 151,
+          "toolCalls": 153,
+          "usageComplete": true,
+          "elapsedMedianMs": 23954.5,
+          "elapsedP95Ms": 43334.45,
+          "qualityDimensions": {
+            "codeCorrect": 30,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 29,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          }
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "small-cache-key-r1",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8289,
+          "candidateTokens": 9963,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r1",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6858,
+          "candidateTokens": 10015,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r1",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 12615,
+          "candidateTokens": 7759,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r2",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8046,
+          "candidateTokens": 5762,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r2",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8173,
+          "candidateTokens": 6127,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r2",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 12345,
+          "candidateTokens": 9915,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r3",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8208,
+          "candidateTokens": 5783,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r3",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6922,
+          "candidateTokens": 8066,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r3",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8158,
+          "candidateTokens": 7630,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r4",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 5974,
+          "candidateTokens": 5847,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r4",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 10591,
+          "candidateTokens": 6044,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r4",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8273,
+          "candidateTokens": 7653,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r5",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8106,
+          "candidateTokens": 5796,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r5",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8289,
+          "candidateTokens": 10016,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r5",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 6564,
+          "candidateTokens": 5829,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r6",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 6037,
+          "candidateTokens": 9445,
+          "baselineAccepted": true,
+          "candidateAccepted": false
+        },
+        {
+          "caseId": "small-retry-budget-r6",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6277,
+          "candidateTokens": 6571,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r6",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8164,
+          "candidateTokens": 7675,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r7",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 6024,
+          "candidateTokens": 10282,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r7",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 9037,
+          "candidateTokens": 7711,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r7",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 6553,
+          "candidateTokens": 7671,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r8",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 7856,
+          "candidateTokens": 7526,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r8",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 11447,
+          "candidateTokens": 12466,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r8",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 9986,
+          "candidateTokens": 7764,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r9",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 10145,
+          "candidateTokens": 9675,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r9",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6243,
+          "candidateTokens": 6071,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r9",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 12587,
+          "candidateTokens": 7683,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r10",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8036,
+          "candidateTokens": 5860,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r10",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8050,
+          "candidateTokens": 7901,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r10",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8023,
+          "candidateTokens": 13712,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "small",
+          "baselineTokens": 251876,
+          "candidateTokens": 240218,
+          "tokenReductionPercent": 4.628467976305806
+        }
+      ],
+      "families": [
+        {
+          "taskId": "small-cache-key",
+          "baselineTokens": 76721,
+          "candidateTokens": 75939,
+          "tokenReductionPercent": 1.0192776423665006
+        },
+        {
+          "taskId": "small-retry-budget",
+          "baselineTokens": 81887,
+          "candidateTokens": 80988,
+          "tokenReductionPercent": 1.097854360276962
+        },
+        {
+          "taskId": "small-unicode",
+          "baselineTokens": 93268,
+          "candidateTokens": 83291,
+          "tokenReductionPercent": 10.697130848736968
+        }
+      ],
+      "tokenReductionPercent": 4.628467976305806,
+      "sourceUnchanged": true,
+      "halted": false,
+      "pairedStratifiedBootstrap95Percent": [
+        -6.091498879631468,
+        14.283005399583459
+      ],
+      "bootstrapNote": "Exploratory repeat-level resampling within each synthetic task; not uncertainty over unseen production tasks.",
+      "p95LatencyChangePercent": 16.59984770658498
+    },
+    {
+      "name": "scale",
+      "runId": "evidence-metadata-e1-scale-glm-20261013-1791862058278049700",
+      "complete": false,
+      "eligible": false,
+      "usageKnown": false,
+      "attemptedRuns": 11,
+      "plannedRuns": 36,
+      "paidRequests": 73,
+      "accountedUsd": 0.4511936000000001,
+      "roles": {
+        "baseline": {
+          "inputTokens": 100525,
+          "outputTokens": 2028,
+          "totalTokens": 102553,
+          "runs": 5,
+          "accepted": 5,
+          "requests": 33,
+          "toolCalls": 36,
+          "usageComplete": true,
+          "elapsedMedianMs": 48977,
+          "elapsedP95Ms": 50927.8,
+          "qualityDimensions": {
+            "codeCorrect": 5,
+            "scopeCorrect": 5,
+            "declaredReadRequirements": 5,
+            "nativePostEditValidation": 5,
+            "nativeCompleted": 5,
+            "usageComplete": 5
+          }
+        },
+        "candidate": {
+          "inputTokens": null,
+          "outputTokens": null,
+          "totalTokens": null,
+          "runs": 6,
+          "accepted": 5,
+          "requests": 40,
+          "toolCalls": 47,
+          "usageComplete": false,
+          "elapsedMedianMs": 37458.5,
+          "elapsedP95Ms": 56042.75,
+          "qualityDimensions": {
+            "codeCorrect": 5,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 5,
+            "nativePostEditValidation": 5,
+            "nativeCompleted": 5,
+            "usageComplete": 5
+          }
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "medium-cache-key-r1",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 10385,
+          "candidateTokens": 7701,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r1",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 6886,
+          "candidateTokens": 9976,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r1",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 13471,
+          "candidateTokens": 9573,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r1",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 33254,
+          "candidateTokens": 39520,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r1",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 38557,
+          "candidateTokens": 35933,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r1",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "baselineAccepted": null,
+          "candidateAccepted": false
+        }
+      ],
+      "scales": [
+        {
+          "scale": "large",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        },
+        {
+          "scale": "medium",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        }
+      ],
+      "families": [
+        {
+          "taskId": "large-cache-key",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        },
+        {
+          "taskId": "large-retry-budget",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        },
+        {
+          "taskId": "large-unicode",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        },
+        {
+          "taskId": "medium-cache-key",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        },
+        {
+          "taskId": "medium-retry-budget",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        },
+        {
+          "taskId": "medium-unicode",
+          "baselineTokens": null,
+          "candidateTokens": null,
+          "tokenReductionPercent": null
+        }
+      ],
+      "tokenReductionPercent": null,
+      "sourceUnchanged": true,
+      "halted": true
+    }
+  ],
+  "paidRequestsAdded": 0,
+  "pairedQualityRegressions": [
+    {
+      "cohort": "small",
+      "caseId": "small-cache-key-r6",
+      "dimensions": [
+        "nativePostEditValidation",
+        "accepted"
+      ]
+    }
+  ],
+  "attemptedRuns": 71,
+  "paidRequests": 375,
+  "conservativeSpentOrReservedUsd": 0.8809388,
+  "commonControlsMatched": true,
+  "gates": {
+    "completeKnownStable": false,
+    "commonControls": true,
+    "smallSavesTokens": true,
+    "noCohortOrScaleTokenIncrease": false,
+    "pairedQualityNonregression": false
+  },
+  "retainCandidate": false,
+  "decision": "revert runtime candidate; preserve evidence"
+}

@@ -1,0 +1,8 @@
+{
+  "kind": "constructed positive-output replay for the exact two commands used by the native contract; not old provider results",
+  "checks": 18,
+  "oldConfirmed": 0,
+  "v3Confirmed": 18,
+  "recognitionPercentagePointChange": 100,
+  "providerTokenReductionPercent": null
+}

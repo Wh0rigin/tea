@@ -1,0 +1,147 @@
+{
+  "kind": "reconstructed-failure-diagnosis",
+  "baselineCommit": "07d6070168bd5c6f7c4a2408a1ae4fcf9857996b",
+  "caseId": "crossfile-ts",
+  "repeat": 1,
+  "variant": "contextos",
+  "providerRequests": 0,
+  "notes": [
+    "B native requests before the erroneous patch are reconstructed on a clone of the exact initial fixture and checked against original settled hashes.",
+    "Counterfactual C projection uses the identical recorded history, not a new model execution; bytes do not predict acceptance or provider tokens.",
+    "No private paths, keys, original thinking, signatures or raw transcripts are exported."
+  ],
+  "requests": [
+    {
+      "request": 1,
+      "expectedDiagnosticWireBytes": 22557,
+      "reconstructedWireBytes": 22557,
+      "reconstructedRequestSha256": "de541a0121cf0e4a3bb8a610599c4994d81988095ca4a8fbb2ab05e3636b0c19",
+      "ruleResident": true,
+      "projectScopeVerbatim": true,
+      "userGoalVerbatim": true,
+      "taskPositionFraction": 0.9854693241287161,
+      "shadowPathMentionedInLatestResult": false,
+      "shadowSourceResident": false,
+      "counterfactualC": {
+        "wireBytes": 15673,
+        "protocol": "paired complete rounds; original signed thinking retained",
+        "goalAnchored": true,
+        "rulesAnchored": true,
+        "coldRounds": 33,
+        "providerRequests": 0
+      },
+      "originalRequestSha256": "de541a0121cf0e4a3bb8a610599c4994d81988095ca4a8fbb2ab05e3636b0c19",
+      "exactNativeRequestHashMatch": true
+    },
+    {
+      "request": 2,
+      "expectedDiagnosticWireBytes": 22793,
+      "reconstructedWireBytes": 22793,
+      "reconstructedRequestSha256": "26a1f2504ab77566414bd74013b1bb391ad8e5a0188924a463b13b13f6535b31",
+      "ruleResident": true,
+      "projectScopeVerbatim": true,
+      "userGoalVerbatim": true,
+      "taskPositionFraction": 0.8908121771623255,
+      "shadowPathMentionedInLatestResult": true,
+      "shadowSourceResident": false,
+      "counterfactualC": {
+        "wireBytes": 15667,
+        "protocol": "paired complete rounds; original signed thinking retained",
+        "goalAnchored": true,
+        "rulesAnchored": true,
+        "coldRounds": 34,
+        "providerRequests": 0
+      },
+      "originalRequestSha256": "26a1f2504ab77566414bd74013b1bb391ad8e5a0188924a463b13b13f6535b31",
+      "exactNativeRequestHashMatch": true
+    },
+    {
+      "request": 3,
+      "expectedDiagnosticWireBytes": 22248,
+      "reconstructedWireBytes": 22248,
+      "reconstructedRequestSha256": "1b1ee9a315cf6c23e10a4bb49110239fcf435e942d05baa1c36eb1026ba1c7c9",
+      "ruleResident": true,
+      "projectScopeVerbatim": true,
+      "userGoalVerbatim": true,
+      "taskPositionFraction": 0.833909250552314,
+      "shadowPathMentionedInLatestResult": true,
+      "shadowSourceResident": true,
+      "counterfactualC": {
+        "wireBytes": 14883,
+        "protocol": "paired complete rounds; original signed thinking retained",
+        "goalAnchored": true,
+        "rulesAnchored": true,
+        "coldRounds": 35,
+        "providerRequests": 0
+      },
+      "originalRequestSha256": "1b1ee9a315cf6c23e10a4bb49110239fcf435e942d05baa1c36eb1026ba1c7c9",
+      "exactNativeRequestHashMatch": true
+    }
+  ],
+  "actions": [
+    {
+      "eventId": "e00000084",
+      "name": "read_file",
+      "path": "src/services/text.ts",
+      "command": null
+    },
+    {
+      "eventId": "e00000087",
+      "name": "list_files",
+      "path": "src/services",
+      "command": null
+    },
+    {
+      "eventId": "e00000095",
+      "name": "read_file",
+      "path": "src/services/points.ts",
+      "command": null
+    },
+    {
+      "eventId": "e00000098",
+      "name": "read_file",
+      "path": "src/services/text.mjs",
+      "command": null
+    },
+    {
+      "eventId": "e00000106",
+      "name": "apply_patch",
+      "path": "src/services/points.ts",
+      "command": null
+    },
+    {
+      "eventId": "e00000109",
+      "name": "apply_patch",
+      "path": "src/services/text.mjs",
+      "command": null
+    },
+    {
+      "eventId": "e00000117",
+      "name": "run_tests",
+      "path": null,
+      "command": "node --test tests/public.test.mjs"
+    },
+    {
+      "eventId": "e00000125",
+      "name": "run_tests",
+      "path": null,
+      "command": "node --test tests/public.test.mjs"
+    }
+  ],
+  "conclusions": {
+    "confirmed": [
+      "Project rule and verbatim user scope were present before both patches.",
+      "Model inspected the TypeScript helper, then an unrelated shadow JavaScript implementation.",
+      "One response requested patches to both files; independent scope failed despite public/hidden functional success."
+    ],
+    "hypotheses": [
+      "Recently read irrelevant source can attract an unnecessary parallel repair.",
+      "Repeating authoritative goal/rules near recent results may reduce scope confusion."
+    ],
+    "unproven": [
+      "Compression caused the mistake.",
+      "Lost-in-the-middle is the unique cause.",
+      "A C anchor guarantees adherence."
+    ]
+  }
+}

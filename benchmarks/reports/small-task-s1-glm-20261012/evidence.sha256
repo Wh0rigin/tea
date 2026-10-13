@@ -1,0 +1,12 @@
+b4eff60eedc524711f1281dd593f0d27615d670b9137eb49989c0f525b7c944c  benchmarks/reports/small-task-s1-glm-20261012/frozen-config.json
+c24b28815ea599207bc064061fb0aadf1d00e70c95b4ab0a66bef718d5dd562d  benchmarks/reports/small-task-s1-glm-20261012/journal-audit.json
+3dcd1c67f1e02900cac0fba1f6801e3520403a6ae3306438eeb85c0809c464e7  benchmarks/reports/small-task-s1-glm-20261012/README.md
+0c27b9fb82e8b4decfdf35c45ae65293baec96d515003f4dd24bb1c854cf57a5  benchmarks/reports/small-task-s1-glm-20261012/README.zh-CN.md
+b09a138fea20e65e351f2a0609e5e6303fe5409ba2e6fb23d973952569ca129a  benchmarks/reports/small-task-s1-glm-20261012/results.json
+a5ffe3c84bda2f5531b7b068dde7df9cc30b649e4278e65e8ba697288b8cbb6b  benchmarks/reports/small-task-s1-glm-20261012/s1-protected-tokens.png
+254560bb1eaa707f727693a9696b0291e58e8fdee5bbcfeb71dc41e6e28ae875  benchmarks/reports/small-task-s1-glm-20261012/s1-protected-tokens.svg
+c5c730116f43674ae4861a27a2edf77074e8b84f7d477518df790aacc5f3024a  benchmarks/reports/small-task-s1-glm-20261012/s1-small-tokens.png
+df4355f3f8570bfb4b9e8986a0d0b1c201fa6e7f632b21f412bf892ff245e080  benchmarks/reports/small-task-s1-glm-20261012/s1-small-tokens.svg
+7293e43a038ed3b06e944f7689f5821afd1655274433eee1d9a6064edf799b10  benchmarks/reports/small-task-s1-glm-20261012/source-audit.json
+9b42aa524a36476031d085ca157d9f7c505225e4494825f8f11f2d7e3347f9d3  benchmarks/reports/small-task-s1-glm-20261012/summary.json
+13b583c3b6956e6e2fcb85fb53859302c9683bdee9cf86fb5074f7d49068a451  scripts/plot-small-task-s1.py

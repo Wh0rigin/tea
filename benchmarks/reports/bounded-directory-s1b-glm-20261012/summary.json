@@ -1,0 +1,2014 @@
+{
+  "stage": "S1b",
+  "parentCommit": "d40056a66212c6e901f09254f5949bd78dc31694",
+  "candidateCommit": "a7ac3b3e2b26f9718b971c1b8e07e1c87b4fba2c",
+  "state": "complete",
+  "cohorts": [
+    {
+      "name": "long",
+      "runId": "bounded-directory-s1b-long-glm-20261012-1791805441427116200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 793,
+      "accountedUsd": 2.9242660000000322,
+      "roles": {
+        "baseline": {
+          "inputTokens": 1854292,
+          "outputTokens": 9927,
+          "totalTokens": 1864219,
+          "requests": 396,
+          "toolCalls": 219,
+          "runs": 6,
+          "accepted": 6,
+          "qualityDimensions": {
+            "codeCorrect": 6,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 6,
+            "nativePostEditValidation": 6,
+            "nativeCompleted": 6,
+            "usageComplete": 6
+          },
+          "elapsedP95Ms": 358167.0,
+          "elapsedMedianMs": 334461.5,
+          "cacheReadInputTokens": 861504,
+          "uncachedInputTokens": 992788,
+          "readOnlyTokens": 1657900,
+          "repairTokens": 206319
+        },
+        "candidate": {
+          "inputTokens": 1729973,
+          "outputTokens": 10378,
+          "totalTokens": 1740351,
+          "requests": 397,
+          "toolCalls": 218,
+          "runs": 6,
+          "accepted": 6,
+          "qualityDimensions": {
+            "codeCorrect": 6,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 6,
+            "nativePostEditValidation": 6,
+            "nativeCompleted": 6,
+            "usageComplete": 6
+          },
+          "elapsedP95Ms": 369524.0,
+          "elapsedMedianMs": 347596.5,
+          "cacheReadInputTokens": 741120,
+          "uncachedInputTokens": 988853,
+          "readOnlyTokens": 1560988,
+          "repairTokens": 179363
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "long-30-r1",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 311918,
+          "candidateTokens": 292894,
+          "reductionPercent": 6.099038849954153,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r2",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 312775,
+          "candidateTokens": 283603,
+          "reductionPercent": 9.326832387498996,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r3",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 315986,
+          "candidateTokens": 284631,
+          "reductionPercent": 9.92290797693569,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r4",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 307573,
+          "candidateTokens": 289938,
+          "reductionPercent": 5.733598202703094,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r5",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 308322,
+          "candidateTokens": 300451,
+          "reductionPercent": 2.552850591264977,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "long-30-r6",
+          "taskId": "long-30",
+          "scale": "long-session",
+          "baselineTokens": 307645,
+          "candidateTokens": 288834,
+          "reductionPercent": 6.1145151066976595,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "long-session",
+          "baselineTokens": 1864219,
+          "candidateTokens": 1740351,
+          "reductionPercent": 6.644498312698244
+        }
+      ],
+      "tokenReductionPercent": 6.644498312698244,
+      "p95LatencyChangePercent": 3.1708672211566036,
+      "familyAcceptanceNonregression": true,
+      "pairedRepeatBootstrap95Percent": [
+        4.799030762906908,
+        8.50409312932927
+      ],
+      "readOnlyTokenReductionPercent": 5.8454671572471195,
+      "repairTokenReductionPercent": 13.06520485267959
+    },
+    {
+      "name": "small",
+      "runId": "bounded-directory-s1b-small-glm-20261012-1791805441427116200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 299,
+      "accountedUsd": 0.4374832000000004,
+      "roles": {
+        "baseline": {
+          "inputTokens": 226976,
+          "outputTokens": 8403,
+          "totalTokens": 235379,
+          "requests": 142,
+          "toolCalls": 151,
+          "runs": 30,
+          "accepted": 30,
+          "qualityDimensions": {
+            "codeCorrect": 30,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 30,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          },
+          "elapsedP95Ms": 24549.5,
+          "elapsedMedianMs": 18324.5,
+          "cacheReadInputTokens": 146880,
+          "uncachedInputTokens": 80096
+        },
+        "candidate": {
+          "inputTokens": 257550,
+          "outputTokens": 9405,
+          "totalTokens": 266955,
+          "requests": 157,
+          "toolCalls": 163,
+          "runs": 30,
+          "accepted": 30,
+          "qualityDimensions": {
+            "codeCorrect": 30,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 30,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          },
+          "elapsedP95Ms": 27829.14999999999,
+          "elapsedMedianMs": 20031.0,
+          "cacheReadInputTokens": 154240,
+          "uncachedInputTokens": 103310
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "small-cache-key-r1",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 5986,
+          "candidateTokens": 10622,
+          "reductionPercent": -77.44737721349817,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r1",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6858,
+          "candidateTokens": 8170,
+          "reductionPercent": -19.130941965587645,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r1",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8189,
+          "candidateTokens": 10185,
+          "reductionPercent": -24.374160459152527,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r2",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 10594,
+          "candidateTokens": 8250,
+          "reductionPercent": 22.1257315461582,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r2",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8981,
+          "candidateTokens": 6304,
+          "reductionPercent": 29.807371116802138,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r2",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8868,
+          "candidateTokens": 8238,
+          "reductionPercent": 7.104194857916102,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r3",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 6172,
+          "candidateTokens": 10268,
+          "reductionPercent": -66.36422553467271,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r3",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8950,
+          "candidateTokens": 8972,
+          "reductionPercent": -0.24581005586592486,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r3",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8125,
+          "candidateTokens": 8091,
+          "reductionPercent": 0.4184615384615342,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r4",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 10423,
+          "candidateTokens": 7863,
+          "reductionPercent": 24.56106687134222,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r4",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 11287,
+          "candidateTokens": 6248,
+          "reductionPercent": 44.644281031274915,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r4",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 10035,
+          "candidateTokens": 8100,
+          "reductionPercent": 19.282511210762333,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r5",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 5974,
+          "candidateTokens": 5965,
+          "reductionPercent": 0.15065282892534615,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r5",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6529,
+          "candidateTokens": 6076,
+          "reductionPercent": 6.938275386736104,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r5",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8153,
+          "candidateTokens": 17024,
+          "reductionPercent": -108.80657426714092,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r6",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 6002,
+          "candidateTokens": 10281,
+          "reductionPercent": -71.29290236587804,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r6",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 8239,
+          "candidateTokens": 6858,
+          "reductionPercent": 16.761742929967227,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r6",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8136,
+          "candidateTokens": 10056,
+          "reductionPercent": -23.59882005899705,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r7",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 7874,
+          "candidateTokens": 8225,
+          "reductionPercent": -4.457708915417835,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r7",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6907,
+          "candidateTokens": 13503,
+          "reductionPercent": -95.49732155783988,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r7",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8150,
+          "candidateTokens": 16347,
+          "reductionPercent": -100.5766871165644,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r8",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 5983,
+          "candidateTokens": 8114,
+          "reductionPercent": -35.61758315226476,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r8",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6308,
+          "candidateTokens": 7015,
+          "reductionPercent": -11.207989854153455,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r8",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 6615,
+          "candidateTokens": 10053,
+          "reductionPercent": -51.972789115646265,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r9",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 5969,
+          "candidateTokens": 5974,
+          "reductionPercent": -0.08376612497906777,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r9",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6948,
+          "candidateTokens": 7943,
+          "reductionPercent": -14.320667818077148,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r9",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 8149,
+          "candidateTokens": 8313,
+          "reductionPercent": -2.012516873235981,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-cache-key-r10",
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "baselineTokens": 8587,
+          "candidateTokens": 6787,
+          "reductionPercent": 20.961919180156052,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-retry-budget-r10",
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "baselineTokens": 6258,
+          "candidateTokens": 8787,
+          "reductionPercent": -40.412272291466934,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "small-unicode-r10",
+          "taskId": "small-unicode",
+          "scale": "small",
+          "baselineTokens": 10130,
+          "candidateTokens": 8323,
+          "reductionPercent": 17.838104639684104,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "small",
+          "baselineTokens": 235379,
+          "candidateTokens": 266955,
+          "reductionPercent": -13.414960552980503
+        }
+      ],
+      "tokenReductionPercent": -13.414960552980503,
+      "p95LatencyChangePercent": 13.35933522067656,
+      "familyAcceptanceNonregression": true
+    },
+    {
+      "name": "scale",
+      "runId": "bounded-directory-s1b-scale-glm-20261012-1791805441427116200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 263,
+      "accountedUsd": 0.7294180000000023,
+      "roles": {
+        "baseline": {
+          "inputTokens": 455242,
+          "outputTokens": 7061,
+          "totalTokens": 462303,
+          "requests": 136,
+          "toolCalls": 149,
+          "runs": 18,
+          "accepted": 18,
+          "qualityDimensions": {
+            "codeCorrect": 18,
+            "scopeCorrect": 18,
+            "declaredReadRequirements": 18,
+            "nativePostEditValidation": 18,
+            "nativeCompleted": 18,
+            "usageComplete": 18
+          },
+          "elapsedP95Ms": 69728.0,
+          "elapsedMedianMs": 32477.0,
+          "cacheReadInputTokens": 296448,
+          "uncachedInputTokens": 158794
+        },
+        "candidate": {
+          "inputTokens": 407975,
+          "outputTokens": 6812,
+          "totalTokens": 414787,
+          "requests": 127,
+          "toolCalls": 137,
+          "runs": 18,
+          "accepted": 18,
+          "qualityDimensions": {
+            "codeCorrect": 18,
+            "scopeCorrect": 18,
+            "declaredReadRequirements": 18,
+            "nativePostEditValidation": 18,
+            "nativeCompleted": 18,
+            "usageComplete": 18
+          },
+          "elapsedP95Ms": 58716.09999999999,
+          "elapsedMedianMs": 32117.5,
+          "cacheReadInputTokens": 262336,
+          "uncachedInputTokens": 145639
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "medium-cache-key-r1",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 10170,
+          "candidateTokens": 5989,
+          "reductionPercent": 41.11111111111111,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r1",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 8417,
+          "candidateTokens": 6251,
+          "reductionPercent": 25.73363431151241,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r1",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 14848,
+          "candidateTokens": 10328,
+          "reductionPercent": 30.44181034482759,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r1",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 43203,
+          "candidateTokens": 31941,
+          "reductionPercent": 26.06763419207,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r1",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 28587,
+          "candidateTokens": 33727,
+          "reductionPercent": -17.980200790569146,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r1",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": 56273,
+          "candidateTokens": 40641,
+          "reductionPercent": 27.77886375348746,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-cache-key-r2",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 10154,
+          "candidateTokens": 6102,
+          "reductionPercent": 39.90545597793973,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r2",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 8072,
+          "candidateTokens": 10480,
+          "reductionPercent": -29.831516352824572,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r2",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 12385,
+          "candidateTokens": 8149,
+          "reductionPercent": 34.202664513524425,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r2",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 32103,
+          "candidateTokens": 43825,
+          "reductionPercent": -36.51372145905367,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r2",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 43414,
+          "candidateTokens": 37852,
+          "reductionPercent": 12.811535449394206,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r2",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": 40583,
+          "candidateTokens": 21380,
+          "reductionPercent": 47.31784244634453,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-cache-key-r3",
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "baselineTokens": 7963,
+          "candidateTokens": 7832,
+          "reductionPercent": 1.6451086274017368,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-retry-budget-r3",
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "baselineTokens": 6295,
+          "candidateTokens": 6276,
+          "reductionPercent": 0.3018268467037344,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "medium-unicode-r3",
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "baselineTokens": 12613,
+          "candidateTokens": 16892,
+          "reductionPercent": -33.92531515103465,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-cache-key-r3",
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "baselineTokens": 51465,
+          "candidateTokens": 57849,
+          "reductionPercent": -12.404546779364622,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-retry-budget-r3",
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "baselineTokens": 34070,
+          "candidateTokens": 33855,
+          "reductionPercent": 0.6310537129439409,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "large-unicode-r3",
+          "taskId": "large-unicode",
+          "scale": "large",
+          "baselineTokens": 41688,
+          "candidateTokens": 35418,
+          "reductionPercent": 15.040299366724241,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "large",
+          "baselineTokens": 371386,
+          "candidateTokens": 336488,
+          "reductionPercent": 9.396692390127793
+        },
+        {
+          "scale": "medium",
+          "baselineTokens": 90917,
+          "candidateTokens": 78299,
+          "reductionPercent": 13.878592562447068
+        }
+      ],
+      "tokenReductionPercent": 10.278107648014402,
+      "p95LatencyChangePercent": -15.792651445617267,
+      "familyAcceptanceNonregression": true
+    },
+    {
+      "name": "recovery",
+      "runId": "bounded-directory-s1b-recovery-glm-20261012-1791805441427116200",
+      "sourceUnchanged": true,
+      "validComparison": true,
+      "paidRequests": 64,
+      "accountedUsd": 0.19129880000000016,
+      "roles": {
+        "baseline": {
+          "inputTokens": 144636,
+          "outputTokens": 1626,
+          "totalTokens": 146262,
+          "requests": 34,
+          "toolCalls": 34,
+          "runs": 6,
+          "accepted": 6,
+          "qualityDimensions": {
+            "codeCorrect": 6,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 6,
+            "nativePostEditValidation": 6,
+            "nativeCompleted": 6,
+            "usageComplete": 6,
+            "historicalObservationPreserved": 6,
+            "historicalRecoveryUsed": 6
+          },
+          "elapsedP95Ms": 30155.0,
+          "elapsedMedianMs": 25559.5,
+          "cacheReadInputTokens": 53184,
+          "uncachedInputTokens": 91452
+        },
+        "candidate": {
+          "inputTokens": 84922,
+          "outputTokens": 1107,
+          "totalTokens": 86029,
+          "requests": 30,
+          "toolCalls": 31,
+          "runs": 6,
+          "accepted": 6,
+          "qualityDimensions": {
+            "codeCorrect": 6,
+            "scopeCorrect": 6,
+            "declaredReadRequirements": 6,
+            "nativePostEditValidation": 6,
+            "nativeCompleted": 6,
+            "usageComplete": 6,
+            "historicalObservationPreserved": 6,
+            "historicalRecoveryUsed": 6
+          },
+          "elapsedP95Ms": 28981.25,
+          "elapsedMedianMs": 17194.0,
+          "cacheReadInputTokens": 47232,
+          "uncachedInputTokens": 37690
+        }
+      },
+      "pairs": [
+        {
+          "caseId": "historical-recall-r1",
+          "taskId": "historical-recall",
+          "scale": "recovery-control",
+          "baselineTokens": 21475,
+          "candidateTokens": 17161,
+          "reductionPercent": 20.088474970896385,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "historical-recall-r2",
+          "taskId": "historical-recall",
+          "scale": "recovery-control",
+          "baselineTokens": 26000,
+          "candidateTokens": 11512,
+          "reductionPercent": 55.72307692307692,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "historical-recall-r3",
+          "taskId": "historical-recall",
+          "scale": "recovery-control",
+          "baselineTokens": 26148,
+          "candidateTokens": 11611,
+          "reductionPercent": 55.59507419305491,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "historical-recall-r4",
+          "taskId": "historical-recall",
+          "scale": "recovery-control",
+          "baselineTokens": 20990,
+          "candidateTokens": 11479,
+          "reductionPercent": 45.312053358742254,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "historical-recall-r5",
+          "taskId": "historical-recall",
+          "scale": "recovery-control",
+          "baselineTokens": 25533,
+          "candidateTokens": 17068,
+          "reductionPercent": 33.15317432342459,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        },
+        {
+          "caseId": "historical-recall-r6",
+          "taskId": "historical-recall",
+          "scale": "recovery-control",
+          "baselineTokens": 26116,
+          "candidateTokens": 17198,
+          "reductionPercent": 34.14764895083474,
+          "baselineAccepted": true,
+          "candidateAccepted": true
+        }
+      ],
+      "scales": [
+        {
+          "scale": "recovery-control",
+          "baselineTokens": 146262,
+          "candidateTokens": 86029,
+          "reductionPercent": 41.18157826366383
+        }
+      ],
+      "tokenReductionPercent": 41.18157826366383,
+      "p95LatencyChangePercent": -3.8923893218371752,
+      "familyAcceptanceNonregression": true
+    }
+  ],
+  "pairedQualityRegressions": [],
+  "coreCombined": {
+    "baseline": 2561901,
+    "candidate": 2422093,
+    "tokenReductionPercent": 5.457197604435149
+  },
+  "combined": {
+    "baselineTokens": 2708163,
+    "candidateTokens": 2508122,
+    "tokenReductionPercent": 7.386593790698715,
+    "paidRequests": 1419,
+    "conservativeSpendUsd": 4.282466000000035,
+    "conservativeGuardUsd": 8
+  },
+  "gates": {
+    "stableKnownComplete": true,
+    "longSavings": true,
+    "longReadOnlySavings": true,
+    "longBootstrapLowerBoundAboveZero": true,
+    "otherScaleAndRecoveryTokenNonregression": false,
+    "quality": true,
+    "scope": true,
+    "historicalObservationAndRecovery": true,
+    "latency": false,
+    "commonControlsMatched": true
+  },
+  "predeclaredGatesPassed": false,
+  "retainCandidate": false,
+  "journalAudit": {
+    "runs": 120,
+    "exactNativeGatewayRequestHashes": 1419,
+    "allJournalsUnchanged": true,
+    "paidRequestsAdded": 0,
+    "roles": {
+      "baseline": {
+        "denials": 5,
+        "failedPatches": 1,
+        "capabilityDeclarations": 60,
+        "capabilityNoticeBytes": 41940,
+        "sourceVerifiedFinalValidation": 60
+      },
+      "candidate": {
+        "denials": 7,
+        "failedPatches": 0,
+        "capabilityDeclarations": 60,
+        "capabilityNoticeBytes": 41940,
+        "sourceVerifiedFinalValidation": 60
+      }
+    }
+  },
+  "verification": {
+    "targetedTests": 39,
+    "fullTests": 275,
+    "passedTests": 275,
+    "skippedTests": 0,
+    "coreNativeContract": {
+      "kind": "native frozen-revision loopback contract",
+      "usageSource": "scripted-loopback",
+      "paidProviderRequests": 0,
+      "runId": "s0-contract-1791805335349",
+      "runs": 18,
+      "requests": 72,
+      "accepted": 18,
+      "scriptedTokensPerArm": 5040,
+      "providerTokenImprovement": null,
+      "commonControlsMatched": true,
+      "allSourcesStable": true,
+      "ratiosWithheld": true,
+      "engines": {
+        "baseline": {
+          "commit": "d40056a66212c6e901f09254f5949bd78dc31694",
+          "sourceSha256": "ca1fe15e8d38daaeddad932175689a437d616b8fad9c3c0e928ca78163a88786"
+        },
+        "candidate": {
+          "commit": "a7ac3b3e2b26f9718b971c1b8e07e1c87b4fba2c",
+          "sourceSha256": "498c4576720b0db7cc57322c3b3a8dfc5b27715b1d954b95a580129e7e3de750"
+        }
+      },
+      "quality": [
+        {
+          "caseId": "small-cache-key-r1",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-cache-key-r1",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-retry-budget-r1",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-retry-budget-r1",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-unicode-r1",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-unicode-r1",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-cache-key-r2",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-cache-key-r2",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-retry-budget-r2",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-retry-budget-r2",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-unicode-r2",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-unicode-r2",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-cache-key-r3",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-cache-key-r3",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "d3684807df35561cfab21e908cc7a32ce301e4c51bcd75cd0ade15f7b4454514",
+                "src/services/cache-key.mjs": "e48f3187e9c43a2fcb461f70e65f24555b01b6701cfff64616cfa36c2ac77809",
+                "tests/public.test.mjs": "200120286671d4c3fa3d51deb7dfce4ab944d6bfce057d859cf6da7daaca4bc9"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-retry-budget-r3",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-retry-budget-r3",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "5fe3bc6d3319abeba93f8021aa5fa2138265f44e1a7a781e22bf081c713627c0",
+                "src/services/retry-budget.mjs": "3e64f493ef6609ccfe95233432a4911ad6c330ee8528add214a18b06c4d8171a",
+                "tests/public.test.mjs": "336b1fef5048e9b14d7866b644edb342d151574187e0347f263e41c04dadaa81"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-unicode-r3",
+          "agent": "baseline",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+                "program": "npm",
+                "argumentShape": [
+                  "value"
+                ],
+                "argumentsSha256": "ecfd160805b1b0481fd0793c745be3b45d2054582de1c4df5d9b8fa4d78e7fbc",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              }
+            }
+          ]
+        },
+        {
+          "caseId": "small-unicode-r3",
+          "agent": "candidate",
+          "accepted": true,
+          "dimensions": {
+            "codeCorrect": true,
+            "scopeCorrect": true,
+            "declaredReadRequirements": true,
+            "nativePostEditValidation": true,
+            "nativeCompleted": true,
+            "usageComplete": true
+          },
+          "commands": [
+            {
+              "execution": {
+                "commandSha256": "2af0cc0590396c990ae301c069d9602342b0c567e07dbfb40e5323a1adbac8fd",
+                "program": "node",
+                "argumentShape": [
+                  "--test",
+                  "--test-reporter",
+                  "test-path"
+                ],
+                "argumentsSha256": "e66ace7ff70760195d9d919c9b426cbc997e09ac352f3957e82abde912a8a585",
+                "approval": "not-reported",
+                "exitCode": 0,
+                "settled": true
+              },
+              "evidence": {
+                "recognized": true,
+                "framework": "node",
+                "targets": [
+                  "tests/public.test.mjs"
+                ],
+                "reason": "declared-node-test-suite",
+                "summary": {
+                  "tests": 1,
+                  "pass": 1,
+                  "fail": 0,
+                  "positiveCompletion": true
+                },
+                "stableSources": true,
+                "passed": true
+              },
+              "sourceVersionsBefore": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              },
+              "sourceVersionsAfter": {
+                "package.json": "838810cb0d66788b5fa6a9f4dcf96c48faf2410b366f4b7f90a900f1480f7314",
+                "src/services/text.mjs": "63d56854dd512fbe8c7ef569a2c43225251bfa76611cc5110f910bc2b2a6fbe6",
+                "tests/public.test.mjs": "6dcd36055a734802a9fd94e10fcc5237b9e65f26609ed83da5f73f75ba1279bf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "recoveryNativeContract": {
+      "runId": "reference-recovery-contract-1791805317803",
+      "usageSource": "scripted-loopback",
+      "paidProviderRequests": 0,
+      "providerTokenImprovement": null,
+      "runs": 6,
+      "accepted": 6,
+      "requests": 36,
+      "commonControlsMatched": true,
+      "initialBaselineEntries": 34,
+      "initialCandidateEntries": 8,
+      "allSourcesStable": true
+    },
+    "implementationCiUrl": "https://github.com/Wh0rigin/tea/actions/runs/38244641744",
+    "offlinePreparationCorrection": "First scripted receipt contract looked for a workspace banner absent from seeded sessions; corrected before the frozen paid plan. Retained failed scripted attempt, zero paid calls."
+  },
+  "additionalRecoveryAudit": {
+    "kind": "Additional read-only historical observation audit; frozen native grades remain unchanged",
+    "paidRequestsAdded": 0,
+    "runId": "bounded-directory-s1b-recovery-glm-20261012-1791805441427116200",
+    "allObservedValuesRetrieved": true,
+    "allObservedSourcesAuthenticated": true,
+    "freshOldObservationSignals": 0
+  },
+  "freshProjectionAudits": {
+    "small": {
+      "requests": 299,
+      "exactNativeGatewayHashes": 299,
+      "sameRecordedHistoryNativeProjectionsIdentical": 299,
+      "maxDirectoryShown": 0,
+      "maxDirectoryOmitted": 0,
+      "counterfactualBasis": "Hold recorded model replies, cache snapshots, dynamic tool availability and historical freshness decisions fixed; not an alternative live trajectory."
+    },
+    "scale": {
+      "requests": 263,
+      "exactNativeGatewayHashes": 263,
+      "sameRecordedHistoryNativeProjectionsIdentical": 263,
+      "maxDirectoryShown": 3,
+      "maxDirectoryOmitted": 0,
+      "counterfactualBasis": "Hold recorded model replies, cache snapshots, dynamic tool availability and historical freshness decisions fixed; not an alternative live trajectory."
+    }
+  },
+  "finalVerification": {
+    "runtimeReverted": true,
+    "runtimeAndPackageMatchParent": true,
+    "fullTests": 268,
+    "passedTests": 268,
+    "skippedTests": 0,
+    "revertCommits": [
+      "a233c54e1cca07ef571785584e94989d8c4941f2",
+      "cb7e8e03b4bba3fc6d10a1bc6ba3debe1ae413df"
+    ],
+    "reportAndMeasurementsPreserved": true,
+    "nextProposalsUnstarted": true
+  }
+}

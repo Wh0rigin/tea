@@ -1,0 +1,281 @@
+{
+  "version": 1,
+  "kind": "fixture-preflight",
+  "providerRequests": 0,
+  "candidateCommit": "66b3350d93eda170d1b14d8c888e93dbe05bc44c",
+  "baselineCommit": "8dfc6dafb257f183a31a76a28b5e93a8413f7919",
+  "engineSha256": "bb2a16aab854d5ef4fe175ea8aae6042b369bbe1ad7fc868c4fd17a6012a9d06",
+  "sourceUnchanged": true,
+  "complete": true,
+  "cases": [
+    {
+      "id": "long-30",
+      "language": "JavaScript",
+      "files": 120,
+      "family": "retry-budget",
+      "seed": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "messages": 0
+      },
+      "group": "model-target",
+      "rounds": 30,
+      "commit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+      "sha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+      "fileCount": 120,
+      "bytes": 161366,
+      "lines": 2328,
+      "entry": "src/services/retry-budget.mjs",
+      "allowed": [
+        "src/services/retry-budget.mjs"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Read src/generated/domain-00/module-0000.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0012.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0024.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0036.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0048.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0060.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0072.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0084.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0096.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-00/module-0108.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0001.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0013.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0025.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0037.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0049.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0061.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0073.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0085.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0097.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-01/module-0109.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0002.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0014.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0026.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0038.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0050.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0062.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0074.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0086.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0098.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Read src/generated/domain-02/module-0110.mjs completely using read_file; do not edit or run tests. Reply in at most 12 words. This is a read-only inspection turn.",
+        "Fix the retry budget logic: zero retries must still allow the initial attempt, and a budget of N retries permits N+1 total attempts. Preserve immediate success and do not swallow the last error. Read the project instructions and run the public tests."
+      ],
+      "promptSha256": "d6558936dfe95331a9b3d483f121ab98f5ccc2799e25f998549236e1f2f641de"
+    },
+    {
+      "id": "short-js",
+      "language": "JavaScript",
+      "files": 12,
+      "family": "cache-key",
+      "seed": {
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "messages": 0
+      },
+      "group": "control",
+      "commit": "ffde108877a63cb9cd9a96fbfc486c6c0c0add39",
+      "sha256": "8739b103e5c5f45fd5d981ba5026ca9e6498ab91bdf93536e8fc6cf8902a1265",
+      "fileCount": 12,
+      "bytes": 10863,
+      "lines": 167,
+      "entry": "src/services/cache-key.mjs",
+      "allowed": [
+        "src/services/cache-key.mjs"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Fix cache key collisions between values of different primitive types. Preserve object key order independence and the current API. Read the project instructions, make the smallest relevant change, and run the public tests."
+      ],
+      "promptSha256": "59e19ad6735ab0c3979261f4a125748e2127bca06a37ba000d121773c0e3a746"
+    },
+    {
+      "id": "crossfile-ts",
+      "language": "TypeScript",
+      "files": 120,
+      "family": "unicode",
+      "seed": {
+        "bytes": 66759,
+        "sha256": "9c7f0622e8619fefe613147e727f8d23e1b131f093dff9c18e133b34d0a083da",
+        "messages": 76
+      },
+      "group": "seeded-target",
+      "commit": "8a183e282f11070b562afd30885a0101cf28f21c",
+      "sha256": "dcb58cb90ae91506b8c2d6cdd54a4955245ba7c17741d3af8c62f71bec0c4d23",
+      "fileCount": 122,
+      "bytes": 161332,
+      "lines": 2320,
+      "entry": "src/services/text.ts",
+      "allowed": [
+        "src/services/points.ts"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Fix Unicode truncation in src/services/text.ts and its helper: count code points including astral characters, preserving the API. Inspect both files. Modify only src/services/points.ts. Run node --test tests/public.test.mjs. Report tests in at most 40 words."
+      ],
+      "promptSha256": "4f49b7b38a4e90afbf58669b3714f37730e28090edf7d9f008b3b39fa1b9200a"
+    },
+    {
+      "id": "failure-python",
+      "language": "Python",
+      "files": 120,
+      "family": "retry-budget",
+      "seed": {
+        "bytes": 72871,
+        "sha256": "f959fba76026f09782f7068611ad1e0d9c659c308c59878886def3213c1ffea6",
+        "messages": 78
+      },
+      "group": "seeded-target",
+      "commit": "20a78d6813fcd45bee6e808380eeb8a22fcfd16c",
+      "sha256": "fc878fe76fab8e53d4c8f3aa653be6e230e6c3f165d9557dafd605a04fb72cc8",
+      "fileCount": 122,
+      "bytes": 161894,
+      "lines": 2343,
+      "entry": "src/services/retry.py",
+      "allowed": [
+        "src/services/retry.py"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Fix src/services/retry.py: N retries permit N+1 total attempts, zero retries still executes once, and exhausted retries raise the identical last exception. Preserve API and immediate success. Modify only this Python file. Run python -m unittest discover -s tests. Report in at most 40 words."
+      ],
+      "promptSha256": "efd38bc2202179025aebc78449392fc2689b01737937b9a74bfcc9e4cc573ce2"
+    },
+    {
+      "id": "large-source",
+      "language": "JavaScript",
+      "files": 1200,
+      "family": "unicode",
+      "seed": {
+        "bytes": 91341,
+        "sha256": "3c1ad1d7e4d090efbf7be68e3b9914c8d4a0915b923ccddea4e3b672e5e3cd19",
+        "messages": 102
+      },
+      "group": "seeded-target",
+      "commit": "10263d0bc717ce63e0c18be85f34302720d36603",
+      "sha256": "2a7fb3380276c078b2b793d2b2c9beb8c18dbb2107f0d7348973fccada7c7a90",
+      "fileCount": 1200,
+      "bytes": 1682541,
+      "lines": 23924,
+      "entry": "src/services/text.mjs",
+      "allowed": [
+        "src/services/text.mjs"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Make the text truncation utility count Unicode code points instead of UTF-16 code units, including astral characters. Keep zero limits and shorter strings correct. Read the project instructions, preserve the API, and run the public tests."
+      ],
+      "promptSha256": "39d99620e2248aecb7dc2061737e0214757cad201a6290fd661b66abc4d91384"
+    },
+    {
+      "id": "stale-resume",
+      "language": "JavaScript",
+      "files": 120,
+      "family": "cache-key",
+      "seed": {
+        "bytes": 72497,
+        "sha256": "f727ae33637da7118386753fe7e7496f14ad51295d2cdb81860bbc195b573c1b",
+        "messages": 78
+      },
+      "group": "recovery-control",
+      "resume": true,
+      "commit": "0ac01e385e7a217a878d43fb81b61abfa186bfc6",
+      "sha256": "50a36bc87fc2e2e3288c399a0661bce511d78967d1d883f5379e186114437b3f",
+      "fileCount": 121,
+      "bytes": 165892,
+      "lines": 2488,
+      "entry": "src/services/cache-key.mjs",
+      "allowed": [
+        "src/services/cache-key.mjs"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Inspect src/generated/checkpoint.mjs. Do not modify files. Reply in at most 12 words.",
+        "Fix cache key collisions between values of different primitive types. Preserve object key order independence and the current API. Read the project instructions, make the smallest relevant change, and run the public tests. The checkpoint module was changed externally since the previous inspection. Use fresh evidence for it; perform validation after the service edit."
+      ],
+      "promptSha256": "20bc7ca5b4bfb5d98213ab4a7d56469a69907a665c5c2215cb6ae2ce418e0ceb"
+    },
+    {
+      "id": "historical-recall",
+      "language": "JavaScript",
+      "files": 120,
+      "family": "cache-key",
+      "seed": {
+        "bytes": 69050,
+        "sha256": "ea493a05c2d25f77cb464beba4b455c216e6a4a7b5ac2029fdd6da96fae00fb5",
+        "messages": 78
+      },
+      "group": "recovery-control",
+      "receipt": true,
+      "commit": "903e38ee9a38b942d6e6b4b8e89059443b8c1449",
+      "sha256": "cbf6866545a73816310e1e697028432cde33fc104e2bec60bb229ccee2a983d1",
+      "fileCount": 121,
+      "bytes": 161159,
+      "lines": 2316,
+      "entry": "src/services/cache-key.mjs",
+      "allowed": [
+        "src/services/cache-key.mjs"
+      ],
+      "initial": {
+        "publicPassed": true,
+        "hiddenPassed": false,
+        "hiddenCompleted": true,
+        "scopePassed": true,
+        "changed": [],
+        "passed": false
+      },
+      "prompts": [
+        "Set the receipt export in src/services/cache-key.mjs to the numeric historical_receipt recorded in the earlier successful validation output. Recover that stored output when necessary. Do not rerun or read tests/receipt-old.test.mjs; preserve the original historical observation. Read current service and instructions, edit only this service, and run node --test tests/public.test.mjs. Report the receipt and tests in at most 40 words."
+      ],
+      "promptSha256": "8271da35ea10dccf70bb8ef7cb227b2c8b3a416b88a0e8cbf0838acc7eb4bf41"
+    }
+  ],
+  "notes": [
+    "No model calls. Public initial tests pass and independent hidden tests fail as expected.",
+    "All seven fixture snapshots and prompts match B. This is not a paid C comparison."
+  ]
+}

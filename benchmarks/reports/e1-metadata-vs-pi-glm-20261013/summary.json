@@ -1,0 +1,294 @@
+{
+  "stage": "E1 compact evidence metadata vs Pi",
+  "candidateCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "pi": {
+    "name": "@earendil-works/pi-coding-agent",
+    "version": "0.87.1",
+    "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+  },
+  "complete": true,
+  "plannedRuns": 60,
+  "attemptedRuns": 60,
+  "submittedRequests": 653,
+  "completeUsageRequests": 653,
+  "unknownUsageRequests": 0,
+  "knownConservativeCostUsd": 2.9523324,
+  "reservedUsd": 0,
+  "cohorts": [
+    {
+      "name": "fresh",
+      "started": true,
+      "complete": true,
+      "plannedRuns": 54,
+      "attemptedRuns": 54,
+      "roles": {
+        "tea": {
+          "runs": 27,
+          "accepted": 27,
+          "qualityDimensions": {
+            "codeCorrect": 27,
+            "scopeCorrect": 27,
+            "declaredReadRequirements": 27,
+            "nativePostEditValidation": 27,
+            "nativeCompleted": 27,
+            "usageComplete": 27
+          },
+          "requests": 183,
+          "usageKnown": true,
+          "totalTokens": 524503,
+          "knownCostUsd": 0.4373464,
+          "reservedUsd": 0,
+          "compactions": 0
+        },
+        "pi": {
+          "runs": 27,
+          "accepted": 26,
+          "qualityDimensions": {
+            "codeCorrect": 27,
+            "scopeCorrect": 27,
+            "declaredReadRequirements": 27,
+            "nativePostEditValidation": 26,
+            "nativeCompleted": 27,
+            "usageComplete": 27
+          },
+          "requests": 143,
+          "usageKnown": true,
+          "totalTokens": 1153964,
+          "knownCostUsd": 0.9394832000000001,
+          "reservedUsd": 0,
+          "compactions": 0
+        }
+      },
+      "overall": {
+        "expectedPairs": 27,
+        "measuredPairs": 27,
+        "bothAcceptedPairs": 26,
+        "teaAccepted": 27,
+        "piAccepted": 26,
+        "teaMeasuredTokens": 524503,
+        "piMeasuredTokens": 1153964,
+        "allPairsTokenReductionPercent": 54.54771552665421,
+        "bothAcceptedTeaTokens": 514939,
+        "bothAcceptedPiTokens": 1139670,
+        "bothAcceptedTokenReductionPercent": 54.81683294286943
+      },
+      "scales": [
+        {
+          "scale": "small",
+          "expectedPairs": 9,
+          "measuredPairs": 9,
+          "bothAcceptedPairs": 8,
+          "teaAccepted": 9,
+          "piAccepted": 8,
+          "teaMeasuredTokens": 74847,
+          "piMeasuredTokens": 108094,
+          "allPairsTokenReductionPercent": 30.75748885229522,
+          "bothAcceptedTeaTokens": 65283,
+          "bothAcceptedPiTokens": 93800,
+          "bothAcceptedTokenReductionPercent": 30.40191897654584
+        },
+        {
+          "scale": "medium",
+          "expectedPairs": 9,
+          "measuredPairs": 9,
+          "bothAcceptedPairs": 9,
+          "teaAccepted": 9,
+          "piAccepted": 9,
+          "teaMeasuredTokens": 73938,
+          "piMeasuredTokens": 286969,
+          "allPairsTokenReductionPercent": 74.23484766647267,
+          "bothAcceptedTeaTokens": 73938,
+          "bothAcceptedPiTokens": 286969,
+          "bothAcceptedTokenReductionPercent": 74.23484766647267
+        },
+        {
+          "scale": "large",
+          "expectedPairs": 9,
+          "measuredPairs": 9,
+          "bothAcceptedPairs": 9,
+          "teaAccepted": 9,
+          "piAccepted": 9,
+          "teaMeasuredTokens": 375718,
+          "piMeasuredTokens": 758901,
+          "allPairsTokenReductionPercent": 50.49182963258711,
+          "bothAcceptedTeaTokens": 375718,
+          "bothAcceptedPiTokens": 758901,
+          "bothAcceptedTokenReductionPercent": 50.49182963258711
+        }
+      ],
+      "families": [
+        {
+          "taskId": "small-cache-key",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 26080,
+          "piTokens": 35609,
+          "tokenReductionPercent": 26.760088741610268
+        },
+        {
+          "taskId": "small-retry-budget",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 22034,
+          "piTokens": 33496,
+          "tokenReductionPercent": 34.21901122522092
+        },
+        {
+          "taskId": "small-unicode",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 26733,
+          "piTokens": 38989,
+          "tokenReductionPercent": 31.434507168688608
+        },
+        {
+          "taskId": "medium-cache-key",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 22905,
+          "piTokens": 93194,
+          "tokenReductionPercent": 75.42223748309978
+        },
+        {
+          "taskId": "medium-retry-budget",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 24319,
+          "piTokens": 96646,
+          "tokenReductionPercent": 74.83703412453697
+        },
+        {
+          "taskId": "medium-unicode",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 26714,
+          "piTokens": 97129,
+          "tokenReductionPercent": 72.49637080583553
+        },
+        {
+          "taskId": "large-cache-key",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 110265,
+          "piTokens": 272046,
+          "tokenReductionPercent": 59.46825169272844
+        },
+        {
+          "taskId": "large-retry-budget",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 160483,
+          "piTokens": 184722,
+          "tokenReductionPercent": 13.121880447374979
+        },
+        {
+          "taskId": "large-unicode",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 104970,
+          "piTokens": 302133,
+          "tokenReductionPercent": 65.25702256953063
+        }
+      ],
+      "conservativeCostReductionPercent": 53.44819364518706,
+      "sourceUnchanged": true,
+      "piSourceUnchanged": true,
+      "commonControlsMatched": true,
+      "runId": "e1-metadata-vs-pi-fresh-glm-20261013-1791866526080007200"
+    },
+    {
+      "name": "long",
+      "started": true,
+      "complete": true,
+      "plannedRuns": 6,
+      "attemptedRuns": 6,
+      "roles": {
+        "tea": {
+          "runs": 3,
+          "accepted": 3,
+          "qualityDimensions": {
+            "codeCorrect": 3,
+            "scopeCorrect": 3,
+            "declaredReadRequirements": 3,
+            "nativePostEditValidation": 3,
+            "nativeCompleted": 3,
+            "usageComplete": 3
+          },
+          "requests": 198,
+          "usageKnown": true,
+          "totalTokens": 913350,
+          "knownCostUsd": 0.74072,
+          "reservedUsd": 0,
+          "compactions": 0,
+          "readOnlyPhaseTokens": 812592,
+          "repairPhaseTokens": 100758
+        },
+        "pi": {
+          "runs": 3,
+          "accepted": 2,
+          "qualityDimensions": {
+            "codeCorrect": 2,
+            "scopeCorrect": 3,
+            "declaredReadRequirements": 2,
+            "nativePostEditValidation": 2,
+            "nativeCompleted": 2,
+            "usageComplete": 3
+          },
+          "requests": 129,
+          "usageKnown": true,
+          "totalTokens": 1036146,
+          "knownCostUsd": 0.8347828,
+          "reservedUsd": 0,
+          "compactions": 0
+        }
+      },
+      "overall": {
+        "expectedPairs": 3,
+        "measuredPairs": 3,
+        "bothAcceptedPairs": 2,
+        "teaAccepted": 3,
+        "piAccepted": 2,
+        "teaMeasuredTokens": 913350,
+        "piMeasuredTokens": 1036146,
+        "allPairsTokenReductionPercent": 11.851225599481152,
+        "bothAcceptedTeaTokens": 607903,
+        "bothAcceptedPiTokens": 1034555,
+        "bothAcceptedTokenReductionPercent": 41.24014672975337
+      },
+      "scales": [
+        {
+          "scale": "long-session",
+          "expectedPairs": 3,
+          "measuredPairs": 3,
+          "bothAcceptedPairs": 2,
+          "teaAccepted": 3,
+          "piAccepted": 2,
+          "teaMeasuredTokens": 913350,
+          "piMeasuredTokens": 1036146,
+          "allPairsTokenReductionPercent": 11.851225599481152,
+          "bothAcceptedTeaTokens": 607903,
+          "bothAcceptedPiTokens": 1034555,
+          "bothAcceptedTokenReductionPercent": 41.24014672975337
+        }
+      ],
+      "families": [
+        {
+          "taskId": "long-30",
+          "expectedPairs": 3,
+          "completePairs": 3,
+          "teaTokens": 913350,
+          "piTokens": 1036146,
+          "tokenReductionPercent": 11.851225599481152
+        }
+      ],
+      "conservativeCostReductionPercent": 11.267937001097772,
+      "sourceUnchanged": true,
+      "piSourceUnchanged": true,
+      "commonControlsMatched": true,
+      "runId": "e1-metadata-vs-pi-long-glm-20261013-1791866526080007200"
+    }
+  ],
+  "runtimeDefaultChanged": false,
+  "priorUnknownReservationsRetainedSeparately": true,
+  "priceBasis": "Configured conservative rates; not invoice"
+}

@@ -1,0 +1,9 @@
+# E1 compact metadata versus Pi: frozen protocol
+
+TEA candidate bd41742d683dfcda69f240223ff6b27815f3dd08; pinned Pi 0.87.1. Independent committed TEA checkout; no default-runtime change. Native clients, prompts/tools, deduplication and Pi auto-compaction remain. TEA ContextOS target 32000 bytes, semantic compaction off, capability feedback on, 24 tools/turn.
+
+GLM-5.3-flash, enabled/low, output/thinking caps 4096/4095; same upstream, initial snapshots, prompts, native-positive-validation-v3 acceptance. Alternating order. Fresh: three self-authored bug families at 12/120/1200 files, three repeats (54 runs). Long: empty-start 30 native read-only inspections followed by repair, three repeats (6 runs). No production/generalization claim.
+
+Freeze all tasks before paid calls. Suite USD 8, USD 1.4/run, 100 requests/run, 160000-byte input guard, requests 180 seconds, turns 300 seconds. Conservative configured input/cache-read USD 0.80 and output USD 2.80 per million; cache-write charged conservatively; not invoice. Existing unknown reservations remain separate and untouched. Unknown submitted usage halts remaining runs/cohorts, reservation retained, no retries; preserve all failed/negative attempts. Overall ratios require every planned pair known. Complete fresh-size results may be reported separately; subsets never replace whole results. Primary comparison is all planned pairs including failures; report code behavior, native validation and full acceptance separately. Do not reinterpret scripted usage as measured tokens or use historical Pi samples as this baseline.
+
+Native loopback verified both clients: 8 requests per client, 16 scripted requests, zero paid calls; full reads, native edits, positive validation and multi-turn history passed. TEA candidate previously passed 276 deterministic tests and six CI jobs. No observer or candidate changes for this run.

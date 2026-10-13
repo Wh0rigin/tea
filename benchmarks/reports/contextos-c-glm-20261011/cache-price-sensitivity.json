@@ -1,0 +1,77 @@
+{
+  "kind": "cache-price-sensitivity-not-invoice",
+  "ratesUsdPerMillion": {
+    "input": 0.8,
+    "cacheRead": 0.23,
+    "output": 2.8
+  },
+  "source": "https://www.packyapi.ai/api/pricing",
+  "notes": [
+    "Cache input remains counted in the primary total-token metric.",
+    "Relay public cache ratio 0.2875 applied to USD 0.80/M. Account routing, actual discount eligibility and invoice cannot be independently verified.",
+    "No cache-write price is assumed: sensitivity is null when any cache creation tokens are reported.",
+    "Different cache hit rates can substantially change the cost benefit of reducing total tokens. Prefix position is a hypothesis, not established relay causality."
+  ],
+  "rows": [
+    {
+      "group": "all",
+      "variant": "legacy",
+      "knownRuns": 21,
+      "inputTokens": 3582537,
+      "cacheReadTokens": 3304576,
+      "cacheCreationTokens": 0,
+      "cacheReadPercent": 92.24122458470073,
+      "priceSensitivityUsd": 1.01024488
+    },
+    {
+      "group": "all",
+      "variant": "full",
+      "knownRuns": 21,
+      "inputTokens": 3401699,
+      "cacheReadTokens": 3185856,
+      "cacheCreationTokens": 0,
+      "cacheReadPercent": 93.65484718077643,
+      "priceSensitivityUsd": 0.93166288
+    },
+    {
+      "group": "all",
+      "variant": "contextos",
+      "knownRuns": 21,
+      "inputTokens": 1252775,
+      "cacheReadTokens": 585408,
+      "cacheCreationTokens": 0,
+      "cacheReadPercent": 46.72890183791982,
+      "priceSensitivityUsd": 0.6960530399999999
+    },
+    {
+      "group": "long-30",
+      "variant": "legacy",
+      "knownRuns": 3,
+      "inputTokens": 1889013,
+      "cacheReadTokens": 1795328,
+      "cacheCreationTokens": 0,
+      "cacheReadPercent": 95.0405317485904,
+      "priceSensitivityUsd": 0.5013610399999999
+    },
+    {
+      "group": "long-30",
+      "variant": "full",
+      "knownRuns": 3,
+      "inputTokens": 1893812,
+      "cacheReadTokens": 1812096,
+      "cacheCreationTokens": 0,
+      "cacheReadPercent": 95.68510496290023,
+      "priceSensitivityUsd": 0.49621368
+    },
+    {
+      "group": "long-30",
+      "variant": "contextos",
+      "knownRuns": 3,
+      "inputTokens": 904149,
+      "cacheReadTokens": 455232,
+      "cacheCreationTokens": 0,
+      "cacheReadPercent": 50.34922341339757,
+      "priceSensitivityUsd": 0.47783976
+    }
+  ]
+}

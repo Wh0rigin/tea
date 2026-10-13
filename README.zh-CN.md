@@ -14,6 +14,24 @@
 
 TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行循环、工作区工具、Anthropic Messages 适配器、Token 账本和基准测试命令。`baseline-v0` 保存初始项目快照；V1、V2 是经用户授权提交的离线实验检查点，V3 正在进行本地策略与请求边界实验。目前 V1–V5 均未通过真实模型基准测试门禁。
 
+## 实测 Token 用量
+
+**2026 年 10 月 13 日**的对比中，缩短证据元数据候选版在 27 对普通任务上，比 **Pi 0.87.1 少用 54.55% 的服务商 Token**：
+
+- **小型项目，12 个文件：减少 30.76%。**
+- **中型项目，120 个文件：减少 74.23%。**
+- **大型项目，1,200 个文件：减少 50.49%。**
+
+![缩短元数据候选 TEA 与 Pi 的实际 Token 对比](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/tea-vs-pi.png)
+
+双方使用 **GLM-5.3-flash、enabled/low 思考、4,096 Token 输出上限**，任务提示和初始源码一致。全部 **60 次运行、653 次请求**的服务商用量完整，包含缓存输入、思考输出、失败和单次负收益。普通任务代码行为检查双方均 **27/27 通过**；完整验收为 **TEA 27/27、Pi 26/27**。Pi 少的一次属于最终验证未确认，代码行为检查通过。
+
+**连续读取 30 轮再修复的长会话**，全部尝试合计 TEA **少用 11.85% Token**，完整验收为 **3/3 对 2/3**。Pi 一条会话在首次读取要求处停止，未进入修复，双方完成量不同。双方均通过的两对会话中，TEA **少用 41.24% Token**；这只是诊断性子集，不能替代包含失败的整组结果。
+
+样本为三类自编 JavaScript 缺陷，每种项目规模重复三次，以及一个长会话流程；新增文件主要是无关模块，尚不能保证生产项目的普遍收益。百分比表示完整实验候选与 Pi 的差距，包含原生提示和工具等差异，不代表元数据缩短的单项贡献。TEA 开启 ContextOS 和能力反馈；双方模型摘要实际执行均为零。**受测候选 `bd41742` 在本分支中仍处于回退状态，图表记录的是其归档实现。**
+
+[完整中文报告](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.zh-CN.md) · [全部尝试和用量](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/results.json) · [冻结实验协议](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/frozen-protocol.md) · [源码与验证记录](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/source-audit.json)
+
 ## 环境要求
 
 - Node.js 20 或更高版本。
@@ -56,7 +74,21 @@ npm run tea -- --demo
 
 **Esc / Ctrl+C** 可中断当前任务，已完成修改会保留，未完成验证仍需继续。`/new` 清空对话和学习词表，保留已消耗预算和待验证修改；`/clear` 仅清屏。费用和累计输入上限覆盖整个终端会话；`/exit` 退出。
 
-演示使用脚本化回答和本地只读工具，不解决真实编程任务，也不产生模型用量测量。会话目前保存在内存中，退出后暂不支持恢复。详见[终端指南（英文）](docs/TERMINAL.md)。
+演示使用脚本化回答和本地只读工具，不解决真实编程任务，也不产生模型用量测量。默认会话保存在内存中；使用 `--session` 或 ContextOS 可启用本地持久化和恢复。详见[终端指南（英文）](docs/TERMINAL.md)。
+
+## Agent 记忆管理：ContextOS
+
+主动开启 `--memory-policy contextos` 后，完整历史写入本地加密日志，发送给模型的旧工具输出可变为可恢复引用。保留用户要求、近期和当前源码、失败信息及待验证修改；源码变化后旧证据失效。模型需要细节时可通过工具按引用或关键词恢复。默认仍使用完整历史模式。
+
+```sh
+npm run tea -- --interactive --session work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- --interactive --resume work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- sessions inspect work
+npm run tea -- sessions delete work
+npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
+```
+
+恢复保留累计费用，不能提高原预算；`/new` 保留费用和待验证修改。`/memory` 查看上次上下文选择的原因；`--memory-policy full-history` 可关闭选择并保留持久化。目标大小使用 UTF-8 字节，不是服务商 Token。[A/B 已淘汰](benchmarks/reports/contextos-glm-20261011/README.zh-CN.md)，[C 已通过冻结实测门槛](benchmarks/reports/contextos-c-glm-20261011/README.zh-CN.md)：七个自编场景、每组重复三次，C 21/21 通过；实际 Token 比完整历史少 **62.99%**，真实 30 轮少 **52.12%**。额外重读核查为旧版/完整历史/C 21/21、20/21、21/21，暴露了原验收漏掉一次完整历史重读缺失。样本不能证明未见项目泛化，仍需主动开启。详见[中文指南](docs/CONTEXTOS.zh-CN.md)、[架构](docs/CONTEXTOS_ARCHITECTURE.md)和[实验协议](docs/CONTEXTOS_BENCHMARK.md)。
 
 ## 会话压缩
 
@@ -133,18 +165,29 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 
 策略仿真覆盖 13 条预设状态轨迹和 4 种路由对照；另一个真实适配器到本地 HTTP 服务的实验检查 9 项请求预算约束。候选代码尚未提交，路由尚未接入真实模型运行。目前没有测得 V3 的真实 Token 或模型质量提升。详见 [V3 实验报告](benchmarks/reports/v3.md)。
 
-### TEA / Pi 对比
+### 早期 TEA / Pi 对比
 
-已于 **2026-10-11** 使用 **GLM-5.3-flash、enabled/low 思考、4,096 Token 输出上限**完成真实测试，Pi 为 **0.87.1**。同一组使用相同 Git 快照，共同网关记录服务商输入、输出及缓存 Token。
+2026-10-11 至 12 日完成早期主动开启的 **ContextOS C** 与原生 **Pi 0.87.1** 对比：共同 **GLM-5.3-flash、enabled/low 思考、4,096 输出上限**，相同初始 Git 内容。每配置重复三次；全部服务商输入、缓存和思考输出计入。这些实验与上方 10 月 13 日候选对比单独记录。
 
-- **64,000 字节请求上限，9 组任务**：TEA **168,282** Token，Pi **161,046**；TEA **多消耗 4.49%**。验收 TEA **9/9**、Pi **7/9**，Pi 两组触发输入上限。失败运行仍计入总量，因此这不是相同完成率下的节省比例。
-- **80,000 字节上限，单独重跑全部 3 组大型任务**：TEA **117,126** Token，Pi **107,674**；TEA **多消耗 8.78%**，双方验收均为 **3/3**。
+- **短任务，CLI 已有的默认每轮 24 次工具额度**：12/120/1,200 文件，27 组配对。TEA **708,844** / Pi **1,080,626** Token，TEA **少 34.40%**；完整验收 **26/27 对 25/27**。[默认额度报告](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.zh-CN.md)。
+- **从空会话实际读取 30 轮，再修复和测试**：3 组配对。TEA **905,224** / Pi **1,558,908**，TEA **少 41.93%**，双方 **3/3**。这组使用原每轮 10 次工具配置；P95 TEA/Pi **485.60/463.18 秒**，没有速度提升证据。[长会话及主实验失败记录](benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.zh-CN.md)。
+- **原 10 次额度短任务**：TEA 验收 **16/27 对 27/27**，额度与验证完成问题全部保留，低 Token 不能算保持性能的收益。补测开始前已选定重跑全部短任务，没有只挑失败项。
 
-当前结果**不能证明稳定节省 Token**。每种配置只跑一轮；这些是 12/120/1,200 文件的自编 JavaScript 样本，大仓库主要增加无关模块。两种配置分开报告，受祖先目录指令变化影响的早期试跑已排除。详见 [真实实验报告](benchmarks/reports/tea-vs-pi-glm-20261011/README.zh-CN.md)和 [对比说明](docs/PI_COMPARISON.zh-CN.md)。
+默认额度分规模差异明显：小型任务 TEA **多用 52.26%**（双方完整验收 8/9）；中型、大型分别**少 57.42%、37.64%**。补测双方独立代码与范围检查均为 27/27；完整验收还要求原生测试和正常结束，保守的命令识别可能有假阴性，不能将完整验收率解释成 TEA 代码更正确。
 
-![64,000 字节上限下的 TEA 与 Pi 服务商 Token 对比](benchmarks/reports/tea-vs-pi-glm-20261011/tea-vs-pi.png)
+这些是自编 JavaScript 缺陷，规模增加主要添加无关模块；三次重复不能证明未见项目泛化。保留双方原生提示、工具与缓存策略。ContextOS 仍需主动开启，Token 降幅不等于账单降幅，压缩也可能降低缓存复用。旧完整历史 TEA/Pi 的 64k 多 4.49%、80k 大型多 8.78% 结果[单独保留](benchmarks/reports/tea-vs-pi-glm-20261011/README.zh-CN.md)。[对比说明](docs/PI_COMPARISON.zh-CN.md)。
 
-![80,000 字节上限下的全部大型任务补测](benchmarks/reports/tea-vs-pi-glm-large-80k-20261011/tea-vs-pi.png)
+[小任务专项诊断](benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.zh-CN.md)：79/46 次请求、21 次 Shell 拒绝和一个显著的恢复循环构成主要成本问题；解决方案的实际收益尚未测量。
+
+[改进计划](docs/SMALL_TASK_IMPROVEMENT_PLAN.zh-CN.md)：先完善评测，再逐项处理能力反馈、结构化验证、进度与结束判断、版本化补丁回执，最后做独立任务确认。每项与直接父版对照，计划目标不写成已实现收益。
+
+[S0 评测检查](benchmarks/reports/small-task-s0-20261012/README.zh-CN.md) 已完成：254/254 测试、18/18 双提交原生合约任务、20/20 冻结故障任务预检。没有付费调用或真实 Token 收益，停在 S0，尚未进入 S1。
+
+[S1 反馈改进的真实对照](benchmarks/reports/small-task-s1-glm-20261012/README.zh-CN.md)：102 次父版/候选运行，实际 Token 全体**减少 11.38%**、小任务**减少 41.44%**、长会话**增加 3.67%**；候选完整验收 51/51 对 47/51。实验开关 `TEA_CAPABILITY_FEEDBACK=1` 默认关闭，等待审核；不表示每个任务或未见项目都省 Token。
+
+![默认 24 次额度短任务](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
+
+![真实长会话累计 Token](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
 
 ## 日志与验证
 

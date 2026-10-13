@@ -1,0 +1,230 @@
+[
+  {
+    "cohort": "small",
+    "runId": "s0-prepare-small-1791776806195654800",
+    "sourceUnchanged": true,
+    "engines": {
+      "baseline": {
+        "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+        "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+      },
+      "candidate": {
+        "commit": "bc3d769cb5903e8a4f2230e1439ea024c109cae5",
+        "sourceSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7"
+      }
+    },
+    "acceptanceVersion": "native-positive-validation-v3",
+    "commonProfile": {
+      "model": "glm-5.3-flash",
+      "thinkingMode": "enabled",
+      "effort": "low",
+      "maxOutputTokens": 4096,
+      "maxRequestInputBound": 160000,
+      "totalBudgetUsd": null,
+      "inputRateUsdPerMillion": 0.8,
+      "outputRateUsdPerMillion": 2.8,
+      "maxRequestsPerAgentTask": 100,
+      "api": "anthropic-messages",
+      "apiVersion": "2023-06-01",
+      "rateBasis": "User-supplied conservative rates; not invoice",
+      "turnTimeoutMs": 180000
+    },
+    "teaProfile": {
+      "memoryPolicy": "contextos",
+      "contextosTargetBytes": 32000,
+      "contextStrategy": "v1",
+      "compaction": "off",
+      "maxToolCallsPerTurn": 24
+    },
+    "tasks": [
+      {
+        "taskId": "small-cache-key",
+        "scale": "small",
+        "family": "cache-key",
+        "group": "fresh",
+        "entry": "src/services/cache-key.mjs",
+        "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+        "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+        "fileCount": 12,
+        "lines": 112,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "small-retry-budget",
+        "scale": "small",
+        "family": "retry-budget",
+        "group": "fresh",
+        "entry": "src/services/retry-budget.mjs",
+        "sha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+        "commit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+        "fileCount": 12,
+        "lines": 113,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "small-unicode",
+        "scale": "small",
+        "family": "unicode",
+        "group": "fresh",
+        "entry": "src/services/text.mjs",
+        "sha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+        "commit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+        "fileCount": 12,
+        "lines": 109,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      }
+    ],
+    "repeat": 10,
+    "preparedAgentRuns": 60,
+    "executedAgentRuns": 0,
+    "paidProviderRequests": 0
+  },
+  {
+    "cohort": "protected",
+    "runId": "s0-prepare-protected-1791776813503668600",
+    "sourceUnchanged": true,
+    "engines": {
+      "baseline": {
+        "commit": "ccc0d449371d9edd488b5e1c39cad7eb3fedf917",
+        "sourceSha256": "f2fc572fd87ca8a276e282370517195f4edb2f3cb64cad74d4d64c0fb5e007ec"
+      },
+      "candidate": {
+        "commit": "bc3d769cb5903e8a4f2230e1439ea024c109cae5",
+        "sourceSha256": "7333be5a391bcc36e4a8f169862082b953c1f7a0d729f0d353c792662b7912d7"
+      }
+    },
+    "acceptanceVersion": "native-positive-validation-v3",
+    "commonProfile": {
+      "model": "glm-5.3-flash",
+      "thinkingMode": "enabled",
+      "effort": "low",
+      "maxOutputTokens": 4096,
+      "maxRequestInputBound": 160000,
+      "totalBudgetUsd": null,
+      "inputRateUsdPerMillion": 0.8,
+      "outputRateUsdPerMillion": 2.8,
+      "maxRequestsPerAgentTask": 100,
+      "api": "anthropic-messages",
+      "apiVersion": "2023-06-01",
+      "rateBasis": "User-supplied conservative rates; not invoice",
+      "turnTimeoutMs": 180000
+    },
+    "teaProfile": {
+      "memoryPolicy": "contextos",
+      "contextosTargetBytes": 32000,
+      "contextStrategy": "v1",
+      "compaction": "off",
+      "maxToolCallsPerTurn": 24
+    },
+    "tasks": [
+      {
+        "taskId": "medium-cache-key",
+        "scale": "medium",
+        "family": "cache-key",
+        "group": "fresh",
+        "entry": "src/services/cache-key.mjs",
+        "sha256": "151ede096639b8215229215d9e836fc66340ca20df5dab32dd16b00aadf45b52",
+        "commit": "81ee31e86dfff14bc79e7e90db514263089221fb",
+        "fileCount": 120,
+        "lines": 1408,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "medium-retry-budget",
+        "scale": "medium",
+        "family": "retry-budget",
+        "group": "fresh",
+        "entry": "src/services/retry-budget.mjs",
+        "sha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+        "commit": "3922f549375a05db5fe0ced58685d358f3d14684",
+        "fileCount": 120,
+        "lines": 1409,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "medium-unicode",
+        "scale": "medium",
+        "family": "unicode",
+        "group": "fresh",
+        "entry": "src/services/text.mjs",
+        "sha256": "f9cc2b9a8d91b76434ab73e3b7e152dde06edf452419de692d7dbaddaaca5757",
+        "commit": "eaa9e37575da3bdac2a5aa1b70cbec2676353eef",
+        "fileCount": 120,
+        "lines": 1405,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "large-cache-key",
+        "scale": "large",
+        "family": "cache-key",
+        "group": "fresh",
+        "entry": "src/services/cache-key.mjs",
+        "sha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+        "commit": "d75329958490887933052c1a00a3d56e548766f6",
+        "fileCount": 1200,
+        "lines": 14368,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "large-retry-budget",
+        "scale": "large",
+        "family": "retry-budget",
+        "group": "fresh",
+        "entry": "src/services/retry-budget.mjs",
+        "sha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+        "commit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+        "fileCount": 1200,
+        "lines": 14369,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "large-unicode",
+        "scale": "large",
+        "family": "unicode",
+        "group": "fresh",
+        "entry": "src/services/text.mjs",
+        "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "fileCount": 1200,
+        "lines": 14365,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 1
+      },
+      {
+        "taskId": "long-30",
+        "scale": "long-session",
+        "family": "retry-budget",
+        "group": "long-session",
+        "entry": "src/services/retry-budget.mjs",
+        "sha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+        "commit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+        "fileCount": 120,
+        "lines": 2328,
+        "initialPublicPassed": true,
+        "initialHiddenPassed": false,
+        "plannedTurns": 31
+      }
+    ],
+    "repeat": 3,
+    "preparedAgentRuns": 42,
+    "executedAgentRuns": 0,
+    "paidProviderRequests": 0
+  }
+]

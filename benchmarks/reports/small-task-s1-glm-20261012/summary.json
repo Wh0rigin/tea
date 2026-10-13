@@ -1,0 +1,373 @@
+{
+  "stage": "S1",
+  "state": "complete; awaiting human review; S2 not started",
+  "usageSource": "provider-wire",
+  "parentCommit": "c97b950797294f48e31752508af11a80814e66d8",
+  "candidateCommit": "efaca4129ae2ea1fe58510749ada7464439daff7",
+  "acceptanceVersion": "native-positive-validation-v3",
+  "cohorts": [
+    {
+      "runId": "small-task-s1-glm-20261012-1791781874601085700",
+      "sourceUnchanged": true,
+      "enginesUnchanged": true,
+      "validComparison": true,
+      "knownUsage": true,
+      "paidRequests": 376,
+      "conservativeSpendUsd": 0.6050828000000009,
+      "providerTokenReductionPercent": 41.43502866722859,
+      "roles": {
+        "baseline": {
+          "runs": 30,
+          "accepted": 27,
+          "inputTokens": 412472,
+          "outputTokens": 19380,
+          "totalTokens": 431852,
+          "requests": 225,
+          "toolCalls": 233,
+          "elapsedMedianMs": 34381.5,
+          "elapsedP95Ms": 89795.59999999998,
+          "qualityDimensions": {
+            "codeCorrect": 29,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 28,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          }
+        },
+        "candidate": {
+          "runs": 30,
+          "accepted": 30,
+          "inputTokens": 243659,
+          "outputTokens": 9255,
+          "totalTokens": 252914,
+          "requests": 151,
+          "toolCalls": 156,
+          "elapsedMedianMs": 27713.0,
+          "elapsedP95Ms": 35494.44999999999,
+          "qualityDimensions": {
+            "codeCorrect": 30,
+            "scopeCorrect": 30,
+            "declaredReadRequirements": 30,
+            "nativePostEditValidation": 30,
+            "nativeCompleted": 30,
+            "usageComplete": 30
+          }
+        }
+      },
+      "families": [
+        {
+          "taskId": "small-cache-key",
+          "baselineTokens": 90059,
+          "candidateTokens": 82742,
+          "reductionPercent": 8.12467382493699,
+          "baselineAccepted": 10,
+          "candidateAccepted": 10
+        },
+        {
+          "taskId": "small-retry-budget",
+          "baselineTokens": 104709,
+          "candidateTokens": 79300,
+          "reductionPercent": 24.266299936013137,
+          "baselineAccepted": 9,
+          "candidateAccepted": 10
+        },
+        {
+          "taskId": "small-unicode",
+          "baselineTokens": 237084,
+          "candidateTokens": 90872,
+          "reductionPercent": 61.6709689392789,
+          "baselineAccepted": 8,
+          "candidateAccepted": 10
+        }
+      ],
+      "pairedQualityRegressions": [],
+      "p95LatencyChangePercent": -60.47194962782141,
+      "cohort": "small",
+      "scales": [
+        {
+          "scale": "small",
+          "baselineTokens": 431852,
+          "candidateTokens": 252914,
+          "reductionPercent": 41.43502866722859
+        }
+      ],
+      "gates": {
+        "knownStableComplete": true,
+        "quality": true,
+        "candidateScope": true,
+        "smallTokenThreshold": true,
+        "latency": true
+      },
+      "smallPassed": true,
+      "taskClusterBootstrap95Percent": [
+        8.12467382493699,
+        61.6709689392789
+      ],
+      "bootstrapLimit": "Task-cluster diagnostic interval; 3 fixture configurations. Repeats and size variants are not independent projects; only three fresh bug families."
+    },
+    {
+      "runId": "small-task-s1-protected-glm-20261012-1791784495519984400",
+      "sourceUnchanged": true,
+      "enginesUnchanged": true,
+      "validComparison": true,
+      "knownUsage": true,
+      "paidRequests": 686,
+      "conservativeSpendUsd": 2.2751860000000184,
+      "providerTokenReductionPercent": 2.124114803517596,
+      "roles": {
+        "baseline": {
+          "runs": 21,
+          "accepted": 20,
+          "inputTokens": 1386583,
+          "outputTokens": 14942,
+          "totalTokens": 1401525,
+          "requests": 357,
+          "toolCalls": 291,
+          "elapsedMedianMs": 45863,
+          "elapsedP95Ms": 347901.0,
+          "qualityDimensions": {
+            "codeCorrect": 21,
+            "scopeCorrect": 21,
+            "declaredReadRequirements": 21,
+            "nativePostEditValidation": 20,
+            "nativeCompleted": 21,
+            "usageComplete": 21
+          }
+        },
+        "candidate": {
+          "runs": 21,
+          "accepted": 21,
+          "inputTokens": 1358416,
+          "outputTokens": 13339,
+          "totalTokens": 1371755,
+          "requests": 329,
+          "toolCalls": 256,
+          "elapsedMedianMs": 40056,
+          "elapsedP95Ms": 317590.0,
+          "qualityDimensions": {
+            "codeCorrect": 21,
+            "scopeCorrect": 21,
+            "declaredReadRequirements": 21,
+            "nativePostEditValidation": 21,
+            "nativeCompleted": 21,
+            "usageComplete": 21
+          }
+        }
+      },
+      "families": [
+        {
+          "taskId": "large-cache-key",
+          "baselineTokens": 150432,
+          "candidateTokens": 127772,
+          "reductionPercent": 15.063284407572851,
+          "baselineAccepted": 3,
+          "candidateAccepted": 3
+        },
+        {
+          "taskId": "large-retry-budget",
+          "baselineTokens": 133095,
+          "candidateTokens": 140006,
+          "reductionPercent": -5.192531650324961,
+          "baselineAccepted": 3,
+          "candidateAccepted": 3
+        },
+        {
+          "taskId": "large-unicode",
+          "baselineTokens": 95027,
+          "candidateTokens": 93638,
+          "reductionPercent": 1.46168983552043,
+          "baselineAccepted": 3,
+          "candidateAccepted": 3
+        },
+        {
+          "taskId": "long-30",
+          "baselineTokens": 899968,
+          "candidateTokens": 932988,
+          "reductionPercent": -3.669019342909974,
+          "baselineAccepted": 3,
+          "candidateAccepted": 3
+        },
+        {
+          "taskId": "medium-cache-key",
+          "baselineTokens": 24962,
+          "candidateTokens": 23091,
+          "reductionPercent": 7.495392997355976,
+          "baselineAccepted": 3,
+          "candidateAccepted": 3
+        },
+        {
+          "taskId": "medium-retry-budget",
+          "baselineTokens": 52965,
+          "candidateTokens": 27150,
+          "reductionPercent": 48.73973378646276,
+          "baselineAccepted": 2,
+          "candidateAccepted": 3
+        },
+        {
+          "taskId": "medium-unicode",
+          "baselineTokens": 45076,
+          "candidateTokens": 27110,
+          "reductionPercent": 39.85713018014021,
+          "baselineAccepted": 3,
+          "candidateAccepted": 3
+        }
+      ],
+      "pairedQualityRegressions": [],
+      "p95LatencyChangePercent": -8.712536037550912,
+      "cohort": "protected",
+      "scales": [
+        {
+          "scale": "large",
+          "baselineTokens": 378554,
+          "candidateTokens": 361416,
+          "reductionPercent": 4.5272272912186935
+        },
+        {
+          "scale": "long-session",
+          "baselineTokens": 899968,
+          "candidateTokens": 932988,
+          "reductionPercent": -3.669019342909974
+        },
+        {
+          "scale": "medium",
+          "baselineTokens": 123003,
+          "candidateTokens": 77351,
+          "reductionPercent": 37.11454192174175
+        }
+      ],
+      "gates": {
+        "knownStableComplete": true,
+        "quality": true,
+        "candidateScope": true,
+        "protectedTokenRegressionLimit": true,
+        "latency": true
+      },
+      "protectedPassed": true,
+      "taskClusterBootstrap95Percent": [
+        -2.751625311075461,
+        23.033095369962542
+      ],
+      "bootstrapLimit": "Task-cluster diagnostic interval; 7 fixture configurations. Repeats and size variants are not independent projects; only three fresh bug families."
+    }
+  ],
+  "combined": {
+    "roles": {
+      "baseline": {
+        "runs": 51,
+        "accepted": 47,
+        "totalTokens": 1833377,
+        "inputTokens": 1799055,
+        "outputTokens": 34322,
+        "requests": 582,
+        "toolCalls": 524,
+        "conservativeSpendUsd": 1.5353456,
+        "qualityDimensions": {
+          "codeCorrect": 50,
+          "scopeCorrect": 51,
+          "declaredReadRequirements": 51,
+          "nativePostEditValidation": 48,
+          "nativeCompleted": 51,
+          "usageComplete": 51
+        }
+      },
+      "candidate": {
+        "runs": 51,
+        "accepted": 51,
+        "totalTokens": 1624669,
+        "inputTokens": 1602075,
+        "outputTokens": 22594,
+        "requests": 480,
+        "toolCalls": 412,
+        "conservativeSpendUsd": 1.3449232,
+        "qualityDimensions": {
+          "codeCorrect": 51,
+          "scopeCorrect": 51,
+          "declaredReadRequirements": 51,
+          "nativePostEditValidation": 51,
+          "nativeCompleted": 51,
+          "usageComplete": 51
+        }
+      }
+    },
+    "paidRequests": 1062,
+    "pairs": 51,
+    "providerTokenReductionPercent": 11.383801585816776,
+    "conservativeSpendUsd": 2.880268800000019,
+    "conservativeCapUsd": 8.0,
+    "unknownUsageRequests": 0,
+    "allSourcesStable": true,
+    "bothAcceptedPairs": 47,
+    "bothAcceptedTokenReductionPercent": 9.252853999940601
+  },
+  "smallSensitivity": {
+    "pairs": 30,
+    "tokenIncreasingPairs": 11,
+    "worstPairTokenIncreasePercent": 137.67592926741247,
+    "largestSavingPair": {
+      "cohortRunId": "small-task-s1-glm-20261012-1791781874601085700",
+      "caseId": "small-unicode-r9",
+      "taskId": "small-unicode",
+      "scale": "small",
+      "baselineTokens": 72396,
+      "candidateTokens": 8091,
+      "savedTokens": 64305,
+      "reductionPercent": 88.8239681750373,
+      "baselineAccepted": true,
+      "candidateAccepted": true
+    },
+    "largestSavingSharePercent": 35.93702846796097,
+    "removeLargestSavingPairReductionPercent": 31.89069037656904,
+    "kind": "paired exclusion sensitivity only; primary retains every attempt"
+  },
+  "journalAudit": {
+    "runs": 102,
+    "allExactNativeRequestHashes": true,
+    "allJournalsUnchanged": true,
+    "paidRequestsAdded": 0,
+    "roles": {
+      "baseline": {
+        "denials": 83,
+        "failedPatches": 8,
+        "sourceStableFailedPatches": 8,
+        "repeatedDeniedCommandHashes": 1,
+        "capabilityDeclarations": 0,
+        "capabilityNoticeBytes": 0,
+        "feedbackBytes": 0,
+        "sourceVerifiedFinalValidation": 51
+      },
+      "candidate": {
+        "denials": 3,
+        "failedPatches": 1,
+        "sourceStableFailedPatches": 1,
+        "repeatedDeniedCommandHashes": 0,
+        "capabilityDeclarations": 51,
+        "capabilityNoticeBytes": 35649,
+        "feedbackBytes": 1412,
+        "sourceVerifiedFinalValidation": 51
+      }
+    }
+  },
+  "verification": {
+    "candidateUnitTests": 267,
+    "candidateUnitPassed": 267,
+    "candidateUnitSkipped": 0,
+    "nativeRevisionContractRuns": 18,
+    "nativeRevisionScriptedRequests": 72,
+    "nativePiPrintScriptedRequests": 8,
+    "nativePiRpcScriptedRequests": 16,
+    "offlineRuntimeAccepted": "12/12",
+    "defaultParentRequestParity": "exact two native requests; normalized workspace paths; no provider calls",
+    "defaultParentRequestFixtureGitSha256": "1c7a93b1318119426dca388b4da591201020ff5afd0ab42dac95564777d83129"
+  },
+  "limits": [
+    "Three self-authored JavaScript bug families; size variants add unrelated modules.",
+    "Diagnostic task bootstrap is not unseen-project generalization.",
+    "S1 is opt-in and fixed on for candidate testing; default full-history provider savings are unmeasured.",
+    "No new Pi measurement; reductions compare actual S0 parent against S1.",
+    "Frozen v3 invalidates validation after failed no-change patches; source-based explanatory audit does not rewrite grades.",
+    "S2 and S5 holdout remain unimplemented; no guarantee that every task saves tokens.",
+    "Budgeting rates are conservative estimates, not invoices."
+  ],
+  "gatesPassed": true
+}

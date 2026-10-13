@@ -167,7 +167,7 @@ export async function compactConversation(session, config, { adapter, ledger, sy
   const plan = prepareCompaction(session, config, { state, instructions });
   if (plan.status !== 'prepared') return plan;
   const measure = measureContext || (messages => requestBytes(config, { system, tools, messages }));
-  const before = measure(sessionContext(session, state));
+  const before = await measure(sessionContext(session, state));
   onEvent({ type: 'compaction_start', reason });
   const result = await adapter.complete({ ...plan.request, signal });
   signal?.throwIfAborted();
@@ -183,7 +183,7 @@ export async function compactConversation(session, config, { adapter, ledger, sy
   const checkpoint = { id: randomUUID(), summary, firstKeptIndex: plan.firstKeptIndex,
     coveredFrom: plan.coveredFrom, coveredMessages: plan.coveredMessages, partial: plan.partial,
     previousId: session.compaction?.id || null, ...fileOperations(session.messages, plan.firstKeptIndex) };
-  const after = measure(sessionContext(session, state, checkpoint));
+  const after = await measure(sessionContext(session, state, checkpoint));
   if (after >= before) {
     const unchanged = { status: 'unchanged', beforeBytes: before, afterBytes: after,
       detail: 'The summary did not reduce the next request size; history remains intact.' };

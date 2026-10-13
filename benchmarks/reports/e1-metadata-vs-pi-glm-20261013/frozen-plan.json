@@ -1,0 +1,330 @@
+{
+  "stage": "E1 compact evidence metadata vs Pi",
+  "state": "complete",
+  "candidateCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "combinedCapUsd": 8,
+  "perRunCapUsd": 1.4,
+  "plannedRuns": 60,
+  "plannedPairs": 30,
+  "protocolSha256": "58ac526907740fc3a0e790be59f3c5031ca1189c10d17c22266202a82635155e",
+  "priorUnknownReservationsRetained": true,
+  "nativeLoopback": {
+    "paidRequests": 0,
+    "scriptedRequests": 16,
+    "clientsCompleted": 2
+  },
+  "cohorts": [
+    {
+      "name": "fresh",
+      "groups": "fresh",
+      "scales": "small,medium,large",
+      "runs": 54,
+      "preflightId": "e1-pi-prepare-fresh-1791866526080007200",
+      "runId": "e1-metadata-vs-pi-fresh-glm-20261013-1791866526080007200",
+      "started": true,
+      "guardUsd": 8,
+      "complete": true,
+      "paidRequests": 326,
+      "accountedUsd": 1.3768296000000058,
+      "exitCode": 0
+    },
+    {
+      "name": "long",
+      "groups": "long-session",
+      "scales": "small",
+      "runs": 6,
+      "preflightId": "e1-pi-prepare-long-1791866526080007200",
+      "runId": "e1-metadata-vs-pi-long-glm-20261013-1791866526080007200",
+      "started": true,
+      "guardUsd": 6.623170399999994,
+      "complete": true,
+      "paidRequests": 327,
+      "accountedUsd": 1.575502800000007,
+      "exitCode": 0
+    }
+  ],
+  "manifests": [
+    {
+      "cohort": "fresh",
+      "teaSourceSha256": "d622a940e669dc70de0aa02344a53563a4972fb41b947db1a770c0974a7064d0",
+      "teaSourceCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+      "pi": {
+        "name": "@earendil-works/pi-coding-agent",
+        "version": "0.87.1",
+        "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      },
+      "commonProfile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 300000
+      },
+      "teaProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "piProfile": {
+        "nativeRpc": true,
+        "autoCompaction": true,
+        "contextWindow": 200000,
+        "automaticRetry": false,
+        "cacheWarming": false,
+        "persistedSession": false,
+        "extensions": false,
+        "skills": false
+      },
+      "tasks": [
+        {
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+          "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+          "fileCount": 12,
+          "bytes": 5456,
+          "lines": 112,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+          ]
+        },
+        {
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+          "commit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+          "fileCount": 12,
+          "bytes": 5433,
+          "lines": 113,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        },
+        {
+          "taskId": "small-unicode",
+          "scale": "small",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "sha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+          "commit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+          "fileCount": 12,
+          "bytes": 5227,
+          "lines": 109,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+          ]
+        },
+        {
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "sha256": "151ede096639b8215229215d9e836fc66340ca20df5dab32dd16b00aadf45b52",
+          "commit": "81ee31e86dfff14bc79e7e90db514263089221fb",
+          "fileCount": 120,
+          "bytes": 70347,
+          "lines": 1408,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+          ]
+        },
+        {
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+          "commit": "3922f549375a05db5fe0ced58685d358f3d14684",
+          "fileCount": 120,
+          "bytes": 70324,
+          "lines": 1409,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        },
+        {
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "sha256": "f9cc2b9a8d91b76434ab73e3b7e152dde06edf452419de692d7dbaddaaca5757",
+          "commit": "eaa9e37575da3bdac2a5aa1b70cbec2676353eef",
+          "fileCount": 120,
+          "bytes": 70118,
+          "lines": 1405,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+          ]
+        },
+        {
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "sha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+          "commit": "d75329958490887933052c1a00a3d56e548766f6",
+          "fileCount": 1200,
+          "bytes": 726176,
+          "lines": 14368,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+          ]
+        },
+        {
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+          "commit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+          "fileCount": 1200,
+          "bytes": 726153,
+          "lines": 14369,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        },
+        {
+          "taskId": "large-unicode",
+          "scale": "large",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+          "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+          "fileCount": 1200,
+          "bytes": 725947,
+          "lines": 14365,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+          ]
+        }
+      ]
+    },
+    {
+      "cohort": "long",
+      "teaSourceSha256": "d622a940e669dc70de0aa02344a53563a4972fb41b947db1a770c0974a7064d0",
+      "teaSourceCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+      "pi": {
+        "name": "@earendil-works/pi-coding-agent",
+        "version": "0.87.1",
+        "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      },
+      "commonProfile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 300000
+      },
+      "teaProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "piProfile": {
+        "nativeRpc": true,
+        "autoCompaction": true,
+        "contextWindow": 200000,
+        "automaticRetry": false,
+        "cacheWarming": false,
+        "persistedSession": false,
+        "extensions": false,
+        "skills": false
+      },
+      "tasks": [
+        {
+          "taskId": "long-30",
+          "scale": "long-session",
+          "family": "retry-budget",
+          "group": "long-session",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+          "commit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+          "fileCount": 120,
+          "bytes": 161366,
+          "lines": 2328,
+          "plannedTurns": 31,
+          "promptSha256": [
+            "36ac7166584f4a665ccbdc0a2d280f78f88d6580a712ff877ac6cd374b64819f",
+            "045b3c6b8fcc50a9b4fbffb7d5425b0ea6378c6f532d1aa5280b7cddca3e49fa",
+            "58f6578516288da611300a97f2746dc45d3ee2e262c7cb2cb5bd82eb93380d2e",
+            "b83ecddf1ce0aa9b79ec79aab09eb43b120148ef4d3441f899fcab33989a568b",
+            "96637780a4c321f04f849ecf9173185c76066917beb5b2b70d92217f25480b77",
+            "b4e7fd7576b1d71433a85c5263fa892c7fb130af8b7e8a783415314bb3795879",
+            "c011c4a824b269b59dd0ad8f538fe67e8bc8ed7119b7b1f41bae56bfeefd7ac2",
+            "a42f74addb5c77d020b956356af06f08dcab0bf3052b5a570ab21ea5b85c7152",
+            "991de479164871e5fff861531f5144be0613ed712940604e954891dd8d360c2a",
+            "039c5d2742173e44315302f510a3bf6b00c412caa650bbec063bfe426479c15b",
+            "83736a54e910107970b2d6bc80d4bf406234275f1bf37b4597229f3d07735577",
+            "972bad592e0942261e4c0b4f214a86b859f17127983391e26ddcdc1a8c15f3f9",
+            "6be6c31d1dee58bf763f1815359df521d48c1921b3709aba81e7c1264a358395",
+            "2129e50936146c685fe769de0f4a2467631b8a308200766cc360f2c0f8b0fa8c",
+            "f150016ccd153dd0d0e4c75be0e66b154b39dbb0b2556edbe1eebe0c5601650f",
+            "df185f217f739c079bc48bfbd3741f8649fabba1597097d6630530a465469f67",
+            "d7695f293ab3d8c79ed0b54b37c923c970d85d1976368223e32792aa6a98e022",
+            "cedd94c1433ebc1b8edc7f5a925494806c24807c34d4827746c5a2a0220799e5",
+            "11a9fd64f1c15a01f28878ddf015cae2ee32963085af2fd1b368a4d509d8d6a6",
+            "32a0b5332177e7f2184c109be176ad3b0547a6d93c51a0fed550b935d232f484",
+            "1a2507b12c67f6bf00f400aa1acb9c2d082ad5d0077a2e600aa2729dc74a1705",
+            "6d7325f42661ae179ce0e35c7809106aa1532dc1a23c04bd3e1b601e65e8ee6d",
+            "2af3758dd138edede661edd79a85cb63497ce2cfdde85035bd15698095b9dcf6",
+            "0a6818d6c4fcf59216918e40413dba02d79dbd9a31cb3e4a859d7ac1be002b99",
+            "1dbef351f7f8976a9601ded8d3bfde8192c597f21f828f2b0fb65d95f4af8b0a",
+            "3185fe1874469fa41015d3b257ba41058a3afddc0c22a6a7822ee8bbeb9360dd",
+            "e9850c758131fc589454e4efaadb708ed74015b9e0bced5c5e18abd487bc9b07",
+            "b162c99e27fff7aa7ceb5c5727265fb44f926f058b3e59ffc26b7f948217f016",
+            "2673242f3bc8cbf819f049b7a2893f919414bc2afc8eb812dc5f2afc29ba11a2",
+            "13af8b76b14e38788a23db33037d41a9c834d5af912aed8f62fa5b4340d907e5",
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        }
+      ]
+    }
+  ]
+}

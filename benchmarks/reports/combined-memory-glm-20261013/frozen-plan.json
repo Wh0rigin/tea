@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "state": "complete",
+  "engineCommit": "bc7869c6d2aa5218fb85dbf2237929b64fabbc85",
+  "sourceSha256": "5f1f6693993c1669ea9919896c56e0f872b1fdb9f11496cd2e9c51701456945a",
+  "profile": {
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "taskMaxOutputTokens": 4096,
+    "summaryMaxOutputTokens": 1200,
+    "requestGuardBytes": 80000,
+    "triggerRatio": 0.8,
+    "keepRecentBytes": 24000,
+    "contextosTargetBytes": 32000,
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "maxToolsPerTurn": 24,
+    "maxRequestsPerRun": 24,
+    "requestTimeoutMs": 180000,
+    "turnTimeoutMs": 300000,
+    "sharedGuardUsd": 8,
+    "perRunGuardUsd": 0.6,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "stream": true
+  },
+  "variants": [
+    {
+      "id": "full_off",
+      "memoryPolicy": "full-history",
+      "compaction": "off"
+    },
+    {
+      "id": "full_auto",
+      "memoryPolicy": "full-history",
+      "compaction": "auto"
+    },
+    {
+      "id": "contextos_off",
+      "memoryPolicy": "contextos",
+      "compaction": "off"
+    },
+    {
+      "id": "contextos_auto",
+      "memoryPolicy": "contextos",
+      "compaction": "auto"
+    }
+  ],
+  "repeat": 4,
+  "plannedRuns": 48,
+  "order": [
+    {
+      "caseId": "short",
+      "repeat": 1,
+      "variants": [
+        "full_off",
+        "full_auto",
+        "contextos_off",
+        "contextos_auto"
+      ]
+    },
+    {
+      "caseId": "short",
+      "repeat": 2,
+      "variants": [
+        "full_auto",
+        "contextos_off",
+        "contextos_auto",
+        "full_off"
+      ]
+    },
+    {
+      "caseId": "short",
+      "repeat": 3,
+      "variants": [
+        "contextos_off",
+        "contextos_auto",
+        "full_off",
+        "full_auto"
+      ]
+    },
+    {
+      "caseId": "short",
+      "repeat": 4,
+      "variants": [
+        "contextos_auto",
+        "full_off",
+        "full_auto",
+        "contextos_off"
+      ]
+    },
+    {
+      "caseId": "protected",
+      "repeat": 1,
+      "variants": [
+        "full_off",
+        "full_auto",
+        "contextos_off",
+        "contextos_auto"
+      ]
+    },
+    {
+      "caseId": "protected",
+      "repeat": 2,
+      "variants": [
+        "full_auto",
+        "contextos_off",
+        "contextos_auto",
+        "full_off"
+      ]
+    },
+    {
+      "caseId": "protected",
+      "repeat": 3,
+      "variants": [
+        "contextos_off",
+        "contextos_auto",
+        "full_off",
+        "full_auto"
+      ]
+    },
+    {
+      "caseId": "protected",
+      "repeat": 4,
+      "variants": [
+        "contextos_auto",
+        "full_off",
+        "full_auto",
+        "contextos_off"
+      ]
+    },
+    {
+      "caseId": "evictable",
+      "repeat": 1,
+      "variants": [
+        "full_off",
+        "full_auto",
+        "contextos_off",
+        "contextos_auto"
+      ]
+    },
+    {
+      "caseId": "evictable",
+      "repeat": 2,
+      "variants": [
+        "full_auto",
+        "contextos_off",
+        "contextos_auto",
+        "full_off"
+      ]
+    },
+    {
+      "caseId": "evictable",
+      "repeat": 3,
+      "variants": [
+        "contextos_off",
+        "contextos_auto",
+        "full_off",
+        "full_auto"
+      ]
+    },
+    {
+      "caseId": "evictable",
+      "repeat": 4,
+      "variants": [
+        "contextos_auto",
+        "full_off",
+        "full_auto",
+        "contextos_off"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "short",
+      "taskId": "small-cache-key",
+      "shape": "empty",
+      "promptSha256": "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7",
+      "seedSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "seedBytes": 2,
+      "seedMessages": 0,
+      "initialIdentity": {
+        "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+        "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+        "fileCount": 12,
+        "bytes": 5456,
+        "lines": 112
+      },
+      "initialProjectedBytes": {
+        "full_off": 4235,
+        "full_auto": 4235,
+        "contextos_off": 4235,
+        "contextos_auto": 4235
+      }
+    },
+    {
+      "id": "protected",
+      "taskId": "medium-retry-budget",
+      "shape": "protected",
+      "promptSha256": "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "seedBytes": 60718,
+      "seedMessages": 28,
+      "initialIdentity": {
+        "commit": "90121fb790eb77b43f931513f15389f010b9a4e4",
+        "sha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+        "fileCount": 120,
+        "bytes": 74282,
+        "lines": 1508
+      },
+      "initialProjectedBytes": {
+        "full_off": 64981,
+        "full_auto": 64981,
+        "contextos_off": 64981,
+        "contextos_auto": 64981
+      }
+    },
+    {
+      "id": "evictable",
+      "taskId": "large-unicode",
+      "shape": "inventory",
+      "promptSha256": "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "seedBytes": 64246,
+      "seedMessages": 34,
+      "initialIdentity": {
+        "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "fileCount": 1200,
+        "bytes": 725947,
+        "lines": 14365
+      },
+      "initialProjectedBytes": {
+        "full_off": 68497,
+        "full_auto": 68497,
+        "contextos_off": 18154,
+        "contextos_auto": 18154
+      }
+    }
+  ]
+}

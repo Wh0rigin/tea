@@ -14,6 +14,24 @@ TEA is an independent terminal coding agent built with Node.js. It brings togeth
 
 Our mission is to reduce token consumption while preserving task correctness, code quality, and execution performance. We measure each change, record failures and tradeoffs, and keep a recovery path when reduced context is insufficient.
 
+## Measured token usage
+
+In the **October 13, 2026** comparison, the compact evidence metadata candidate used **54.55% fewer provider tokens** than **Pi 0.87.1** across 27 fresh task pairs:
+
+- **Small — 12 files:** 30.76% fewer tokens.
+- **Medium — 120 files:** 74.23% fewer tokens.
+- **Large — 1,200 files:** 50.49% fewer tokens.
+
+![Measured TEA candidate versus Pi provider token usage](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/tea-vs-pi.png)
+
+Both agents used **GLM-5.3-flash**, **enabled/low** thinking, a **4,096-token** output cap, identical task prompts and initial source snapshots. All **60 runs and 653 requests** are recorded with complete provider usage, including cached input, reasoning output, failures and individual regressions. Fresh-task code behavior passed **27/27 for both**; full acceptance was **TEA 27/27, Pi 26/27**. One Pi run had unconfirmed final validation rather than a code behavior failure.
+
+For the **30-read + repair long conversations**, TEA used **11.85% fewer tokens across all attempts**, with full acceptance **3/3 versus 2/3**. One Pi conversation stopped at its first required read before repair, so completed work differs. The two pairs where both passed used **41.24% fewer TEA tokens**; that diagnostic subset does not replace the result including failures.
+
+These are three self-authored JavaScript defects, three repeats at each repository size, and one long-conversation workflow. Added files are unrelated modules; this is sample evidence rather than a production-wide savings guarantee. Results compare the complete experimental TEA configuration with Pi, including native prompt/tool differences, and do not isolate metadata shortening. TEA enabled ContextOS and capability feedback; model summaries were not executed by either agent. **The measured candidate `bd41742` remains reverted in this branch; these figures describe its archived implementation.**
+
+[Full report](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.md) · [All attempts and usage](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/results.json) · [Frozen protocol](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/frozen-protocol.md) · [Source and verification](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/source-audit.json)
+
 ## Getting started
 
 TEA requires **Node.js 20 or newer** and **Git**. It has no npm runtime dependencies. Run it from a local checkout:
@@ -95,6 +113,20 @@ Source evidence, failures, patch receipts, recent results, and original assistan
 
 ## Experiments
 
+### Persistent and retrievable memory
+
+ContextOS is opt-in: exact session history is stored locally in an encrypted journal, while older recoverable tool output can be replaced with references in model requests. Requirements, current evidence, failures and validation obligations are retained. Source changes invalidate old evidence. Full history remains the default and rollback control.
+
+```sh
+npm run tea -- --interactive --session work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- --interactive --resume work --memory-policy contextos --max-cost-usd 1.00
+npm run tea -- sessions inspect work
+npm run tea -- sessions delete work
+npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
+```
+
+Resume uses the original workspace/model/endpoint and preserves spending; `/new` preserves outstanding edits too. `/memory` explains the last request projection. `--memory-policy full-history` disables selection; `--session` still enables persistence. The soft target uses UTF-8 request bytes, not provider tokens. See the [architecture](docs/CONTEXTOS_ARCHITECTURE.md), [benchmark protocol](docs/CONTEXTOS_BENCHMARK.md) and [Chinese usage guide](docs/CONTEXTOS.zh-CN.md). [Candidates A/B were rejected](benchmarks/reports/contextos-glm-20261011/README.md). [C passed the frozen live gate](benchmarks/reports/contextos-c-glm-20261011/README.md): seven self-authored cases, three repeats, 21/21 ContextOS acceptance; **62.99% fewer provider tokens** versus persisted full history and **52.12% fewer** in the real 30-turn workflow. An additional fresh-read audit gives original/full/C 21/21, 20/21 and 21/21; the frozen checks missed one full-history omission. These results do not establish unseen-project generalization. ContextOS remains opt-in.
+
 Run offline experiments without a provider connection:
 
 ```sh
@@ -111,18 +143,29 @@ Current recorded results:
 
 These are offline character/byte measurements, not verified provider token savings or model task success rates. Direct-parent TEA live evaluation, broader language coverage, and independent holdout evaluation remain unfinished. Recent session-vocabulary and discovery changes have no isolated provider-token savings measurement.
 
-### TEA / Pi comparison
+### Earlier TEA / Pi comparisons
 
-Measured on **2026-10-11**, using **GLM-5.3-flash**, **enabled/low** thinking and a shared **4,096-token** output cap. Pi was **0.87.1**. Every pair started from identical Git snapshots; a shared gateway recorded actual provider input, output and cache tokens.
+Earlier opt-in **ContextOS C** versus native **Pi 0.87.1**, measured on October 11–12, 2026: same **GLM-5.3-flash**, **enabled/low** thinking, **4,096** output cap and initial Git contents. Three repeats per configuration; all provider input, cache and reasoning output count. These experiments are recorded separately from the October 13 candidate comparison above.
 
-- **64,000-byte request guard, nine task pairs:** TEA **168,282** tokens; Pi **161,046**. TEA used **4.49% more**. Acceptance was **9/9** for TEA and **7/9** for Pi; two Pi runs stopped at the input guard. Failed runs remain in the totals, so this ratio does not compare equal completion.
-- **80,000-byte guard, separate rerun of all three large tasks:** TEA **117,126** tokens; Pi **107,674**. TEA used **8.78% more**, with **3/3** acceptance on both sides.
+- **Fresh tasks, existing CLI default of 24 tools/turn:** 27 pairs at 12/120/1,200 files; TEA **708,844** / Pi **1,080,626** tokens, **34.40% fewer** for TEA. Full acceptance **26/27 vs 25/27**. [Default-quota report](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.md).
+- **Actual empty-start 30-inspection + repair conversation:** three pairs, TEA **905,224** / Pi **1,558,908**, **41.93% fewer**, both **3/3** accepted. This used the original 10-tool/turn profile. P95 TEA/Pi **485.60/463.18s**; it does not establish a speed benefit. [Long conversation and primary failures](benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.md).
+- **Original 10-tool fresh profile:** TEA accepted **16/27 vs 27/27**. Quota/validation failures remain recorded; its lower token total does not establish a performance-preserving improvement. The entire fresh matrix was selected for the separate default-quota follow-up before any follow-up paid calls.
 
-These results do **not establish consistent token savings**. Each profile has one repetition and uses self-authored JavaScript fixtures across 12-, 120- and 1,200-file repositories. Larger fixtures add unrelated modules. The two profiles are reported separately; an earlier pilot with changing ancestor instructions was excluded. See the [measured report](benchmarks/reports/tea-vs-pi-glm-20261011/README.md) and [comparison guide](docs/PI_COMPARISON.md).
+Default-quota results differ by size: small tasks use **52.26% more** TEA tokens (both 8/9 fully accepted); medium/large use **57.42%/37.64% fewer**. Both agents pass independent code/scope checks in all 27 follow-up runs; full acceptance also requires native post-edit testing and completion, whose conservative command recognition can produce false negatives. This is not evidence that TEA produces more correct code.
 
-![TEA and Pi provider token usage with a 64,000-byte request guard](benchmarks/reports/tea-vs-pi-glm-20261011/tea-vs-pi.png)
+These are self-authored JavaScript bug fixtures; larger repositories add unrelated modules. Three repeats do not prove unseen-project generalization. Native prompts, tool protocols and cache policies differ. ContextOS remains opt-in. Token reductions are not invoice reductions; stronger compression can reduce cache reuse. Earlier full-history TEA/Pi results remain [recorded separately](benchmarks/reports/tea-vs-pi-glm-20261011/README.md): +4.49% at 64k bytes and +8.78% in the 80k large-only profile. [Protocol and comparison guide](docs/PI_COMPARISON.md).
 
-![Separate large-task rerun with an 80,000-byte request guard](benchmarks/reports/tea-vs-pi-glm-large-80k-20261011/tea-vs-pi.png)
+[Small-task diagnosis](benchmarks/reports/contextos-c-vs-pi-small-diagnosis-20261012/README.md): 79/46 requests, 21 denied shell calls and one dominant recovery loop explain the observed aggregate regression; proposed fixes have no measured savings yet.
+
+[Improvement plan](docs/SMALL_TASK_IMPROVEMENT_PLAN.md): evaluation, capability feedback, structured validation, progress/completion, versioned patch receipts and independent confirmation. Each candidate is measured separately against its direct parent; targets are not measured gains.
+
+[S0 evaluation checks](benchmarks/reports/small-task-s0-20261012/README.md) are complete: 254/254 tests, 18/18 native revision contract tasks and 20/20 frozen fault preflights. No paid calls or measured token gains; stopped before S1.
+
+[S1 measured feedback experiment](benchmarks/reports/small-task-s1-glm-20261012/README.md): 102 parent/candidate runs, **11.38% fewer total provider tokens**, small **41.44% fewer**, long workflow **3.67% more**. Candidate acceptance 51/51 versus 47/51; default remains off pending review. Use `TEA_CAPABILITY_FEEDBACK=1` for the experimental option; this narrow result does not prove every-task or unseen-project savings.
+
+![Default-24 fresh tasks](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/tea-contextos-vs-pi-fresh.png)
+
+![Actual long conversation](benchmarks/reports/contextos-c-vs-pi-glm-20261011/tea-contextos-vs-pi-long.png)
 
 ## Conversation compaction
 

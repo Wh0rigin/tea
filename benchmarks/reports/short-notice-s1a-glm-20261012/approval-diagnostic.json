@@ -1,0 +1,13 @@
+{
+  "kind": "offline actual approved-command diagnostic",
+  "platform": "win32",
+  "commandShape": "explicitly approved unlisted node -e containing quotes and parentheses",
+  "approvals": 1,
+  "exitZero": true,
+  "expectedOutput": true,
+  "providerRequests": 0,
+  "sourceCodeChanged": false,
+  "parentNoticeScope": "Windows allowlisted commands",
+  "candidateNoticeScope": "Windows blocks quotes, (), %, !, ^.",
+  "scopeDifference": "Candidate wording omits the allowlisted qualifier although approved unlisted commands bypass assertWindowsCommand."
+}

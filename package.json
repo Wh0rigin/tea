@@ -14,7 +14,10 @@
     "benchmark:replay": "node src/cli.mjs benchmark run --suite core --mode replay",
     "benchmark:runtime": "node src/cli.mjs benchmark run --suite runtime-smoke --mode runtime",
     "benchmark:pi": "node scripts/compare-pi.mjs",
-    "benchmark:pi:check": "node scripts/check-pi-protocol.mjs"
+    "benchmark:pi:check": "node scripts/check-pi-protocol.mjs",
+    "benchmark:contextos-pi": "node scripts/compare-contextos-pi.mjs",
+    "benchmark:contextos-pi:check": "node scripts/check-contextos-pi-protocol.mjs",
+    "benchmark:revisions:check": "node scripts/check-revision-comparison.mjs"
   },
   "engines": {
     "node": ">=20"

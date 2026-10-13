@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { validateRunId } from './run-id.mjs';
 
 export class ConfigError extends Error {}
 
@@ -35,6 +36,13 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isInteger(initialFileLimit) || initialFileLimit < 1 || initialFileLimit > 250) throw new ConfigError('--initial-file-limit / TEA_INITIAL_FILE_LIMIT must be an integer from 1 through 250');
   const historyStrategy = String(options.historyStrategy || env.TEA_HISTORY_STRATEGY || 'full').toLowerCase();
   if (!['full', 'compact-tools'].includes(historyStrategy)) throw new ConfigError('History strategy must be full or compact-tools');
+  const memoryPolicy = String(options.memoryPolicy || env.TEA_MEMORY_POLICY || (historyStrategy === 'compact-tools' ? 'compact-tools' : 'full-history')).toLowerCase();
+  if (!['full-history', 'compact-tools', 'contextos'].includes(memoryPolicy)) throw new ConfigError('Memory policy must be full-history, compact-tools or contextos');
+  const sessionId = options.sessionId || env.TEA_SESSION_ID;
+  const resume = options.resume;
+  if (sessionId) validateRunId(sessionId);
+  if (resume) validateRunId(resume);
+  if (resume && sessionId) throw new ConfigError('Choose --session or --resume, not both');
   const historyKeepRecent = positiveNumber(options.historyKeepRecent ?? env.TEA_HISTORY_KEEP_RECENT, 2, 'History recent rounds');
   if (!Number.isInteger(historyKeepRecent) || historyKeepRecent < 2 || historyKeepRecent > 24) throw new ConfigError('History recent rounds must be an integer from 2 through 24');
 
@@ -43,6 +51,9 @@ export function loadConfig(options = {}, env = process.env) {
   const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
   if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
   const maxRequestInputTokens = Math.floor(positiveNumber(env.TEA_MAX_REQUEST_INPUT_TOKENS, 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
+  const contextosTargetBytes = positiveNumber(options.contextosTargetBytes ?? env.TEA_CONTEXTOS_TARGET_BYTES,
+    Math.max(1, Math.floor(maxRequestInputTokens * .5)), 'ContextOS target bytes');
+  if (!Number.isSafeInteger(contextosTargetBytes)) throw new ConfigError('ContextOS target bytes must be a positive safe integer');
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
     Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
@@ -76,13 +87,19 @@ export function loadConfig(options = {}, env = process.env) {
     maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, 1200, 'TEA_MAX_OUTPUT_TOKENS')),
     maxRequestInputTokens,
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
+    capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === '1',
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
     effort,
     thinkingMode,
     contextStrategy,
     initialFileLimit,
-    historyStrategy,
+    historyStrategy: options.memoryPolicy || env.TEA_MEMORY_POLICY ? (memoryPolicy === 'compact-tools' ? 'compact-tools' : 'full') : historyStrategy,
     historyKeepRecent,
+    memoryPolicy,
+    contextosTargetBytes,
+    contextosKeepRecent: historyKeepRecent,
+    sessionId,
+    resume,
     compaction,
     compactionTriggerRatio,
     compactionKeepRecentBytes,

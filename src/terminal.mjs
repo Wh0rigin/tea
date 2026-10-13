@@ -7,10 +7,12 @@ import { compactAgentSession, createAgentSession, resetConversation, runTask } f
 import { sessionContext } from './compaction.mjs';
 import { assertLiveConfig } from './config.mjs';
 import { redactText } from './tools.mjs';
+import { attachSessionJournal, closeSessionJournal } from './session-memory.mjs';
 
 const HELP = [
   '/help          Show commands',
   '/status        Show session usage, budget and outstanding validation',
+  '/memory        Explain context references, freshness and retention',
   '/tools         List the last 100 tool records',
   '/tools N       Expand one tool result',
   '/diff          Show the current Git diff (up to 24,000 characters)',
@@ -201,6 +203,15 @@ export function demoAdapterFactory() {
 export async function runInteractive(config, { demo = false, initialTask, input = process.stdin, output = process.stdout } = {}) {
   const view = new TerminalView(output, config, { demo });
   const session = createAgentSession(config);
+  if (session.persistent) {
+    await attachSessionJournal(session, config);
+    await closeSessionJournal(session);
+    view.spent = session.restoredBudget?.spentUsd || 0;
+    // The budget is restored exactly; old output/cache totals are not inferred
+    // from an input-only counter. Show '?' until a full accounting view exists.
+    if (config.resume) { view.baseUsage.complete = false; view.usage.complete = false; }
+    view.write('Persistent session: ' + session.sessionId);
+  }
   const adapterFactory = demo ? demoAdapterFactory() : undefined;
   if (!input.isTTY || !output.isTTY) {
     if (!demo) throw new Error('Interactive mode requires a terminal. Use tea "task" for pipes, or --demo for an offline preview.');
@@ -280,7 +291,9 @@ export async function runInteractive(config, { demo = false, initialTask, input 
       if (task === '/help') view.write(HELP);
       else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${dollars(Math.max(0, config.maxCostUsd - view.spent))}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') : 'none'}\nOriginal history messages: ${session.messages.length}\nActive context messages: ${sessionContext(session).length}\nConversation compactions: ${session.compactionCount}\nAuto compaction: ${config.compaction}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
       else if (/^\/tools(?:\s+\d+)?$/.test(task)) view.showTools(task.split(/\s+/)[1]);
-      else if (task === '/new') { resetConversation(session); composed = []; view.multiline = false; view.mode = 'Ready'; view.write('New conversation. Spending and outstanding edits are retained.'); }
+      else if (task === '/new') { await resetConversation(session, config); composed = []; view.multiline = false; view.mode = 'Ready'; view.write('New conversation. Spending and outstanding edits are retained.'); }
+      else if (task === '/memory') view.write(JSON.stringify({ sessionId: session.persistent ? session.sessionId : null,
+        policy: config.memoryPolicy, diagnostics: session.memoryDiagnostics, pendingValidation: session.pendingValidation }, null, 2));
       else if (task === '/clear') { if (view.rich) output.write('\x1b[2J\x1b[H'); else output.write('\n'); view.editorAttached = false; view.banner(); }
       else if (/^\/compact(?:\s|$)/.test(task)) {
         if (demo) { view.write('Conversation summaries require a live model. The demo makes no provider requests.'); return; }
