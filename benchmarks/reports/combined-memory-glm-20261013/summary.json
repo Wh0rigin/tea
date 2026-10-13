@@ -1,0 +1,376 @@
+{
+  "kind": "four-arm combination test of unchanged runtime",
+  "complete": true,
+  "engineCommit": "bc7869c6d2aa5218fb85dbf2237929b64fabbc85",
+  "attemptedRuns": 48,
+  "plannedRuns": 48,
+  "knownCompatibilityGap": true,
+  "defaultCompactionEnabled": false,
+  "sourceUnchanged": true,
+  "conservativeSpentOrReservedUsd": 1.6702452000000005,
+  "haltReason": null,
+  "cases": [
+    {
+      "caseId": "short",
+      "variants": {
+        "full_off": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 30902,
+          "outputTokens": 1066,
+          "totalTokens": 31968,
+          "summaryTokens": 0
+        },
+        "full_auto": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 26573,
+          "outputTokens": 924,
+          "totalTokens": 27497,
+          "summaryTokens": 0
+        },
+        "contextos_off": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 31324,
+          "outputTokens": 835,
+          "totalTokens": 32159,
+          "summaryTokens": 0
+        },
+        "contextos_auto": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 31606,
+          "outputTokens": 1070,
+          "totalTokens": 32676,
+          "summaryTokens": 0
+        }
+      },
+      "combinedVsContextosTokenReductionPercent": -1.6076370533909534,
+      "combinedVsSummaryOnlyTokenReductionPercent": -18.8347819762156,
+      "automaticSummaryExecutedInCombined": false,
+      "attribution": "Automatic summary inactive; observed trajectory variation, not compaction benefit"
+    },
+    {
+      "caseId": "protected",
+      "variants": {
+        "full_off": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 241997,
+          "outputTokens": 902,
+          "totalTokens": 242899,
+          "summaryTokens": 0
+        },
+        "full_auto": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 4,
+          "compactions": 4,
+          "knownUsage": true,
+          "inputTokens": 158308,
+          "outputTokens": 3351,
+          "totalTokens": 161659,
+          "summaryTokens": 18223
+        },
+        "contextos_off": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 307255,
+          "outputTokens": 1640,
+          "totalTokens": 308895,
+          "summaryTokens": 0
+        },
+        "contextos_auto": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 4,
+          "compactions": 4,
+          "knownUsage": true,
+          "inputTokens": 180071,
+          "outputTokens": 3582,
+          "totalTokens": 183653,
+          "summaryTokens": 18126
+        }
+      },
+      "combinedVsContextosTokenReductionPercent": 40.54516907039609,
+      "combinedVsSummaryOnlyTokenReductionPercent": -13.605181276637857,
+      "automaticSummaryExecutedInCombined": true,
+      "attribution": "Automatic summary active; include its cost"
+    },
+    {
+      "caseId": "evictable",
+      "variants": {
+        "full_off": {
+          "runs": 4,
+          "accepted": 3,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 566115,
+          "outputTokens": 1516,
+          "totalTokens": 567631,
+          "summaryTokens": 0
+        },
+        "full_auto": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 4,
+          "compactions": 4,
+          "knownUsage": true,
+          "inputTokens": 249759,
+          "outputTokens": 3511,
+          "totalTokens": 253270,
+          "summaryTokens": 29386
+        },
+        "contextos_off": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 100310,
+          "outputTokens": 2030,
+          "totalTokens": 102340,
+          "summaryTokens": 0
+        },
+        "contextos_auto": {
+          "runs": 4,
+          "accepted": 4,
+          "summaryRequests": 0,
+          "compactions": 0,
+          "knownUsage": true,
+          "inputTokens": 86982,
+          "outputTokens": 1460,
+          "totalTokens": 88442,
+          "summaryTokens": 0
+        }
+      },
+      "combinedVsContextosTokenReductionPercent": 13.58022278678913,
+      "combinedVsSummaryOnlyTokenReductionPercent": 65.07995419907608,
+      "automaticSummaryExecutedInCombined": false,
+      "attribution": "Automatic summary inactive; observed trajectory variation, not compaction benefit"
+    }
+  ],
+  "variants": {
+    "full_off": {
+      "runs": 12,
+      "accepted": 11,
+      "totalTokens": 842498,
+      "summaryTokens": 0,
+      "summaryRequests": 0,
+      "compactions": 0
+    },
+    "full_auto": {
+      "runs": 12,
+      "accepted": 12,
+      "totalTokens": 442426,
+      "summaryTokens": 47609,
+      "summaryRequests": 8,
+      "compactions": 8
+    },
+    "contextos_off": {
+      "runs": 12,
+      "accepted": 12,
+      "totalTokens": 443394,
+      "summaryTokens": 0,
+      "summaryRequests": 0,
+      "compactions": 0
+    },
+    "contextos_auto": {
+      "runs": 12,
+      "accepted": 12,
+      "totalTokens": 304771,
+      "summaryTokens": 18126,
+      "summaryRequests": 4,
+      "compactions": 4
+    }
+  },
+  "combinedVsContextosTokenReductionPercent": 31.264067623828918,
+  "combinedVsSummaryOnlyTokenReductionPercent": 31.11367776758147,
+  "combinedAcceptanceDeclines": [],
+  "providerRequests": 292,
+  "functionalContract": {
+    "kind": "scripted native combination checks; no provider token claim",
+    "profile": {
+      "requestGuardBytes": 80000,
+      "triggerRatio": 0.8,
+      "keepRecentBytes": 8000,
+      "contextosTargetBytes": 32000
+    },
+    "paidRequestsAdded": 0,
+    "runs": [
+      {
+        "variant": "full-history-off",
+        "taskRequests": 5,
+        "summaryRequests": 0,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 0,
+        "recovery": null
+      },
+      {
+        "variant": "full-history-auto",
+        "taskRequests": 5,
+        "summaryRequests": 1,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 1,
+        "recovery": null
+      },
+      {
+        "variant": "contextos-off",
+        "taskRequests": 5,
+        "summaryRequests": 0,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 0,
+        "recovery": {
+          "originalRecovered": true,
+          "searchAdvertised": false
+        }
+      },
+      {
+        "variant": "contextos-auto",
+        "taskRequests": 5,
+        "summaryRequests": 1,
+        "canonicalPreserved": true,
+        "actualValidationPassed": true,
+        "validationNudges": 1,
+        "compactionCount": 1,
+        "recovery": {
+          "originalRecovered": true,
+          "searchAdvertised": false
+        }
+      }
+    ],
+    "checks": [
+      {
+        "name": "full-history-off: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "full-history-off: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "full-history-off: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "full-history-auto: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "full-history-auto: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "full-history-auto: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "contextos-off: original indexed source remains recoverable internally",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: canonical seed unchanged",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: actual validation required and completed",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: expected summary activation",
+        "passed": true
+      },
+      {
+        "name": "contextos-auto: original indexed source remains recoverable internally",
+        "passed": true
+      },
+      {
+        "name": "combined auto: history search advertised after checkpoint",
+        "passed": false,
+        "detail": "Compatibility expectation; a false result records the conditional retrieval-entry gap, not a harness error."
+      },
+      {
+        "name": "combined auto: authoritative pending state overrides summary",
+        "passed": true
+      },
+      {
+        "name": "combined auto: stale source withheld",
+        "passed": true
+      },
+      {
+        "name": "combined auto: checkpoint survives unchanged-workspace resume",
+        "passed": true
+      }
+    ],
+    "passed": 17,
+    "total": 18,
+    "combinationFullyCompatible": false
+  },
+  "runtimeChanged": false,
+  "verification": {
+    "existingTests": 268,
+    "existingPassed": 268,
+    "skipped": 0,
+    "nativeChecksPassed": 17,
+    "nativeChecksTotal": 18,
+    "conditionalRetrievalEntryGap": true,
+    "initialCheckerCorrection": "Raw checkpoint text must be inspected directly rather than searching escaped JSON; corrected before paid calls; all zero-paid attempts retained.",
+    "currentHeadCiUrl": "https://github.com/Wh0rigin/tea/pull/3/checks"
+  },
+  "liveRetrievalObservation": {
+    "protectedCombinedTaskRequestsAfterCheckpoint": 27,
+    "withoutAdvertisedHistorySearch": 12,
+    "ordinaryRepairDoesNotProveHistoricalRetrieval": true,
+    "firstTaskAfterCheckpointRuns": 4,
+    "firstTaskAfterCheckpointWithoutHistorySearch": 4
+  },
+  "knownFailures": [
+    {
+      "caseId": "evictable",
+      "repeat": 1,
+      "variant": "full_off",
+      "nextUnsubmittedWireBytes": [
+        81838
+      ],
+      "reason": "per-request wire guard exceeded before provider submission"
+    }
+  ]
+}
