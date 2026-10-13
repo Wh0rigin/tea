@@ -35,5 +35,6 @@
       "interruptedAttemptTokens": []
     }
   },
-  "aggregateLongRatioDisplayed": false
+  "aggregateLongRatioDisplayed": false,
+  "allPanelBarPolicy": "exclude-cross-marked-failures-keep-triangles"
 }

@@ -24,6 +24,8 @@ This compares coding-agent software: **TEA archived candidate bd41742, Pi 0.87.1
 
 ![Three coding agents: provider tokens and quality](benchmarks/reports/tea-pi-claude-glm-20261013/three-agents.png)
 
+Cross-marked failures are excluded from bar means but remain plotted points and report records. Triangles mark final-validation uncertainty, not code behavior failures, and remain eligible. Long bars also require all workflow phases; their unequal sample counts are shown explicitly.
+
 - **12 files:** TEA vs Pi 34.02% fewer; vs Claude Code 73.70% fewer tokens.
 - **120 files:** TEA vs Pi 75.68% fewer; vs Claude Code 76.58% fewer tokens.
 - **1,200 files:** TEA vs Pi 50.12% fewer; vs Claude Code 18.32% fewer tokens.

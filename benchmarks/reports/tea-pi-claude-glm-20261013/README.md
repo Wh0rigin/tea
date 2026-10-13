@@ -4,6 +4,8 @@
 
 ![Three native coding agents](three-agents.png)
 
+Cross-marked failures never enter main-chart bar means; they remain individual points and original records. Triangle-marked final-validation uncertainty remains eligible because all other quality dimensions passed. Long bars additionally require completion of all phases; no aggregate ratio is displayed for unequal samples.
+
 90 planned runs; 90 attempted. 968 submitted requests; 0 with unknown usage. Complete plan: True.
 
 ## Long continuation follow-up (v5)

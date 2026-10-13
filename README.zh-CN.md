@@ -24,6 +24,8 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 ![Three coding agents: provider tokens and quality](benchmarks/reports/tea-pi-claude-glm-20261013/three-agents.png)
 
+叉号失败样本不参与柱形均值，只保留为散点和报告记录。三角表示最终验证未确认，代码行为检查通过，可纳入柱形并保留标记。Long 柱形还要求完成全部流程，并明确显示各方样本数。
+
 - **12 文件**：TEA 对 Pi 减少 34.02%；对 Claude Code 减少 73.70%。
 - **120 文件**：TEA 对 Pi 减少 75.68%；对 Claude Code 减少 76.58%。
 - **1,200 文件**：TEA 对 Pi 减少 50.12%；对 Claude Code 减少 18.32%。
