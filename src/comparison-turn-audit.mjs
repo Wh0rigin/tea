@@ -70,7 +70,8 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
     if (captureSources && validatedAfterEdit && !versionsEqual(validatedSources, sources())) validatedAfterEdit = false;
     const fullSourceRead = !requiredPath || calls.some(call => call.kind === 'read' && call.success && call.relativePath === requiredPath && call.outputSha256 === hash(expectedOutput));
     const readOnlyHonored = !readOnly || !calls.some(call => ['edit', 'shell'].includes(call.kind));
-    return { calls, fullSourceRead, readOnlyHonored, passed: fullSourceRead && readOnlyHonored && pending.size === 0 && !calls.some(call => call.malformed),
+    const eventsComplete = pending.size === 0 && !calls.some(call => call.malformed);
+    return { calls, fullSourceRead, readOnlyHonored, eventsComplete, passed: fullSourceRead && readOnlyHonored && eventsComplete,
       expectedOutputSha256: requiredPath ? hash(expectedOutput) : null, validatedAfterEdit, observerMs };
   } };
 }

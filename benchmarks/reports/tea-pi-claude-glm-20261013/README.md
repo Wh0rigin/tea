@@ -6,6 +6,14 @@
 
 90 planned runs; 90 attempted. 968 submitted requests; 0 with unknown usage. Complete plan: True.
 
+## Long continuation follow-up (v5)
+
+The first phase requested the full native read of `src/generated/domain-00/module-0000.mjs`, a 1,378-byte synthetic unrelated utility. Two Pi attempts recorded zero tool calls; the old harness stopped after the missed read. Future runs record missed inspections and continue the remaining reads and repair, without granting acceptance. Workflow completion and read compliance are separate. Timeouts, unknown usage, budget guards, mutations and protocol errors still stop execution.
+
+Current Long bars average only workflows reaching all scheduled phases, with TEA/Pi/Claude sample counts 3/1/3 and no aggregate ratio. Interrupted attempts remain points; historical grades and token totals remain unchanged. Numerical totals below remain historical all-attempt statistics. No v5 paid measurements yet; a new experiment must rerun all three agents rather than replace Pi failures selectively.
+
+[Historical all-attempt chart](three-agents-all-attempts.png) · [Policy and chart statistics](long-continuation.json)
+
 ## fresh
 
 - small: TEA vs Pi 34.02% fewer; TEA vs Claude Code 73.70% fewer.

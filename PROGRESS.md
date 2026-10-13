@@ -237,3 +237,8 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 ## 2026-10-13：验证命令兼容 v4
 
 识别当前工作区 cd && Node 测试与 2>&1；拒绝管道、掩盖失败与测试过滤。278/278 测试、27/27 原生本地三方任务通过，0 新增付费请求。旧 v3 判分和 Token 不变；图例区分 27 次未确认和 2 次其他失败。旧命令 SHA 核对确认 19 条工作区切换测试及 1 条 tail 管道，不以哈希代替通过摘要。[核查](benchmarks/reports/tea-pi-claude-glm-20261013/validation-compatibility.json)。
+
+
+## 2026-10-13：长会话漏读继续（v5）
+
+移除漏读即停止：在本轮原生正常完成、只读与工作区不变、工具事件完整时继续后续提示，读取失分保留；完整执行和验收独立统计。旧 Long 两次 Pi 为 1,586/1,577 tokens 而非零；主图改用完成流程样本均值（3/1/3），取消整体百分比，中断点与旧全尝试图保留。原始数据不变，尚无 v5 付费实测。[记录](benchmarks/reports/tea-pi-claude-glm-20261013/long-continuation.json)。

@@ -18,7 +18,9 @@ for ax,scale,title in zip(axes,scales,titles):
     for pos,(agent,color) in enumerate(zip(agents,colors)):
         arm=[r for r in xs if r['agent']==agent];known=[r for r in arm if r['usageComplete'] and r['totalTokens'] is not None]
         if known:
-            ys=[r['totalTokens']/1000 for r in known];ax.bar(pos,np.mean(ys),width=.6,color=color,alpha=.85)
+            ys=[r['totalTokens']/1000 for r in known]
+            bar_rows=[r for r in known if r['qualityDimensions']['nativeCompleted']] if scale=='long-session' else known
+            if bar_rows:ax.bar(pos,np.mean([r['totalTokens']/1000 for r in bar_rows]),width=.6,color=color,alpha=.85)
             for offset,row,y in zip(np.linspace(-.20,.20,len(ys)),known,ys):
                 dims=row['qualityDimensions'];unconfirmed=not row['accepted'] and all(v for k,v in dims.items() if k!='nativePostEditValidation')
                 marker='o' if row['accepted'] else '^' if unconfirmed else 'x'
@@ -29,15 +31,17 @@ for ax,scale,title in zip(axes,scales,titles):
     if stats:
         def text(v):return 'incomplete' if v is None else f"{abs(v):.2f}% "+('fewer' if v>=0 else 'more')
         label='TEA vs Pi: '+text(stats['reductionVsPi'])+'\nTEA vs Claude: '+text(stats['reductionVsClaude'])
+        if scale=='long-session':
+            completed=' / '.join(str(sum(r['qualityDimensions']['nativeCompleted'] for r in xs if r['agent']==a)) for a in agents)
+            label='Bars: completed workflows only\nTEA / Pi / Claude: '+completed+'\nUnequal samples; no overall ratio'
         expected=3 if scale=='long-session' else 9
-        if scale=='long-session' and any(len(r['turns'])<31 for r in xs):label+='\nUnequal completion; see report'
-        elif any(v['accepted']<expected for v in stats['roles'].values()):label+='\nValidation unconfirmed; see report'
+        if scale!='long-session' and any(v['accepted']<expected for v in stats['roles'].values()):label+='\nValidation unconfirmed; see report'
         ax.text(.5,.98,label,ha='center',va='top',transform=ax.transAxes,fontsize=9)
         acc=' · '.join(f"{stats['roles'][a]['accepted']}/{expected}" for a in agents)
         code=' · '.join(f"{stats['roles'][a]['qualityDimensions']['codeCorrect']}/{expected}" for a in agents)
         ax.text(.5,-.24,'TEA / Pi / Claude\nAccepted: '+acc+'\nCode behavior: '+code,ha='center',transform=ax.transAxes,fontsize=9)
 fig.suptitle('Three native coding agents — same GLM-5.3-flash, enabled/low; three repeats',fontsize=16)
-fig.text(.5,.03,'Bars: mean known provider tokens; every known attempt retained. ○: accepted; △: final validation unconfirmed; ×: other acceptance failure.\nHistorical v3 grades unchanged. All cache input and reasoning output included; self-authored fixtures do not establish production generalization.',ha='center',fontsize=10)
+fig.text(.5,.03,'Fresh bars: all-attempt means. Long bars: completed-workflow means only. Every known attempt remains a point.\n○: accepted; △: final validation unconfirmed; ×: other acceptance failure. Historical v3 grades and tokens unchanged; not production generalization.',ha='center',fontsize=10)
 fig.subplots_adjust(left=.055,right=.99,top=.81,bottom=.29,wspace=.35)
 fig.savefig(folder/'three-agents.png',dpi=160);fig.savefig(folder/'three-agents.svg',metadata={'Date':None});plt.close(fig)
 svg=folder/'three-agents.svg';svg.write_bytes(('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf-8').splitlines())+'\n').encode())

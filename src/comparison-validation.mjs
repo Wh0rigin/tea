@@ -116,3 +116,10 @@ export function acceptanceDimensions({ evaluation, turns, plannedTurns, status, 
   const dimensions = { codeCorrect, scopeCorrect, declaredReadRequirements, nativePostEditValidation, nativeCompleted, usageComplete: Boolean(usageComplete) };
   return { dimensions, accepted: Object.values(dimensions).every(Boolean) };
 }
+
+/** Missing a required read is a grading failure, not a reason to shorten a workflow. */
+export function shouldStopComparisonTurn({ status, requirements, requiredPath }) {
+  if (status !== 'completed') return true;
+  if (requirements.passed) return false;
+  return !requiredPath || !requirements.readOnlyHonored || !requirements.unchangedWorkspace || requirements.eventsComplete !== true;
+}
