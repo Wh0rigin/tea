@@ -128,7 +128,8 @@ test('does not claim that truncated requested ranges are fully available in hist
     assert.match(tail, /401: const HIDDEN_TAIL = true/);
     assert.doesNotMatch(tail, /truncated|Only a prefix/);
     const repeatedTail = await tools.readFile({ path: 'large.js', startLine: 401, endLine: 401 });
-    assert.match(repeatedTail, /Evidence unchanged; ref=large\.js#L401-L401@/);
+    assert.equal(repeatedTail, tail, 'Compact tail evidence is shorter than its unchanged-reference notice');
+    assert.ok(tools.readEvidence.has('large.js:401-401'));
   });
 });
 
@@ -138,7 +139,8 @@ test('clears a previously cached range when its replacement becomes too large to
     await writeFile(filename, 'const state = 1;');
     await tools.init();
     const original = await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 });
-    assert.match(await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 }), /Evidence unchanged/);
+    assert.equal(await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 }), original);
+    assert.ok(tools.readEvidence.has('changing.js:1-1'));
     await writeFile(filename, `const state = '${'x'.repeat(15_000)}';`);
     const changed = await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 });
     assert.match(changed, /Only a prefix/);
@@ -146,7 +148,8 @@ test('clears a previously cached range when its replacement becomes too large to
     assert.equal(await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 }), changed);
     await writeFile(filename, 'const state = 1;');
     assert.equal(await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 }), original);
-    assert.match(await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 }), /Evidence unchanged/);
+    assert.equal(await tools.readFile({ path: 'changing.js', startLine: 1, endLine: 1 }), original);
+    assert.ok(tools.readEvidence.has('changing.js:1-1'));
   });
 });
 
