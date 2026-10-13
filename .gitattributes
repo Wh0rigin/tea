@@ -45,3 +45,9 @@ benchmarks/reports/e1-metadata-vs-pi*/*.json text eol=lf
 benchmarks/reports/e1-metadata-vs-pi*/*.md text eol=lf
 benchmarks/reports/e1-metadata-vs-pi*/*.svg text eol=lf
 benchmarks/reports/e1-metadata-vs-pi*/evidence.sha256 text eol=lf
+
+scripts/plot-three-agents.py text eol=lf
+benchmarks/reports/tea-pi-claude*/*.json text eol=lf
+benchmarks/reports/tea-pi-claude*/*.md text eol=lf
+benchmarks/reports/tea-pi-claude*/*.svg text eol=lf
+benchmarks/reports/tea-pi-claude*/evidence.sha256 text eol=lf

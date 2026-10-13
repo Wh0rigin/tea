@@ -225,3 +225,10 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 - 候选完整测试再次 276/276；原生流式本地检查双方各 8 次请求通过，零付费。原始线级用量独立重算、请求记录与用量账本一致，源码/夹具与付费前冻结计划匹配。新一轮保守费用 USD 2.9523324，未知用量 0；非账单，旧未知预留仍独立保留。
 - 百分比来自完整候选对 Pi 的差距，不作为元数据单项贡献。三类自编缺陷、三次重复和一个长会话流程，不证明生产泛化。未合并 main，等待用户审核。
 - [中文报告](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.zh-CN.md) · [English](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.md)
+
+
+## 2026-10-13：原生三方 Coding Agent 比较
+
+计划90次，实际90次；968次请求，0次用量未知。新测 TEA归档候选bd41742 / Pi0.87.1 / Claude Code2.1.281，共同GLM-5.3-flash enabled/low，任务和初始源码冻结；没有混用旧样本。完整与中断、代码行为与原生验证分别记录，包含负收益。274/274单元测试，三方27/27原生脚本化任务、108次本地请求及Claude多轮8次检查通过；脚本化用量不是性能证据。默认运行时未启用候选，未合并main。
+
+[中文报告](benchmarks/reports/tea-pi-claude-glm-20261013/README.zh-CN.md) · [English](benchmarks/reports/tea-pi-claude-glm-20261013/README.md)

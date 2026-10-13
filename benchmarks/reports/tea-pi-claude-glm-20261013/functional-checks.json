@@ -1,0 +1,26 @@
+{
+  "tests": 274,
+  "passed": 274,
+  "failed": 0,
+  "nativeThreeContract": {
+    "runId": "three-contract-1791894014069",
+    "kind": "native three-agent streaming contract",
+    "usageSource": "scripted-loopback",
+    "paidProviderRequests": 0,
+    "accepted": 27,
+    "runs": 27,
+    "requests": 108,
+    "commonControlsMatched": true,
+    "sourceStable": true,
+    "providerTokenBenefit": null
+  },
+  "claudeMultiTurn": {
+    "kind": "native Claude Code multi-turn contract",
+    "scriptedRequests": 8,
+    "paidRequests": 0,
+    "fullReadVerified": true,
+    "postEditValidationVerified": true,
+    "nativeHistoryVerified": true,
+    "processClosed": true
+  }
+}

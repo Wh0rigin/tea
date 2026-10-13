@@ -16,6 +16,31 @@ Our mission is to reduce token consumption while preserving task correctness, co
 
 ## Measured token usage
 
+### TEA / Pi / Claude Code
+
+Measured October 13, 2026 with the same **GLM-5.3-flash, enabled/low thinking, 4096/4095 output/thinking caps**, task prompts and initial source snapshots. All three arms were newly measured.
+
+This compares coding-agent software: **TEA archived candidate bd41742, Pi 0.87.1 and native Claude Code 2.1.281 safe-mode CLI**. Claude Code also uses GLM here, not an Anthropic Claude model. Native core prompts/tools are retained; host plugins, skills, MCP and cross-session automatic memory are disabled.
+
+![Three coding agents: provider tokens and quality](benchmarks/reports/tea-pi-claude-glm-20261013/three-agents.png)
+
+- **12 files:** TEA vs Pi 34.02% fewer; vs Claude Code 73.70% fewer tokens.
+- **120 files:** TEA vs Pi 75.68% fewer; vs Claude Code 76.58% fewer tokens.
+- **1,200 files:** TEA vs Pi 50.12% fewer; vs Claude Code 18.32% fewer tokens.
+
+Fresh-task total: TEA vs Pi **55.63% fewer**, vs Claude Code **51.93% fewer** tokens.
+
+Fresh code behavior checks (TEA / Pi / Claude Code): **27/27 / 27/27 / 27/27**; full acceptance: **27/27 / 27/27 / 1/27**. Command forms outside the frozen observer grammar remain unconfirmed final validation, not code behavior failures.
+
+Long workflow: empty start, 30 native read-only inspections then repair; all attempts TEA vs Pi 76.35% more, vs Claude Code 61.78% fewer tokens; full acceptance 3/3 / 1/3 / 2/3. Interrupted workflows perform unequal work; token gaps are not equal-completion efficiency claims. Both-accepted diagnostic subsets are separate in the report.
+
+90 planned runs, 90 attempted; 968 submitted requests, 0 with unknown usage. Includes cache input, reasoning output, failures and individual regressions. Three self-authored JavaScript defects, three repeats per size, one long workflow; extra files are unrelated modules. Not production generalization. **The measured TEA candidate remains reverted; default runtime is not reenabled.**
+
+[Full three-agent report](benchmarks/reports/tea-pi-claude-glm-20261013/README.md) · [All attempts](benchmarks/reports/tea-pi-claude-glm-20261013/results.json) · [Frozen protocol](benchmarks/reports/tea-pi-claude-glm-20261013/frozen-protocol.md)
+
+<details>
+<summary>Earlier two-agent experiment (2026-10-13)</summary>
+
 In the **October 13, 2026** comparison, the compact evidence metadata candidate used **54.55% fewer provider tokens** than **Pi 0.87.1** across 27 fresh task pairs:
 
 - **Small — 12 files:** 30.76% fewer tokens.
@@ -31,6 +56,8 @@ For the **30-read + repair long conversations**, TEA used **11.85% fewer tokens 
 These are three self-authored JavaScript defects, three repeats at each repository size, and one long-conversation workflow. Added files are unrelated modules; this is sample evidence rather than a production-wide savings guarantee. Results compare the complete experimental TEA configuration with Pi, including native prompt/tool differences, and do not isolate metadata shortening. TEA enabled ContextOS and capability feedback; model summaries were not executed by either agent. **The measured candidate `bd41742` remains reverted in this branch; these figures describe its archived implementation.**
 
 [Full report](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.md) · [All attempts and usage](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/results.json) · [Frozen protocol](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/frozen-protocol.md) · [Source and verification](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/source-audit.json)
+
+</details>
 
 ## Getting started
 
