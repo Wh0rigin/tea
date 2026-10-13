@@ -52,7 +52,7 @@ export async function startComparisonGateway(config, { onRecord = async () => {}
     let localUrl;
     try { localUrl = new URL(request.url || '/', 'http://127.0.0.1'); }
     catch { reject(response, 400, 'Invalid local route'); return; }
-    const match = /^\/(tea|pi|baseline|candidate)\/([a-z0-9-]+)\/v1\/messages$/.exec(localUrl.pathname);
+    const match = /^\/(tea|pi|claude|baseline|candidate)\/([a-z0-9-]+)\/v1\/messages$/.exec(localUrl.pathname);
     if (request.method !== 'POST' || !match || request.headers['x-api-key'] !== token) { reject(response, 403, 'Unknown comparison route or local credential'); return; }
     const [, agent, caseId] = match;
     const key = `${caseId}/${agent}`;

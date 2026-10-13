@@ -15,7 +15,7 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
   const observe = event => {
     const startedObserver = performance.now();
     try {
-      const tea = agent !== 'pi';
+      const tea = !['pi', 'claude'].includes(agent);
       const start = tea ? event.type === 'tool_start' : event.type === 'tool_execution_start';
       const end = tea ? event.type === 'tool_end' : event.type === 'tool_execution_end';
       const key = tea ? 'native-tea' : event.toolCallId;
@@ -54,6 +54,8 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
       const argumentShape = words?.slice(1).map(arg => arg.startsWith('-') && arg.length < 120 ? arg.split('=')[0]
         : arg.replaceAll('\\', '/').startsWith('tests/') || arg.replaceAll('\\', '/').startsWith('./tests/') ? 'test-path' : 'value');
       calls.push({ name: call.name, kind, relativePath, success, outputSha256: hash(output), relevantValidation: Boolean(selection.recognized),
+        ...(agent === 'claude' ? { nativeOutputSha256: event.result?.details?.nativeOutputSha256 ?? null,
+          readNumberingDecoded: Boolean(event.result?.details?.readNumberingDecoded) } : {}),
         startedAt: call.startedAt ?? null, completedAt: new Date().toISOString(), elapsedMs: event.elapsedMs ?? (call.startedMs ? performance.now() - call.startedMs : null),
         execution: command ? { commandSha256: hash(command), program: words?.[0]?.replaceAll('\\', '/').split('/').at(-1) || null,
           argumentShape: argumentShape ?? null, argumentsSha256: words ? hash(JSON.stringify(words.slice(1))) : null,
