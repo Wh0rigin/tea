@@ -26,6 +26,7 @@ for ax,scale,title in zip(axes,scales,titles):
             ys=[r['totalTokens']/1000 for r in known]
             bar_rows=[r for r in known if plot_status(r)!='failed' and (scale!='long-session' or r['qualityDimensions']['nativeCompleted'])]
             if bar_rows:ax.bar(pos,np.mean([r['totalTokens']/1000 for r in bar_rows]),width=.6,color=color,alpha=.85)
+            else:ax.text(pos,.12,'No eligible\nsamples',ha='center',transform=ax.get_xaxis_transform(),fontsize=8)
             for offset,row,y in zip(np.linspace(-.20,.20,len(ys)),known,ys):
                 status=plot_status(row);marker='o' if status=='accepted' else '^' if status=='unconfirmed' else 'x'
                 ax.scatter(pos+offset,y,s=30,marker=marker,color='white' if marker!='x' else '#333333',edgecolors=color if marker!='x' else None,zorder=3,clip_on=False)
@@ -37,8 +38,8 @@ for ax,scale,title in zip(axes,scales,titles):
         label='TEA vs Pi: '+text(stats['reductionVsPi'])+'\nTEA vs Claude: '+text(stats['reductionVsClaude'])
         if any(plot_status(r)=='failed' for r in xs):label='Failures excluded from bars\nNo full-workload ratio'
         if scale=='long-session':
-            completed=' / '.join(str(sum(r['qualityDimensions']['nativeCompleted'] for r in xs if r['agent']==a)) for a in agents)
-            label='Bars: completed workflows only\nTEA / Pi / Claude: '+completed+'\nUnequal samples; no overall ratio'
+            completed=' / '.join(str(sum(r['qualityDimensions']['nativeCompleted'] and plot_status(r)!='failed' for r in xs if r['agent']==a)) for a in agents)
+            label='Bars: eligible completed workflows\nTEA / Pi / Claude: '+completed+'\nUnequal samples; no overall ratio'
         expected=3 if scale=='long-session' else 9
         if scale!='long-session' and any(v['accepted']<expected for v in stats['roles'].values()):label+='\nValidation unconfirmed; see report'
         ax.text(.5,.98,label,ha='center',va='top',transform=ax.transAxes,fontsize=9)

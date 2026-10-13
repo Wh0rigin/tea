@@ -16,11 +16,13 @@ test('a missed inspection continues without granting read compliance or acceptan
     plannedTurns: 1, status: 'completed', usageComplete: true });
   assert.equal(graded.dimensions.nativeCompleted, true); assert.equal(graded.dimensions.declaredReadRequirements, false); assert.equal(graded.accepted, false);
 });
-test('continuation still stops native failures, mutations and incomplete tool events', () => {
+test('grading failures continue while native failures and incomplete tool events stop', () => {
   const input = { status: 'completed', requiredPath: 'src/a.mjs', requirements: { passed: false, readOnlyHonored: true, unchangedWorkspace: true, eventsComplete: true } };
-  for (const patch of [{ status: 'timeout' }, { requiredPath: null },
-    ...['readOnlyHonored','unchangedWorkspace','eventsComplete'].map(k => ({ requirements: { ...input.requirements, [k]: false } }))]) {
+  for (const patch of [{ status: 'timeout' }, { requirements: { ...input.requirements, eventsComplete: false } }]) {
     assert.equal(shouldStopComparisonTurn({ ...input, ...patch }), true);
+  }
+  for (const key of ['readOnlyHonored','unchangedWorkspace']) {
+    assert.equal(shouldStopComparisonTurn({ ...input, requirements: { ...input.requirements, [key]: false } }), false);
   }
 });
 test('validation recognizes quoted relative paths, option order and npm scripts', () => {

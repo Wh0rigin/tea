@@ -60,7 +60,7 @@ const snapshot = async () => {
   return hash(Buffer.concat(chunks.map(value => Buffer.isBuffer(value) ? value : Buffer.from(value))));
 };
 const sourceHash = await snapshot();
-const report = { schemaVersion: 4, acceptanceVersion: 'native-positive-validation-v5', stoppingPolicy: 'continue-missing-inspection-read', comparisonKind: 'tea-pi-claude', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
+const report = { schemaVersion: 4, acceptanceVersion: 'native-positive-validation-v6', stoppingPolicy: 'continue-completed-turns-grade-requirements', comparisonKind: 'tea-pi-claude', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
   benchmarkKind: 'Self-authored JavaScript fixtures: nine fresh coding tasks at three sizes plus one empty-start 30-inspection/repair workflow; three repetitions; not production holdout.',
   teaSourceSha256: sourceHash, teaSourceCommit: (await execute('git', ['rev-parse', 'HEAD'], { cwd: ROOT, windowsHide: true })).stdout.trim(),
   claude: { version: claudeVersion, binarySha256: hash(await readFile(claudeCli)) },
@@ -163,7 +163,7 @@ try {
             run.toolCalls += result.toolCalls; run.compactions += result.compactions || 0;
             await save();
             if (phase % 5 === 4 || phase === prompts.length - 1) console.log(`  ${caseId}/${agent}: ${phase + 1}/${prompts.length} turns`);
-            if (shouldStopComparisonTurn({ status: result.status, requirements, requiredPath })) { run.error = result.errorMessage || 'Native turn incomplete, protocol failure or read-only violation'; break; }
+            if (shouldStopComparisonTurn({ status: result.status, requirements, requiredPath })) { run.error = result.errorMessage || 'Native turn incomplete or protocol failure'; break; }
           }
           if (!run.error && run.turns.length === prompts.length && run.turns.every(turn => turn.status === 'completed')) run.status = 'completed';
         } catch (error) { run.error = redactText(String(error.message)).replaceAll(workspace, '[WORKSPACE]').slice(0, 1000); }

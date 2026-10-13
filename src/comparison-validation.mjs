@@ -117,9 +117,7 @@ export function acceptanceDimensions({ evaluation, turns, plannedTurns, status, 
   return { dimensions, accepted: Object.values(dimensions).every(Boolean) };
 }
 
-/** Missing a required read is a grading failure, not a reason to shorten a workflow. */
-export function shouldStopComparisonTurn({ status, requirements, requiredPath }) {
-  if (status !== 'completed') return true;
-  if (requirements.passed) return false;
-  return !requiredPath || !requirements.readOnlyHonored || !requirements.unchangedWorkspace || requirements.eventsComplete !== true;
+/** Grade unmet requirements separately; only incomplete runtime/protocol stops a workflow. */
+export function shouldStopComparisonTurn({ status, requirements }) {
+  return status !== 'completed' || requirements.eventsComplete !== true;
 }

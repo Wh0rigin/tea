@@ -1,0 +1,735 @@
+{
+  "stage": "Native TEA / Pi / Claude Code v5 remeasurement",
+  "state": "complete",
+  "harnessCommit": "af78e9baa93d90344d525b7e38907bae808d1708",
+  "teaCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "combinedCapUsd": 12,
+  "perRunCapUsd": 1.4,
+  "plannedRuns": 90,
+  "matchedSets": 30,
+  "protocolSha256": "2bf0e618e68b1c80f95a40fdf8f4edce293cf2760d3b2eb9e9c15f539f97c63d",
+  "cohorts": [
+    {
+      "name": "fresh",
+      "groups": "fresh",
+      "scales": "small,medium,large",
+      "runs": 81,
+      "preflightId": "three-v5-prepare-fresh-1791905274735554700",
+      "runId": "tea-pi-claude-v5-fresh-glm-20261013-1791905274735554700",
+      "started": true,
+      "guardUsd": 12,
+      "complete": true,
+      "paidRequests": 504,
+      "accountedUsd": 1.997837200000016,
+      "exitCode": 0
+    },
+    {
+      "name": "long",
+      "groups": "long-session",
+      "scales": "small",
+      "runs": 9,
+      "preflightId": "three-v5-prepare-long-1791905274735554700",
+      "runId": "tea-pi-claude-v5-long-glm-20261013-1791905274735554700",
+      "started": true,
+      "guardUsd": 10.002162799999985,
+      "complete": true,
+      "paidRequests": 523,
+      "accountedUsd": 3.486324800000014,
+      "exitCode": 0
+    }
+  ],
+  "previousUnknownReservationsRetainedSeparately": true,
+  "allAttemptsRetained": true,
+  "manifests": [
+    {
+      "cohort": "fresh",
+      "harnessSha256": "3fdd0dcb1a53c1fabbf4bcc9ce15b25afc42b88ea57cb7d6e40939b5f79db39f",
+      "teaEngine": {
+        "commit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+        "sourceSha256": "cb7dcbe190449dd92cc7c505db557f10fffef3e23a95ac3cce1cd87ad4a6b011",
+        "files": [
+          {
+            "path": "package.json",
+            "sha256": "55c9e92f3ce4278f3eb45111b0b0a74229f0917e07a81aa92fea0f50f96bf043",
+            "bytes": 926
+          },
+          {
+            "path": "src/agent.mjs",
+            "sha256": "1f1850e6e4473d3c5465620af90a8f2ceb00dd602dd98473503732bd67a415c0",
+            "bytes": 25965
+          },
+          {
+            "path": "src/benchmark.mjs",
+            "sha256": "c5e52911bf7f38a9f33754a5c819a157daa5683e39cfeef905bbd6fdc10b6289",
+            "bytes": 12644
+          },
+          {
+            "path": "src/cli.mjs",
+            "sha256": "4c59f78fe76f8db2d59db389d2152a89b9fe075583ae7eace056e5f94ab65af0",
+            "bytes": 12055
+          },
+          {
+            "path": "src/compaction-experiment.mjs",
+            "sha256": "78769248909ef041ad6ec7cfc54df2a391ca74958d78406efa44927ce3b2633c",
+            "bytes": 3913
+          },
+          {
+            "path": "src/compaction.mjs",
+            "sha256": "bae3d58421b3c10612e9fed313f2cdf2d03f551868197ef4e7827c751ea9c27b",
+            "bytes": 13167
+          },
+          {
+            "path": "src/comparison-fixtures.mjs",
+            "sha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+            "bytes": 8113
+          },
+          {
+            "path": "src/comparison-gateway.mjs",
+            "sha256": "a59acea278f0ec74cbf3f25d6b9bb5caa194aaa089a409074c689ff9c4864afc",
+            "bytes": 9891
+          },
+          {
+            "path": "src/comparison-pi-rpc.mjs",
+            "sha256": "fbf30c26fb542c85533db68d7eea75efe253d52d7db1428bc6a726711b35b239",
+            "bytes": 5732
+          },
+          {
+            "path": "src/comparison-pi.mjs",
+            "sha256": "1ec8e165ad2311524c8e4924878a4d96dc7048a3af14b8db7f57a560548298e2",
+            "bytes": 4505
+          },
+          {
+            "path": "src/comparison-report.mjs",
+            "sha256": "becc1d41f17d222df375b62e79251057a32455248ae9a4aa1d8389c3c4e06f6e",
+            "bytes": 8222
+          },
+          {
+            "path": "src/comparison-revision-report.mjs",
+            "sha256": "9a7db34af8ba3a5386b0dcda9b765b6984a3bee510a63d04c457c36e56f2fa1b",
+            "bytes": 3830
+          },
+          {
+            "path": "src/comparison-revisions.mjs",
+            "sha256": "0b22a4a38d7bf3646ad4ca5d84148ec98b8139d6523b57d72eac85cc04108da0",
+            "bytes": 3989
+          },
+          {
+            "path": "src/comparison-source-capture.mjs",
+            "sha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+            "bytes": 1860
+          },
+          {
+            "path": "src/comparison-turn-audit.mjs",
+            "sha256": "787108eb067dd352e20311585acd45081f6470ea39429185cf644b82647b711b",
+            "bytes": 6207
+          },
+          {
+            "path": "src/comparison-validation.mjs",
+            "sha256": "aad6f26e069c7569aea991026a4189dc3b76d34db9f9d09bcc4a77998199c4e9",
+            "bytes": 5380
+          },
+          {
+            "path": "src/config.mjs",
+            "sha256": "73bb9ff6fad59b5b9b3b984046c54bedecfca0f147f7dec84e9317f492ecbc0c",
+            "bytes": 8677
+          },
+          {
+            "path": "src/context-assembler.mjs",
+            "sha256": "da710f2ea585992547ba723c68a7db74c05ac4f4f2445e6a1252136cf789eb59",
+            "bytes": 20057
+          },
+          {
+            "path": "src/context.mjs",
+            "sha256": "fe3712bf50f965d8fdcf4a84290e7e78f58e70c96476865cd5cf4f6fa1f386ca",
+            "bytes": 6356
+          },
+          {
+            "path": "src/contextos-benchmark.mjs",
+            "sha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c",
+            "bytes": 32955
+          },
+          {
+            "path": "src/ledger.mjs",
+            "sha256": "7ac67058a32d247b2bf30492972a0bda0e5b59b321f4eddf8fad99e9f2852c87",
+            "bytes": 7177
+          },
+          {
+            "path": "src/memory-benchmark.mjs",
+            "sha256": "1822d5d0d35225ac52bd9e62bf48cd6f1b2abc88ed15cb3d2d17e89b377336c5",
+            "bytes": 17502
+          },
+          {
+            "path": "src/memory-handoff.mjs",
+            "sha256": "d553203cf5fdbf7c786747c8b54a18320bdc3d7621c682f984441738de2127f8",
+            "bytes": 1587
+          },
+          {
+            "path": "src/memory.mjs",
+            "sha256": "0b215e127d7973d9fd164a334eecc5c986c3b5fcb2849d87fefdb642c8bb9692",
+            "bytes": 4923
+          },
+          {
+            "path": "src/model.mjs",
+            "sha256": "74fbcc13a3ce31c9b498f20fff3259a275161dc6b4b7a7ab984341b7822e136b",
+            "bytes": 14177
+          },
+          {
+            "path": "src/output.mjs",
+            "sha256": "d35dbc4031dbb94f9b6be11ad56ec28f369ebe5764c7fa01adf06a0515870def",
+            "bytes": 2469
+          },
+          {
+            "path": "src/policy.mjs",
+            "sha256": "bf4c5c51c387a5c320de993e20f7cef998d37133d59cf51c7f663e27530354cd",
+            "bytes": 12790
+          },
+          {
+            "path": "src/run-id.mjs",
+            "sha256": "13ed48178930c77d1b2b0ced0b320e6c5461bafc1a01ddb88b625e1ec579a475",
+            "bytes": 373
+          },
+          {
+            "path": "src/runtime-benchmark.mjs",
+            "sha256": "43efec1b45020144d011262d8c8641eee76877bef6e27f5920a489f771f3a28a",
+            "bytes": 19942
+          },
+          {
+            "path": "src/session-journal.mjs",
+            "sha256": "7fbf901dd1d2d89696a504a29470d1935e6df0407d77d8ef8278e1e943413a4c",
+            "bytes": 11298
+          },
+          {
+            "path": "src/session-memory.mjs",
+            "sha256": "70f07d8c05b1fdb1435e2b88cf710cf1e87b10937ec316fdc475d96c82a5759e",
+            "bytes": 9630
+          },
+          {
+            "path": "src/terminal.mjs",
+            "sha256": "e5ca4b9974e867656e218247df94a9da4400bc729e88741d2e88f937bf4478f0",
+            "bytes": 19656
+          },
+          {
+            "path": "src/tool-feedback.mjs",
+            "sha256": "e3b9e4f657000980b057c8d39a7ca3277d492b5533872f771f5769941f1a73fc",
+            "bytes": 4664
+          },
+          {
+            "path": "src/tools.mjs",
+            "sha256": "9b180357788b05608792912357986c25bf95e6cab106ef7a1663b12ec558d318",
+            "bytes": 30940
+          },
+          {
+            "path": "src/usage.mjs",
+            "sha256": "eb3e7f7b1f91dc9fc35d49b37d891d0db55a58ac2b5566f866f0298652c08bd4",
+            "bytes": 2347
+          }
+        ],
+        "sourceUnchanged": true
+      },
+      "pi": {
+        "name": "@earendil-works/pi-coding-agent",
+        "version": "0.87.1",
+        "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      },
+      "claude": {
+        "version": "2.1.281",
+        "binarySha256": "39be063c2512b43347fe7b0ab18c46f1596141701c9c5fc895ddfca9a051067c"
+      },
+      "commonProfile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 300000
+      },
+      "teaProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "piProfile": {
+        "nativeRpc": true,
+        "autoCompaction": true,
+        "contextWindow": 200000,
+        "automaticRetry": false,
+        "cacheWarming": false,
+        "persistedSession": false,
+        "extensions": false,
+        "skills": false
+      },
+      "claudeProfile": {
+        "nativeStreamJson": true,
+        "safeMode": true,
+        "bareMode": false,
+        "automaticMemory": false,
+        "persistedSession": false,
+        "tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "skills": false,
+        "hooks": false,
+        "mcp": false,
+        "gatewayPreventsPaidRetriesAfterUnknown": true
+      },
+      "tasks": [
+        {
+          "taskId": "small-cache-key",
+          "scale": "small",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "sha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+          "commit": "b5b676262bd2d88e7fd78b601651f84d48e18aba",
+          "fileCount": 12,
+          "bytes": 5456,
+          "lines": 112,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+          ]
+        },
+        {
+          "taskId": "small-retry-budget",
+          "scale": "small",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+          "commit": "46a4052ca9b9f9eca271275a9ff6e9109e183f5b",
+          "fileCount": 12,
+          "bytes": 5433,
+          "lines": 113,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        },
+        {
+          "taskId": "small-unicode",
+          "scale": "small",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "sha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+          "commit": "676570ead123ae1eb5947b9d304b9b988e09874f",
+          "fileCount": 12,
+          "bytes": 5227,
+          "lines": 109,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+          ]
+        },
+        {
+          "taskId": "medium-cache-key",
+          "scale": "medium",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "sha256": "151ede096639b8215229215d9e836fc66340ca20df5dab32dd16b00aadf45b52",
+          "commit": "81ee31e86dfff14bc79e7e90db514263089221fb",
+          "fileCount": 120,
+          "bytes": 70347,
+          "lines": 1408,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+          ]
+        },
+        {
+          "taskId": "medium-retry-budget",
+          "scale": "medium",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "8373f8e8a9daf4fbd764ceae6920ca376fda6828d6ae726fbf5326f48c15ff1f",
+          "commit": "3922f549375a05db5fe0ced58685d358f3d14684",
+          "fileCount": 120,
+          "bytes": 70324,
+          "lines": 1409,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        },
+        {
+          "taskId": "medium-unicode",
+          "scale": "medium",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "sha256": "f9cc2b9a8d91b76434ab73e3b7e152dde06edf452419de692d7dbaddaaca5757",
+          "commit": "eaa9e37575da3bdac2a5aa1b70cbec2676353eef",
+          "fileCount": 120,
+          "bytes": 70118,
+          "lines": 1405,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+          ]
+        },
+        {
+          "taskId": "large-cache-key",
+          "scale": "large",
+          "family": "cache-key",
+          "group": "fresh",
+          "entry": "src/services/cache-key.mjs",
+          "sha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+          "commit": "d75329958490887933052c1a00a3d56e548766f6",
+          "fileCount": 1200,
+          "bytes": 726176,
+          "lines": 14368,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+          ]
+        },
+        {
+          "taskId": "large-retry-budget",
+          "scale": "large",
+          "family": "retry-budget",
+          "group": "fresh",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+          "commit": "a78c616129626de155bf0375f00b9eb192ab77a5",
+          "fileCount": 1200,
+          "bytes": 726153,
+          "lines": 14369,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        },
+        {
+          "taskId": "large-unicode",
+          "scale": "large",
+          "family": "unicode",
+          "group": "fresh",
+          "entry": "src/services/text.mjs",
+          "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+          "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+          "fileCount": 1200,
+          "bytes": 725947,
+          "lines": 14365,
+          "plannedTurns": 1,
+          "promptSha256": [
+            "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+          ]
+        }
+      ]
+    },
+    {
+      "cohort": "long",
+      "harnessSha256": "3fdd0dcb1a53c1fabbf4bcc9ce15b25afc42b88ea57cb7d6e40939b5f79db39f",
+      "teaEngine": {
+        "commit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+        "sourceSha256": "cb7dcbe190449dd92cc7c505db557f10fffef3e23a95ac3cce1cd87ad4a6b011",
+        "files": [
+          {
+            "path": "package.json",
+            "sha256": "55c9e92f3ce4278f3eb45111b0b0a74229f0917e07a81aa92fea0f50f96bf043",
+            "bytes": 926
+          },
+          {
+            "path": "src/agent.mjs",
+            "sha256": "1f1850e6e4473d3c5465620af90a8f2ceb00dd602dd98473503732bd67a415c0",
+            "bytes": 25965
+          },
+          {
+            "path": "src/benchmark.mjs",
+            "sha256": "c5e52911bf7f38a9f33754a5c819a157daa5683e39cfeef905bbd6fdc10b6289",
+            "bytes": 12644
+          },
+          {
+            "path": "src/cli.mjs",
+            "sha256": "4c59f78fe76f8db2d59db389d2152a89b9fe075583ae7eace056e5f94ab65af0",
+            "bytes": 12055
+          },
+          {
+            "path": "src/compaction-experiment.mjs",
+            "sha256": "78769248909ef041ad6ec7cfc54df2a391ca74958d78406efa44927ce3b2633c",
+            "bytes": 3913
+          },
+          {
+            "path": "src/compaction.mjs",
+            "sha256": "bae3d58421b3c10612e9fed313f2cdf2d03f551868197ef4e7827c751ea9c27b",
+            "bytes": 13167
+          },
+          {
+            "path": "src/comparison-fixtures.mjs",
+            "sha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+            "bytes": 8113
+          },
+          {
+            "path": "src/comparison-gateway.mjs",
+            "sha256": "a59acea278f0ec74cbf3f25d6b9bb5caa194aaa089a409074c689ff9c4864afc",
+            "bytes": 9891
+          },
+          {
+            "path": "src/comparison-pi-rpc.mjs",
+            "sha256": "fbf30c26fb542c85533db68d7eea75efe253d52d7db1428bc6a726711b35b239",
+            "bytes": 5732
+          },
+          {
+            "path": "src/comparison-pi.mjs",
+            "sha256": "1ec8e165ad2311524c8e4924878a4d96dc7048a3af14b8db7f57a560548298e2",
+            "bytes": 4505
+          },
+          {
+            "path": "src/comparison-report.mjs",
+            "sha256": "becc1d41f17d222df375b62e79251057a32455248ae9a4aa1d8389c3c4e06f6e",
+            "bytes": 8222
+          },
+          {
+            "path": "src/comparison-revision-report.mjs",
+            "sha256": "9a7db34af8ba3a5386b0dcda9b765b6984a3bee510a63d04c457c36e56f2fa1b",
+            "bytes": 3830
+          },
+          {
+            "path": "src/comparison-revisions.mjs",
+            "sha256": "0b22a4a38d7bf3646ad4ca5d84148ec98b8139d6523b57d72eac85cc04108da0",
+            "bytes": 3989
+          },
+          {
+            "path": "src/comparison-source-capture.mjs",
+            "sha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+            "bytes": 1860
+          },
+          {
+            "path": "src/comparison-turn-audit.mjs",
+            "sha256": "787108eb067dd352e20311585acd45081f6470ea39429185cf644b82647b711b",
+            "bytes": 6207
+          },
+          {
+            "path": "src/comparison-validation.mjs",
+            "sha256": "aad6f26e069c7569aea991026a4189dc3b76d34db9f9d09bcc4a77998199c4e9",
+            "bytes": 5380
+          },
+          {
+            "path": "src/config.mjs",
+            "sha256": "73bb9ff6fad59b5b9b3b984046c54bedecfca0f147f7dec84e9317f492ecbc0c",
+            "bytes": 8677
+          },
+          {
+            "path": "src/context-assembler.mjs",
+            "sha256": "da710f2ea585992547ba723c68a7db74c05ac4f4f2445e6a1252136cf789eb59",
+            "bytes": 20057
+          },
+          {
+            "path": "src/context.mjs",
+            "sha256": "fe3712bf50f965d8fdcf4a84290e7e78f58e70c96476865cd5cf4f6fa1f386ca",
+            "bytes": 6356
+          },
+          {
+            "path": "src/contextos-benchmark.mjs",
+            "sha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c",
+            "bytes": 32955
+          },
+          {
+            "path": "src/ledger.mjs",
+            "sha256": "7ac67058a32d247b2bf30492972a0bda0e5b59b321f4eddf8fad99e9f2852c87",
+            "bytes": 7177
+          },
+          {
+            "path": "src/memory-benchmark.mjs",
+            "sha256": "1822d5d0d35225ac52bd9e62bf48cd6f1b2abc88ed15cb3d2d17e89b377336c5",
+            "bytes": 17502
+          },
+          {
+            "path": "src/memory-handoff.mjs",
+            "sha256": "d553203cf5fdbf7c786747c8b54a18320bdc3d7621c682f984441738de2127f8",
+            "bytes": 1587
+          },
+          {
+            "path": "src/memory.mjs",
+            "sha256": "0b215e127d7973d9fd164a334eecc5c986c3b5fcb2849d87fefdb642c8bb9692",
+            "bytes": 4923
+          },
+          {
+            "path": "src/model.mjs",
+            "sha256": "74fbcc13a3ce31c9b498f20fff3259a275161dc6b4b7a7ab984341b7822e136b",
+            "bytes": 14177
+          },
+          {
+            "path": "src/output.mjs",
+            "sha256": "d35dbc4031dbb94f9b6be11ad56ec28f369ebe5764c7fa01adf06a0515870def",
+            "bytes": 2469
+          },
+          {
+            "path": "src/policy.mjs",
+            "sha256": "bf4c5c51c387a5c320de993e20f7cef998d37133d59cf51c7f663e27530354cd",
+            "bytes": 12790
+          },
+          {
+            "path": "src/run-id.mjs",
+            "sha256": "13ed48178930c77d1b2b0ced0b320e6c5461bafc1a01ddb88b625e1ec579a475",
+            "bytes": 373
+          },
+          {
+            "path": "src/runtime-benchmark.mjs",
+            "sha256": "43efec1b45020144d011262d8c8641eee76877bef6e27f5920a489f771f3a28a",
+            "bytes": 19942
+          },
+          {
+            "path": "src/session-journal.mjs",
+            "sha256": "7fbf901dd1d2d89696a504a29470d1935e6df0407d77d8ef8278e1e943413a4c",
+            "bytes": 11298
+          },
+          {
+            "path": "src/session-memory.mjs",
+            "sha256": "70f07d8c05b1fdb1435e2b88cf710cf1e87b10937ec316fdc475d96c82a5759e",
+            "bytes": 9630
+          },
+          {
+            "path": "src/terminal.mjs",
+            "sha256": "e5ca4b9974e867656e218247df94a9da4400bc729e88741d2e88f937bf4478f0",
+            "bytes": 19656
+          },
+          {
+            "path": "src/tool-feedback.mjs",
+            "sha256": "e3b9e4f657000980b057c8d39a7ca3277d492b5533872f771f5769941f1a73fc",
+            "bytes": 4664
+          },
+          {
+            "path": "src/tools.mjs",
+            "sha256": "9b180357788b05608792912357986c25bf95e6cab106ef7a1663b12ec558d318",
+            "bytes": 30940
+          },
+          {
+            "path": "src/usage.mjs",
+            "sha256": "eb3e7f7b1f91dc9fc35d49b37d891d0db55a58ac2b5566f866f0298652c08bd4",
+            "bytes": 2347
+          }
+        ],
+        "sourceUnchanged": true
+      },
+      "pi": {
+        "name": "@earendil-works/pi-coding-agent",
+        "version": "0.87.1",
+        "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      },
+      "claude": {
+        "version": "2.1.281",
+        "binarySha256": "39be063c2512b43347fe7b0ab18c46f1596141701c9c5fc895ddfca9a051067c"
+      },
+      "commonProfile": {
+        "model": "glm-5.3-flash",
+        "thinkingMode": "enabled",
+        "effort": "low",
+        "maxOutputTokens": 4096,
+        "maxRequestInputBound": 160000,
+        "totalBudgetUsd": null,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxRequestsPerAgentTask": 100,
+        "api": "anthropic-messages",
+        "apiVersion": "2023-06-01",
+        "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+        "rateBasis": "User-supplied conservative rates; not invoice",
+        "turnTimeoutMs": 300000
+      },
+      "teaProfile": {
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextStrategy": "v1",
+        "compaction": "off",
+        "maxToolCallsPerTurn": 24,
+        "requestedCapabilityFeedback": true
+      },
+      "piProfile": {
+        "nativeRpc": true,
+        "autoCompaction": true,
+        "contextWindow": 200000,
+        "automaticRetry": false,
+        "cacheWarming": false,
+        "persistedSession": false,
+        "extensions": false,
+        "skills": false
+      },
+      "claudeProfile": {
+        "nativeStreamJson": true,
+        "safeMode": true,
+        "bareMode": false,
+        "automaticMemory": false,
+        "persistedSession": false,
+        "tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "skills": false,
+        "hooks": false,
+        "mcp": false,
+        "gatewayPreventsPaidRetriesAfterUnknown": true
+      },
+      "tasks": [
+        {
+          "taskId": "long-30",
+          "scale": "long-session",
+          "family": "retry-budget",
+          "group": "long-session",
+          "entry": "src/services/retry-budget.mjs",
+          "sha256": "a6b0e96f7fb583768995915c18b707dad682d016ff7abe679f9616056e551462",
+          "commit": "9c48e51807e0ed2be7dc7ef985f43e16932a168b",
+          "fileCount": 120,
+          "bytes": 161366,
+          "lines": 2328,
+          "plannedTurns": 31,
+          "promptSha256": [
+            "36ac7166584f4a665ccbdc0a2d280f78f88d6580a712ff877ac6cd374b64819f",
+            "045b3c6b8fcc50a9b4fbffb7d5425b0ea6378c6f532d1aa5280b7cddca3e49fa",
+            "58f6578516288da611300a97f2746dc45d3ee2e262c7cb2cb5bd82eb93380d2e",
+            "b83ecddf1ce0aa9b79ec79aab09eb43b120148ef4d3441f899fcab33989a568b",
+            "96637780a4c321f04f849ecf9173185c76066917beb5b2b70d92217f25480b77",
+            "b4e7fd7576b1d71433a85c5263fa892c7fb130af8b7e8a783415314bb3795879",
+            "c011c4a824b269b59dd0ad8f538fe67e8bc8ed7119b7b1f41bae56bfeefd7ac2",
+            "a42f74addb5c77d020b956356af06f08dcab0bf3052b5a570ab21ea5b85c7152",
+            "991de479164871e5fff861531f5144be0613ed712940604e954891dd8d360c2a",
+            "039c5d2742173e44315302f510a3bf6b00c412caa650bbec063bfe426479c15b",
+            "83736a54e910107970b2d6bc80d4bf406234275f1bf37b4597229f3d07735577",
+            "972bad592e0942261e4c0b4f214a86b859f17127983391e26ddcdc1a8c15f3f9",
+            "6be6c31d1dee58bf763f1815359df521d48c1921b3709aba81e7c1264a358395",
+            "2129e50936146c685fe769de0f4a2467631b8a308200766cc360f2c0f8b0fa8c",
+            "f150016ccd153dd0d0e4c75be0e66b154b39dbb0b2556edbe1eebe0c5601650f",
+            "df185f217f739c079bc48bfbd3741f8649fabba1597097d6630530a465469f67",
+            "d7695f293ab3d8c79ed0b54b37c923c970d85d1976368223e32792aa6a98e022",
+            "cedd94c1433ebc1b8edc7f5a925494806c24807c34d4827746c5a2a0220799e5",
+            "11a9fd64f1c15a01f28878ddf015cae2ee32963085af2fd1b368a4d509d8d6a6",
+            "32a0b5332177e7f2184c109be176ad3b0547a6d93c51a0fed550b935d232f484",
+            "1a2507b12c67f6bf00f400aa1acb9c2d082ad5d0077a2e600aa2729dc74a1705",
+            "6d7325f42661ae179ce0e35c7809106aa1532dc1a23c04bd3e1b601e65e8ee6d",
+            "2af3758dd138edede661edd79a85cb63497ce2cfdde85035bd15698095b9dcf6",
+            "0a6818d6c4fcf59216918e40413dba02d79dbd9a31cb3e4a859d7ac1be002b99",
+            "1dbef351f7f8976a9601ded8d3bfde8192c597f21f828f2b0fb65d95f4af8b0a",
+            "3185fe1874469fa41015d3b257ba41058a3afddc0c22a6a7822ee8bbeb9360dd",
+            "e9850c758131fc589454e4efaadb708ed74015b9e0bced5c5e18abd487bc9b07",
+            "b162c99e27fff7aa7ceb5c5727265fb44f926f058b3e59ffc26b7f948217f016",
+            "2673242f3bc8cbf819f049b7a2893f919414bc2afc8eb812dc5f2afc29ba11a2",
+            "13af8b76b14e38788a23db33037d41a9c834d5af912aed8f62fa5b4340d907e5",
+            "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+          ]
+        }
+      ]
+    }
+  ]
+}

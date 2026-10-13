@@ -1,0 +1,44 @@
+{
+  "tests": 280,
+  "passed": 280,
+  "failed": 0,
+  "nativeThreeContract": {
+    "runId": "three-contract-1791905080257",
+    "kind": "native three-agent streaming contract",
+    "acceptanceVersion": "native-positive-validation-v5",
+    "claudeBashWrappersVerified": true,
+    "missedFirstReadContinued": false,
+    "usageSource": "scripted-loopback",
+    "paidProviderRequests": 0,
+    "accepted": 27,
+    "runs": 27,
+    "requests": 108,
+    "commonControlsMatched": true,
+    "sourceStable": true,
+    "providerTokenBenefit": null
+  },
+  "nativeLongContract": {
+    "runId": "three-long-contract-1791905080258",
+    "kind": "native long continuation contract",
+    "acceptanceVersion": "native-positive-validation-v5",
+    "claudeBashWrappersVerified": true,
+    "missedFirstReadContinued": true,
+    "usageSource": "scripted-loopback",
+    "paidProviderRequests": 0,
+    "accepted": 0,
+    "runs": 9,
+    "requests": 567,
+    "commonControlsMatched": true,
+    "sourceStable": true,
+    "providerTokenBenefit": null
+  },
+  "claudeMultiTurn": {
+    "kind": "native Claude Code multi-turn contract",
+    "scriptedRequests": 8,
+    "paidRequests": 0,
+    "fullReadVerified": true,
+    "postEditValidationVerified": true,
+    "nativeHistoryVerified": true,
+    "processClosed": true
+  }
+}
