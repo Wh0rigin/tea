@@ -1,0 +1,40 @@
+{
+  "parentCommit": "f4589fa9bb0858902a804d926c142055bf135af2",
+  "candidateCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "changedSourceFiles": [
+    "src/agent.mjs",
+    "src/context-assembler.mjs",
+    "src/memory-benchmark.mjs",
+    "src/tools.mjs"
+  ],
+  "candidateCi": {
+    "allSixChecksPassed": true,
+    "url": "https://github.com/Wh0rigin/tea/actions/runs/38342383341"
+  },
+  "currentRuntimeMatchesParent": true,
+  "hypothesis": "Remove 72 serialized bytes per full source header; preserve full hash in runtime sidecars. Provider token effects measured separately.",
+  "restoredSourceComparison": {
+    "basis": "Git content; working-tree CRLF/LF conversion does not change frozen engine bytes",
+    "filesChecked": 35,
+    "normalizedSourceMatchesParent": true,
+    "workingTreeLineEndingOnlyDifferences": [
+      "src/agent.mjs",
+      "src/benchmark.mjs",
+      "src/config.mjs",
+      "src/context-assembler.mjs",
+      "src/context.mjs",
+      "src/contextos-benchmark.mjs",
+      "src/ledger.mjs",
+      "src/memory-benchmark.mjs",
+      "src/memory.mjs",
+      "src/model.mjs",
+      "src/output.mjs",
+      "src/run-id.mjs",
+      "src/runtime-benchmark.mjs",
+      "src/tool-feedback.mjs",
+      "src/tools.mjs",
+      "src/usage.mjs",
+      "package.json"
+    ]
+  }
+}
