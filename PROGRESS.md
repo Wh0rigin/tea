@@ -232,3 +232,8 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 计划90次，实际90次；968次请求，0次用量未知。新测 TEA归档候选bd41742 / Pi0.87.1 / Claude Code2.1.281，共同GLM-5.3-flash enabled/low，任务和初始源码冻结；没有混用旧样本。完整与中断、代码行为与原生验证分别记录，包含负收益。274/274单元测试，三方27/27原生脚本化任务、108次本地请求及Claude多轮8次检查通过；脚本化用量不是性能证据。默认运行时未启用候选，未合并main。
 
 [中文报告](benchmarks/reports/tea-pi-claude-glm-20261013/README.zh-CN.md) · [English](benchmarks/reports/tea-pi-claude-glm-20261013/README.md)
+
+
+## 2026-10-13：验证命令兼容 v4
+
+识别当前工作区 cd && Node 测试与 2>&1；拒绝管道、掩盖失败与测试过滤。278/278 测试、27/27 原生本地三方任务通过，0 新增付费请求。旧 v3 判分和 Token 不变；图例区分 27 次未确认和 2 次其他失败。旧命令 SHA 核对确认 19 条工作区切换测试及 1 条 tail 管道，不以哈希代替通过摘要。[核查](benchmarks/reports/tea-pi-claude-glm-20261013/validation-compatibility.json)。

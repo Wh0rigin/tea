@@ -19,7 +19,10 @@ for ax,scale,title in zip(axes,scales,titles):
         arm=[r for r in xs if r['agent']==agent];known=[r for r in arm if r['usageComplete'] and r['totalTokens'] is not None]
         if known:
             ys=[r['totalTokens']/1000 for r in known];ax.bar(pos,np.mean(ys),width=.6,color=color,alpha=.85)
-            for offset,row,y in zip(np.linspace(-.20,.20,len(ys)),known,ys):ax.scatter(pos+offset,y,s=30,marker='o' if row['accepted'] else 'x',color='white' if row['accepted'] else '#333333',edgecolors=color if row['accepted'] else None,zorder=3,clip_on=False)
+            for offset,row,y in zip(np.linspace(-.20,.20,len(ys)),known,ys):
+                dims=row['qualityDimensions'];unconfirmed=not row['accepted'] and all(v for k,v in dims.items() if k!='nativePostEditValidation')
+                marker='o' if row['accepted'] else '^' if unconfirmed else 'x'
+                ax.scatter(pos+offset,y,s=30,marker=marker,color='white' if marker!='x' else '#333333',edgecolors=color if marker!='x' else None,zorder=3,clip_on=False)
         count=sum(not r['usageComplete'] for r in arm)
         if count:ax.text(pos,.1,f'{count} unknown',ha='center',transform=ax.get_xaxis_transform(),color='#ab3b36',fontsize=9)
     vals=[r['totalTokens']/1000 for r in xs if r['usageComplete'] and r['totalTokens'] is not None];ax.set_ylim(0,max(vals)*1.3 if vals else 1)
@@ -34,7 +37,7 @@ for ax,scale,title in zip(axes,scales,titles):
         code=' · '.join(f"{stats['roles'][a]['qualityDimensions']['codeCorrect']}/{expected}" for a in agents)
         ax.text(.5,-.24,'TEA / Pi / Claude\nAccepted: '+acc+'\nCode behavior: '+code,ha='center',transform=ax.transAxes,fontsize=9)
 fig.suptitle('Three native coding agents — same GLM-5.3-flash, enabled/low; three repeats',fontsize=16)
-fig.text(.5,.03,'Bars: mean known provider tokens; dots: every known attempt; ×: full acceptance unconfirmed or failed, not necessarily a code error.\nAll cache input and reasoning output included. Native core prompts/tools differ; self-authored fixtures do not establish production generalization.',ha='center',fontsize=10)
+fig.text(.5,.03,'Bars: mean known provider tokens; every known attempt retained. ○: accepted; △: final validation unconfirmed; ×: other acceptance failure.\nHistorical v3 grades unchanged. All cache input and reasoning output included; self-authored fixtures do not establish production generalization.',ha='center',fontsize=10)
 fig.subplots_adjust(left=.055,right=.99,top=.81,bottom=.29,wspace=.35)
 fig.savefig(folder/'three-agents.png',dpi=160);fig.savefig(folder/'three-agents.svg',metadata={'Date':None});plt.close(fig)
 svg=folder/'three-agents.svg';svg.write_bytes(('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf-8').splitlines())+'\n').encode())

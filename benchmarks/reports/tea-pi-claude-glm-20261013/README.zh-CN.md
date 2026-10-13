@@ -44,6 +44,14 @@
 - pi: attempted 3/3, accepted 1/3, code behavior 1/3, native final validation 1/3, compactions 0, known conservative cost USD 0.4208212, reservation USD 0.0000000.
 - claude: attempted 3/3, accepted 2/3, code behavior 3/3, native final validation 2/3, compactions 0, known conservative cost USD 1.9432352, reservation USD 0.0000000.
 
+## 判定器兼容修正（v4）
+
+新增识别 `cd 当前工作区 && node --test …` 和末尾 `2>&1`，也识别 Windows Git Bash 的驱动器路径；继续要求真实通过摘要、成功结果和源码版本稳定。管道、错误掩盖、替换表达式、工作区外目录和测试过滤仍不确认。全量 278/278 测试与原生三方 27/27 本地任务通过，新增付费请求为 0。
+
+旧 v3 记录保持原判分和 Token 数值。离线重建命令并核对 SHA-256，19 条确认属于可兼容的工作区切换测试命令，另 1 条含 tail 管道；没有据此证明旧命令测试通过或重新判分。旧记录不含未识别命令的结果摘要；今后会保留脱敏摘要。图例改为圆点通过、三角最终验证未确认（27 次）、叉号其他验收失败（2 次）。首次本地检查因开发时源码发生变更被保护机制停止，记录保留；源码固定后检查通过。
+
+[兼容核查记录](validation-compatibility.json)
+
 ## 未通过记录
 
 - `small-cache-key-r1/claude`: completed, tokens 28388; nativePostEditValidation.

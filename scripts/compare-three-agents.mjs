@@ -60,7 +60,7 @@ const snapshot = async () => {
   return hash(Buffer.concat(chunks.map(value => Buffer.isBuffer(value) ? value : Buffer.from(value))));
 };
 const sourceHash = await snapshot();
-const report = { schemaVersion: 4, acceptanceVersion: 'native-positive-validation-v3', comparisonKind: 'tea-pi-claude', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
+const report = { schemaVersion: 4, acceptanceVersion: 'native-positive-validation-v4', comparisonKind: 'tea-pi-claude', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
   benchmarkKind: 'Self-authored JavaScript fixtures: nine fresh coding tasks at three sizes plus one empty-start 30-inspection/repair workflow; three repetitions; not production holdout.',
   teaSourceSha256: sourceHash, teaSourceCommit: (await execute('git', ['rev-parse', 'HEAD'], { cwd: ROOT, windowsHide: true })).stdout.trim(),
   claude: { version: claudeVersion, binarySha256: hash(await readFile(claudeCli)) },

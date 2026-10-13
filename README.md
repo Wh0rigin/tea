@@ -32,6 +32,8 @@ Fresh-task total: TEA vs Pi **55.63% fewer**, vs Claude Code **51.93% fewer** to
 
 Fresh code behavior checks (TEA / Pi / Claude Code): **27/27 / 27/27 / 27/27**; full acceptance: **27/27 / 27/27 / 1/27**. Command forms outside the frozen observer grammar remain unconfirmed final validation, not code behavior failures.
 
+Chart: circles accepted, triangles final validation unconfirmed, crosses other acceptance failures. The v4 observer now recognizes workspace-change Node test commands and stderr merging for future runs. Historical v3 grades and token values are unchanged. [Compatibility audit](benchmarks/reports/tea-pi-claude-glm-20261013/validation-compatibility.json).
+
 Long workflow: empty start, 30 native read-only inspections then repair; all attempts TEA vs Pi 76.35% more, vs Claude Code 61.78% fewer tokens; full acceptance 3/3 / 1/3 / 2/3. Interrupted workflows perform unequal work; token gaps are not equal-completion efficiency claims. Both-accepted diagnostic subsets are separate in the report.
 
 90 planned runs, 90 attempted; 968 submitted requests, 0 with unknown usage. Includes cache input, reasoning output, failures and individual regressions. Three self-authored JavaScript defects, three repeats per size, one long workflow; extra files are unrelated modules. Not production generalization. **The measured TEA candidate remains reverted; default runtime is not reenabled.**

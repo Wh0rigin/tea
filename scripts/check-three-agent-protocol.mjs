@@ -27,7 +27,10 @@ const server=createServer(async(req,res)=>{
     const p=patches[family];
     const blocks=n===0?['AGENTS.md',entry,'tests/public.test.mjs'].map((file,i)=>call(agent==='tea'?'read_file':agent==='pi'?'read':'Read',agent==='claude'?{file_path:file}:{path:file},i))
       :n===1?[call(agent==='tea'?'apply_patch':agent==='pi'?'edit':'Edit',agent==='tea'?{path:entry,...p}:agent==='pi'?{path:entry,oldText:p.search,newText:p.replace}:{file_path:entry,old_string:p.search,new_string:p.replace},0)]
-      :n===2?[call(agent==='tea'?'run_tests':agent==='claude'?'Bash':process.platform==='win32'?'powershell':'bash',{command:'node --test tests/public.test.mjs'},0)]
+      :n===2?[call(agent==='tea'?'run_tests':agent==='claude'?'Bash':process.platform==='win32'?'powershell':'bash',
+        {command:agent==='claude' ? caseId.endsWith('r1') ? 'cd . && node --test tests/public.test.mjs 2>&1'
+          : caseId.endsWith('r2') ? 'cd -- "." && node --test tests/public.test.mjs' : 'node --test tests/public.test.mjs 2>&1'
+          : 'node --test tests/public.test.mjs'},0)]
       :[{type:'text',text:'Verified.'}];
     let payload=ev({type:'message_start',message:{id:key+'-'+n,type:'message',role:'assistant',model:b.model,content:[],stop_reason:null,usage:{input_tokens:100,output_tokens:0,cache_read_input_tokens:20}}});
     for(let i=0;i<blocks.length;i++){const x=blocks[i];payload+=ev({type:'content_block_start',index:i,content_block:x.type==='tool_use'?{...x,input:{}}:{type:'text',text:''}});
@@ -47,6 +50,6 @@ try {
   assert.ok(r.requests.every(q=>q.complete && q.totalTokens===140));assert.equal(r.paidProviderRequests,0);
   assert.equal(new Set(controls).size,1);assert.equal(r.analysis.teaVsPi.overall.allPairsTokenReductionPercent,null);
   assert.equal(r.analysis.teaVsClaude.overall.allPairsTokenReductionPercent,null);
-  const record={runId:id,kind:'native three-agent streaming contract',usageSource:'scripted-loopback',paidProviderRequests:0,accepted:27,runs:27,requests:108,commonControlsMatched:true,sourceStable:true,providerTokenBenefit:null};
+  const record={runId:id,kind:'native three-agent streaming contract',acceptanceVersion:r.acceptanceVersion,claudeBashWrappersVerified:true,usageSource:'scripted-loopback',paidProviderRequests:0,accepted:27,runs:27,requests:108,commonControlsMatched:true,sourceStable:true,providerTokenBenefit:null};
   await writeFile(path.join(directory,'contract.json'),JSON.stringify(record,null,2)+'\n');console.log(JSON.stringify(record));
 }finally{server.closeAllConnections();await new Promise(r=>server.close(r));}

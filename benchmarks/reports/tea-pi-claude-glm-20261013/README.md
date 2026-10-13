@@ -44,6 +44,14 @@
 - pi: attempted 3/3, accepted 1/3, code behavior 1/3, native final validation 1/3, compactions 0, known conservative cost USD 0.4208212, reservation USD 0.0000000.
 - claude: attempted 3/3, accepted 2/3, code behavior 3/3, native final validation 2/3, compactions 0, known conservative cost USD 1.9432352, reservation USD 0.0000000.
 
+## Observer compatibility follow-up (v4)
+
+Recognize an optional exact-workspace `cd … && node --test …` and terminal `2>&1`, including Windows Git Bash drive paths. Require positive completion counts, successful results and stable source versions. Pipelines, status masking, substitutions, outside directories and filtered tests remain unconfirmed. Deterministic tests: 278/278; native three-agent loopback: 27/27 tasks; new paid requests: 0.
+
+Historical v3 grades and token totals remain unchanged. Exact SHA-256 reconstruction identified 19 compatible workspace-change test commands and one tail pipeline; it does not prove their original tests passed or regrade them. Old unrecognized commands lack result summaries; future observations retain sanitized summaries. Chart markers: circles accepted, triangles final validation unconfirmed (27), crosses other acceptance failure (2). The first local check was stopped by the source-change guard during development; that record is retained. The check passed with source fixed.
+
+[Compatibility audit](validation-compatibility.json)
+
 ## Unaccepted runs
 
 - `small-cache-key-r1/claude`: completed, tokens 28388; nativePostEditValidation.

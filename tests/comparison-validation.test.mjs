@@ -29,6 +29,47 @@ test('positive summary requires executed tests, all passing counts and failure z
   assert.ok(nodeTestSummary('ℹ tests 1\nℹ pass 1\nℹ fail 0\n').positiveCompletion);
   for (const output of ['exit=0', '# tests 0\n# pass 0\n# fail 0', '# tests 2\n# pass 1\n# fail 0', '# tests 1\n# pass 0\n# fail 1', '# tests 1']) assert.equal(nodeTestSummary(output).positiveCompletion, false);
 });
+test('validation recognizes exact-workspace Bash cd and stderr merging for every agent', () => {
+  for (const command of [`cd "${workspace}" && node --test tests/public.test.mjs`,
+    'cd . && node --test tests/public.test.mjs 2>&1',
+    'cd -- "." && npm test 2>&1', 'node --test tests/public.test.mjs 2>&1',
+    `  cd '${workspace}' && node --test tests/public.test.mjs  `]) {
+    assert.equal(recognizeValidation(command, { workspace, packageScripts: { test: 'node --test tests/public.test.mjs' } }).recognized, true, command);
+  }
+  for (const directory of ['C:/Users/test/project', '/c/Users/test/project', 'C:\\Users\\test\\project']) {
+    assert.equal(recognizeValidation(`cd "${directory}" && node --test tests/public.test.mjs`, { workspace: 'C:\\Users\\test\\project' }).recognized, true);
+  }
+});
+test('Bash compatibility rejects unrelated directories, status masking, substitutions and pipelines', () => {
+  for (const command of ['cd ../other && node --test tests/public.test.mjs', 'cd tests && node --test tests/public.test.mjs',
+    'cd .; node --test tests/public.test.mjs', 'cd . && node --test tests/public.test.mjs || true',
+    'cd . && echo pass && node --test tests/public.test.mjs', 'cd . && node --test tests/public.test.mjs | tail -10',
+    'node --test tests/public.test.mjs > log', 'node --test tests/public.test.mjs 2>&1; true',
+    'node --test tests/public.test.mjs 2>&1 2>&1', 'cd "$PWD" && node --test tests/public.test.mjs',
+    'cd `pwd` && node --test tests/public.test.mjs', 'cd . && node --test --test-only tests/public.test.mjs',
+    'cd . && node --test tests/public.test.mjs\necho pass']) {
+    assert.equal(recognizeValidation(command, { workspace }).recognized, false, command);
+  }
+});
+test('native Bash wrapper still requires passing output, stable sources, and successful completion', () => {
+  for (const agent of ['pi', 'claude']) for (const [output, exitCode, isError, passed] of [
+    [positive.slice(7), 0, false, true], [positive.slice(7), 1, false, false],
+    [positive.slice(7), 0, true, false], ['no tests executed', 0, false, false],
+    ['# tests 1\n# pass 0\n# fail 1', 0, false, false]]) {
+    const audit = createComparisonTurnAudit({ agent, workspace });
+    audit.observe({ type: 'tool_execution_start', toolCallId: 'bash', toolName: 'bash', args: { command: 'cd . && node --test tests/public.test.mjs 2>&1' } });
+    audit.observe({ type: 'tool_execution_end', toolCallId: 'bash', isError, result: { content: [{ type: 'text', text: output }], details: { exitCode } } });
+    assert.equal(audit.finish().validatedAfterEdit, passed, agent + output);
+  }
+});
+test('unknown commands retain sanitized counts without granting validation', () => {
+  const audit = createComparisonTurnAudit({ agent: 'claude', workspace });
+  audit.observe({ type: 'tool_execution_start', toolCallId: 'one', toolName: 'bash', args: { command: 'echo fake | cat' } });
+  audit.observe({ type: 'tool_execution_end', toolCallId: 'one', result: { content: [{ type: 'text', text: positive.slice(7) }] } });
+  const result = audit.finish(); assert.equal(result.validatedAfterEdit, false);
+  assert.equal(result.calls[0].validationEvidence.summary.positiveCompletion, true);
+  assert.equal(result.calls[0].validationEvidence.recognized, false);
+});
 test('native test evidence rejects nonzero exit, denial and missing test results', () => {
   for (const output of ['exit=1\n# tests 1\n# pass 1\n# fail 0', 'exit=0', 'Command denied by user.']) {
     const audit = createComparisonTurnAudit({ agent: 'tea', workspace });

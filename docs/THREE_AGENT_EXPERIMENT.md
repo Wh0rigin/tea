@@ -34,3 +34,9 @@ Report each size and long workflows separately. Pairwise full-workload ratios re
 Run the deterministic suite and native three-agent loopback contract. Separately verify Claude multi-turn history, full source reads and positive post-edit validation. Scripted local usage is never performance evidence. Retain local setup failures; one initial mock omitted SSE event headers and was corrected before paid calls. Freeze the complete source and plan only after these checks pass.
 
 References: [Claude CLI](https://code.claude.com/docs/en/cli-reference), [programmatic execution](https://code.claude.com/docs/en/headless), [automatic memory controls](https://code.claude.com/docs/en/memory).
+
+## Observer compatibility amendment: v4
+
+New runs use `native-positive-validation-v4` for all agents. Recognize one optional `cd` to the exact workspace (including Windows Git Bash drive spelling) followed by `&&` and the declared Node test runner, plus an optional terminal `2>&1`. Require the existing positive test counts, successful settled result and unchanged source versions. This is command observation, not a change to execution permissions or agent prompts. Pipelines, status masking, substitutions, outside directories, filtered tests and arbitrary command chains remain unconfirmed.
+
+Keep sanitized test counts for unrecognized shell commands without granting acceptance. Existing October 13 v3 records retain their original grading and token totals: unrecognized commands previously had only command/output hashes, not result summaries, so command hash reconstruction cannot prove the original tests passed. The historical chart now separates final validation unconfirmed (triangle) from other acceptance failures (cross). Native loopback checks establish adapter compatibility, not new token savings. See [the compatibility audit](../benchmarks/reports/tea-pi-claude-glm-20261013/validation-compatibility.json).

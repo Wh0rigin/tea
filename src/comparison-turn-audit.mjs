@@ -43,7 +43,9 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
       let scripts = packageScripts;
       if (command && getPackageScripts) { try { scripts = getPackageScripts(); } catch { scripts = {}; } }
       const selection = command ? recognizeValidation(command, { workspace, targets: validationTargets, packageScripts: scripts }) : { recognized: false };
-      const summary = selection.recognized ? nodeTestSummary(output) : null;
+      // Retain sanitized counts even for unrecognized commands for future audits;
+      // positive output alone still never grants validation.
+      const summary = kind === 'shell' ? nodeTestSummary(output) : null;
       const explicitExit = tea ? output.match(/^exit=(-?\d+)\b/) : null;
       const exitCode = explicitExit ? Number(explicitExit[1]) : Number.isSafeInteger(event.result?.details?.exitCode) ? event.result.details.exitCode : null;
       const stableSources = !captureSources || versionsEqual(before, after);
@@ -61,7 +63,7 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
           argumentShape: argumentShape ?? null, argumentsSha256: words ? hash(JSON.stringify(words.slice(1))) : null,
           approval: denied ? output.startsWith('Command denied') ? 'denied' : 'unavailable-or-blocked' : 'not-reported', exitCode, settled: true } : null,
         sourceVersionsBefore: before, sourceVersionsAfter: after,
-        validationEvidence: selection.recognized ? { ...selection, summary, stableSources, passed: Boolean(validationPassed) } : { ...selection, passed: false } });
+        validationEvidence: { ...selection, summary, stableSources, passed: Boolean(validationPassed) } });
     } finally { observerMs += performance.now() - startedObserver; }
   };
   return { observe, finish() {

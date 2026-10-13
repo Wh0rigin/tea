@@ -56,7 +56,7 @@ const snapshot = async () => {
   return hash(Buffer.concat(chunks.map(value => Buffer.isBuffer(value) ? value : Buffer.from(value))));
 };
 const sourceHash = await snapshot();
-const report = { schemaVersion: 3, acceptanceVersion: 'native-positive-validation-v3', comparisonKind: revisions ? 'tea-revisions' : 'tea-pi', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
+const report = { schemaVersion: 3, acceptanceVersion: 'native-positive-validation-v4', comparisonKind: revisions ? 'tea-revisions' : 'tea-pi', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
   benchmarkKind: 'Self-authored JavaScript fixtures: nine fresh coding tasks at three sizes plus one empty-start 30-inspection/repair workflow; three repetitions; not production holdout.',
   teaSourceSha256: sourceHash, teaSourceCommit: (await execute('git', ['rev-parse', 'HEAD'], { cwd: ROOT, windowsHide: true })).stdout.trim(),
   pi: revisions ? null : { name: piPackage.name, version: piPackage.version, cliSha256: hash(await readFile(piCli)) },
