@@ -14,6 +14,24 @@ TEA is an independent terminal coding agent built with Node.js. It brings togeth
 
 Our mission is to reduce token consumption while preserving task correctness, code quality, and execution performance. We measure each change, record failures and tradeoffs, and keep a recovery path when reduced context is insufficient.
 
+## Measured token usage
+
+In the **October 13, 2026** comparison, the compact evidence metadata candidate used **54.55% fewer provider tokens** than **Pi 0.87.1** across 27 fresh task pairs:
+
+- **Small — 12 files:** 30.76% fewer tokens.
+- **Medium — 120 files:** 74.23% fewer tokens.
+- **Large — 1,200 files:** 50.49% fewer tokens.
+
+![Measured TEA candidate versus Pi provider token usage](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/tea-vs-pi.png)
+
+Both agents used **GLM-5.3-flash**, **enabled/low** thinking, a **4,096-token** output cap, identical task prompts and initial source snapshots. All **60 runs and 653 requests** are recorded with complete provider usage, including cached input, reasoning output, failures and individual regressions. Fresh-task code behavior passed **27/27 for both**; full acceptance was **TEA 27/27, Pi 26/27**. One Pi run had unconfirmed final validation rather than a code behavior failure.
+
+For the **30-read + repair long conversations**, TEA used **11.85% fewer tokens across all attempts**, with full acceptance **3/3 versus 2/3**. One Pi conversation stopped at its first required read before repair, so completed work differs. The two pairs where both passed used **41.24% fewer TEA tokens**; that diagnostic subset does not replace the result including failures.
+
+These are three self-authored JavaScript defects, three repeats at each repository size, and one long-conversation workflow. Added files are unrelated modules; this is sample evidence rather than a production-wide savings guarantee. Results compare the complete experimental TEA configuration with Pi, including native prompt/tool differences, and do not isolate metadata shortening. TEA enabled ContextOS and capability feedback; model summaries were not executed by either agent. **The measured candidate `bd41742` remains reverted in this branch; these figures describe its archived implementation.**
+
+[Full report](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.md) · [All attempts and usage](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/results.json) · [Frozen protocol](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/frozen-protocol.md) · [Source and verification](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/source-audit.json)
+
 ## Getting started
 
 TEA requires **Node.js 20 or newer** and **Git**. It has no npm runtime dependencies. Run it from a local checkout:
@@ -125,9 +143,9 @@ Current recorded results:
 
 These are offline character/byte measurements, not verified provider token savings or model task success rates. Direct-parent TEA live evaluation, broader language coverage, and independent holdout evaluation remain unfinished. Recent session-vocabulary and discovery changes have no isolated provider-token savings measurement.
 
-### TEA / Pi comparison
+### Earlier TEA / Pi comparisons
 
-Current opt-in **ContextOS C** versus native **Pi 0.87.1**, measured on October 11–12, 2026: same **GLM-5.3-flash**, **enabled/low** thinking, **4,096** output cap and initial Git contents. Three repeats per configuration; all provider input, cache and reasoning output count.
+Earlier opt-in **ContextOS C** versus native **Pi 0.87.1**, measured on October 11–12, 2026: same **GLM-5.3-flash**, **enabled/low** thinking, **4,096** output cap and initial Git contents. Three repeats per configuration; all provider input, cache and reasoning output count. These experiments are recorded separately from the October 13 candidate comparison above.
 
 - **Fresh tasks, existing CLI default of 24 tools/turn:** 27 pairs at 12/120/1,200 files; TEA **708,844** / Pi **1,080,626** tokens, **34.40% fewer** for TEA. Full acceptance **26/27 vs 25/27**. [Default-quota report](benchmarks/reports/contextos-c-vs-pi-default24-glm-20261011/README.md).
 - **Actual empty-start 30-inspection + repair conversation:** three pairs, TEA **905,224** / Pi **1,558,908**, **41.93% fewer**, both **3/3** accepted. This used the original 10-tool/turn profile. P95 TEA/Pi **485.60/463.18s**; it does not establish a speed benefit. [Long conversation and primary failures](benchmarks/reports/contextos-c-vs-pi-glm-20261011/README.md).
