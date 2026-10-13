@@ -1,0 +1,33 @@
+{
+  "paidRequestsAdded": 0,
+  "cohorts": [
+    {
+      "cohort": "fresh",
+      "sourceAndFixtureIdentityMatchFrozenPlan": true,
+      "analysisValid": true,
+      "issues": [],
+      "settledRuns": 54,
+      "nativeControlsMatched": true,
+      "completeUsageRequests": 326,
+      "unknownUsageRequests": 0,
+      "tokenSumsMatchWire": true,
+      "independentRawUsageRecalculationPassed": true,
+      "wireLedgerSha256": "ce50ca4e60d903e65b2fe164243fd242d731ed1e2032cd007baee974b523b22a",
+      "paidRequestsAddedByAudit": 0
+    },
+    {
+      "cohort": "long",
+      "sourceAndFixtureIdentityMatchFrozenPlan": true,
+      "analysisValid": true,
+      "issues": [],
+      "settledRuns": 6,
+      "nativeControlsMatched": true,
+      "completeUsageRequests": 327,
+      "unknownUsageRequests": 0,
+      "tokenSumsMatchWire": true,
+      "independentRawUsageRecalculationPassed": true,
+      "wireLedgerSha256": "0e863bd03ce2df492dd6a60b26989f78c7f56c396f412faae6bc5b3c5769e207",
+      "paidRequestsAddedByAudit": 0
+    }
+  ]
+}

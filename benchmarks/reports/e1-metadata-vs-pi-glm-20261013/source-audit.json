@@ -1,0 +1,40 @@
+{
+  "candidateCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "candidateTestsRerun": {
+    "tests": 276,
+    "passed": 276,
+    "failed": 0,
+    "skipped": 0,
+    "logSha256": "137f5c82dd1a9af7c38dfd89169a9ec19f093d0a0373216ef696a226fe64da4d"
+  },
+  "candidateSixCiPassedUrl": "https://github.com/Wh0rigin/tea/actions/runs/38342383341",
+  "comparisonNativeLoopback": {
+    "paidRequests": 0,
+    "scriptedRequests": 16,
+    "clientsCompleted": 2
+  },
+  "sourceLoadedFromIndependentCandidateCheckout": true,
+  "runtimeDefaultChanged": false,
+  "currentDefaultRuntimeMatchesPreE1Parent": true,
+  "loadedSourceHashes": [
+    {
+      "cohort": "fresh",
+      "teaSourceSha256": "d622a940e669dc70de0aa02344a53563a4972fb41b947db1a770c0974a7064d0",
+      "pi": {
+        "name": "@earendil-works/pi-coding-agent",
+        "version": "0.87.1",
+        "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      }
+    },
+    {
+      "cohort": "long",
+      "teaSourceSha256": "d622a940e669dc70de0aa02344a53563a4972fb41b947db1a770c0974a7064d0",
+      "pi": {
+        "name": "@earendil-works/pi-coding-agent",
+        "version": "0.87.1",
+        "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      }
+    }
+  ],
+  "basis": "Harness hashes actual loaded source bytes, including checkout line endings, before and after. Commit identifies normalized Git contents; no claim that CRLF checkout byte hashes equal Git blob hashes."
+}
