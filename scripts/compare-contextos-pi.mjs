@@ -25,7 +25,7 @@ const execute = promisify(execFile), hash = value => createHash('sha256').update
 const options = {};
 for (let n = 2; n < process.argv.length; n++) {
   const key = process.argv[n];
-  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales', '--baseline-ref', '--candidate-ref', '--candidate-auto-gc', '--both-auto-gc'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
+  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales', '--baseline-ref', '--candidate-ref', '--candidate-auto-gc', '--both-auto-gc', '--candidate-only'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
   options[key.slice(2)] = process.argv[++n];
 }
 const mode = options.mode || 'prepare', repeat = Number(options.repeat || 3), timeoutMs = Number(options['timeout-ms'] || 180000);
@@ -37,6 +37,8 @@ const runId = validateRunId(options['run-id'] || `contextos-pi-${Date.now()}`);
 const revisions = revisionPairOptions(options);
 if (options['candidate-auto-gc'] && (!revisions || options['candidate-auto-gc'] !== 'true')) throw new Error('Candidate auto GC requires a revision comparison');
 if (options['both-auto-gc'] && (!revisions || options['both-auto-gc'] !== 'true' || options['candidate-auto-gc'])) throw new Error('Both auto GC requires an exclusive revision comparison');
+if (options['candidate-only'] && (!revisions || options['candidate-only'] !== 'true')) throw new Error('Candidate-only requires a frozen revision');
+const roles = options['candidate-only'] ? ['candidate'] : revisions ? ['baseline', 'candidate'] : ['tea', 'pi'];
 const output = path.join(ROOT, 'benchmarks', 'results', runId);
 const piRoot = path.resolve(options['pi-package'] || path.join(os.homedir(), 'AppData', 'Roaming', 'npm', 'node_modules', '@earendil-works', 'pi-coding-agent'));
 const piPackage = revisions ? null : JSON.parse(await readFile(path.join(piRoot, 'package.json'), 'utf8')), piCli = revisions ? null : path.join(piRoot, 'dist', 'bundle', 'cli.js');
@@ -77,12 +79,12 @@ const save = () => writeFile(path.join(output, 'comparison.json'), JSON.stringif
 const definitions = [];
 const engines = {};
 if (revisions) {
-  for (const role of ['baseline', 'candidate']) engines[role] = await prepareRevisionEngine({ repository: ROOT, ref: revisions[role], directory: path.join(workspaceRoot, `${role}-engine`) });
+  for (const role of roles) engines[role] = await prepareRevisionEngine({ repository: ROOT, ref: revisions[role], directory: path.join(workspaceRoot, `${role}-engine`) });
   report.engines = Object.fromEntries(Object.entries(engines).map(([role, value]) => [role, { ...value.metadata, sourceUnchanged: false }]));
   report.profileNote = 'Native TEA revisions loaded from committed snapshots; common model, controls, budgets, fixtures and acceptance. No Pi dependency. Frozen engine and harness source hashes are checked separately. All attempted work counts.';
   report.piProfile = null;
 }
-const roles = revisions ? ['baseline', 'candidate'] : ['tea', 'pi'];
+report.singleCandidate = Boolean(options['candidate-only']);
 let gateway;
 try {
   for (const task of groups.includes('fresh') ? taskDefinitions().filter(task => scales.includes(task.scale)) : []) {
@@ -185,14 +187,14 @@ try {
       }
     }
   }
-  report.complete = mode === 'prepare' || report.runs.length === definitions.length * repeat * 2 && !gateway.halted;
+  report.complete = mode === 'prepare' || report.runs.length === definitions.length * repeat * roles.length && !gateway.halted;
   report.accountedUsd = gateway?.accountedUsd ?? 0; report.haltedForUnknownUsageOrLimit = gateway?.halted ?? false;
   report.paidProviderRequests = mode === 'live' ? report.requests.filter(row => row.submitted).length : 0;
   report.endedAt = new Date().toISOString(); report.teaSourceAfterSha256 = await snapshot(); report.sourceUnchanged = sourceHash === report.teaSourceAfterSha256;
   report.piSourceUnchanged = revisions ? null : hash(await readFile(piCli)) === report.pi.cliSha256;
   if (revisions) for (const role of roles) report.engines[role].sourceUnchanged = await engines[role].verify();
-  report.analysis = revisions ? analyzeRevisionComparison(report) : analyzeComparison(report); await save();
-  if (revisions) await writeRevisionComparisonReport(report, output); else await writeComparisonReport(report, output);
+  report.analysis = options['candidate-only'] ? { kind: 'single frozen TEA coverage cohort', ratiosWithheld: true, runs: report.runs.length, accepted: report.runs.filter(run => run.accepted).length } : revisions ? analyzeRevisionComparison(report) : analyzeComparison(report); await save();
+  if (options['candidate-only']) {} else if (revisions) await writeRevisionComparisonReport(report, output); else await writeComparisonReport(report, output);
   console.log(`Saved ${output}; complete=${report.complete}; $${report.accountedUsd.toFixed(6)}`);
 } catch (error) { report.error = redactText(String(error.message)); await save(); throw error; }
 finally { if (gateway) await gateway.close(); }
