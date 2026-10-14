@@ -16,6 +16,23 @@ Our mission is to reduce token consumption while preserving task correctness, co
 
 ## Measured token usage
 
+### TEA fair discovery / recorded Pi / recorded Claude Code
+
+Updated TEA **d76f45f** is aligned with existing **Pi 0.87.1 / Claude Code 2.1.281** fresh-v5 data. Same **GLM-5.3-flash, enabled/low, 4096 output cap**, matching prompts and initial source. **Historical cross-round comparison; Pi/Claude were not rerun.** Only the measured small and large scales are included.
+
+![TEA fair discovery versus recorded Pi and Claude Code](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/three-agents.png)
+
+- **12 files:** TEA **28.86% fewer than Pi**, **71.07% fewer than Claude Code**.
+- **1,200 files:** TEA **86.61% fewer than Pi**, **79.74% fewer than Claude Code**.
+- **18 cases per agent:** TEA **77.41% fewer than Pi**, **76.16% fewer than Claude Code** (151,678 / 671,394 / 636,122 tokens).
+
+Full acceptance **TEA/Pi/Claude: 18/18, 18/18, 12/18**; code behavior **18/18 for all**. Six Claude final validations remain unconfirmed triangles, not failures or passes. Cache and thinking tokens count; all attempts retained. Separate rounds do not control provider-cache/backend randomness; self-authored fixtures are not production holdouts. New TEA medium/long performance is not inferred from older versions.
+
+[Report, alignment and complete data](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/README.md)
+
+<details>
+<summary>Previous TEA version comparison (historical evidence)</summary>
+
 ### TEA / Pi / Claude Code — updated measurements
 
 Measured October 13–14, 2026 with the same **GLM-5.3-flash, enabled/low, 4096/4095 output/thinking caps**, tasks and initial source. **TEA archived candidate bd41742, Pi 0.87.1 and native Claude Code 2.1.281 safe-mode CLI**. Claude Code uses GLM here, not an Anthropic Claude model.
@@ -38,6 +55,9 @@ Circles passed; triangles have only final validation unconfirmed; failure crosse
 
 [Full report](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.md)
 [All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
+
+
+</details>
 
 <details>
 <summary>Earlier v3 comparison (historical evidence)</summary>

@@ -1,0 +1,8 @@
+{
+  "barPolicy": "Known accepted + validation-only-unconfirmed completed runs; failures excluded.",
+  "allKnownAttemptsPlotted": 54,
+  "unknownImputedAsZero": false,
+  "validationUnconfirmedMarkers": 6,
+  "failureMarkers": 0,
+  "ratiosMatchBarPopulation": true
+}

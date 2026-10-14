@@ -1,0 +1,187 @@
+{
+  "comparisonKind": "case-aligned historical-cohort comparison",
+  "newProviderCalls": 0,
+  "completeKnownUsage": true,
+  "allSelectedAttemptsRetained": true,
+  "commonProfile": {
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "maxRequestInputBound": 160000,
+    "maxRequestsPerAgentTask": 100,
+    "api": "anthropic-messages",
+    "apiVersion": "2023-06-01",
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "turnTimeoutMs": 300000
+  },
+  "effectiveControls": {
+    "model": "glm-5.3-flash",
+    "maxTokens": 4096,
+    "thinking": {
+      "type": "enabled",
+      "budget_tokens": 4095
+    },
+    "outputConfig": {
+      "effort": "low"
+    }
+  },
+  "overall": {
+    "scale": "selected-small-and-large",
+    "roles": {
+      "tea": {
+        "runs": 18,
+        "totalTokens": 151678,
+        "accepted": 18,
+        "codeCorrect": 18,
+        "validationUnconfirmed": 0,
+        "failed": 0
+      },
+      "pi": {
+        "runs": 18,
+        "totalTokens": 671394,
+        "accepted": 18,
+        "codeCorrect": 18,
+        "validationUnconfirmed": 0,
+        "failed": 0
+      },
+      "claude": {
+        "runs": 18,
+        "totalTokens": 636122,
+        "accepted": 12,
+        "codeCorrect": 18,
+        "validationUnconfirmed": 6,
+        "failed": 0
+      }
+    },
+    "reductionVsPi": 77.40849635236538,
+    "reductionVsClaude": 76.15583174296754,
+    "bothAcceptedDiagnostic": {
+      "pi": {
+        "caseAlignedBothAcceptedPairs": 18,
+        "reductionPercent": 77.40849635236538
+      },
+      "claude": {
+        "caseAlignedBothAcceptedPairs": 12,
+        "reductionPercent": 78.9863956564363
+      }
+    }
+  },
+  "scales": [
+    {
+      "scale": "small",
+      "roles": {
+        "tea": {
+          "runs": 9,
+          "totalTokens": 76095,
+          "accepted": 9,
+          "codeCorrect": 9,
+          "validationUnconfirmed": 0,
+          "failed": 0
+        },
+        "pi": {
+          "runs": 9,
+          "totalTokens": 106969,
+          "accepted": 9,
+          "codeCorrect": 9,
+          "validationUnconfirmed": 0,
+          "failed": 0
+        },
+        "claude": {
+          "runs": 9,
+          "totalTokens": 263065,
+          "accepted": 6,
+          "codeCorrect": 9,
+          "validationUnconfirmed": 3,
+          "failed": 0
+        }
+      },
+      "reductionVsPi": 28.862567659789285,
+      "reductionVsClaude": 71.07368901222131,
+      "bothAcceptedDiagnostic": {
+        "pi": {
+          "caseAlignedBothAcceptedPairs": 9,
+          "reductionPercent": 28.862567659789285
+        },
+        "claude": {
+          "caseAlignedBothAcceptedPairs": 6,
+          "reductionPercent": 74.24706867167316
+        }
+      }
+    },
+    {
+      "scale": "large",
+      "roles": {
+        "tea": {
+          "runs": 9,
+          "totalTokens": 75583,
+          "accepted": 9,
+          "codeCorrect": 9,
+          "validationUnconfirmed": 0,
+          "failed": 0
+        },
+        "pi": {
+          "runs": 9,
+          "totalTokens": 564425,
+          "accepted": 9,
+          "codeCorrect": 9,
+          "validationUnconfirmed": 0,
+          "failed": 0
+        },
+        "claude": {
+          "runs": 9,
+          "totalTokens": 373057,
+          "accepted": 6,
+          "codeCorrect": 9,
+          "validationUnconfirmed": 3,
+          "failed": 0
+        }
+      },
+      "reductionVsPi": 86.60884971431102,
+      "reductionVsClaude": 79.73955722583949,
+      "bothAcceptedDiagnostic": {
+        "pi": {
+          "caseAlignedBothAcceptedPairs": 9,
+          "reductionPercent": 86.60884971431102
+        },
+        "claude": {
+          "caseAlignedBothAcceptedPairs": 6,
+          "reductionPercent": 81.86287410266533
+        }
+      }
+    }
+  ],
+  "sources": {
+    "tea": {
+      "path": "benchmarks/reports/discovery-repair-20261014/comparison.json",
+      "sha256": "a8355dc431e2b472bd0c51e55cc95c852ee40cd6570491c7f76c6bff18c977aa"
+    },
+    "historicalAgents": {
+      "path": "benchmarks/reports/tea-pi-claude-v5-glm-20261013/results.json",
+      "sha256": "44f53192cd57680b5cdb4c107ec36bf46fc8ef91f0feb3d967faf9a870392f81"
+    },
+    "historicalPlan": {
+      "path": "benchmarks/reports/tea-pi-claude-v5-glm-20261013/frozen-plan.json",
+      "sha256": "0371f3ee7f6a732b38e7d1f96d382efd51e1aac0907cebf572052e3466ba5556"
+    }
+  },
+  "identities": {
+    "tea": "d76f45f3b102dc8db2c96a4e6917c2659d86b085",
+    "pi": {
+      "name": "@earendil-works/pi-coding-agent",
+      "version": "0.87.1",
+      "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+    },
+    "claude": {
+      "version": "2.1.281",
+      "binarySha256": "39be063c2512b43347fe7b0ab18c46f1596141701c9c5fc895ddfca9a051067c"
+    }
+  },
+  "limitations": [
+    "Separate measurement rounds, not a simultaneous three-agent rerun.",
+    "Cache state, server load and backend sampling are not fixed across rounds.",
+    "Six Claude attempts have final validation unconfirmed; historical grades are unchanged.",
+    "No new-version medium or long-session data; those are excluded.",
+    "Self-authored JavaScript fixtures, three repeats; not production generalization."
+  ]
+}

@@ -267,3 +267,7 @@ Post-hoc diagnosis: reconstructed first request hashes matched 18/18; all 9 larg
 ## 2026-10-14: Fair discovery repair
 
 Rotating directory traversal, bounded default listing and resumable search; small inventories retain old wire schemas until capped search. 307/307 deterministic tests, 36/36 native loopback runs / 144 requests, then 36/36 provider acceptance / 226 requests. Direct-parent paired usage: 506,421 -> 151,678 (-70.05%); large -82.02%, small -11.65%. Small Unicode +26.73%, all regressions retained. No summary calls, no Pi/Claude calls, no paid retries or unknown usage. Evidence: benchmarks/reports/discovery-repair-20261014. Source/runtime frozen during calls. Stop stage and await review.
+
+## 2026-10-14: Recorded-agent comparison after discovery repair
+
+Aligned TEA d76f45f small/large data with historical Pi 0.87.1 and Claude Code 2.1.281 fresh-v5 data; zero new provider calls. All six prompt/source identities and effective model controls match. 18 runs per agent, 54 attempts / 302 complete requests. Totals TEA/Pi/Claude: 151,678 / 671,394 / 636,122; TEA 77.41% / 76.16% fewer. Full acceptance 18/18, 18/18, 12/18; six historical validation-unconfirmed attempts retain triangles. Separate rounds, no backend/cache equivalence claim; no new TEA medium/long data. Updated bilingual README and PNG/SVG; historical evidence retained.

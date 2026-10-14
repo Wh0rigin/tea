@@ -16,6 +16,23 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 ## 实测 Token 用量
 
+### 新版 TEA / 历史 Pi / 历史 Claude Code
+
+公平检索修复版 **TEA d76f45f** 对齐历史 fresh-v5 的 **Pi 0.87.1 / Claude Code 2.1.281** 数据。相同 **GLM-5.3-flash、enabled/low、4096 输出上限**，任务提示与初始源码匹配。**跨轮次历史对比，未重测 Pi/Claude**；只纳入新版已测的小型与大型场景。
+
+![新版 TEA 与历史 Pi、Claude Code 对比](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/three-agents.png)
+
+- **12 文件：**TEA 对 Pi **减少 28.86%**，对 Claude Code **减少 71.07%**。
+- **1,200 文件：**TEA 对 Pi **减少 86.61%**，对 Claude Code **减少 79.74%**。
+- **每 Agent 18 次：**TEA 对 Pi **减少 77.41%**，对 Claude Code **减少 76.16%**（151,678 / 671,394 / 636,122 Token）。
+
+完整验收 **TEA/Pi/Claude：18/18、18/18、12/18**；三方代码行为均 **18/18**。Claude 6 次最终验证未确认，保留三角，不改成失败或通过。包含缓存与思考用量，所有尝试保留。跨轮次没有控制缓存/后端随机性，自建场景不保证生产泛化；新版中型与长会话数据不由旧版代替。
+
+[报告、对齐审计与完整数据](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/README.zh-CN.md)
+
+<details>
+<summary>旧 TEA 版本对比（历史证据）</summary>
+
 ### TEA / Pi / Claude Code 最新实测
 
 2026 年 10 月 13–14 日：相同 **GLM-5.3-flash、enabled/low、4096/4095 输出/思考上限**，相同任务与初始源码。受测软件为 **TEA 归档候选 bd41742、Pi 0.87.1、Claude Code 2.1.281 原生 safe-mode CLI**。Claude Code 使用的也是 GLM，不是 Anthropic Claude 模型。
@@ -38,6 +55,9 @@ Claude Code 完整验收从旧实验 **1/27 变为 18/27**，未确认三角从 
 
 [完整报告](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.zh-CN.md)
 [All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
+
+
+</details>
 
 <details>
 <summary>旧 v3 比较（历史证据）</summary>
