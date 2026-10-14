@@ -17,7 +17,7 @@ import { createComparisonTurnAudit } from '../src/comparison-turn-audit.mjs';
 import { analyzeComparison, writeComparisonReport } from '../src/comparison-report.mjs';
 import { prepareRevisionEngine, revisionPairOptions } from '../src/comparison-revisions.mjs';
 import { analyzeRevisionComparison, writeRevisionComparisonReport } from '../src/comparison-revision-report.mjs';
-import { acceptanceDimensions } from '../src/comparison-validation.mjs';
+import { acceptanceDimensions, shouldStopComparisonTurn } from '../src/comparison-validation.mjs';
 import { createSourceCapture, createPackageScriptReader } from '../src/comparison-source-capture.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -56,7 +56,7 @@ const snapshot = async () => {
   return hash(Buffer.concat(chunks.map(value => Buffer.isBuffer(value) ? value : Buffer.from(value))));
 };
 const sourceHash = await snapshot();
-const report = { schemaVersion: 3, acceptanceVersion: 'native-positive-validation-v3', comparisonKind: revisions ? 'tea-revisions' : 'tea-pi', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
+const report = { schemaVersion: 3, acceptanceVersion: 'native-positive-validation-v6', stoppingPolicy: 'continue-completed-turns-grade-requirements', comparisonKind: revisions ? 'tea-revisions' : 'tea-pi', mode, runId, startedAt: new Date().toISOString(), usageSource: mode === 'live' ? 'provider-wire' : mode === 'contract' ? 'scripted-loopback' : 'none', paidProviderRequests: 0,
   benchmarkKind: 'Self-authored JavaScript fixtures: nine fresh coding tasks at three sizes plus one empty-start 30-inspection/repair workflow; three repetitions; not production holdout.',
   teaSourceSha256: sourceHash, teaSourceCommit: (await execute('git', ['rev-parse', 'HEAD'], { cwd: ROOT, windowsHide: true })).stdout.trim(),
   pi: revisions ? null : { name: piPackage.name, version: piPackage.version, cliSha256: hash(await readFile(piCli)) },
@@ -158,9 +158,9 @@ try {
             run.toolCalls += result.toolCalls; run.compactions += result.compactions || 0;
             await save();
             if (phase % 5 === 4 || phase === prompts.length - 1) console.log(`  ${caseId}/${agent}: ${phase + 1}/${prompts.length} turns`);
-            if (result.status !== 'completed' || !requirements.passed) { run.error = result.errorMessage || 'Native turn incomplete or read-only/full-source requirement failed'; break; }
+            if (shouldStopComparisonTurn({ status: result.status, requirements, requiredPath })) { run.error = result.errorMessage || 'Native turn incomplete or protocol failure'; break; }
           }
-          if (run.turns.length === prompts.length && run.turns.every(turn => turn.status === 'completed' && turn.requirements.passed)) run.status = 'completed';
+          if (!run.error && run.turns.length === prompts.length && run.turns.every(turn => turn.status === 'completed')) run.status = 'completed';
         } catch (error) { run.error = redactText(String(error.message)).replaceAll(workspace, '[WORKSPACE]').slice(0, 1000); }
         finally { if (piSession) Object.assign(run, await piSession.close()); }
         await gateway.waitForIdle();

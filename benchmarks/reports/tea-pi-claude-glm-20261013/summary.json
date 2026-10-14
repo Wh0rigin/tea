@@ -1,0 +1,631 @@
+{
+  "stage": "Native TEA / Pi / Claude Code comparison",
+  "complete": true,
+  "plannedRuns": 90,
+  "attemptedRuns": 90,
+  "submittedRequests": 968,
+  "completeUsageRequests": 968,
+  "unknownUsageRequests": 0,
+  "teaCommit": "bd41742d683dfcda69f240223ff6b27815f3dd08",
+  "harnessCommit": "59ddb3c5d024076d74968515052e53619bb72cdf",
+  "pi": {
+    "name": "@earendil-works/pi-coding-agent",
+    "version": "0.87.1",
+    "cliSha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+  },
+  "claude": {
+    "version": "2.1.281",
+    "binarySha256": "39be063c2512b43347fe7b0ab18c46f1596141701c9c5fc895ddfca9a051067c"
+  },
+  "cohorts": [
+    {
+      "name": "fresh",
+      "started": true,
+      "complete": true,
+      "attemptedRuns": 81,
+      "plannedRuns": 81,
+      "runId": "tea-pi-claude-fresh-glm-20261013-1791895224976584700",
+      "roles": {
+        "tea": {
+          "runs": 27,
+          "expectedRuns": 27,
+          "accepted": 27,
+          "qualityDimensions": {
+            "codeCorrect": 27,
+            "scopeCorrect": 27,
+            "declaredReadRequirements": 27,
+            "nativePostEditValidation": 27,
+            "nativeCompleted": 27,
+            "usageComplete": 27
+          },
+          "totalTokens": 482327,
+          "knownUsageTokens": 482327,
+          "submittedRequests": 175,
+          "unknownRequests": 0,
+          "knownCostUsd": 0.4049796,
+          "reservedUsd": 0,
+          "compactions": 0
+        },
+        "pi": {
+          "runs": 27,
+          "expectedRuns": 27,
+          "accepted": 27,
+          "qualityDimensions": {
+            "codeCorrect": 27,
+            "scopeCorrect": 27,
+            "declaredReadRequirements": 27,
+            "nativePostEditValidation": 27,
+            "nativeCompleted": 27,
+            "usageComplete": 27
+          },
+          "totalTokens": 1087051,
+          "knownUsageTokens": 1087051,
+          "submittedRequests": 149,
+          "unknownRequests": 0,
+          "knownCostUsd": 0.8843968000000001,
+          "reservedUsd": 0,
+          "compactions": 0
+        },
+        "claude": {
+          "runs": 27,
+          "expectedRuns": 27,
+          "accepted": 1,
+          "qualityDimensions": {
+            "codeCorrect": 27,
+            "scopeCorrect": 27,
+            "declaredReadRequirements": 27,
+            "nativePostEditValidation": 1,
+            "nativeCompleted": 27,
+            "usageComplete": 27
+          },
+          "totalTokens": 1003423,
+          "knownUsageTokens": 1003423,
+          "submittedRequests": 180,
+          "unknownRequests": 0,
+          "knownCostUsd": 0.8397244,
+          "reservedUsd": 0,
+          "compactions": 0
+        }
+      },
+      "scales": [
+        {
+          "scale": "small",
+          "roles": {
+            "tea": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 9,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 9,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 72897,
+              "knownUsageTokens": 72897,
+              "submittedRequests": 45,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.0641336,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "pi": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 9,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 9,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 110482,
+              "knownUsageTokens": 110482,
+              "submittedRequests": 48,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.0923096,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "claude": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 0,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 0,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 277132,
+              "knownUsageTokens": 277132,
+              "submittedRequests": 58,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.23377360000000003,
+              "reservedUsd": 0,
+              "compactions": 0
+            }
+          },
+          "reductionVsPi": 34.019116236128966,
+          "reductionVsClaude": 73.69592829409812,
+          "knownPairsVsPi": 9,
+          "knownPairsVsClaude": 9
+        },
+        {
+          "scale": "medium",
+          "roles": {
+            "tea": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 9,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 9,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 73911,
+              "knownUsageTokens": 73911,
+              "submittedRequests": 47,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.0643528,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "pi": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 9,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 9,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 303904,
+              "knownUsageTokens": 303904,
+              "submittedRequests": 54,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.24877120000000003,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "claude": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 1,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 1,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 315539,
+              "knownUsageTokens": 315539,
+              "submittedRequests": 63,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.2651432,
+              "reservedUsd": 0,
+              "compactions": 0
+            }
+          },
+          "reductionVsPi": 75.6794908918606,
+          "reductionVsClaude": 76.57627107901084,
+          "knownPairsVsPi": 9,
+          "knownPairsVsClaude": 9
+        },
+        {
+          "scale": "large",
+          "roles": {
+            "tea": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 9,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 9,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 335519,
+              "knownUsageTokens": 335519,
+              "submittedRequests": 83,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.2764932,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "pi": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 9,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 9,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 672665,
+              "knownUsageTokens": 672665,
+              "submittedRequests": 47,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.543316,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "claude": {
+              "runs": 9,
+              "expectedRuns": 9,
+              "accepted": 0,
+              "qualityDimensions": {
+                "codeCorrect": 9,
+                "scopeCorrect": 9,
+                "declaredReadRequirements": 9,
+                "nativePostEditValidation": 0,
+                "nativeCompleted": 9,
+                "usageComplete": 9
+              },
+              "totalTokens": 410752,
+              "knownUsageTokens": 410752,
+              "submittedRequests": 59,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.34080760000000004,
+              "reservedUsd": 0,
+              "compactions": 0
+            }
+          },
+          "reductionVsPi": 50.120936870507606,
+          "reductionVsClaude": 18.315918120909934,
+          "knownPairsVsPi": 9,
+          "knownPairsVsClaude": 9
+        }
+      ],
+      "comparisons": {
+        "teaVsPi": {
+          "overall": {
+            "expectedPairs": 27,
+            "measuredPairs": 27,
+            "bothAcceptedPairs": 27,
+            "teaAccepted": 27,
+            "piAccepted": 27,
+            "teaMeasuredTokens": 482327,
+            "piMeasuredTokens": 1087051,
+            "allPairsTokenReductionPercent": 55.629772660160384,
+            "bothAcceptedTeaTokens": 482327,
+            "bothAcceptedPiTokens": 1087051,
+            "bothAcceptedTokenReductionPercent": 55.629772660160384
+          },
+          "scales": [
+            {
+              "scale": "small",
+              "expectedPairs": 9,
+              "measuredPairs": 9,
+              "bothAcceptedPairs": 9,
+              "teaAccepted": 9,
+              "piAccepted": 9,
+              "teaMeasuredTokens": 72897,
+              "piMeasuredTokens": 110482,
+              "allPairsTokenReductionPercent": 34.019116236128966,
+              "bothAcceptedTeaTokens": 72897,
+              "bothAcceptedPiTokens": 110482,
+              "bothAcceptedTokenReductionPercent": 34.019116236128966
+            },
+            {
+              "scale": "medium",
+              "expectedPairs": 9,
+              "measuredPairs": 9,
+              "bothAcceptedPairs": 9,
+              "teaAccepted": 9,
+              "piAccepted": 9,
+              "teaMeasuredTokens": 73911,
+              "piMeasuredTokens": 303904,
+              "allPairsTokenReductionPercent": 75.6794908918606,
+              "bothAcceptedTeaTokens": 73911,
+              "bothAcceptedPiTokens": 303904,
+              "bothAcceptedTokenReductionPercent": 75.6794908918606
+            },
+            {
+              "scale": "large",
+              "expectedPairs": 9,
+              "measuredPairs": 9,
+              "bothAcceptedPairs": 9,
+              "teaAccepted": 9,
+              "piAccepted": 9,
+              "teaMeasuredTokens": 335519,
+              "piMeasuredTokens": 672665,
+              "allPairsTokenReductionPercent": 50.120936870507606,
+              "bothAcceptedTeaTokens": 335519,
+              "bothAcceptedPiTokens": 672665,
+              "bothAcceptedTokenReductionPercent": 50.120936870507606
+            }
+          ]
+        },
+        "teaVsClaude": {
+          "overall": {
+            "expectedPairs": 27,
+            "measuredPairs": 27,
+            "bothAcceptedPairs": 1,
+            "teaAccepted": 27,
+            "piAccepted": 1,
+            "teaMeasuredTokens": 482327,
+            "piMeasuredTokens": 1003423,
+            "allPairsTokenReductionPercent": 51.931837320850725,
+            "bothAcceptedTeaTokens": 5815,
+            "bothAcceptedPiTokens": 30124,
+            "bothAcceptedTokenReductionPercent": 80.6964546540964
+          },
+          "scales": [
+            {
+              "scale": "small",
+              "expectedPairs": 9,
+              "measuredPairs": 9,
+              "bothAcceptedPairs": 0,
+              "teaAccepted": 9,
+              "piAccepted": 0,
+              "teaMeasuredTokens": 72897,
+              "piMeasuredTokens": 277132,
+              "allPairsTokenReductionPercent": 73.69592829409812,
+              "bothAcceptedTeaTokens": null,
+              "bothAcceptedPiTokens": null,
+              "bothAcceptedTokenReductionPercent": null
+            },
+            {
+              "scale": "medium",
+              "expectedPairs": 9,
+              "measuredPairs": 9,
+              "bothAcceptedPairs": 1,
+              "teaAccepted": 9,
+              "piAccepted": 1,
+              "teaMeasuredTokens": 73911,
+              "piMeasuredTokens": 315539,
+              "allPairsTokenReductionPercent": 76.57627107901084,
+              "bothAcceptedTeaTokens": 5815,
+              "bothAcceptedPiTokens": 30124,
+              "bothAcceptedTokenReductionPercent": 80.6964546540964
+            },
+            {
+              "scale": "large",
+              "expectedPairs": 9,
+              "measuredPairs": 9,
+              "bothAcceptedPairs": 0,
+              "teaAccepted": 9,
+              "piAccepted": 0,
+              "teaMeasuredTokens": 335519,
+              "piMeasuredTokens": 410752,
+              "allPairsTokenReductionPercent": 18.315918120909934,
+              "bothAcceptedTeaTokens": null,
+              "bothAcceptedPiTokens": null,
+              "bothAcceptedTokenReductionPercent": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "long",
+      "started": true,
+      "complete": true,
+      "attemptedRuns": 9,
+      "plannedRuns": 9,
+      "runId": "tea-pi-claude-long-glm-20261013-1791895224976584700",
+      "roles": {
+        "tea": {
+          "runs": 3,
+          "expectedRuns": 3,
+          "accepted": 3,
+          "qualityDimensions": {
+            "codeCorrect": 3,
+            "scopeCorrect": 3,
+            "declaredReadRequirements": 3,
+            "nativePostEditValidation": 3,
+            "nativeCompleted": 3,
+            "usageComplete": 3
+          },
+          "totalTokens": 920730,
+          "knownUsageTokens": 920730,
+          "submittedRequests": 200,
+          "unknownRequests": 0,
+          "knownCostUsd": 0.746556,
+          "reservedUsd": 0,
+          "compactions": 0
+        },
+        "pi": {
+          "runs": 3,
+          "expectedRuns": 3,
+          "accepted": 1,
+          "qualityDimensions": {
+            "codeCorrect": 1,
+            "scopeCorrect": 3,
+            "declaredReadRequirements": 1,
+            "nativePostEditValidation": 1,
+            "nativeCompleted": 1,
+            "usageComplete": 3
+          },
+          "totalTokens": 522099,
+          "knownUsageTokens": 522099,
+          "submittedRequests": 66,
+          "unknownRequests": 0,
+          "knownCostUsd": 0.4208212,
+          "reservedUsd": 0,
+          "compactions": 0
+        },
+        "claude": {
+          "runs": 3,
+          "expectedRuns": 3,
+          "accepted": 2,
+          "qualityDimensions": {
+            "codeCorrect": 3,
+            "scopeCorrect": 3,
+            "declaredReadRequirements": 3,
+            "nativePostEditValidation": 2,
+            "nativeCompleted": 3,
+            "usageComplete": 3
+          },
+          "totalTokens": 2409039,
+          "knownUsageTokens": 2409039,
+          "submittedRequests": 198,
+          "unknownRequests": 0,
+          "knownCostUsd": 1.9432352000000002,
+          "reservedUsd": 0,
+          "compactions": 0
+        }
+      },
+      "scales": [
+        {
+          "scale": "long-session",
+          "roles": {
+            "tea": {
+              "runs": 3,
+              "expectedRuns": 3,
+              "accepted": 3,
+              "qualityDimensions": {
+                "codeCorrect": 3,
+                "scopeCorrect": 3,
+                "declaredReadRequirements": 3,
+                "nativePostEditValidation": 3,
+                "nativeCompleted": 3,
+                "usageComplete": 3
+              },
+              "totalTokens": 920730,
+              "knownUsageTokens": 920730,
+              "submittedRequests": 200,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.746556,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "pi": {
+              "runs": 3,
+              "expectedRuns": 3,
+              "accepted": 1,
+              "qualityDimensions": {
+                "codeCorrect": 1,
+                "scopeCorrect": 3,
+                "declaredReadRequirements": 1,
+                "nativePostEditValidation": 1,
+                "nativeCompleted": 1,
+                "usageComplete": 3
+              },
+              "totalTokens": 522099,
+              "knownUsageTokens": 522099,
+              "submittedRequests": 66,
+              "unknownRequests": 0,
+              "knownCostUsd": 0.4208212,
+              "reservedUsd": 0,
+              "compactions": 0
+            },
+            "claude": {
+              "runs": 3,
+              "expectedRuns": 3,
+              "accepted": 2,
+              "qualityDimensions": {
+                "codeCorrect": 3,
+                "scopeCorrect": 3,
+                "declaredReadRequirements": 3,
+                "nativePostEditValidation": 2,
+                "nativeCompleted": 3,
+                "usageComplete": 3
+              },
+              "totalTokens": 2409039,
+              "knownUsageTokens": 2409039,
+              "submittedRequests": 198,
+              "unknownRequests": 0,
+              "knownCostUsd": 1.9432352000000002,
+              "reservedUsd": 0,
+              "compactions": 0
+            }
+          },
+          "reductionVsPi": -76.35161147598444,
+          "reductionVsClaude": 61.78019533930335,
+          "knownPairsVsPi": 3,
+          "knownPairsVsClaude": 3
+        }
+      ],
+      "comparisons": {
+        "teaVsPi": {
+          "overall": {
+            "expectedPairs": 3,
+            "measuredPairs": 3,
+            "bothAcceptedPairs": 1,
+            "teaAccepted": 3,
+            "piAccepted": 1,
+            "teaMeasuredTokens": 920730,
+            "piMeasuredTokens": 522099,
+            "allPairsTokenReductionPercent": -76.35161147598444,
+            "bothAcceptedTeaTokens": 302160,
+            "bothAcceptedPiTokens": 518936,
+            "bothAcceptedTokenReductionPercent": 41.77316663326499
+          },
+          "scales": [
+            {
+              "scale": "long-session",
+              "expectedPairs": 3,
+              "measuredPairs": 3,
+              "bothAcceptedPairs": 1,
+              "teaAccepted": 3,
+              "piAccepted": 1,
+              "teaMeasuredTokens": 920730,
+              "piMeasuredTokens": 522099,
+              "allPairsTokenReductionPercent": -76.35161147598444,
+              "bothAcceptedTeaTokens": 302160,
+              "bothAcceptedPiTokens": 518936,
+              "bothAcceptedTokenReductionPercent": 41.77316663326499
+            }
+          ]
+        },
+        "teaVsClaude": {
+          "overall": {
+            "expectedPairs": 3,
+            "measuredPairs": 3,
+            "bothAcceptedPairs": 2,
+            "teaAccepted": 3,
+            "piAccepted": 2,
+            "teaMeasuredTokens": 920730,
+            "piMeasuredTokens": 2409039,
+            "allPairsTokenReductionPercent": 61.78019533930335,
+            "bothAcceptedTeaTokens": 606627,
+            "bothAcceptedPiTokens": 1584393,
+            "bothAcceptedTokenReductionPercent": 61.712340309506544
+          },
+          "scales": [
+            {
+              "scale": "long-session",
+              "expectedPairs": 3,
+              "measuredPairs": 3,
+              "bothAcceptedPairs": 2,
+              "teaAccepted": 3,
+              "piAccepted": 2,
+              "teaMeasuredTokens": 920730,
+              "piMeasuredTokens": 2409039,
+              "allPairsTokenReductionPercent": 61.78019533930335,
+              "bothAcceptedTeaTokens": 606627,
+              "bothAcceptedPiTokens": 1584393,
+              "bothAcceptedTokenReductionPercent": 61.712340309506544
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "knownConservativeCostUsd": 5.239713200000001,
+  "reservedUsd": 0,
+  "priceBasis": "Configured conservative rates, not invoice",
+  "defaultRuntimeCandidateReenabled": false,
+  "earlierUnknownReservationsRemainSeparate": true
+}

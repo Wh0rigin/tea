@@ -15,7 +15,7 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
   const observe = event => {
     const startedObserver = performance.now();
     try {
-      const tea = agent !== 'pi';
+      const tea = !['pi', 'claude'].includes(agent);
       const start = tea ? event.type === 'tool_start' : event.type === 'tool_execution_start';
       const end = tea ? event.type === 'tool_end' : event.type === 'tool_execution_end';
       const key = tea ? 'native-tea' : event.toolCallId;
@@ -43,7 +43,9 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
       let scripts = packageScripts;
       if (command && getPackageScripts) { try { scripts = getPackageScripts(); } catch { scripts = {}; } }
       const selection = command ? recognizeValidation(command, { workspace, targets: validationTargets, packageScripts: scripts }) : { recognized: false };
-      const summary = selection.recognized ? nodeTestSummary(output) : null;
+      // Retain sanitized counts even for unrecognized commands for future audits;
+      // positive output alone still never grants validation.
+      const summary = kind === 'shell' ? nodeTestSummary(output) : null;
       const explicitExit = tea ? output.match(/^exit=(-?\d+)\b/) : null;
       const exitCode = explicitExit ? Number(explicitExit[1]) : Number.isSafeInteger(event.result?.details?.exitCode) ? event.result.details.exitCode : null;
       const stableSources = !captureSources || versionsEqual(before, after);
@@ -54,19 +56,22 @@ export function createComparisonTurnAudit({ agent, workspace, requiredPath, expe
       const argumentShape = words?.slice(1).map(arg => arg.startsWith('-') && arg.length < 120 ? arg.split('=')[0]
         : arg.replaceAll('\\', '/').startsWith('tests/') || arg.replaceAll('\\', '/').startsWith('./tests/') ? 'test-path' : 'value');
       calls.push({ name: call.name, kind, relativePath, success, outputSha256: hash(output), relevantValidation: Boolean(selection.recognized),
+        ...(agent === 'claude' ? { nativeOutputSha256: event.result?.details?.nativeOutputSha256 ?? null,
+          readNumberingDecoded: Boolean(event.result?.details?.readNumberingDecoded) } : {}),
         startedAt: call.startedAt ?? null, completedAt: new Date().toISOString(), elapsedMs: event.elapsedMs ?? (call.startedMs ? performance.now() - call.startedMs : null),
         execution: command ? { commandSha256: hash(command), program: words?.[0]?.replaceAll('\\', '/').split('/').at(-1) || null,
           argumentShape: argumentShape ?? null, argumentsSha256: words ? hash(JSON.stringify(words.slice(1))) : null,
           approval: denied ? output.startsWith('Command denied') ? 'denied' : 'unavailable-or-blocked' : 'not-reported', exitCode, settled: true } : null,
         sourceVersionsBefore: before, sourceVersionsAfter: after,
-        validationEvidence: selection.recognized ? { ...selection, summary, stableSources, passed: Boolean(validationPassed) } : { ...selection, passed: false } });
+        validationEvidence: { ...selection, summary, stableSources, passed: Boolean(validationPassed) } });
     } finally { observerMs += performance.now() - startedObserver; }
   };
   return { observe, finish() {
     if (captureSources && validatedAfterEdit && !versionsEqual(validatedSources, sources())) validatedAfterEdit = false;
     const fullSourceRead = !requiredPath || calls.some(call => call.kind === 'read' && call.success && call.relativePath === requiredPath && call.outputSha256 === hash(expectedOutput));
     const readOnlyHonored = !readOnly || !calls.some(call => ['edit', 'shell'].includes(call.kind));
-    return { calls, fullSourceRead, readOnlyHonored, passed: fullSourceRead && readOnlyHonored && pending.size === 0 && !calls.some(call => call.malformed),
+    const eventsComplete = pending.size === 0 && !calls.some(call => call.malformed);
+    return { calls, fullSourceRead, readOnlyHonored, eventsComplete, passed: fullSourceRead && readOnlyHonored && eventsComplete,
       expectedOutputSha256: requiredPath ? hash(expectedOutput) : null, validatedAfterEdit, observerMs };
   } };
 }

@@ -16,6 +16,61 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 ## 实测 Token 用量
 
+### TEA / Pi / Claude Code 最新实测
+
+2026 年 10 月 13–14 日：相同 **GLM-5.3-flash、enabled/low、4096/4095 输出/思考上限**，相同任务与初始源码。受测软件为 **TEA 归档候选 bd41742、Pi 0.87.1、Claude Code 2.1.281 原生 safe-mode CLI**。Claude Code 使用的也是 GLM，不是 Anthropic Claude 模型。
+
+普通任务 81 次为 v5，Long v6 经授权重测完成 9 次，两组独立冻结。v6 将正常完结的要求违规记分后继续，不以漏读或只读违规截断会话；旧 v5 Long 数据保留。不是统一的一次 90 样本源码冻结。
+
+![Three native coding agents](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/three-agents.png)
+
+- **12 文件**: TEA vs Pi 减少 26.27%; vs Claude Code 减少 70.02%.
+- **120 文件**: TEA vs Pi 减少 77.18%; vs Claude Code 减少 76.48%.
+- **1,200 文件**: TEA vs Pi 减少 40.37%; vs Claude Code 减少 9.78%.
+
+普通任务全尝试总量：TEA 对 Pi **减少 50.60%**，对 Claude Code **减少 48.26%**。
+
+Claude Code 完整验收从旧实验 **1/27 变为 18/27**，未确认三角从 **26 个降至 9 个**；主要命令识别问题已修复，剩余复杂命令仍未确认，不伪造通过。普通任务三方代码行为检查均为 **27/27**，完整验收 TEA/Pi/Claude 为 **27/27、27/27、18/27**。
+
+**Long v6 经授权重测已完成：TEA / Pi / Claude 均完整通过 3/3，587 笔请求用量全部已知。TEA 比 Pi 减少 41.36%，比 Claude Code 减少 62.40%（总量分别为 905,432 / 1,544,126 / 2,407,974 token）。上次中断组与 USD 0.2674688 预留单独保留，本次成功不代表旧请求用量已追回。**
+
+圆点完整通过；三角最终验证未确认、其他维度通过；叉号失败不进入柱形均值，仍保留散点和报告。Long 柱形还要求完整流程，显示实际可纳入样本数；失败排除后不对柱形标全尝试百分比。包含全部缓存输入和思考输出；三类自编 JavaScript 缺陷与无关模块扩展，不证明生产泛化。**归档 TEA 候选仍未重新启用，默认运行时保持回退状态。**
+
+[完整报告](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.zh-CN.md)
+[All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
+
+<details>
+<summary>旧 v3 比较（历史证据）</summary>
+
+### TEA / Pi / Claude Code 三方对比
+
+2026 年 10 月 13 日，三方在同一 **GLM-5.3-flash、enabled/low 思考、4096/4095 输出/思考上限**下重新测量，任务与初始源码一致。
+
+这里比较的是编程 Agent 软件：**TEA 归档候选 bd41742、Pi 0.87.1、Claude Code 2.1.281 原生 safe-mode CLI**。Claude Code 使用的也是 GLM，不是 Anthropic Claude 模型；各自核心提示与工具保留，宿主插件、技能、MCP 和跨会话自动记忆关闭。
+
+![Three coding agents: provider tokens and quality](benchmarks/reports/tea-pi-claude-glm-20261013/three-agents.png)
+
+叉号失败样本不参与柱形均值，只保留为散点和报告记录。三角表示最终验证未确认，代码行为检查通过，可纳入柱形并保留标记。Long 柱形还要求完成全部流程，并明确显示各方样本数。
+
+- **12 文件**：TEA 对 Pi 减少 34.02%；对 Claude Code 减少 73.70%。
+- **120 文件**：TEA 对 Pi 减少 75.68%；对 Claude Code 减少 76.58%。
+- **1,200 文件**：TEA 对 Pi 减少 50.12%；对 Claude Code 减少 18.32%。
+
+普通任务合计：TEA 对 Pi **减少 55.63%**，对 Claude Code **减少 51.93%**。
+
+普通任务代码行为检查（TEA / Pi / Claude Code）：**27/27 / 27/27 / 27/27**；完整验收：**27/27 / 27/27 / 1/27**。命令形式未被固定核查器识别时，保留“最终验证未确认”，不将其当作代码错误。
+
+图例：圆点为完整通过，三角为最终验证未确认，叉号为其他验收失败。后续判定器 v4 已兼容工作区切换后的 Node 测试命令及标准错误合并；旧记录保留 v3 判分，Token 数值不变。[兼容核查](benchmarks/reports/tea-pi-claude-glm-20261013/validation-compatibility.json)。
+
+长会话：从空历史连续读取 30 轮再修复。旧规则在漏读后停止，使 Pi 两次仅消耗 1,586/1,577 tokens，不能据此比较相同完成量。当前 Long 柱形只统计完成全部阶段的会话，样本数 TEA/Pi/Claude 为 **3/1/3**；两次中断仍保留为散点，完整总量和旧图见报告，不给出整体百分比。后续 v5 流程已改为漏读记分后继续，但尚无 v5 付费实测，旧数据不重新判分。
+
+计划 90 次运行，实际 90 次；已提交 968 次请求，其中 0 次用量未知。包含缓存输入、思考输出、失败和单次负收益。样本为三类自编 JavaScript 缺陷、每规模三次重复和一个长会话流程；规模靠无关模块扩展，不证明生产泛化。**受测 TEA 候选仍处于回退状态，默认运行时未重新启用。**
+
+[完整三方报告](benchmarks/reports/tea-pi-claude-glm-20261013/README.zh-CN.md) · [All attempts](benchmarks/reports/tea-pi-claude-glm-20261013/results.json) · [Frozen protocol](benchmarks/reports/tea-pi-claude-glm-20261013/frozen-protocol.md)
+
+<details>
+<summary>先前两方实验（2026-10-13）</summary>
+
 **2026 年 10 月 13 日**的对比中，缩短证据元数据候选版在 27 对普通任务上，比 **Pi 0.87.1 少用 54.55% 的服务商 Token**：
 
 - **小型项目，12 个文件：减少 30.76%。**
@@ -31,6 +86,10 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 样本为三类自编 JavaScript 缺陷，每种项目规模重复三次，以及一个长会话流程；新增文件主要是无关模块，尚不能保证生产项目的普遍收益。百分比表示完整实验候选与 Pi 的差距，包含原生提示和工具等差异，不代表元数据缩短的单项贡献。TEA 开启 ContextOS 和能力反馈；双方模型摘要实际执行均为零。**受测候选 `bd41742` 在本分支中仍处于回退状态，图表记录的是其归档实现。**
 
 [完整中文报告](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/README.zh-CN.md) · [全部尝试和用量](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/results.json) · [冻结实验协议](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/frozen-protocol.md) · [源码与验证记录](benchmarks/reports/e1-metadata-vs-pi-glm-20261013/source-audit.json)
+
+</details>
+
+</details>
 
 ## 环境要求
 

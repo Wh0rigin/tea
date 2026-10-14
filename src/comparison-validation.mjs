@@ -30,8 +30,45 @@ const relative = (workspace, value) => {
   return result === '..' || result.startsWith('../') ? null : result;
 };
 
+// Only recognize an optional move to the exact workspace and stderr merging.
+// Never execute a command, accept pipelines, or infer what arbitrary shell code did.
+export function validationCommandArguments(command, workspace) {
+  if (typeof command !== 'string' || /[\r\n\0`$]/.test(command)) return null;
+  command = command.trim();
+  let quote = null, split = -1, redirect = -1;
+  for (let i = 0; i < command.length; i++) {
+    const char = command[i];
+    if (quote) { if (char === quote) quote = null; continue; }
+    if (char === '"' || char === "'") { quote = char; continue; }
+    if (command.slice(i, i + 4) === '2>&1') {
+      if (redirect !== -1 || command.slice(i + 4).trim() || i && !/\s/.test(command[i - 1])) return null;
+      redirect = i; break;
+    }
+    if (command.slice(i, i + 2) === '&&') {
+      if (split !== -1) return null;
+      split = i; i++; continue;
+    }
+    if (/[;|<>]/.test(char) || char === '&' && i !== command.search(/\S/)) return null;
+  }
+  if (quote) return null;
+  const text = (redirect === -1 ? command : command.slice(0, redirect)).trim();
+  if (split === -1) return commandArguments(text);
+  const prefix = commandArguments(text.slice(0, split));
+  if (!prefix || prefix[0] !== 'cd' || !workspace) return null;
+  const directory = prefix.length === 2 ? prefix[1] : prefix.length === 3 && prefix[1] === '--' ? prefix[2] : null;
+  if (!directory) return null;
+  const normalized = directory.replaceAll('\\', '/');
+  const root = workspace.replaceAll('\\', '/').replace(/\/$/, '');
+  const windows = /^[a-z]:\//i.test(root);
+  const gitBashRoot = windows ? '/' + root[0].toLowerCase() + root.slice(2) : null;
+  const aliases = [root, ...(gitBashRoot ? [gitBashRoot] : [])];
+  const exact = aliases.some(alias => windows ? path.posix.normalize(normalized).toLowerCase() === alias.toLowerCase() : path.posix.normalize(normalized) === alias);
+  if (!exact && path.posix.normalize(normalized) !== '.') return null;
+  return commandArguments(text.slice(split + 2));
+}
+
 export function recognizeValidation(command, { workspace, targets = ['tests/public.test.mjs'], packageScripts = {}, depth = 0, extraArgs = [] } = {}) {
-  const words = commandArguments(command);
+  const words = validationCommandArguments(command, workspace);
   if (!words || depth > 4) return { recognized: false, reason: 'ambiguous-or-unresolved-command' };
   const executable = base(words[0]);
   let args = [...words.slice(1), ...extraArgs];
@@ -78,4 +115,9 @@ export function acceptanceDimensions({ evaluation, turns, plannedTurns, status, 
   const nativeCompleted = status === 'completed' && requiredTurnsComplete;
   const dimensions = { codeCorrect, scopeCorrect, declaredReadRequirements, nativePostEditValidation, nativeCompleted, usageComplete: Boolean(usageComplete) };
   return { dimensions, accepted: Object.values(dimensions).every(Boolean) };
+}
+
+/** Grade unmet requirements separately; only incomplete runtime/protocol stops a workflow. */
+export function shouldStopComparisonTurn({ status, requirements }) {
+  return status !== 'completed' || requirements.eventsComplete !== true;
 }

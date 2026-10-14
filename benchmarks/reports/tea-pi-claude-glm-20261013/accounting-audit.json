@@ -1,0 +1,25 @@
+{
+  "paidRequestsAdded": 0,
+  "cohorts": [
+    {
+      "cohort": "fresh",
+      "sourceAndFixtureIdentityMatchFrozenPlan": true,
+      "sourceStable": true,
+      "pairwiseAccountingValid": true,
+      "wireLedgerMatchesReport": true,
+      "independentRawUsageRecalculationPassed": true,
+      "wireLedgerSha256": "3ecd1823346cced3d8441c9f4452ce148991026f600003a39eec814e522cebb1",
+      "paidRequestsAdded": 0
+    },
+    {
+      "cohort": "long",
+      "sourceAndFixtureIdentityMatchFrozenPlan": true,
+      "sourceStable": true,
+      "pairwiseAccountingValid": true,
+      "wireLedgerMatchesReport": true,
+      "independentRawUsageRecalculationPassed": true,
+      "wireLedgerSha256": "d9f702e183cbc356650c9b1fc8dd9c7d92dd64dc70d37c567393df313f44796d",
+      "paidRequestsAdded": 0
+    }
+  ]
+}

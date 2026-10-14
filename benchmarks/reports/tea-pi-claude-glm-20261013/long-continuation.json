@@ -1,0 +1,40 @@
+{
+  "observerVersion": "native-positive-validation-v5",
+  "stoppingPolicy": "continue-missing-inspection-read",
+  "newPaidRequests": 0,
+  "newV5PerformanceResultsAvailable": false,
+  "historicalGradesAndUsageUnchanged": true,
+  "firstInspection": {
+    "path": "src/generated/domain-00/module-0000.mjs",
+    "bytes": 1378,
+    "purpose": "synthetic unrelated module used to accumulate native read history"
+  },
+  "historicalChartStats": {
+    "tea": {
+      "attempted": 3,
+      "completedWorkflows": 3,
+      "allAttemptTokens": 920730,
+      "completedWorkflowMeanTokens": 306910.0,
+      "interruptedAttemptTokens": []
+    },
+    "pi": {
+      "attempted": 3,
+      "completedWorkflows": 1,
+      "allAttemptTokens": 522099,
+      "completedWorkflowMeanTokens": 518936.0,
+      "interruptedAttemptTokens": [
+        1586,
+        1577
+      ]
+    },
+    "claude": {
+      "attempted": 3,
+      "completedWorkflows": 3,
+      "allAttemptTokens": 2409039,
+      "completedWorkflowMeanTokens": 803013.0,
+      "interruptedAttemptTokens": []
+    }
+  },
+  "aggregateLongRatioDisplayed": false,
+  "allPanelBarPolicy": "exclude-cross-marked-failures-keep-triangles"
+}
