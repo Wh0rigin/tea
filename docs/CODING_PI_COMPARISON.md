@@ -18,7 +18,7 @@ Pi runs in a temporary workspace without ancestor instructions. The earlier TEA 
 
 Both require preserved original tests and protected files, passing independent source-level assertions, passing added tests, completion and actual post-edit validation. Pi validation is derived from native events, declared test commands, positive Node test output and source fingerprints. Unrecognized validation is reported separately from functional correctness.
 
-All attempted samples, failures, guards and unknown usage remain visible. Unknown usage is never zero and halts the added cohort without retry. Charts show all known attempted token totals, with failed/unconfirmed samples marked separately. A total ratio requires complete coverage and usage for all eight tasks; any both-passed subset is separately named. Tokens include cache reads/writes and output, without adding reasoning output twice.
+All attempted samples, failures, guards and unknown usage remain visible. Unknown usage is never zero and halts the added cohort without retry. Chart bars contain functional passes only; failed costs appear as separate markers, and native validation uncertainty is marked U. A total ratio requires complete coverage and usage for all eight tasks; any both-passed subset is separately named. Tokens include cache reads/writes and output, without adding reasoning output twice.
 
 ```sh
 node scripts/compare-coding-pi.mjs --mode=prepare --run-id=coding-pi-preflight-example

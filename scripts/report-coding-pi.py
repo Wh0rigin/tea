@@ -7,6 +7,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 run_id = sys.argv[1]
@@ -58,14 +59,15 @@ for i,row in enumerate(rows):
         sample=row[agent];value=sample['usage']['totalTokens']/1000 if sample and sample['usage'] else None
         if value is None: ax.text(i+shift,.02,'Unknown / not run',rotation=90,ha='center',transform=ax.get_xaxis_transform());continue
         failed=not sample['functionalPass']; unconfirmed=sample['functionalPass'] and not sample['accepted']
-        ax.bar(i+shift,value,width=.34,color=colors[agent],hatch='///' if failed else None,edgecolor='black' if failed else 'white',linewidth=.6,zorder=3)
+        if failed: ax.scatter([i+shift],[value],marker='x',color=colors[agent],s=85,linewidths=2,zorder=4)
+        else: ax.bar(i+shift,value,width=.34,color=colors[agent],edgecolor='white',linewidth=.6,zorder=3)
         ax.annotate(f'{value:.1f}'+(' F' if failed else ' U' if unconfirmed else ''),(i+shift,value),xytext=(0,4),textcoords='offset points',ha='center',fontsize=9)
 for cut in [1.5,3.5,5.5]:ax.axvline(cut,color='#dadce0',linewidth=.8)
 ax.set_xticks(range(8),['Narcissistic\nmodule','Interval\nmerging','Quoted\nCSV','TTL\ncache','Async\nscheduler','Cursor\npagination','Atomic\ntransfers','Dependency\nplanner'])
 ax.set_ylabel('Provider tokens / attempt (thousands)');ax.set_xlabel('Author-assigned difficulty: L1 / L2 / L3 / L4');ax.grid(axis='y',color='#eaebee',zorder=0);ax.margins(y=.22)
-ax.legend(handles=[Patch(facecolor=colors['tea'],label='TEA (recorded cohort)'),Patch(facecolor=colors['pi'],label='Pi 0.87.1 (new cohort)'),Patch(facecolor='white',edgecolor='black',hatch='///',label='F: functional failure; U: native validation unconfirmed')],frameon=False,loc='upper right')
+ax.legend(handles=[Patch(facecolor=colors['tea'],label='TEA (recorded cohort)'),Patch(facecolor=colors['pi'],label='Pi 0.87.1 (new cohort)'),Line2D([0],[0],color=colors['pi'],marker='x',linestyle='None',label='F: failure cost marker; U: native validation unconfirmed')],frameon=False,loc='upper right')
 fig.suptitle(f'Functional checks — TEA 8/8 · Pi {totals["piFunctionalPass"]}/8 | Workflow checks — TEA 8/8 · Pi {totals["piAccepted"]}/8',fontsize=15,y=.97)
-fig.text(.5,.02,'GLM-5.3-flash · enabled thinking / low · 4,096 output cap · one attempt per task\nAll known attempted costs shown, including failures. Inputs include cache reads/writes; reasoning not added twice.\nSequential self-authored Node.js cohorts; no timing speedup or general coding-accuracy claim. Source: '+run_id,ha='center',fontsize=9)
+fig.text(.5,.02,'GLM-5.3-flash · enabled thinking / low · 4,096 output cap · one attempt per task\nBars: functional passes only; markers retain failed costs. Inputs include caches; reasoning not added twice.\nSequential self-authored Node.js cohorts; no timing speedup or general coding-accuracy claim. Source: '+run_id,ha='center',fontsize=9)
 fig.tight_layout(rect=(0,.12,1,.94));fig.savefig(target/'tea-vs-pi-coding.png',dpi=200);fig.savefig(target/'tea-vs-pi-coding.svg');plt.close(fig)
 
 def change(value): return f'{"增加" if value>=0 else "减少"} **{abs(value):.2f}%**'
@@ -81,7 +83,7 @@ for row in rows:
     p=row['pi']; t=row['tea']; pt=f'{p["usage"]["totalTokens"]:,}' if p and p['usage'] else '未知/未运行'
     grade='通过' if p and p['accepted'] else '功能通过，原生验证未确认' if p and p['functionalPass'] else '功能未通过/未运行'
     lines += [f'- **L{row["level"]} · {row["title"]}**：TEA {t["usage"]["totalTokens"]:,} Token（{"通过" if t["accepted"] else "未通过"}）；Pi {pt} Token（{grade}）。']
-lines += ['','## 方法与限制','','独立验收与 TEA 首轮相同：原有公开测试、额外边界测试、保护文件、增加的测试、任务完成与修改后实际验证。功能失败样本保留消耗，图中用斜线和 F 标记；U 表示代码通过独立检查，但原生验证未确认，不直接当作编码错误。没有将失败计作零，也没有静默重试。','',
+lines += ['','## 方法与限制','','独立验收与 TEA 首轮相同：原有公开测试、额外边界测试、保护文件、增加的测试、任务完成与修改后实际验证。条形图只展示功能通过的样本；功能失败的实际消耗单独用交叉点和 F 标记，不混入成功条形图。U 表示代码通过独立检查，但原生验证未确认，不直接当作编码错误。没有将失败计作零，也没有静默重试。','',
           '两组先后运行，每题仅一次，不能证明稳定优势或给出通用成功率。相同模型/思考/输出参数通过新 Pi 请求观察及旧 TEA 冻结配置匹配；旧 TEA 未记录服务端地址指纹，地址连续性依赖此前配置记录。保留原生工具和压缩策略，Pi 原生 PowerShell 与 TEA 批准策略不同。Pi 模型容量匹配相同保守配置，其摘要预留保持原生默认值。','',
           '费用是有限预算下的保守核算，非账户账单。原始会话和临时路径未发布；源码指纹、完整逐题数据、实际用量及限制见 [summary.json](summary.json)。复现方法见 [横向评测说明](../../../docs/CODING_PI_COMPARISON.md)。']
 (target/'README.md').write_text('\n'.join(lines)+'\n',encoding='utf8')
