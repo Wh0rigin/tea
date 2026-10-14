@@ -28,7 +28,7 @@
     },
     {
       "path": "src/context-archive.mjs",
-      "sha256": "72e7ce134e89845efe9abd7bc35f4ad2751ed3e209f364d6b9af4965322d5b97"
+      "sha256": "334e3a4b41d97a078e346afe668804c795f19b12d584a2c9965377f75cfd42c4"
     },
     {
       "path": "src/context-assembler.mjs",
