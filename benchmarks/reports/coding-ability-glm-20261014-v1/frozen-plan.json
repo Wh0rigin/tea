@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "runId": "coding-ability-glm-20261014-v1",
+  "mode": "live",
+  "commit": "451551fb9a04f61cea00bca701947fc9ef501ba4",
+  "sourceSha256": "c10ee4aeb8e57d50e6a1f17671488664dfa213bbb068dcef4f9478dcb46338c3",
+  "manifestSha256": "8f1efd65bb1ab10fb0f126040140dec6ee0d6d8eeaf017774a07090e6643c095",
+  "harnessSha256": "8983ad8a210384520cdac29730a26d5ec8804bf5bda67ca07c6bb95937f19024",
+  "createdAt": "2026-10-14T13:44:12.456Z",
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "maxOutputTokens": 4096,
+  "contextWindowTokens": 32768,
+  "contextReserveTokens": 4096,
+  "maxRequestInputBytes": 256000,
+  "maxToolCalls": 24,
+  "timeoutMs": 90000,
+  "taskTimeoutMs": 600000,
+  "taskCap": 1,
+  "suiteCap": 6,
+  "inputRateUsdPerMillion": 0.8,
+  "outputRateUsdPerMillion": 2.8,
+  "priceSource": "Previously recorded relay experiment rates; conservative accounting, not verified account billing",
+  "tasks": [
+    {
+      "id": "l1-narcissistic",
+      "level": 1,
+      "title": "新建水仙花数模块",
+      "files": 3,
+      "promptSha256": "83caa5ba6988c3ec36d38f34ea8b60b5f78d25121f588e7126d94b30decdfbfb",
+      "acceptanceSha256": "bd55f86fa0fa77eb99de4d6c439a196c302411564b19acbfc3ff9fad79a1d794",
+      "initialTreeSha256": "a3e4d75727c94d7e46b5fc20111b55046011281f6c875f10029e9751a00f9294"
+    },
+    {
+      "id": "l1-intervals",
+      "level": 1,
+      "title": "区间合并与输入保护",
+      "files": 4,
+      "promptSha256": "07f77212e3d1cdeca6a204d18c5ef9df992f5c5fdfd5940ca240c1adbdd175a0",
+      "acceptanceSha256": "34c60e791ddf1c37962c87ff337316407b5a6e400c0a9ff18994001bcb146e51",
+      "initialTreeSha256": "ce6a80f2ee53fd74ff7332c506baa3186db120f8ca9a70cbb3233acff5372ffb"
+    },
+    {
+      "id": "l2-csv",
+      "level": 2,
+      "title": "带引号的 CSV 状态机",
+      "files": 6,
+      "promptSha256": "6bbf6ceab1ca3717d20f662223e7b8a00b862897e82ac07299374e29e3691923",
+      "acceptanceSha256": "43ba67c2f38844d3c6c34463da4e29af6b7cfa678b0d78b8fb9b472acf2b018a",
+      "initialTreeSha256": "974d452e1fc8d46b599bfed6f250e213217ea90013704dfff75fa5ff9f05d09e"
+    },
+    {
+      "id": "l2-ttl-cache",
+      "level": 2,
+      "title": "TTL 缓存跨文件修复",
+      "files": 10,
+      "promptSha256": "30fb2605069568d8be7caec486dd6a5731fe8c8f04747f89b69b2ae8fd94887d",
+      "acceptanceSha256": "3c353805ebc173f99e1931a6c5ed284d73c5359f66d3e4796303de81033462b0",
+      "initialTreeSha256": "ea7e0ba208b801ca73948348956fab5fb3f8adb1f8922c1945cc7cb70cd0803d"
+    },
+    {
+      "id": "l3-scheduler",
+      "level": 3,
+      "title": "异步并发调度器",
+      "files": 11,
+      "promptSha256": "17248615831a6455937d05a8a6ecbb6c720953ba53816647590bcacb7045ea43",
+      "acceptanceSha256": "c2edb23a3f71fc72e6a09087fdaec0faaae07fcce79a46a8d74c17cf33824b98",
+      "initialTreeSha256": "87b7f60f186b9de458a24eb98c825d271dd6ce35e5b51a92cb9a68bf1147965b"
+    },
+    {
+      "id": "l3-pagination",
+      "level": 3,
+      "title": "多层 API 游标分页",
+      "files": 15,
+      "promptSha256": "2c20a806b105d63361561287b8e87229abd8f99ab37e8cba595b88057702c6eb",
+      "acceptanceSha256": "e0442da90e84be69fc3c54605fe6887f8212025beaa12fc49c89cc1edb6c2cb9",
+      "initialTreeSha256": "c208b7fc8d990ceb58c84f31a17cb307de5c8b95133bab331b37d43165d84fec"
+    },
+    {
+      "id": "l4-transfers",
+      "level": 4,
+      "title": "事务与幂等转账",
+      "files": 23,
+      "promptSha256": "0a01f089acd20af59866b7fa5c1d1a5c84b1278ada61c53aa121fa0394ef9570",
+      "acceptanceSha256": "c65eb7eb3540c0dfb6103be4924dd4241ecb5c5e66b3d2c5b100ae8c40aabee5",
+      "initialTreeSha256": "e07cfb1427e16590dff6eb4211ba350ac759441409d32ea97968089267fdbab1"
+    },
+    {
+      "id": "l4-dependency-plan",
+      "level": 4,
+      "title": "依赖图与增量重建",
+      "files": 30,
+      "promptSha256": "a93013e0ba464774676c30d1198d03347f2cc7d02eeccb4784656f943204931b",
+      "acceptanceSha256": "5741e5ab3d45c90cf9e3d272c3ab79dd40bf20caa52e3a360cc66ce72ae662f1",
+      "initialTreeSha256": "eb4983eb2fc19cd424effdb66cd44beba42cf8bdd0852ed747e6b22124155227"
+    }
+  ],
+  "limitations": [
+    "Self-authored Node.js fixtures; difficulty is an author-assigned label",
+    "One fresh attempt per task, no generalization or agent comparison claim",
+    "Acceptance source is outside the agent workspace but on the same host; not an OS sandbox or secret benchmark",
+    "Headless unlisted shell commands cannot obtain approval"
+  ]
+}
