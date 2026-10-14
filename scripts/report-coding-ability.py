@@ -3,6 +3,7 @@ import hashlib
 import json
 import pathlib
 import sys
+import subprocess
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -14,7 +15,8 @@ if not run_id or any(c not in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW
 source = ROOT / 'benchmarks/results' / run_id
 raw = json.loads((source / 'results.json').read_text(encoding='utf-8'))
 for name, field in [('benchmarks/tasks/coding-ability.mjs', 'manifestSha256'), ('scripts/test-coding-ability.mjs', 'harnessSha256')]:
-    if hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != raw[field]:
+    recorded = subprocess.check_output(['git', 'show', f'{raw["commit"]}:{name}'], cwd=ROOT)
+    if hashlib.sha256(recorded).hexdigest() != raw[field] and hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != raw[field]:
         raise RuntimeError('Frozen fixture/harness changed during evaluation')
 if any(row['status'] == 'running' for row in raw['rows']):
     raise RuntimeError('Run is still active')

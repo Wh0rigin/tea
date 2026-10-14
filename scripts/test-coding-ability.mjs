@@ -21,6 +21,7 @@ const options = Object.fromEntries(process.argv.slice(2).map(arg => {
 const mode = options.mode || 'preflight', runId = options['run-id'] || `coding-${mode}-${Date.now()}`;
 if (!['preflight', 'live'].includes(mode) || !/^[a-zA-Z0-9_-]+$/.test(runId)) throw new Error('Invalid mode/run ID');
 const outputDir = path.join(root, 'benchmarks/results', runId);
+await mkdir(path.dirname(outputDir), { recursive: true });
 await mkdir(outputDir); // Never overwrite an existing run.
 const taskCap = Number(options['task-cap'] || 1), suiteCap = Number(options['suite-cap'] || 6);
 if (![taskCap, suiteCap].every(x => Number.isFinite(x) && x > 0)) throw new Error('Finite positive caps required');
