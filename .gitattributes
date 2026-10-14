@@ -52,3 +52,6 @@ benchmarks/reports/tea-pi-claude*/*.md text eol=lf
 benchmarks/reports/tea-pi-claude*/*.svg text eol=lf
 benchmarks/reports/tea-pi-claude*/evidence.sha256 text eol=lf
 benchmarks/reports/tea-pi-claude*/*.txt text eol=lf
+benchmarks/reports/contextos-gc*/*.json text eol=lf
+benchmarks/reports/contextos-gc*/*.md text eol=lf
+benchmarks/reports/contextos-gc*/evidence.sha256 text eol=lf

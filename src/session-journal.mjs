@@ -1,5 +1,5 @@
 import { createHash, randomBytes, createCipheriv, createDecipheriv } from 'node:crypto';
-import { open, mkdir, readFile, readdir, lstat, realpath, unlink, rm } from 'node:fs/promises';
+import { open, mkdir, readFile, readdir, lstat, realpath, unlink, rm, opendir } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -74,12 +74,13 @@ export async function workspaceIdentity(workspace) {
 
 /** Append-only metadata with authenticated, content-addressed encrypted payloads. */
 export class SessionJournal {
-  static async open({ workspace, id, resume = false }) {
+  static async open({ workspace, id, resume = false, maxStorageBytes = Infinity }) {
     const root = await sessionRoot(workspace, true), name = validateRunId(id);
     const directory = path.join(root, name);
     if (!resume) await mkdir(directory, { mode: 0o700 });
     await safeDirectory(directory);
     const journal = new SessionJournal(directory, name);
+    journal.maxStorageBytes = maxStorageBytes;
     try {
       await journal.acquire();
       if (!resume) {
@@ -92,6 +93,10 @@ export class SessionJournal {
       if (keyInfo.size !== 32) throw new Error('Invalid session encryption key');
       journal.key = await readFile(journal.keyPath);
       await journal.recover();
+      journal.storageBytes = (await regularFile(journal.logPath)).size;
+      for await (const file of await opendir(journal.artifacts)) {
+        if (/^[a-f0-9]{64}\.bin$/.test(file.name)) journal.storageBytes += (await regularFile(path.join(journal.artifacts,file.name))).size;
+      }
       return journal;
     } catch (error) { await journal.close(); throw error; }
   }
@@ -134,7 +139,10 @@ export class SessionJournal {
       const row = JSON.parse(line), { sha256, ...body } = row;
       if (row.schema !== 1 || row.sessionId !== this.id || row.seq !== this.rows.length + 1
         || row.eventId !== `e${String(row.seq).padStart(8, '0')}` || row.previous !== previous || digest(body) !== sha256) throw new Error('Session journal integrity or schema failure');
-      await this.get(row.artifact); // Fail closed on missing/corrupt committed payloads.
+      const value = await this.get(row.artifact);
+      const nested = row.kind === 'context_archive' ? [value.artifact]
+        : row.kind === 'memory_gc_checkpoint' ? [...value.coveredArtifacts, ...value.suffixArtifacts] : [];
+      for (const ref of nested) await this.get(ref); // Validate committed cold evidence too.
       this.rows.push(row); previous = sha256;
     }
   }
@@ -142,10 +150,13 @@ export class SessionJournal {
     const plain = Buffer.from(JSON.stringify(value)), ref = digest(plain.toString('utf8'));
     if (plain.length > MAX_ARTIFACT) throw new Error('Session artifact exceeds 64 MiB');
     const filename = path.join(this.artifacts, ref + '.bin');
+    try { await regularFile(filename); await this.get(ref); return ref; }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+    if ((this.storageBytes || 0) + plain.length + 32 > this.maxStorageBytes) throw new Error('Session storage limit reached; explicitly raise the limit or archive/delete this session');
     const iv = randomBytes(12), cipher = createCipheriv('aes-256-gcm', this.key, iv);
     cipher.setAAD(Buffer.from(this.id + ':' + ref));
     const encrypted = Buffer.concat([cipher.update(plain), cipher.final()]);
-    try { await exclusiveWrite(filename, Buffer.concat([Buffer.from('TEA1'), iv, cipher.getAuthTag(), encrypted])); }
+    try { await exclusiveWrite(filename, Buffer.concat([Buffer.from('TEA1'), iv, cipher.getAuthTag(), encrypted])); this.storageBytes = (this.storageBytes || 0) + encrypted.length + 32; }
     catch (error) { if (error.code !== 'EEXIST') throw error; await this.get(ref); }
     return ref;
   }
@@ -168,14 +179,46 @@ export class SessionJournal {
       const body = { schema: 1, sessionId: this.id, seq, eventId: `e${String(seq).padStart(8, '0')}`,
         timestamp: new Date().toISOString(), kind, artifact, previous: this.rows.at(-1)?.sha256 || null };
       const row = { ...body, sha256: digest(body) };
+      const line = JSON.stringify(row) + '\n';
+      if ((this.storageBytes || 0) + Buffer.byteLength(line) > this.maxStorageBytes) throw new Error('Session storage limit reached before metadata commit');
       const file = await open(this.logPath, 'a');
-      try { await file.writeFile(JSON.stringify(row) + '\n'); await file.sync(); } finally { await file.close(); }
+      try { await file.writeFile(line); await file.sync(); } finally { await file.close(); }
+      this.storageBytes = (this.storageBytes || 0) + Buffer.byteLength(line);
       this.rows.push(row); return row;
     });
     return this.queue;
   }
   async events() {
     return Promise.all(this.rows.map(async row => ({ ...row, value: await this.get(row.artifact) })));
+  }
+  async *iterateEvents() {
+    for (const row of this.rows) yield { ...row, value: await this.get(row.artifact) };
+  }
+  async collectOrphans({ graceMs = 86400000, maxFiles = 1000, now = Date.now() } = {}) {
+    await this.queue;
+    if (!this.ownedLock) throw new Error('Session journal is closed');
+    if (!Number.isFinite(graceMs) || graceMs < 0 || !Number.isSafeInteger(maxFiles) || maxFiles < 1) throw new Error('Invalid orphan collection bounds');
+    const marked = new Set(this.rows.map(row => row.artifact));
+    for await (const event of this.iterateEvents()) {
+      const refs = event.kind === 'context_archive' ? [event.value.artifact]
+        : event.kind === 'memory_gc_checkpoint' ? [...event.value.coveredArtifacts, ...event.value.suffixArtifacts] : [];
+      for (const ref of refs) {
+        if (!/^[a-f0-9]{64}$/.test(ref || '')) throw new Error('Invalid GC artifact root');
+        await this.get(ref); marked.add(ref);
+      }
+    }
+    let scanned = 0, deleted = 0, deletedBytes = 0;
+    const root = await realpath(this.artifacts);
+    for await (const entry of await opendir(this.artifacts)) {
+      if (++scanned > maxFiles) break;
+      if (!/^[a-f0-9]{64}\.bin$/.test(entry.name) || marked.has(entry.name.slice(0,-4))) continue;
+      const filename = path.join(root,entry.name), info = await regularFile(filename);
+      if (path.dirname(await realpath(filename)) !== root) throw new Error('Invalid GC target');
+      if (now - info.mtimeMs < graceMs) continue;
+      await unlink(filename); deleted++; deletedBytes += info.size;
+    }
+    this.storageBytes = Math.max(0, (this.storageBytes || 0) - deletedBytes);
+    return { scanned, deleted, deletedBytes, graceMs };
   }
   async close() {
     await this.queue.catch(() => {});

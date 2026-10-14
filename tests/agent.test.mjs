@@ -31,7 +31,7 @@ async function scenario(steps, callback, { maxToolCalls = 24, initializeGit = fa
     await writeFile(path.join(root, 'value.test.mjs'), "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { value } from './value.mjs';\ntest('value', () => assert.equal(value, 2));\n");
     if (verbose) await writeFile(path.join(root, 'verbose.test.mjs'), "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { value } from './value.mjs';\ntest('verbose actual validation', () => { for (let i = 0; i < 200; i++) console.log('fixed log ' + i + ' ' + 'x'.repeat(80)); assert.equal(value, 2); });\n");
     if (initializeGit) await promisify(execFile)('git', ['init', '-q'], { cwd: root, windowsHide: true });
-    const config = { ...loadConfig({ workspace: root, runId: 'integration', historyStrategy }, {}), maxToolCalls };
+    const config = { ...loadConfig({ workspace: root, runId: 'integration', historyStrategy, compaction: 'off' }, {}), maxToolCalls };
     const captured = [];
     const result = await runTask('修复 value 的值', config, { adapterFactory: scriptedFactory(steps, captured) });
     await callback(result, root, captured);

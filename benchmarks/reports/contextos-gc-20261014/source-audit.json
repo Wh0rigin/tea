@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "bdc06bcb237d1c5235247f3ac4292aff64c05f4d",
+  "basis": "UTF-8 source bytes normalized to LF for committed Git identity",
+  "files": [
+    {
+      "path": "scripts/check-combined-memory.mjs",
+      "sha256": "8788f599534a622159c259bec7baef529ff3f0e96c722d9e2ec483e5487b68bc"
+    },
+    {
+      "path": "scripts/check-memory-gc.mjs",
+      "sha256": "8508b509124345938a2ba1ed16a6ecc95b0cfbe4c44657d6dcd14abcd9e57710"
+    },
+    {
+      "path": "src/agent.mjs",
+      "sha256": "ee222801f4f8f086f8a632f7bfc6e780b83efd172599ee1a9e82b7ee0434cc94"
+    },
+    {
+      "path": "src/cli.mjs",
+      "sha256": "b05b579228870e1562649d61b37f010ff69f8a3b7f742b28ff5a6e78896a1471"
+    },
+    {
+      "path": "src/compaction.mjs",
+      "sha256": "5af75e22df378e3a575603bcc11f170559fd4baa27b7b6cce52b1dd8a80aabb3"
+    },
+    {
+      "path": "src/config.mjs",
+      "sha256": "0c7af1050210505fde5be02e997642eb04a5cb2eff4025d17ff994ad82050f19"
+    },
+    {
+      "path": "src/context-archive.mjs",
+      "sha256": "72e7ce134e89845efe9abd7bc35f4ad2751ed3e209f364d6b9af4965322d5b97"
+    },
+    {
+      "path": "src/context-assembler.mjs",
+      "sha256": "5a4d3444e0bc175ebc976c610e34c5b8df9cb92fc22b8a2114c45e67582dea78"
+    },
+    {
+      "path": "src/memory-gc.mjs",
+      "sha256": "06f9fc4de2b50615288bab2873edf15f369018cc8632e5f0fe23b4d43f8f60f2"
+    },
+    {
+      "path": "src/runtime-benchmark.mjs",
+      "sha256": "61dfd791ed2ee46ed2c19929686c58d0d498d1117bcf0fa08312dce11781be6d"
+    },
+    {
+      "path": "src/session-journal.mjs",
+      "sha256": "37da0dc43cd65a3bbb9a5bedc234bb51741f1230ef8ce22099a542719e72b940"
+    },
+    {
+      "path": "src/session-memory.mjs",
+      "sha256": "b8cf85b9a40869a7f69dfeb637b84b79940e48a96de15927b8abafa3e261f72a"
+    },
+    {
+      "path": "src/terminal.mjs",
+      "sha256": "ee39b27f0f4ed7e8016dbf682e8dc91fb87a3e716bc198d64f66f1f1bad8c77c"
+    },
+    {
+      "path": "tests/agent.test.mjs",
+      "sha256": "fd95ee95b49c10abccbfb77a28cbabfe0e8129477a77f036b950e60f99549826"
+    },
+    {
+      "path": "tests/compaction.test.mjs",
+      "sha256": "dae6099e141fd0d24f8e6378d24dd51384fc951c220f1eb9cd6f52e63bfddb6a"
+    },
+    {
+      "path": "tests/config.test.mjs",
+      "sha256": "ac04eaea14893bc64cb68bc42c32fd1883c951adeec3db33ca82fbe52f2faae1"
+    },
+    {
+      "path": "tests/memory-gc.test.mjs",
+      "sha256": "57d99d36822e498569c038edd97f47e56c053cdb45f11a67ea3b2f922d35b94a"
+    },
+    {
+      "path": "tests/session-memory.test.mjs",
+      "sha256": "4543e13f4491ff2d054261a491a76e314fdf387a3c29158490a0c617eb5f8bb6"
+    },
+    {
+      "path": "tests/tool-feedback.test.mjs",
+      "sha256": "c6e6d0942cf3d74cd3fbc356993b94c38d7c2b0e0db00ff73902e88c675856f0"
+    }
+  ]
+}

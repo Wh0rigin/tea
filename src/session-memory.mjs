@@ -4,14 +4,15 @@ import { validateRunId } from './run-id.mjs';
 
 export function memorySessionFields(config) {
   return { sessionId: validateRunId(config.resume || config.sessionId || randomUUID()), journal: null,
-    persistent: Boolean(config.resume || config.sessionId || config.memoryPolicy === 'contextos'),
+    persistent: Boolean(config.resume || config.sessionId || config.memoryPolicy === 'contextos'
+      || (config.compaction === 'auto' && config.memoryGc !== 'off')),
     persisted: false, journalHead: null, restoredBudget: null, memoryDiagnostics: null, capabilities: null };
 }
 
 export async function attachSessionJournal(session, config) {
   if (!session.persistent) return;
   const journal = await SessionJournal.open({ workspace: config.workspace, id: session.sessionId,
-    resume: session.persisted || Boolean(config.resume) });
+    resume: session.persisted || Boolean(config.resume), maxStorageBytes: config.sessionStorageMaxBytes });
   session.journal = journal;
   try {
     if (session.persisted) {
@@ -27,14 +28,32 @@ export async function attachSessionJournal(session, config) {
         maxInputTokens: config.maxInputTokens ?? null, effort: config.effort, thinkingMode: config.thinkingMode });
       session.persisted = true; return;
     }
-    const events = await journal.events(), created = events[0];
+    const created = { kind: journal.rows[0]?.kind, value: await journal.get(journal.rows[0]?.artifact) };
     if (created?.kind !== 'session_created' || created.value.identity.workspace !== identity.workspace
       || created.value.model !== config.model || created.value.endpointSha256 !== digest(config.baseUrl)) throw new Error('Resume requires the original workspace, model and endpoint');
     const messages = [], inflight = new Map();
     let state = null, budget = { spentUsd: 0, spentInputBound: 0, actualInputTokens: 0, blockedUnknown: false };
-    for (const event of events) {
-      if (event.kind === 'conversation_reset') messages.length = 0;
-      if (event.kind === 'message') messages.push(event.value);
+    const checkpointRow = journal.rows.findLast(row => row.kind === 'memory_gc_checkpoint');
+    const resetRow = journal.rows.findLast(row => row.kind === 'conversation_reset');
+    const fullRestore = config.memoryGc === 'off' && config.memoryPolicy === 'full-history';
+    const latestCut = fullRestore ? 0 : Math.max(checkpointRow?.seq || 0, resetRow?.seq || 0);
+    for await (const event of journal.iterateEvents()) {
+      if (event.kind === 'conversation_reset') { messages.length = 0; session.pinnedRequirements = []; session.protectedRuleRefs = []; session.archivedMessageCount = 0; }
+      if (event.kind === 'memory_gc_checkpoint' && event.seq === latestCut) {
+        if (event.value.schema !== 1 || !Array.isArray(event.value.suffixArtifacts) || !Array.isArray(event.value.pinnedRequirements)) throw new Error('Invalid GC checkpoint');
+        messages.length = 0;
+        for (const artifact of event.value.suffixArtifacts) messages.push(await journal.get(artifact));
+        session.compaction = event.value.compaction;
+        session.pinnedRequirements = event.value.pinnedRequirements;
+        session.protectedRuleRefs = event.value.protectedRuleRefs || [];
+        session.archivedMessageCount = event.value.archivedMessageCount;
+        session.gcDiagnostics = event.value.outcome;
+        state = { ...(state || {}), ...event.value.runtimeState, compaction: event.value.compaction,
+          compactionCount: event.value.compactionCount, tools: null, memoryDiagnostics: null };
+      }
+      if (event.kind === 'memory_gc_checkpoint' && fullRestore) state = { ...(state || {}),
+        ...event.value.runtimeState, compaction: null, compactionCount: event.value.compactionCount, tools: null };
+      if (event.kind === 'message' && event.seq > latestCut) messages.push(event.value);
       if (event.kind === 'runtime_state') state = event.value;
       if (event.kind === 'request_intent') inflight.set(event.value.requestId, event.value);
       if (event.kind === 'request_settled') { inflight.delete(event.value.requestId); budget = event.value.budget; }
@@ -46,6 +65,7 @@ export async function attachSessionJournal(session, config) {
     session.taskState = state?.taskState || null;
     session.capabilities = state?.capabilities || null;
     session.memoryDiagnostics = state?.memoryDiagnostics || null;
+    if (fullRestore) { session.compaction = null; session.pinnedRequirements = []; }
     for (const intent of inflight.values()) {
       budget = { ...budget, spentUsd: budget.spentUsd + intent.reservedUsd,
         spentInputBound: budget.spentInputBound + intent.inputBound, blockedUnknown: true };
@@ -102,6 +122,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
     validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
     compaction: session.compaction, compactionCount: session.compactionCount, offline: session.offline,
     taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
+    gcDiagnostics: session.gcDiagnostics || null,
     capabilities: session.capabilities || null,
     identity,
     tools: tools ? { sessionTerms: [...tools.sessionTerms], unresolvedQueries: [...tools.unresolvedQueries],
@@ -134,6 +155,8 @@ export async function resetPersistentConversation(session, config) {
     session.contextMemory = null;
     if (session.tools) session.tools.contextMemory = null;
     session.taskState = null; session.memoryDiagnostics = null;
+    session.pinnedRequirements = []; session.protectedRuleRefs = []; session.archivedMessageCount = 0; session.gcDiagnostics = null;
+    session.contextArchive?.sweepCache(); session.contextArchive = null;
     session.capabilities = null;
     await persistRuntimeState(session);
   } finally { await closeSessionJournal(session); }
@@ -142,12 +165,18 @@ export async function resetPersistentConversation(session, config) {
 export async function inspectSession(config, id) {
   const journal = await SessionJournal.open({ workspace: config.workspace, id, resume: true });
   try {
-    const events = await journal.events(), state = events.filter(event => event.kind === 'runtime_state').at(-1)?.value;
-    return { sessionId: id, schema: 1, events: events.length, messages: events.filter(event => event.kind === 'message').length,
+    let state, requests = 0, messages = 0;
+    const unresolved = new Set();
+    for await (const event of journal.iterateEvents()) {
+      if (event.kind === 'runtime_state') state = event.value;
+      if (event.kind === 'message') messages++;
+      if (event.kind === 'request_intent') unresolved.add(event.value.requestId);
+      if (event.kind === 'request_settled') { requests++; unresolved.delete(event.value.requestId); }
+    }
+    return { sessionId: id, schema: 1, events: journal.rows.length, messages,
       pendingValidation: state?.pendingValidation ?? null, changedFiles: state?.changedFiles || [],
       latestIdentity: state?.identity || null, memoryDiagnostics: state?.memoryDiagnostics || null,
-      taskState: state?.taskState || null,
-      requests: events.filter(event => event.kind === 'request_settled').length,
-      unresolvedRequestIds: events.filter(event => event.kind === 'request_intent' && !events.some(other => other.kind === 'request_settled' && other.value.requestId === event.value.requestId)).map(event => event.value.requestId) };
+      taskState: state?.taskState || null, gcDiagnostics: state?.gcDiagnostics || null,
+      requests, unresolvedRequestIds: [...unresolved] };
   } finally { await journal.close(); }
 }

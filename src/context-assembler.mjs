@@ -65,32 +65,34 @@ export class ContextMemory {
           if (!block || typeof block.content !== 'string') continue;
           const ref = refFor(call, block), evidence = block.content.match(/^\[evidence ref=([^\n]+?) sha256=([a-f0-9]{64})\]/);
           const cached = block.content.match(/^Evidence unchanged; ref=(.+)#L\d+-L\d+@([a-f0-9]{16})\./);
-          const inherited = call.name === 'recall_context' ? units.get(call.input?.ref) : null;
+          const inherited = call.name === 'recall_context' ? (units.get(call.input?.ref) || this.archive?.peek(call.input?.ref)) : null;
           let dependencies = inherited?.sourceDependencies || [];
           if (call.name === 'search_history') {
             try { dependencies = JSON.parse(block.content).flatMap(row => {
-              const source = units.get(row.ref);
+              const source = units.get(row.ref) || this.archive?.peek(row.ref);
               return source?.sourceHash ? [{ path: source.path, sourceHash: source.sourceHash }] : source?.sourceDependencies || [];
             }); } catch { /* Error results do not contain indexed source previews. */ }
           }
-          const searchSnapshot = call.name === 'search_code' ? this.tools.searchEvidence.get(digest(block.content)) : null;
-          const sourceSnapshot = call.name === 'read_file' ? this.tools.sourceEvidence.get(digest(block.content)) : null;
+          const searchSnapshot = ['search_code','search_history'].includes(call.name) ? this.tools.searchEvidence.get(digest(block.content)) : null;
+          const sourceSnapshot = ['read_file','recall_context'].includes(call.name) ? this.tools.sourceEvidence.get(digest(block.content)) : null;
+          if (sourceSnapshot?.sourceDependencies) dependencies = sourceSnapshot.sourceDependencies;
           if (searchSnapshot) dependencies = searchSnapshot;
           const failed = Boolean(block.is_error) || (['run_tests','run_shell'].includes(call.name) && /^exit=(?!0\b)/.test(block.content));
           const unit = { ref, kind: call.name === 'read_file' ? 'source_evidence' : block.is_error ? 'test_failure' : 'tool_result',
-            provenance: inherited?.provenance || 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
+            provenance: inherited?.provenance || sourceSnapshot?.provenance || 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
             error: failed, path: inherited?.path || sourceSnapshot?.path || (call.name === 'read_file' ? (typeof call.input?.path==='string' ? path.posix.normalize(call.input.path.replaceAll('\\','/')) : null) : null),
             sourceHash: inherited?.sourceHash || sourceSnapshot?.sourceHash || evidence?.[2] || cached?.[2] || null, sourceDependencies: dependencies,
             unversionedSearch: call.name==='search_code' && !searchSnapshot && /^[^\n]+:\d+:\s/m.test(block.content),
             messageIndex: index + 1, bytes: bytes(block.content), validity: inherited?.validity || 'historical' };
           if (inherited?.sourceHash) unit.kind='source_evidence';
+          if (sourceSnapshot?.kind) unit.kind=sourceSnapshot.kind;
           if (block.is_error && call.name==='read_file') unit.kind='tool_result';
           if (failed && ['run_tests','run_shell'].includes(call.name)) unit.kind='test_failure';
           if (units.has(ref)) throw new Error('Ambiguous memory reference');
           units.set(ref, unit);
         }
         const text = message.content.filter(block => block.type === 'text').map(block => block.text || '').join('\n');
-        if (text) { const ref = 'note-' + digest({ index, text }).slice(0, 20); units.set(ref, { ref, kind: 'decision', provenance: 'inferred', name: 'assistant_note', output: text, bytes: bytes(text), validity: 'inferred' }); }
+        if (text) { const ref = 'note-' + digest({ index, text }).slice(0, 20); units.set(ref, { ref, kind: 'decision', provenance: 'inferred', name: 'assistant_note', output: text, bytes: bytes(text), messageIndex: index, validity: 'inferred' }); }
       }
     }
     this.units = units;
@@ -117,29 +119,51 @@ export class ContextMemory {
   }
   async recall({ ref, offset = 0, maxBytes = 6000 }) {
     if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isSafeInteger(maxBytes) || maxBytes < 256 || maxBytes > 8000) throw new Error('Invalid memory page bounds');
-    const unit = this.units.get(ref);
+    const unit = this.units.get(ref) || await this.archive?.get(ref);
     if (!unit) throw new Error('Unknown context reference in this conversation');
     this.recalls++;
     if (await this.freshness(unit) === 'stale') return `STALE historical source: ref=${ref}; path=${unit.path}. Read current source with read_file. No old source lines returned.`;
     const page = utf8Page(redactText(unit.output), offset, maxBytes);
-    return `[${unit.provenance} ${unit.kind}; ref=${ref}; validity=${unit.validity}; offset=${page.offset}; nextOffset=${page.nextOffset}; complete=${page.complete}]\n${page.text}`;
+    const output = `[${unit.provenance} ${unit.kind}; ref=${ref}; validity=${unit.validity}; offset=${page.offset}; nextOffset=${page.nextOffset}; complete=${page.complete}]\n${page.text}`;
+    this.tools.sourceEvidence.set(digest(output), { path: unit.path, sourceHash: unit.sourceHash,
+      sourceDependencies: unit.sourceDependencies, provenance: unit.provenance, kind: unit.kind });
+    return output;
   }
   async search({ query, maxResults = 5 }) {
     if (typeof query !== 'string' || !query.trim() || query.length > 200 || !Number.isSafeInteger(maxResults) || maxResults < 1 || maxResults > 10) throw new Error('Invalid history query');
     this.searches++;
     const terms = query.toLowerCase().split(/[^\p{L}\p{N}_./:-]+/u).filter(Boolean);
-    const selected = [...this.units.values()].map(unit => ({ unit, score: terms.reduce((sum, term) => sum + ((unit.path || '').toLowerCase().includes(term) ? 3 : 0) + (unit.output.toLowerCase().includes(term) ? 1 : 0) + (JSON.stringify(unit.input || {}).toLowerCase().includes(term) ? 1 : 0), 0) }))
+    const score = unit => terms.reduce((sum, term) => sum + ((unit.path || '').toLowerCase().includes(term) ? 3 : 0) + (unit.output.toLowerCase().includes(term) ? 1 : 0) + (JSON.stringify(unit.input || {}).toLowerCase().includes(term) ? 1 : 0), 0);
+    const selected = [...this.units.values()].map(unit => ({ unit, score: score(unit) }))
       .filter(row => row.score > 0).sort((a, b) => b.score - a.score || (b.unit.messageIndex || 0) - (a.unit.messageIndex || 0)).slice(0, maxResults);
+    if (this.archive?.count) for await (const entry of this.archive.entries()) {
+      if (this.units.has(entry.ref) || selected.some(row => row.unit.ref === entry.ref)) continue;
+      const unit = await this.archive.read(entry), rank = score(unit);
+      if (rank > 0) {
+        selected.push({ unit, score: rank });
+        selected.sort((a,b) => b.score-a.score); selected.length = Math.min(selected.length,maxResults);
+      }
+    }
     const rows = [];
     for (const { unit } of selected) {
+      this.archive?.remember(unit);
       await this.freshness(unit);
       const preview = unit.validity === 'stale' ? 'Old source withheld; read current source.' : utf8Page(redactText(unit.output), 0, 180).text;
       rows.push({ ref: unit.ref, kind: unit.kind, provenance: unit.provenance, validity: unit.validity, path: unit.path || null, preview });
     }
-    return JSON.stringify(rows);
+    const output = JSON.stringify(rows);
+    this.tools.searchEvidence.set(digest(output), selected.flatMap(({unit}) => [
+      ...(unit.sourceDependencies || []), ...(unit.sourceHash ? [{path:unit.path,sourceHash:unit.sourceHash}] : [])]));
+    return output;
   }
-  async assemble({ messages, canonical, system, tools, config, state, goal = '', commit = true }) {
+  async assemble({ messages, canonical, system, tools, config, state, goal = '', commit = true, additionalArchive = false }) {
     this.rebuild(canonical);
+    for (const [,ref] of this.protectedRuleRefs || []) {
+      if (!this.units.has(ref)) {
+        const unit = await this.archive?.get(ref);
+        if (unit) { await this.freshness(unit); this.units.set(ref,{...unit,messageIndex:-1}); }
+      }
+    }
     // Semantic checkpoints may summarize user constraints. Reinsert original
     // user text as authoritative history without orphaning any tool batch.
     const retained=new Map();
@@ -204,7 +228,7 @@ export class ContextMemory {
     const active = new Set([...selected, ...stale]);
     // Stale source can only be refreshed through read_file. A stale-only
     // warning does not require retrieval schemas or their repeated overhead.
-    const recoverable = selected.some(ref => !stale.has(ref))
+    const recoverable = additionalArchive || Boolean(this.archive?.count) || selected.some(ref => !stale.has(ref))
       || [...this.evicted].some(ref => this.units.has(ref) && !stale.has(ref));
     let coldRounds=0;
     if(recoverable){
@@ -253,6 +277,7 @@ export class ContextMemory {
     return { request, diagnostics: { policy: 'contextos', fullWireBytes: before, sentWireBytes: after,
       fullEstimatedTokens: estimateTextTokens(JSON.stringify(base)), sentEstimatedTokens: estimateTextTokens(JSON.stringify(request)),
       evictedUnits: active.size, staleUnits: stale.size, recoveries: this.recalls, searches: this.searches,
+      archivedUnits: this.archive?.count || 0, coldCacheBytes: this.archive?.cachedBytes || 0,
       targetBytes: config.contextosTargetBytes, activeFiles: [...activeFiles], coldRounds, activeGoalAnchored:recoverable&&!fallback, repinnedRequirements:missing.length, units: decisions, fallback } };
   }
 }

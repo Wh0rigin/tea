@@ -54,3 +54,15 @@ test('loads explicit history ablations with at least two recent tool rounds', ()
   assert.throws(() => loadConfig({ historyStrategy: 'drop-all' }, {}), ConfigError);
   for (const historyKeepRecent of [1, 2.5, 25]) assert.throws(() => loadConfig({ historyKeepRecent }, {}), ConfigError);
 });
+
+test('defaults to bounded checkpoint GC and allows explicit opt out', () => {
+  const config = loadConfig({}, {});
+  assert.equal(config.compaction,'auto'); assert.equal(config.memoryGc,'auto');
+  assert.equal(config.memoryCacheBytes,262144); assert.equal(config.memoryGcMaxResidentBytes,4194304);
+  assert.equal(config.sessionStorageMaxBytes,536870912);
+  assert.equal(loadConfig({memoryGc:'off',compaction:'off'},{}).memoryGc,'off');
+  assert.throws(()=>loadConfig({memoryGc:'unknown'},{}),ConfigError);
+  for(const name of ['TEA_MEMORY_CACHE_BYTES','TEA_MEMORY_MAX_RESIDENT_BYTES','TEA_SESSION_MAX_STORAGE_BYTES']) {
+    for(const value of ['-1','NaN','0.5','9007199254740992']) assert.throws(()=>loadConfig({}, {[name]:value}),ConfigError);
+  }
+});

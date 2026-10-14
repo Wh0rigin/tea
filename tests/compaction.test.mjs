@@ -187,8 +187,8 @@ test('request byte measurement includes exact provider controls', () => {
   const config = liveConfig(), request = { system: 's', tools: [], messages: history(), maxTokens: 1200 };
   assert.equal(requestBytes(config, request), Buffer.byteLength(JSON.stringify(buildMessagesRequest(config, request)), 'utf8'));
 });
-test('default configuration disables automatic compaction and rejects invalid limits', () => {
-  assert.equal(loadConfig({}, {}).compaction, 'off');
+test('default configuration enables automatic compaction and rejects invalid limits', () => {
+  assert.equal(loadConfig({}, {}).compaction, 'auto');
   for (const env of [{ TEA_COMPACTION: 'bad' }, { TEA_COMPACTION_TRIGGER_RATIO: '1' },
     { TEA_COMPACTION_KEEP_RECENT_BYTES: '0.5' }, { TEA_COMPACTION_MAX_PER_TURN: '9' }]) {
     assert.throws(() => loadConfig({}, env));
@@ -260,7 +260,7 @@ test('manual compaction keeps validation pending and /new keeps spending and out
   const result = await compactAgentSession(config, { session: s, adapterFactory: () => adapter });
   assert.equal(result.status, 'compacted'); assert.equal(result.validationPassed, false);
   assert.equal(s.pendingValidation, true); assert.equal(s.running, false);
-  resetConversation(s); assert.equal(s.messages.length, 0); assert.equal(s.compaction, null);
+  await resetConversation(s, config); assert.equal(s.messages.length, 0); assert.equal(s.compaction, null);
   assert.equal(s.adapter.spentUsd, 0.25); assert.equal(s.pendingValidation, true); assert.deepEqual(s.changedFiles, ['value.mjs']);
   s.running = true; assert.throws(() => resetConversation(s), /Stop/);
   await assert.rejects(compactAgentSession(config, { session: s }), /running turn/);
