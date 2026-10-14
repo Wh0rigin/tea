@@ -299,6 +299,7 @@ Optimization work should record its hypothesis, baseline, candidate, quality che
 
 - [Graded coding ability tasks](docs/CODING_ABILITY.md): eight executable tasks from file creation to asynchronous scheduling and transaction repair; preflight runs without API calls.
 - [First live coding ability run](benchmarks/reports/coding-ability-glm-20261014-v1/README.md): 8/8 self-authored tasks accepted with GLM-5.3-flash / low effort, one fresh attempt each; 279,529 reported tokens in total. This is a small Node.js diagnostic suite, not a general coding accuracy claim.
+- [Coding ability comparison with native Pi](benchmarks/reports/coding-ability-tea-pi-glm-20261014-v1/README.md): functional checks TEA 8/8, Pi 7/8; 279,529 vs 172,953 tokens across all attempts (TEA +61.62%). Across the seven tasks with passing functional checks on both sides, TEA used 18.84% more. Recorded TEA vs new Pi, one attempt per task; failures retain their costs and unconfirmed native validation is separately marked.
 
 Supporting research documents currently include Chinese content.
 

@@ -231,6 +231,8 @@ tea
 
 [首轮真实测试结果](benchmarks/reports/coding-ability-glm-20261014-v1/README.md)：GLM-5.3-flash / low，每题一次，8/8 自编题通过完整验收，共 279,529 实际 Token。这是 Node.js 小样本诊断，不代表通用编码正确率。
 
+[与原生 Pi 的编码横向对比](benchmarks/reports/coding-ability-tea-pi-glm-20261014-v1/README.md)：功能验收 TEA 8/8、Pi 7/8；全尝试 Token 为 279,529 / 172,953，TEA 多 61.62%。双方功能通过的 7 题中，TEA 多 18.84%。复用 TEA 首轮，新增 Pi 单次运行；失败保留实际用量，验证未确认单列。
+
 ```powershell
 npm run benchmark:replay
 tea benchmark run --suite core --mode replay
