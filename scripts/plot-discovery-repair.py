@@ -58,4 +58,5 @@ fig.supxlabel('GLM-5.3-flash · enabled / low · both ContextOS + auto compactio
               'Source: TEA-only frozen revision experiment, 2026-10-14. All cache input and thinking output included.', fontsize=9)
 fig.savefig(folder / 'tokens.png', dpi=170)
 fig.savefig(folder / 'tokens.svg')
+(folder / 'tokens.svg').write_bytes((folder / 'tokens.svg').read_bytes().replace(b'\r\n', b'\n'))
 plt.close(fig)
