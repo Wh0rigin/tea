@@ -54,7 +54,7 @@ try {
   const child = await execute(process.execPath, ['scripts/compare-contextos-pi.mjs', '--mode', 'contract', '--baseline-ref', baseline, '--candidate-ref', candidate,
     ...(process.argv[4] === 'auto-gc' ? ['--candidate-auto-gc', 'true'] : []),
     ...(process.argv[4] === 'both-auto-gc' ? ['--both-auto-gc', 'true'] : []),
-    '--groups', 'fresh', '--scales', scales, '--repeat', '3', '--run-id', runId, '--max-cost-usd', '1'], { cwd: ROOT, env, windowsHide: true, timeout: 180000, maxBuffer: 1_000_000 });
+    '--groups', 'fresh', '--scales', scales, '--repeat', '3', '--run-id', runId, '--max-cost-usd', '1'], { cwd: ROOT, env, windowsHide: true, timeout: 180000 * scales.split(',').length, maxBuffer: 1_000_000 });
   const directory = path.join(ROOT, 'benchmarks/results', runId), report = JSON.parse(await readFile(path.join(directory, 'comparison.json'), 'utf8'));
   assert.equal(report.complete, true); assert.equal(report.paidProviderRequests, 0); assert.equal(report.usageSource, 'scripted-loopback');
   assert.equal(report.runs.length, expectedRuns); assert.ok(report.runs.every(run => run.accepted));
