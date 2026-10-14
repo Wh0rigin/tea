@@ -123,7 +123,8 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
   if (!['solution', 'unchanged', 'extended'].includes(fixtureVariant)) throw new Error('Unknown scripted fixture variant');
   if (mode === 'live' && fixtureVariant === 'extended') throw new Error('Extended diagnostic loops are a scripted stress check only');
   validateRunId(runId);
-  const validatedConfig = loadConfig({ contextStrategy: strategy, initialFileLimit, historyStrategy, historyKeepRecent }, {});
+  // This fixture compares tool-history policies; keep summary activation fixed.
+  const validatedConfig = loadConfig({ contextStrategy: strategy, initialFileLimit, historyStrategy, historyKeepRecent, compaction: 'off' }, {});
   if (mode === 'live') { if (!config) throw new Error('Live benchmark requires configured credentials, rates, and a total budget'); assertLiveConfig(config); }
   const { manifest, manifestSha256 } = await loadExecutableManifest();
   const selected = taskIds ? manifest.tasks.filter((task) => taskIds.includes(task.taskId)) : manifest.tasks;

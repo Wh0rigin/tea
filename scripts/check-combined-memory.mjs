@@ -9,6 +9,7 @@ import { WorkspaceTools } from '../src/tools.mjs';
 import { ContextMemory, validToolProtocol } from '../src/context-assembler.mjs';
 import { requestBytes } from '../src/compaction.mjs';
 import { attachSessionJournal, appendSessionMessage, persistRuntimeState, closeSessionJournal } from '../src/session-memory.mjs';
+import { attachContextArchive } from '../src/memory-gc.mjs';
 
 const output=path.resolve(process.argv[2]||`benchmarks/results/combined-memory-contract-${Date.now()}`);
 await mkdir(output,{recursive:false});
@@ -46,14 +47,20 @@ for(const [policy,compaction] of [['full-history','off'],['full-history','auto']
   return{content:instructions.map(([name,input],i)=>({type:'tool_use',id:`task-${taskRequests}-${i}`,name,input})),stop_reason:'tool_use'};
  }})});
  nudges=session.messages.filter(m=>typeof m.content==='string'&&m.content.includes('Runtime validation is pending')).length;
- const canonicalPreserved=hash(session.messages.slice(0,seed.length))===seedHash;
- check(`${variant}: canonical seed unchanged`,canonicalPreserved);
+ await attachSessionJournal(session,config);
+ if(policy==='contextos')attachContextArchive(session,config);
+ const gcRow=session.journal.rows.findLast(row=>row.kind==='memory_gc_checkpoint');
+ const gcCheckpoint=gcRow ? await session.journal.get(gcRow.artifact) : null;
+ const originals=gcCheckpoint ? await Promise.all([...gcCheckpoint.coveredArtifacts,...gcCheckpoint.suffixArtifacts].map(ref=>session.journal.get(ref))) : session.messages;
+ const canonicalPreserved=hash(originals.slice(0,seed.length))===seedHash;
+ check(`${variant}: canonical seed durably preserved`,canonicalPreserved);
  check(`${variant}: actual validation required and completed`,result.status==='completed'&&result.validationPassed&&nudges===1);
  check(`${variant}: expected summary activation`,summaryRequests===(compaction==='auto'?1:0));
  let recovery=null;
  if(policy==='contextos'){
   const memory=session.contextMemory;memory.rebuild(session.messages);
-  const unit=[...memory.units.values()].find(u=>u.name==='read_file'&&u.path==='README.md');
+  const unit=[...memory.units.values()].find(u=>u.name==='read_file'&&u.path==='README.md')
+   || JSON.parse(await memory.search({query:'observed_marker=997'})).find(u=>u.path==='README.md');
   const originalRecovered=(await memory.recall({ref:unit.ref})).includes('observed_marker=997');
   check(`${variant}: original indexed source remains recoverable internally`,originalRecovered);
   if(compaction==='auto'){
@@ -64,12 +71,14 @@ for(const [policy,compaction] of [['full-history','off'],['full-history','auto']
    check('combined auto: stale source withheld',stale.startsWith('STALE')&&!stale.includes('observed_marker=997'));
    // Restore the file before resuming; external changes intentionally invalidate checkpoints.
    await writeFile(path.join(workspace,'README.md'),'observed_marker=997\n'+('Historical project documentation detail.\n'.repeat(300)));
+   await persistRuntimeState(session);await closeSessionJournal(session);
    const resumed=createAgentSession({...config,resume:'combined-contract'});
    const resumedResult=await runTask('Confirm current status.',{...config,resume:'combined-contract',runId:'resume-check'},{session:resumed,adapterFactory:()=>({complete:async()=>({content:[{type:'text',text:'Status confirmed.'}],stop_reason:'end_turn'})})});
-   check('combined auto: checkpoint survives unchanged-workspace resume',resumed.compaction?.id===session.compaction?.id&&resumed.messages.length>seed.length&&resumedResult.status==='completed');
+   check('combined auto: checkpoint survives unchanged-workspace resume',resumed.compaction?.id===session.compaction?.id&&resumed.messages.length===session.messages.length+2&&resumedResult.status==='completed');
   }
   recovery={originalRecovered,searchAdvertised};
  }
+ await closeSessionJournal(session);
  runs.push({variant,taskRequests,summaryRequests,canonicalPreserved,actualValidationPassed:result.validationPassed,validationNudges:nudges,compactionCount:session.compactionCount,recovery});
 }
 const report={kind:'scripted native combination checks; no provider token claim',profile:{requestGuardBytes:80000,triggerRatio:.8,keepRecentBytes:8000,contextosTargetBytes:32000},paidRequestsAdded:0,runs,checks,passed:checks.filter(c=>c.passed).length,total:checks.length,combinationFullyCompatible:checks.every(c=>c.passed)};

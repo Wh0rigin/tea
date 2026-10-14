@@ -1,0 +1,3998 @@
+{
+  "kind": "Post-hoc analysis of existing provider runs; no new provider calls",
+  "matchedFirstRequestHashesAfterWorkspaceNormalization": true,
+  "firstRequestReconstructionMatchedRecordedWireHash": true,
+  "runs": [
+    {
+      "caseId": "large-cache-key-r1",
+      "agent": "baseline",
+      "totalTokens": 29918,
+      "inputTokens": 29574,
+      "outputTokens": 344,
+      "requests": 9,
+      "first": {
+        "normalizedSha256": "ea10958181435bee89b6d26c6ef8722b5a4ccd2a520b6044be242e484823a407",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1219,
+        "bytes": 4984,
+        "messageBytes": 1703,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4844,
+          "sent": 4844
+        },
+        {
+          "index": 2,
+          "full": 9975,
+          "sent": 9975
+        },
+        {
+          "index": 3,
+          "full": 12283,
+          "sent": 12283
+        },
+        {
+          "index": 4,
+          "full": 13284,
+          "sent": 13284
+        },
+        {
+          "index": 5,
+          "full": 14382,
+          "sent": 14382
+        },
+        {
+          "index": 6,
+          "full": 15094,
+          "sent": 15094
+        },
+        {
+          "index": 7,
+          "full": 15877,
+          "sent": 15877
+        },
+        {
+          "index": 8,
+          "full": 16287,
+          "sent": 15947
+        },
+        {
+          "index": 9,
+          "full": 16757,
+          "sent": 16417
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": ".",
+          "bytes": 4105,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 692,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "scanned=2 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 232,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 340,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 427,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 493,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 34,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 165,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1219,
+          "outputTokens": 31,
+          "totalTokens": 1250,
+          "bytes": 4984,
+          "requestSha256": "363674ff61023644b658a432eb9a72c5057e4096982add9930fb0e499423a7be"
+        },
+        {
+          "inputTokens": 2683,
+          "outputTokens": 49,
+          "totalTokens": 2732,
+          "bytes": 10115,
+          "requestSha256": "b618fea84cc9987c941c0e2f7489ff5225e07ab60790b1e6b8ced8abd4d6f50e"
+        },
+        {
+          "inputTokens": 3168,
+          "outputTokens": 52,
+          "totalTokens": 3220,
+          "bytes": 12423,
+          "requestSha256": "e8283b24109c2109121b0ddb84b33bcaf2a1ec0dfbe6dd40cbcb6559b0340e34"
+        },
+        {
+          "inputTokens": 3336,
+          "outputTokens": 38,
+          "totalTokens": 3374,
+          "bytes": 13424,
+          "requestSha256": "4988d8e4c3eb24a1a1df4a9d8e1eddd68b676fef6e025f2126d000c9e3c5e399"
+        },
+        {
+          "inputTokens": 3581,
+          "outputTokens": 16,
+          "totalTokens": 3597,
+          "bytes": 14522,
+          "requestSha256": "e02ca216a07559e105e063f1975c0e66eee3b75a8d895011d7509f6ee5ee1a07"
+        },
+        {
+          "inputTokens": 3765,
+          "outputTokens": 17,
+          "totalTokens": 3782,
+          "bytes": 15234,
+          "requestSha256": "0b6e48d114e65c56d6999a51e2ea9430bedde3c4dc72bcb164c1551b2f8e4328"
+        },
+        {
+          "inputTokens": 3956,
+          "outputTokens": 42,
+          "totalTokens": 3998,
+          "bytes": 16017,
+          "requestSha256": "88bb2c8f11b7d94cfb2f0ee44e0b2b175317f9fb63c5e9fea3f9ba3b1afa0def"
+        },
+        {
+          "inputTokens": 3886,
+          "outputTokens": 19,
+          "totalTokens": 3905,
+          "bytes": 16087,
+          "requestSha256": "83317567e10edcd074dfb7ac451d57bcd90ace5918fac18441f3c535747bcd90"
+        },
+        {
+          "inputTokens": 3980,
+          "outputTokens": 80,
+          "totalTokens": 4060,
+          "bytes": 16557,
+          "requestSha256": "80b2b6e8d3a5c93e3ffd47749a7039feb00d6978170dfc82c72869db527d08ef"
+        }
+      ]
+    },
+    {
+      "caseId": "large-cache-key-r1",
+      "agent": "candidate",
+      "totalTokens": 34773,
+      "inputTokens": 34315,
+      "outputTokens": 458,
+      "requests": 8,
+      "first": {
+        "normalizedSha256": "ea10958181435bee89b6d26c6ef8722b5a4ccd2a520b6044be242e484823a407",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1219,
+        "bytes": 4985,
+        "messageBytes": 1704,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4845,
+          "sent": 4845
+        },
+        {
+          "index": 2,
+          "full": 6863,
+          "sent": 6863
+        },
+        {
+          "index": 3,
+          "full": 17567,
+          "sent": 17567
+        },
+        {
+          "index": 4,
+          "full": 18646,
+          "sent": 18646
+        },
+        {
+          "index": 5,
+          "full": 19429,
+          "sent": 19429
+        },
+        {
+          "index": 6,
+          "full": 20093,
+          "sent": 19753
+        },
+        {
+          "index": 7,
+          "full": 20726,
+          "sent": 20386
+        },
+        {
+          "index": 8,
+          "full": 22024,
+          "sent": 21684
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 228,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 339,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 493,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 34,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 783,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1219,
+          "outputTokens": 32,
+          "totalTokens": 1251,
+          "bytes": 4985,
+          "requestSha256": "5efd684278ff3fb879ceef4b0130d0c67e1da8013a934b1cffaef4c1e05b7fbf"
+        },
+        {
+          "inputTokens": 1636,
+          "outputTokens": 12,
+          "totalTokens": 1648,
+          "bytes": 7003,
+          "requestSha256": "a9b386804b05b16a36dfbd2e536d526ce607e07fc49c7a15bb9c5d204fcb8ee1"
+        },
+        {
+          "inputTokens": 4897,
+          "outputTokens": 34,
+          "totalTokens": 4931,
+          "bytes": 17707,
+          "requestSha256": "0f743058d4fe54ebda91db90afcd498b17b755908ff2da7091a4f3300970164d"
+        },
+        {
+          "inputTokens": 5052,
+          "outputTokens": 17,
+          "totalTokens": 5069,
+          "bytes": 18786,
+          "requestSha256": "f04cc32049dc23d8c1fcca6b28a6ea217b8eb41e394af4bf230b13315853ed1d"
+        },
+        {
+          "inputTokens": 5243,
+          "outputTokens": 113,
+          "totalTokens": 5356,
+          "bytes": 19569,
+          "requestSha256": "6e14182428786bf13d5259ed7b58fe01126c322135ed79fca6bfd34a43f24653"
+        },
+        {
+          "inputTokens": 5244,
+          "outputTokens": 37,
+          "totalTokens": 5281,
+          "bytes": 19893,
+          "requestSha256": "02480360d74348f232b4fecb21b9ed6d8187a68776a8f6f268c06bd2ddf7f8d5"
+        },
+        {
+          "inputTokens": 5357,
+          "outputTokens": 48,
+          "totalTokens": 5405,
+          "bytes": 20526,
+          "requestSha256": "cae496f6cfb8162f1ef04404da47bfc15aef6f6ee503c356462835ad09543d65"
+        },
+        {
+          "inputTokens": 5667,
+          "outputTokens": 165,
+          "totalTokens": 5832,
+          "bytes": 21824,
+          "requestSha256": "f75637458eabd7be1645b4c269b0fb08f4d6fb82a2f21652fe8d133fcebdd6ec"
+        }
+      ]
+    },
+    {
+      "caseId": "large-retry-budget-r1",
+      "agent": "candidate",
+      "totalTokens": 36056,
+      "inputTokens": 35519,
+      "outputTokens": 537,
+      "requests": 8,
+      "first": {
+        "normalizedSha256": "4a351010a5cd238f9c90c40278a4aff4f863c03489cb23fd545d52abbb338517",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1231,
+        "bytes": 5017,
+        "messageBytes": 1736,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4877,
+          "sent": 4877
+        },
+        {
+          "index": 2,
+          "full": 6176,
+          "sent": 6176
+        },
+        {
+          "index": 3,
+          "full": 16880,
+          "sent": 16880
+        },
+        {
+          "index": 4,
+          "full": 18966,
+          "sent": 18966
+        },
+        {
+          "index": 5,
+          "full": 20181,
+          "sent": 20181
+        },
+        {
+          "index": 6,
+          "full": 20885,
+          "sent": 20885
+        },
+        {
+          "index": 7,
+          "full": 21569,
+          "sent": 21314
+        },
+        {
+          "index": 8,
+          "full": 22195,
+          "sent": 21940
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 343,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "tests",
+          "bytes": 471,
+          "error": false,
+          "containsTarget": true,
+          "coverage": [
+            "scanned=1 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 231,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 489,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 411,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 37,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 163,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1231,
+          "outputTokens": 25,
+          "totalTokens": 1256,
+          "bytes": 5017,
+          "requestSha256": "8850d153d7752fd4abe6b8b0d35d49830eb710f389402a50fa0f6e85fa35bd30"
+        },
+        {
+          "inputTokens": 1550,
+          "outputTokens": 12,
+          "totalTokens": 1562,
+          "bytes": 6316,
+          "requestSha256": "d3366d115c47e5aba7c601e4f4385c1c420a283de0a719a7d6136c8b5bceac7d"
+        },
+        {
+          "inputTokens": 4811,
+          "outputTokens": 49,
+          "totalTokens": 4860,
+          "bytes": 17020,
+          "requestSha256": "9312cb8473db467b9cc8db92f6da2e113af3575beff0d3cd294bbb4dd2af9b0a"
+        },
+        {
+          "inputTokens": 5238,
+          "outputTokens": 27,
+          "totalTokens": 5265,
+          "bytes": 19106,
+          "requestSha256": "b95cc12428ef81e6924554cac2bb75994a40b774e2c6c47cea3a1e7488259fbc"
+        },
+        {
+          "inputTokens": 5501,
+          "outputTokens": 18,
+          "totalTokens": 5519,
+          "bytes": 20321,
+          "requestSha256": "53230cf9cca9f2dd0b5fbfe306e7fe83c5ad67589614f17f954f1547bb4a704b"
+        },
+        {
+          "inputTokens": 5672,
+          "outputTokens": 117,
+          "totalTokens": 5789,
+          "bytes": 21025,
+          "requestSha256": "aa5645a42511287218332ad8c595a5795010c302d99686bb6eca114e078f5140"
+        },
+        {
+          "inputTokens": 5700,
+          "outputTokens": 41,
+          "totalTokens": 5741,
+          "bytes": 21454,
+          "requestSha256": "ca53dbf5f153bdfcc96f43409e19facbcd4a235269380a46b07bafb0f2584423"
+        },
+        {
+          "inputTokens": 5816,
+          "outputTokens": 248,
+          "totalTokens": 6064,
+          "bytes": 22080,
+          "requestSha256": "ba547b588446c699607d1518d6b3c951191efdfdd386b661ad2c8ca452c55fb1"
+        }
+      ]
+    },
+    {
+      "caseId": "large-retry-budget-r1",
+      "agent": "baseline",
+      "totalTokens": 51409,
+      "inputTokens": 51121,
+      "outputTokens": 288,
+      "requests": 8,
+      "first": {
+        "normalizedSha256": "4a351010a5cd238f9c90c40278a4aff4f863c03489cb23fd545d52abbb338517",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1231,
+        "bytes": 5016,
+        "messageBytes": 1735,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4876,
+          "sent": 4876
+        },
+        {
+          "index": 2,
+          "full": 6175,
+          "sent": 6175
+        },
+        {
+          "index": 3,
+          "full": 18194,
+          "sent": 18194
+        },
+        {
+          "index": 4,
+          "full": 29225,
+          "sent": 29225
+        },
+        {
+          "index": 5,
+          "full": 30000,
+          "sent": 30000
+        },
+        {
+          "index": 6,
+          "full": 30704,
+          "sent": 30704
+        },
+        {
+          "index": 7,
+          "full": 31263,
+          "sent": 31008
+        },
+        {
+          "index": 8,
+          "full": 31781,
+          "sent": 31526
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 343,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": ".",
+          "bytes": 10105,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 489,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 411,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 37,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 234,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1231,
+          "outputTokens": 25,
+          "totalTokens": 1256,
+          "bytes": 5016,
+          "requestSha256": "a810b47b97750f9de8d1446aeb33c92f921124ba6b4350d92e24f18ba7b06460"
+        },
+        {
+          "inputTokens": 1550,
+          "outputTokens": 35,
+          "totalTokens": 1585,
+          "bytes": 6315,
+          "requestSha256": "27a4f1a0fc300bd35965f92d7e5e5fe6f2b2752ab53ec4ed1bbadbc383815a97"
+        },
+        {
+          "inputTokens": 5083,
+          "outputTokens": 22,
+          "totalTokens": 5105,
+          "bytes": 18334,
+          "requestSha256": "241bfeb463bce57ddd6dd7e3679db6d823214c1cc60434d80140abe6d37eed37"
+        },
+        {
+          "inputTokens": 8374,
+          "outputTokens": 16,
+          "totalTokens": 8390,
+          "bytes": 29365,
+          "requestSha256": "72ca0955ddcb6c626ba26c880840763379274f744cb544a602e8580a65792a7b"
+        },
+        {
+          "inputTokens": 8574,
+          "outputTokens": 18,
+          "totalTokens": 8592,
+          "bytes": 30140,
+          "requestSha256": "988c63c2a2e515c6ae345c877a14f307f95e13d20b8cd7f14f6bdad8c2a8eee5"
+        },
+        {
+          "inputTokens": 8745,
+          "outputTokens": 68,
+          "totalTokens": 8813,
+          "bytes": 30844,
+          "requestSha256": "fc2f975a682431b3c0f321e4ba21118a679b5a46448a12238b96213f24d2e772"
+        },
+        {
+          "inputTokens": 8726,
+          "outputTokens": 13,
+          "totalTokens": 8739,
+          "bytes": 31148,
+          "requestSha256": "831bd0c329c4dbc8484a306e728d0c3ad0b6f7fca1230f033fa6d96354bce3ad"
+        },
+        {
+          "inputTokens": 8838,
+          "outputTokens": 91,
+          "totalTokens": 8929,
+          "bytes": 31666,
+          "requestSha256": "3c399f7bc6d915a919c89abc10a036af2421a1040507d9e9dd11f3f5062fb999"
+        }
+      ]
+    },
+    {
+      "caseId": "large-unicode-r1",
+      "agent": "baseline",
+      "totalTokens": 10063,
+      "inputTokens": 9717,
+      "outputTokens": 346,
+      "requests": 6,
+      "first": {
+        "normalizedSha256": "5da39e1f82c6c000b5c953a0a14ee398b5b4b5ee0949e952371b31bfd3d5393c",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1227,
+        "bytes": 4999,
+        "messageBytes": 1718,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4859,
+          "sent": 4859
+        },
+        {
+          "index": 2,
+          "full": 6106,
+          "sent": 6106
+        },
+        {
+          "index": 3,
+          "full": 6659,
+          "sent": 6659
+        },
+        {
+          "index": 4,
+          "full": 7172,
+          "sent": 7172
+        },
+        {
+          "index": 5,
+          "full": 7976,
+          "sent": 7779
+        },
+        {
+          "index": 6,
+          "full": 8445,
+          "sent": 8248
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "README.md",
+          "bytes": 325,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src/services",
+          "bytes": 263,
+          "error": false,
+          "containsTarget": true,
+          "coverage": [
+            "scanned=1 files"
+          ]
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 232,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1227,
+          "outputTokens": 25,
+          "totalTokens": 1252,
+          "bytes": 4999,
+          "requestSha256": "b69e0a06392b754724a25045033aecbc002bb7186869ab072ab8f6d87c68316a"
+        },
+        {
+          "inputTokens": 1509,
+          "outputTokens": 19,
+          "totalTokens": 1528,
+          "bytes": 6246,
+          "requestSha256": "624819ba539c986733ef1b4404d8a53f38df4520f209e8e8ad89292853910a07"
+        },
+        {
+          "inputTokens": 1593,
+          "outputTokens": 16,
+          "totalTokens": 1609,
+          "bytes": 6799,
+          "requestSha256": "4b51241be2b3214196217a37eca863047a78ce23179772c77e5107c30e4151a8"
+        },
+        {
+          "inputTokens": 1720,
+          "outputTokens": 137,
+          "totalTokens": 1857,
+          "bytes": 7312,
+          "requestSha256": "00ec1afa3ad8897eb788dd4f7e6aa0fa2dabf7dc7f592348202c34e1fbac1f7f"
+        },
+        {
+          "inputTokens": 1787,
+          "outputTokens": 19,
+          "totalTokens": 1806,
+          "bytes": 7919,
+          "requestSha256": "4e9d920df9f7e84179229290920602bbaeb0d130c60474454b395a86b0a08b0e"
+        },
+        {
+          "inputTokens": 1881,
+          "outputTokens": 130,
+          "totalTokens": 2011,
+          "bytes": 8388,
+          "requestSha256": "18589f510dc58afe5d594a32a415383ea6c23c163c874de7d9c34c4496ef3197"
+        }
+      ]
+    },
+    {
+      "caseId": "large-unicode-r1",
+      "agent": "candidate",
+      "totalTokens": 93279,
+      "inputTokens": 91310,
+      "outputTokens": 1969,
+      "requests": 17,
+      "first": {
+        "normalizedSha256": "5da39e1f82c6c000b5c953a0a14ee398b5b4b5ee0949e952371b31bfd3d5393c",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1227,
+        "bytes": 5000,
+        "messageBytes": 1719,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4860,
+          "sent": 4860
+        },
+        {
+          "index": 2,
+          "full": 6861,
+          "sent": 6861
+        },
+        {
+          "index": 3,
+          "full": 7372,
+          "sent": 7372
+        },
+        {
+          "index": 4,
+          "full": 18098,
+          "sent": 18098
+        },
+        {
+          "index": 5,
+          "full": 18854,
+          "sent": 18854
+        },
+        {
+          "index": 6,
+          "full": 19855,
+          "sent": 19855
+        },
+        {
+          "index": 7,
+          "full": 20588,
+          "sent": 20588
+        },
+        {
+          "index": 8,
+          "full": 21101,
+          "sent": 21101
+        },
+        {
+          "index": 9,
+          "full": 21668,
+          "sent": 21588
+        },
+        {
+          "index": 10,
+          "full": 22619,
+          "sent": 22539
+        },
+        {
+          "index": 11,
+          "full": 23799,
+          "sent": 23467
+        },
+        {
+          "index": 12,
+          "full": 24813,
+          "sent": 24481
+        },
+        {
+          "index": 13,
+          "full": 27132,
+          "sent": 26495
+        },
+        {
+          "index": 14,
+          "full": 27820,
+          "sent": 29724
+        },
+        {
+          "index": 15,
+          "full": 29875,
+          "sent": 31779
+        },
+        {
+          "index": 16,
+          "full": 31070,
+          "sent": 32650
+        },
+        {
+          "index": 17,
+          "full": 31540,
+          "sent": 33120
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 322,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src/generated",
+          "bytes": 234,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 232,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 398,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "AGENTS.md",
+          "bytes": 17,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "AGENTS.md",
+          "bytes": 17,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 468,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 165,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1227,
+          "outputTokens": 24,
+          "totalTokens": 1251,
+          "bytes": 5000,
+          "requestSha256": "ab8c40ee1405110712633cc0e11b0939c1c4751cc8d7048ccedac7e3adde1550"
+        },
+        {
+          "inputTokens": 1636,
+          "outputTokens": 20,
+          "totalTokens": 1656,
+          "bytes": 7001,
+          "requestSha256": "15134a8861472dba4ddaefcee65efd91aedb4d16c9503bea701728477ef235b2"
+        },
+        {
+          "inputTokens": 1712,
+          "outputTokens": 20,
+          "totalTokens": 1732,
+          "bytes": 7512,
+          "requestSha256": "c7d86df309e4a1c86ce5556827180fd6c2a566796b5fe2bba42b47dfa42a23d6"
+        },
+        {
+          "inputTokens": 4981,
+          "outputTokens": 29,
+          "totalTokens": 5010,
+          "bytes": 18238,
+          "requestSha256": "f8a9141cde1700a7d3a253ced0836d6377a8f5f4b3557e7b70ae2ab8d09beeb3"
+        },
+        {
+          "inputTokens": 5080,
+          "outputTokens": 54,
+          "totalTokens": 5134,
+          "bytes": 18994,
+          "requestSha256": "56cad91ff370bcac15dc7148ec682823f29cb67d7e4e5b437465d3c0cdb4cef0"
+        },
+        {
+          "inputTokens": 5241,
+          "outputTokens": 16,
+          "totalTokens": 5257,
+          "bytes": 19995,
+          "requestSha256": "523fd55227ee85c98c5a0f8903e6a03e33c7edfcaf3189122c7943d431e34fa2"
+        },
+        {
+          "inputTokens": 5422,
+          "outputTokens": 16,
+          "totalTokens": 5438,
+          "bytes": 20728,
+          "requestSha256": "04c29acf0620f2ef1327f84b9c7a2463382da9b98c5ee8725e3473e75f67d63a"
+        },
+        {
+          "inputTokens": 5549,
+          "outputTokens": 96,
+          "totalTokens": 5645,
+          "bytes": 21241,
+          "requestSha256": "c8a00ae9dbdd16c53dff555d2b3d2d689a812a35718f645c2875149ed3144ef8"
+        },
+        {
+          "inputTokens": 5595,
+          "outputTokens": 53,
+          "totalTokens": 5648,
+          "bytes": 21728,
+          "requestSha256": "a99ee69132311b49ff4a98abf4a5f01fe7aa6a26fb6efb08875206d0936ce897"
+        },
+        {
+          "inputTokens": 5815,
+          "outputTokens": 216,
+          "totalTokens": 6031,
+          "bytes": 22679,
+          "requestSha256": "1ed427f34318a533de77a8b60133d3be45d4e5b4c8592c521a50352100241661"
+        },
+        {
+          "inputTokens": 5925,
+          "outputTokens": 127,
+          "totalTokens": 6052,
+          "bytes": 23607,
+          "requestSha256": "919ca61f21f554fc06408f82f102ddfb3bf45ae9fc7c0851c936aa95554dfa80"
+        },
+        {
+          "inputTokens": 6127,
+          "outputTokens": 449,
+          "totalTokens": 6576,
+          "bytes": 24621,
+          "requestSha256": "16dd74cd01551cfaa1044e0184d08245ac47620bfa39ad63d378579ddc66e820"
+        },
+        {
+          "inputTokens": 6504,
+          "outputTokens": 92,
+          "totalTokens": 6596,
+          "bytes": 26635,
+          "requestSha256": "105d41b2a319fb4791649192216aa35eddf52450c6ed4e6d0ba271650f2a0d34"
+        },
+        {
+          "inputTokens": 7198,
+          "outputTokens": 157,
+          "totalTokens": 7355,
+          "bytes": 29864,
+          "requestSha256": "3b2d74b7288b43b8ab778b00e7b20458c1f0ebde87b4c8d7e0ab1998cb817bd4"
+        },
+        {
+          "inputTokens": 7677,
+          "outputTokens": 212,
+          "totalTokens": 7889,
+          "bytes": 31919,
+          "requestSha256": "a86e058577de42ee82faa10c72fd2b1623cb9e667b948e3156998b371281be05"
+        },
+        {
+          "inputTokens": 7763,
+          "outputTokens": 19,
+          "totalTokens": 7782,
+          "bytes": 32790,
+          "requestSha256": "767ec5acd4c45b275b2acfead76371bd8996209960aefd7777f016b57ae5e73a"
+        },
+        {
+          "inputTokens": 7858,
+          "outputTokens": 369,
+          "totalTokens": 8227,
+          "bytes": 33260,
+          "requestSha256": "4519be9c47f996d2e6344999541ce9f90c8b9704ecbbd8049b172bafce4319f3"
+        }
+      ]
+    },
+    {
+      "caseId": "large-cache-key-r2",
+      "agent": "candidate",
+      "totalTokens": 43838,
+      "inputTokens": 43413,
+      "outputTokens": 425,
+      "requests": 9,
+      "first": {
+        "normalizedSha256": "ea10958181435bee89b6d26c6ef8722b5a4ccd2a520b6044be242e484823a407",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1219,
+        "bytes": 4985,
+        "messageBytes": 1704,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4845,
+          "sent": 4845
+        },
+        {
+          "index": 2,
+          "full": 16202,
+          "sent": 16202
+        },
+        {
+          "index": 3,
+          "full": 16848,
+          "sent": 16848
+        },
+        {
+          "index": 4,
+          "full": 18653,
+          "sent": 18653
+        },
+        {
+          "index": 5,
+          "full": 19365,
+          "sent": 19365
+        },
+        {
+          "index": 6,
+          "full": 20148,
+          "sent": 20148
+        },
+        {
+          "index": 7,
+          "full": 21107,
+          "sent": 20767
+        },
+        {
+          "index": 8,
+          "full": 22397,
+          "sent": 22057
+        },
+        {
+          "index": 9,
+          "full": 22866,
+          "sent": 22526
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 339,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 427,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 493,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 34,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 897,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1219,
+          "outputTokens": 24,
+          "totalTokens": 1243,
+          "bytes": 4985,
+          "requestSha256": "47c8bff377171d15dd8425fe82a20d8a8c825261d46d2da8dbf1a750e5b8ed51"
+        },
+        {
+          "inputTokens": 4627,
+          "outputTokens": 19,
+          "totalTokens": 4646,
+          "bytes": 16342,
+          "requestSha256": "e4cb26dacc31ead12d7c6050188f90eea33a9aafba22756dd429dd903d4be683"
+        },
+        {
+          "inputTokens": 4716,
+          "outputTokens": 38,
+          "totalTokens": 4754,
+          "bytes": 16988,
+          "requestSha256": "1c20f87a03062458c074cf2794fab3e9d0ec5c26234f779ba1664424726fea0d"
+        },
+        {
+          "inputTokens": 5053,
+          "outputTokens": 16,
+          "totalTokens": 5069,
+          "bytes": 18793,
+          "requestSha256": "756147ca97f118de05a358a222f997beb6857083ed6c8bb0dbad74e25bdb36fb"
+        },
+        {
+          "inputTokens": 5237,
+          "outputTokens": 17,
+          "totalTokens": 5254,
+          "bytes": 19505,
+          "requestSha256": "a00bea694b8110ffd41bb4a3a204fccc8a5aa8985c17c78018d14c77ab0e1194"
+        },
+        {
+          "inputTokens": 5428,
+          "outputTokens": 159,
+          "totalTokens": 5587,
+          "bytes": 20288,
+          "requestSha256": "a9bd3823a05ca14c5aa89d5ca8f75219beb957f5919328fbf1b2461e7fbb1f52"
+        },
+        {
+          "inputTokens": 5474,
+          "outputTokens": 23,
+          "totalTokens": 5497,
+          "bytes": 20907,
+          "requestSha256": "5c74a63aca3cbc0932dd5d5f4b4f1f515242ed7e338d0f87a8b0a19ca603fba1"
+        },
+        {
+          "inputTokens": 5782,
+          "outputTokens": 19,
+          "totalTokens": 5801,
+          "bytes": 22197,
+          "requestSha256": "ccde2b825dfd01f4febb6b3e510a6908c995e1f6fbbb84c19d2c4b12f59eb585"
+        },
+        {
+          "inputTokens": 5877,
+          "outputTokens": 110,
+          "totalTokens": 5987,
+          "bytes": 22666,
+          "requestSha256": "f5d0d7ac9a4c30168f2854fbfdf4aecccd81822fc9ad0d208179a2e7485f7426"
+        }
+      ]
+    },
+    {
+      "caseId": "large-cache-key-r2",
+      "agent": "baseline",
+      "totalTokens": 19226,
+      "inputTokens": 18880,
+      "outputTokens": 346,
+      "requests": 8,
+      "first": {
+        "normalizedSha256": "ea10958181435bee89b6d26c6ef8722b5a4ccd2a520b6044be242e484823a407",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1219,
+        "bytes": 4984,
+        "messageBytes": 1703,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4844,
+          "sent": 4844
+        },
+        {
+          "index": 2,
+          "full": 7513,
+          "sent": 7513
+        },
+        {
+          "index": 3,
+          "full": 9307,
+          "sent": 9307
+        },
+        {
+          "index": 4,
+          "full": 10019,
+          "sent": 10019
+        },
+        {
+          "index": 5,
+          "full": 10802,
+          "sent": 10802
+        },
+        {
+          "index": 6,
+          "full": 11505,
+          "sent": 11165
+        },
+        {
+          "index": 7,
+          "full": 12604,
+          "sent": 12264
+        },
+        {
+          "index": 8,
+          "full": 13074,
+          "sent": 12734
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": ".",
+          "bytes": 1704,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 427,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 493,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 34,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 703,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 165,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1219,
+          "outputTokens": 31,
+          "totalTokens": 1250,
+          "bytes": 4984,
+          "requestSha256": "ac995a44d05cbb5d6b6df51d8f6cdc728cf233cc383f05f0ef1a75c733ed2c1c"
+        },
+        {
+          "inputTokens": 1916,
+          "outputTokens": 35,
+          "totalTokens": 1951,
+          "bytes": 7653,
+          "requestSha256": "3ff4060676f116a5286b2b77e43edaf920b8ab6aa89b4e8eb40cd67f8ef2d987"
+        },
+        {
+          "inputTokens": 2251,
+          "outputTokens": 16,
+          "totalTokens": 2267,
+          "bytes": 9447,
+          "requestSha256": "a45d787f0e04923977073a364decd9d2c17066875de0744453b9356e98b41fa6"
+        },
+        {
+          "inputTokens": 2435,
+          "outputTokens": 17,
+          "totalTokens": 2452,
+          "bytes": 10159,
+          "requestSha256": "145225f2a3f6d52ce937f4e193ad1be20d09274aac9688a5f782a96d542e57d2"
+        },
+        {
+          "inputTokens": 2626,
+          "outputTokens": 93,
+          "totalTokens": 2719,
+          "bytes": 10942,
+          "requestSha256": "a33241e1dd322aa0d9e9c4f4574813a11540e9f3e3afeae2ee7c0a5bc52e1e5e"
+        },
+        {
+          "inputTokens": 2608,
+          "outputTokens": 23,
+          "totalTokens": 2631,
+          "bytes": 11305,
+          "requestSha256": "c2799a1506c715607549680c42e2b357244d568aa9df140a034bf44508f2576b"
+        },
+        {
+          "inputTokens": 2865,
+          "outputTokens": 19,
+          "totalTokens": 2884,
+          "bytes": 12404,
+          "requestSha256": "fc2d2994f7675bf003863ba3a322bd0a9afd43e9159f27ae0f1980d78dd93439"
+        },
+        {
+          "inputTokens": 2960,
+          "outputTokens": 112,
+          "totalTokens": 3072,
+          "bytes": 12874,
+          "requestSha256": "10b4123bb753136389acbebbb14b5559ca9478b8cb83b16b68f0af9afac84ba3"
+        }
+      ]
+    },
+    {
+      "caseId": "large-retry-budget-r2",
+      "agent": "baseline",
+      "totalTokens": 59456,
+      "inputTokens": 58885,
+      "outputTokens": 571,
+      "requests": 11,
+      "first": {
+        "normalizedSha256": "4a351010a5cd238f9c90c40278a4aff4f863c03489cb23fd545d52abbb338517",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1231,
+        "bytes": 5016,
+        "messageBytes": 1735,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4876,
+          "sent": 4876
+        },
+        {
+          "index": 2,
+          "full": 6033,
+          "sent": 6033
+        },
+        {
+          "index": 3,
+          "full": 18037,
+          "sent": 18037
+        },
+        {
+          "index": 4,
+          "full": 28758,
+          "sent": 28758
+        },
+        {
+          "index": 5,
+          "full": 29822,
+          "sent": 29822
+        },
+        {
+          "index": 6,
+          "full": 30597,
+          "sent": 30597
+        },
+        {
+          "index": 7,
+          "full": 31098,
+          "sent": 31098
+        },
+        {
+          "index": 8,
+          "full": 31802,
+          "sent": 31802
+        },
+        {
+          "index": 9,
+          "full": 32355,
+          "sent": 11336
+        },
+        {
+          "index": 10,
+          "full": 33295,
+          "sent": 12276
+        },
+        {
+          "index": 11,
+          "full": 34276,
+          "sent": 13257
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 235,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": ".",
+          "bytes": 10105,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 343,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 489,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 231,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 411,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 37,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 412,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1231,
+          "outputTokens": 24,
+          "totalTokens": 1255,
+          "bytes": 5016,
+          "requestSha256": "6fdaf2dba2edf5b85ea47ece95cd2f3929f5a9b4c88b181876f2658afb38a512"
+        },
+        {
+          "inputTokens": 1452,
+          "outputTokens": 28,
+          "totalTokens": 1480,
+          "bytes": 6173,
+          "requestSha256": "d56cb5103563e4445d1f48e248edadc4b64601c161e4c0dab608b4c11a362d41"
+        },
+        {
+          "inputTokens": 4978,
+          "outputTokens": 18,
+          "totalTokens": 4996,
+          "bytes": 18177,
+          "requestSha256": "1627943a272b9d937ac01bd7e2e3fd0da6ec40df824946345a5e9c5c1d178b80"
+        },
+        {
+          "inputTokens": 8216,
+          "outputTokens": 23,
+          "totalTokens": 8239,
+          "bytes": 28898,
+          "requestSha256": "c229d189ffac9b245a93183bdc10da33489d5519b26075b8734068a8f160eb03"
+        },
+        {
+          "inputTokens": 8447,
+          "outputTokens": 16,
+          "totalTokens": 8463,
+          "bytes": 29962,
+          "requestSha256": "1c5acaeecec51094333642d506af73b08cf5c3cf83d1bab739b372426bc9af6d"
+        },
+        {
+          "inputTokens": 8647,
+          "outputTokens": 13,
+          "totalTokens": 8660,
+          "bytes": 30737,
+          "requestSha256": "743e5a9ec1425bd0476520ec6966def54fa2174e8ddce9d6b7d50aff6f845fd6"
+        },
+        {
+          "inputTokens": 8714,
+          "outputTokens": 18,
+          "totalTokens": 8732,
+          "bytes": 31238,
+          "requestSha256": "a704819ff7cf8e5949f265704c82dd6c53bfff378227e62e71140fd9e298c5c6"
+        },
+        {
+          "inputTokens": 8885,
+          "outputTokens": 64,
+          "totalTokens": 8949,
+          "bytes": 31942,
+          "requestSha256": "4f23b6e8b51a58d5fdc6791237e5044cb94ba44e267f15d53e2c1e36713967bb"
+        },
+        {
+          "inputTokens": 2566,
+          "outputTokens": 48,
+          "totalTokens": 2614,
+          "bytes": 11476,
+          "requestSha256": "9b792aa12437611c901bc5764c73e13b66b77bd3b5428a2c8e3f03c3620b54b0"
+        },
+        {
+          "inputTokens": 2772,
+          "outputTokens": 129,
+          "totalTokens": 2901,
+          "bytes": 12416,
+          "requestSha256": "f56a1aac07762aab73bf4bb9528006e5fff3bb107aff659baefdb7580234d06b"
+        },
+        {
+          "inputTokens": 2977,
+          "outputTokens": 190,
+          "totalTokens": 3167,
+          "bytes": 13397,
+          "requestSha256": "85528cdecd8e9c17266f0baf279d89b5d14df252086ec4124c1eb79ba63e59a3"
+        }
+      ]
+    },
+    {
+      "caseId": "large-retry-budget-r2",
+      "agent": "candidate",
+      "totalTokens": 36245,
+      "inputTokens": 35893,
+      "outputTokens": 352,
+      "requests": 9,
+      "first": {
+        "normalizedSha256": "4a351010a5cd238f9c90c40278a4aff4f863c03489cb23fd545d52abbb338517",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1231,
+        "bytes": 5017,
+        "messageBytes": 1736,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4877,
+          "sent": 4877
+        },
+        {
+          "index": 2,
+          "full": 6176,
+          "sent": 6176
+        },
+        {
+          "index": 3,
+          "full": 6680,
+          "sent": 6680
+        },
+        {
+          "index": 4,
+          "full": 17384,
+          "sent": 17384
+        },
+        {
+          "index": 5,
+          "full": 18406,
+          "sent": 18406
+        },
+        {
+          "index": 6,
+          "full": 19181,
+          "sent": 19181
+        },
+        {
+          "index": 7,
+          "full": 19885,
+          "sent": 19885
+        },
+        {
+          "index": 8,
+          "full": 20573,
+          "sent": 20318
+        },
+        {
+          "index": 9,
+          "full": 21043,
+          "sent": 20788
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 343,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 235,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 322,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 489,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 411,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 37,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 165,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1231,
+          "outputTokens": 25,
+          "totalTokens": 1256,
+          "bytes": 5017,
+          "requestSha256": "5b333663a2ec7cad30747a33e591cf94e28f281be9c2c6af05cef8d23d45afa2"
+        },
+        {
+          "inputTokens": 1550,
+          "outputTokens": 12,
+          "totalTokens": 1562,
+          "bytes": 6316,
+          "requestSha256": "de13e008736b0275a0415b8c4a286013e362f09683996a89f1ec014eac785691"
+        },
+        {
+          "inputTokens": 1624,
+          "outputTokens": 12,
+          "totalTokens": 1636,
+          "bytes": 6820,
+          "requestSha256": "911c05e6640b78cc159dbacd31eda73216f43c045c6f8b8b2886cd4946ebee61"
+        },
+        {
+          "inputTokens": 4885,
+          "outputTokens": 23,
+          "totalTokens": 4908,
+          "bytes": 17524,
+          "requestSha256": "cf2c48df49cf3f33cd9c40f36a1234815e12f0ddc93836db83af0a5d35c69dd3"
+        },
+        {
+          "inputTokens": 5027,
+          "outputTokens": 16,
+          "totalTokens": 5043,
+          "bytes": 18546,
+          "requestSha256": "148371e46f1c142a6a2f00caf169d454e07666538e4f39b3bcdc56ba0506c76b"
+        },
+        {
+          "inputTokens": 5227,
+          "outputTokens": 18,
+          "totalTokens": 5245,
+          "bytes": 19321,
+          "requestSha256": "93df489e004110896c6b0cdc398b89972321a905814b71c729e63d8877df0ef4"
+        },
+        {
+          "inputTokens": 5398,
+          "outputTokens": 119,
+          "totalTokens": 5517,
+          "bytes": 20025,
+          "requestSha256": "29ed455a96cf3b6fb82094e4dbc4aca6c1660449fb47589d983105df9d6d37f8"
+        },
+        {
+          "inputTokens": 5428,
+          "outputTokens": 19,
+          "totalTokens": 5447,
+          "bytes": 20458,
+          "requestSha256": "739fce5e45c4f9715d9015e9e792723da44ab67b6b66b2632082bdb0071746ad"
+        },
+        {
+          "inputTokens": 5523,
+          "outputTokens": 108,
+          "totalTokens": 5631,
+          "bytes": 20928,
+          "requestSha256": "09949a574513bbcc3bfa5946e79fefbbd490ce699878996083192f698bf6d57a"
+        }
+      ]
+    },
+    {
+      "caseId": "large-unicode-r2",
+      "agent": "candidate",
+      "totalTokens": 18005,
+      "inputTokens": 16958,
+      "outputTokens": 1047,
+      "requests": 8,
+      "first": {
+        "normalizedSha256": "5da39e1f82c6c000b5c953a0a14ee398b5b4b5ee0949e952371b31bfd3d5393c",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1227,
+        "bytes": 5000,
+        "messageBytes": 1719,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4860,
+          "sent": 4860
+        },
+        {
+          "index": 2,
+          "full": 6107,
+          "sent": 6107
+        },
+        {
+          "index": 3,
+          "full": 7887,
+          "sent": 7887
+        },
+        {
+          "index": 4,
+          "full": 9072,
+          "sent": 9072
+        },
+        {
+          "index": 5,
+          "full": 9794,
+          "sent": 9714
+        },
+        {
+          "index": 6,
+          "full": 11409,
+          "sent": 11329
+        },
+        {
+          "index": 7,
+          "full": 11878,
+          "sent": 11798
+        },
+        {
+          "index": 8,
+          "full": 12669,
+          "sent": 12589
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "README.md",
+          "bytes": 325,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 223,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 232,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 339,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1227,
+          "outputTokens": 25,
+          "totalTokens": 1252,
+          "bytes": 5000,
+          "requestSha256": "87abe7a56ff798e6560af7d095ff7062058af7e32fc72421dc673325de8ad04c"
+        },
+        {
+          "inputTokens": 1509,
+          "outputTokens": 23,
+          "totalTokens": 1532,
+          "bytes": 6247,
+          "requestSha256": "816be832eeb888d9d1b604677780f33600c4fdf3974186bb50dcb077ff46d440"
+        },
+        {
+          "inputTokens": 1832,
+          "outputTokens": 30,
+          "totalTokens": 1862,
+          "bytes": 8027,
+          "requestSha256": "91f0179ef3f3145523c31e91107aa75596f4a19d816a6c9389a5eedef92c77b6"
+        },
+        {
+          "inputTokens": 2136,
+          "outputTokens": 114,
+          "totalTokens": 2250,
+          "bytes": 9212,
+          "requestSha256": "3ef75d791a1bef6bc2de97334cbed5a9537b4453e70af177fa2f50448b6cc6af"
+        },
+        {
+          "inputTokens": 2201,
+          "outputTokens": 362,
+          "totalTokens": 2563,
+          "bytes": 9854,
+          "requestSha256": "ef6649c31bc1be1b44a8b6e50bb6df1097fc010b4c25c6b661a9b34098afcc1f"
+        },
+        {
+          "inputTokens": 2573,
+          "outputTokens": 19,
+          "totalTokens": 2592,
+          "bytes": 11469,
+          "requestSha256": "4b6da67963dad4ab9e1da2c922f15b380be98c25a4863f7a31ac7543f117bbb8"
+        },
+        {
+          "inputTokens": 2668,
+          "outputTokens": 74,
+          "totalTokens": 2742,
+          "bytes": 11938,
+          "requestSha256": "681fa40748e1c93a3f9e7095461788037a24bbaeac6c777cd9dbb9d0f117cf08"
+        },
+        {
+          "inputTokens": 2812,
+          "outputTokens": 400,
+          "totalTokens": 3212,
+          "bytes": 12729,
+          "requestSha256": "2bb57f642df69e320e49a5f70deebb35dde0b2676c0abbe43673be9a7963d705"
+        }
+      ]
+    },
+    {
+      "caseId": "large-unicode-r2",
+      "agent": "baseline",
+      "totalTokens": 29251,
+      "inputTokens": 28891,
+      "outputTokens": 360,
+      "requests": 7,
+      "first": {
+        "normalizedSha256": "5da39e1f82c6c000b5c953a0a14ee398b5b4b5ee0949e952371b31bfd3d5393c",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1227,
+        "bytes": 4999,
+        "messageBytes": 1718,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4859,
+          "sent": 4859
+        },
+        {
+          "index": 2,
+          "full": 6860,
+          "sent": 6860
+        },
+        {
+          "index": 3,
+          "full": 17564,
+          "sent": 17564
+        },
+        {
+          "index": 4,
+          "full": 18729,
+          "sent": 18729
+        },
+        {
+          "index": 5,
+          "full": 19242,
+          "sent": 19242
+        },
+        {
+          "index": 6,
+          "full": 19860,
+          "sent": 19780
+        },
+        {
+          "index": 7,
+          "full": 20328,
+          "sent": 20248
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 223,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 232,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 163,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1227,
+          "outputTokens": 24,
+          "totalTokens": 1251,
+          "bytes": 4999,
+          "requestSha256": "9eac1d37b1b46b9d4b228702735266bdf589ee94c3077307332927cf5cf7503a"
+        },
+        {
+          "inputTokens": 1636,
+          "outputTokens": 12,
+          "totalTokens": 1648,
+          "bytes": 7000,
+          "requestSha256": "31c8962c85212ed69493849401278e519f2268d74d8316950a6956e353310cc3"
+        },
+        {
+          "inputTokens": 4897,
+          "outputTokens": 27,
+          "totalTokens": 4924,
+          "bytes": 17704,
+          "requestSha256": "f1e890146eb2e06b237dfbaf610c366bc0645d9bc514c1d425933026f27484ca"
+        },
+        {
+          "inputTokens": 5139,
+          "outputTokens": 16,
+          "totalTokens": 5155,
+          "bytes": 18869,
+          "requestSha256": "8dcad86890bb179b38915534f2e79f800087f1e2a79116b692d52a5b49469109"
+        },
+        {
+          "inputTokens": 5266,
+          "outputTokens": 100,
+          "totalTokens": 5366,
+          "bytes": 19382,
+          "requestSha256": "b9a3405f4abe87afe47075c94b61f6004e50b8a7ee27f753adfd7a1335d60a70"
+        },
+        {
+          "inputTokens": 5316,
+          "outputTokens": 19,
+          "totalTokens": 5335,
+          "bytes": 19920,
+          "requestSha256": "fa35065108f168c0a3f7b1c9c18726921125082e00cbd7229357a75b103d7da6"
+        },
+        {
+          "inputTokens": 5410,
+          "outputTokens": 162,
+          "totalTokens": 5572,
+          "bytes": 20388,
+          "requestSha256": "59c7e86e0ea19d6df91b712231e803a2816dd53de0c56b971bbc0db5f513a063"
+        }
+      ]
+    },
+    {
+      "caseId": "large-cache-key-r3",
+      "agent": "baseline",
+      "totalTokens": 38887,
+      "inputTokens": 38554,
+      "outputTokens": 333,
+      "requests": 8,
+      "first": {
+        "normalizedSha256": "ea10958181435bee89b6d26c6ef8722b5a4ccd2a520b6044be242e484823a407",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1219,
+        "bytes": 4984,
+        "messageBytes": 1703,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4844,
+          "sent": 4844
+        },
+        {
+          "index": 2,
+          "full": 16201,
+          "sent": 16201
+        },
+        {
+          "index": 3,
+          "full": 18017,
+          "sent": 18017
+        },
+        {
+          "index": 4,
+          "full": 19311,
+          "sent": 19311
+        },
+        {
+          "index": 5,
+          "full": 20094,
+          "sent": 20094
+        },
+        {
+          "index": 6,
+          "full": 20504,
+          "sent": 20164
+        },
+        {
+          "index": 7,
+          "full": 21569,
+          "sent": 21229
+        },
+        {
+          "index": 8,
+          "full": 22165,
+          "sent": 21825
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 427,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 340,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 493,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 34,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 514,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1219,
+          "outputTokens": 24,
+          "totalTokens": 1243,
+          "bytes": 4984,
+          "requestSha256": "5e811e96769da78b5e9b17fef245be9ce011be136fc4570b6f046632d619fff8"
+        },
+        {
+          "inputTokens": 4627,
+          "outputTokens": 43,
+          "totalTokens": 4670,
+          "bytes": 16341,
+          "requestSha256": "572337242315c69a571a472a9ce74080fdefdb232d0841e2fcf335388e389075"
+        },
+        {
+          "inputTokens": 4970,
+          "outputTokens": 27,
+          "totalTokens": 4997,
+          "bytes": 18157,
+          "requestSha256": "1d50979a75814b64ce3aebaa4425926a8f068ffe5d814c1c0fb5d43ac83fbf29"
+        },
+        {
+          "inputTokens": 5321,
+          "outputTokens": 17,
+          "totalTokens": 5338,
+          "bytes": 19451,
+          "requestSha256": "9648e89efb252b62e24676ba646f8c502b1a56fee790ee57a9c6f701471b8235"
+        },
+        {
+          "inputTokens": 5512,
+          "outputTokens": 42,
+          "totalTokens": 5554,
+          "bytes": 20234,
+          "requestSha256": "52acfe4dd9830797f9174b9bea78487fbacd17df8b45be5d4e6443a0e4d99f8d"
+        },
+        {
+          "inputTokens": 5443,
+          "outputTokens": 50,
+          "totalTokens": 5493,
+          "bytes": 20304,
+          "requestSha256": "f69e6aa62447dfb6878458011eb7af53277f9606de86aa4d5231e75a80934af5"
+        },
+        {
+          "inputTokens": 5678,
+          "outputTokens": 30,
+          "totalTokens": 5708,
+          "bytes": 21369,
+          "requestSha256": "0fd31a9ee66087ec992f56a425535f47b2d265272a88b0d413e4052a0829c338"
+        },
+        {
+          "inputTokens": 5784,
+          "outputTokens": 100,
+          "totalTokens": 5884,
+          "bytes": 21965,
+          "requestSha256": "fe16eb1c27824dff8d5b4a3babf162310d069119a7493831d127904627b05240"
+        }
+      ]
+    },
+    {
+      "caseId": "large-cache-key-r3",
+      "agent": "candidate",
+      "totalTokens": 61894,
+      "inputTokens": 61458,
+      "outputTokens": 436,
+      "requests": 11,
+      "first": {
+        "normalizedSha256": "ea10958181435bee89b6d26c6ef8722b5a4ccd2a520b6044be242e484823a407",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1219,
+        "bytes": 4985,
+        "messageBytes": 1704,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4845,
+          "sent": 4845
+        },
+        {
+          "index": 2,
+          "full": 16202,
+          "sent": 16202
+        },
+        {
+          "index": 3,
+          "full": 17581,
+          "sent": 17581
+        },
+        {
+          "index": 4,
+          "full": 18667,
+          "sent": 18667
+        },
+        {
+          "index": 5,
+          "full": 21503,
+          "sent": 21503
+        },
+        {
+          "index": 6,
+          "full": 22843,
+          "sent": 22843
+        },
+        {
+          "index": 7,
+          "full": 23788,
+          "sent": 23788
+        },
+        {
+          "index": 8,
+          "full": 25222,
+          "sent": 25222
+        },
+        {
+          "index": 9,
+          "full": 25777,
+          "sent": 25437
+        },
+        {
+          "index": 10,
+          "full": 26581,
+          "sent": 26241
+        },
+        {
+          "index": 11,
+          "full": 27247,
+          "sent": 26907
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 339,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": ".",
+          "bytes": 2504,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 340,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "README.md",
+          "bytes": 325,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 228,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 493,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 427,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 34,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/cache-key.mjs",
+          "bytes": 514,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1219,
+          "outputTokens": 24,
+          "totalTokens": 1243,
+          "bytes": 4985,
+          "requestSha256": "9d67c409254ac1b101f39cc4b8eac45d1e3d64d1aed7dca783736bf70d110f2b"
+        },
+        {
+          "inputTokens": 4627,
+          "outputTokens": 26,
+          "totalTokens": 4653,
+          "bytes": 16342,
+          "requestSha256": "04c855a150463e3e852d85e93cd2727d297258024f373e4831c5c94802eddf7a"
+        },
+        {
+          "inputTokens": 4904,
+          "outputTokens": 40,
+          "totalTokens": 4944,
+          "bytes": 17721,
+          "requestSha256": "aa5901aed905f7e018e5e4aea4e3adf180fd5cb78cfc40ac9072a98592f34922"
+        },
+        {
+          "inputTokens": 5068,
+          "outputTokens": 19,
+          "totalTokens": 5087,
+          "bytes": 18807,
+          "requestSha256": "1c716ea99a377e4677e42517eb3453491ddf298da45eaea7c868143a61c5753b"
+        },
+        {
+          "inputTokens": 5878,
+          "outputTokens": 46,
+          "totalTokens": 5924,
+          "bytes": 21643,
+          "requestSha256": "1764da56026961bca0b9b8e37269e687aded1e22c860077c2b1530b34ac933da"
+        },
+        {
+          "inputTokens": 6202,
+          "outputTokens": 37,
+          "totalTokens": 6239,
+          "bytes": 22983,
+          "requestSha256": "228b8f9b06805ce95c114e1e1b5a4434a919a4189cd3c9010b9a0fcb6fc70e99"
+        },
+        {
+          "inputTokens": 6341,
+          "outputTokens": 31,
+          "totalTokens": 6372,
+          "bytes": 23928,
+          "requestSha256": "d630e85a6d5eae464828b11ffbfe5965bef328a84213b8e46ea68214f1ebc2ec"
+        },
+        {
+          "inputTokens": 6712,
+          "outputTokens": 58,
+          "totalTokens": 6770,
+          "bytes": 25362,
+          "requestSha256": "cb34e1b6cb50b3e932443b98a7a3f419121dfc65231a6984c3e83ac32c9bc847"
+        },
+        {
+          "inputTokens": 6659,
+          "outputTokens": 17,
+          "totalTokens": 6676,
+          "bytes": 25577,
+          "requestSha256": "4c1d5aa30898f225416882b222653c3442227d5685bcf3fbae43989a23656979"
+        },
+        {
+          "inputTokens": 6861,
+          "outputTokens": 50,
+          "totalTokens": 6911,
+          "bytes": 26381,
+          "requestSha256": "60674032e9bbbbe357a422544af19df3528ef5684df9484a0cb7e36a85494365"
+        },
+        {
+          "inputTokens": 6987,
+          "outputTokens": 88,
+          "totalTokens": 7075,
+          "bytes": 27047,
+          "requestSha256": "d2acddf08be4bd4ee7c2cd1a5fb8991bb917acbe5d7b6ac14fff2cdb56ddc10c"
+        }
+      ]
+    },
+    {
+      "caseId": "large-retry-budget-r3",
+      "agent": "candidate",
+      "totalTokens": 44061,
+      "inputTokens": 43740,
+      "outputTokens": 321,
+      "requests": 10,
+      "first": {
+        "normalizedSha256": "4a351010a5cd238f9c90c40278a4aff4f863c03489cb23fd545d52abbb338517",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1231,
+        "bytes": 5017,
+        "messageBytes": 1736,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4877,
+          "sent": 4877
+        },
+        {
+          "index": 2,
+          "full": 6176,
+          "sent": 6176
+        },
+        {
+          "index": 3,
+          "full": 7536,
+          "sent": 7536
+        },
+        {
+          "index": 4,
+          "full": 18240,
+          "sent": 18240
+        },
+        {
+          "index": 5,
+          "full": 19268,
+          "sent": 19268
+        },
+        {
+          "index": 6,
+          "full": 20576,
+          "sent": 20576
+        },
+        {
+          "index": 7,
+          "full": 21280,
+          "sent": 21280
+        },
+        {
+          "index": 8,
+          "full": 21740,
+          "sent": 21485
+        },
+        {
+          "index": 9,
+          "full": 22445,
+          "sent": 22190
+        },
+        {
+          "index": 10,
+          "full": 22963,
+          "sent": 22708
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 343,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "tests",
+          "bytes": 216,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 322,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 489,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "README.md",
+          "bytes": 325,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 411,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 37,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 412,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 234,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1231,
+          "outputTokens": 25,
+          "totalTokens": 1256,
+          "bytes": 5017,
+          "requestSha256": "bdbf07575cf4ddc088eb802351222624e434d83d5640ee64df4fb37f8a05df38"
+        },
+        {
+          "inputTokens": 1550,
+          "outputTokens": 18,
+          "totalTokens": 1568,
+          "bytes": 6316,
+          "requestSha256": "aca887fe800b3e0211fce3876ad2a5594d1ecc2a226ab0be6f812cbfab8b12c9"
+        },
+        {
+          "inputTokens": 1819,
+          "outputTokens": 12,
+          "totalTokens": 1831,
+          "bytes": 7676,
+          "requestSha256": "0f6ed366a01ba6b8643c70926f2e13040488ceb822ce48f4afdb8c513142857e"
+        },
+        {
+          "inputTokens": 5080,
+          "outputTokens": 24,
+          "totalTokens": 5104,
+          "bytes": 18380,
+          "requestSha256": "37b3db4c278963fb142ac8ce9758003f43a1c29cd8e0e8199a53452085e0180a"
+        },
+        {
+          "inputTokens": 5223,
+          "outputTokens": 27,
+          "totalTokens": 5250,
+          "bytes": 19408,
+          "requestSha256": "e2359388e2db0ae0f7cb1830d685d076df44934ac05bd0bc2395ade8c01b7a2b"
+        },
+        {
+          "inputTokens": 5554,
+          "outputTokens": 18,
+          "totalTokens": 5572,
+          "bytes": 20716,
+          "requestSha256": "fe5fe04e1aeeaf1d574ee068d57bfa643df4eec797fe574980076070caeee514"
+        },
+        {
+          "inputTokens": 5725,
+          "outputTokens": 60,
+          "totalTokens": 5785,
+          "bytes": 21420,
+          "requestSha256": "2324b57d5764e9bd73379fe6ff18e750e9472ecc0c82809564af7fee33e23e71"
+        },
+        {
+          "inputTokens": 5698,
+          "outputTokens": 18,
+          "totalTokens": 5716,
+          "bytes": 21625,
+          "requestSha256": "876c7cb2e1224358b161e7250c780b7d49ec34d2dd927fef7f0d46c6a223469a"
+        },
+        {
+          "inputTokens": 5874,
+          "outputTokens": 13,
+          "totalTokens": 5887,
+          "bytes": 22330,
+          "requestSha256": "7a7fcef8afd2c83924c1b8d1e1f93a0b470340ed50c99e0322c4ef7c290f7201"
+        },
+        {
+          "inputTokens": 5986,
+          "outputTokens": 106,
+          "totalTokens": 6092,
+          "bytes": 22848,
+          "requestSha256": "ded36d78eed0833493d96aee8caf3de90814d83110b08ea9972efce50b626be0"
+        }
+      ]
+    },
+    {
+      "caseId": "large-retry-budget-r3",
+      "agent": "baseline",
+      "totalTokens": 44016,
+      "inputTokens": 43518,
+      "outputTokens": 498,
+      "requests": 11,
+      "first": {
+        "normalizedSha256": "4a351010a5cd238f9c90c40278a4aff4f863c03489cb23fd545d52abbb338517",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1231,
+        "bytes": 5016,
+        "messageBytes": 1735,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4876,
+          "sent": 4876
+        },
+        {
+          "index": 2,
+          "full": 6139,
+          "sent": 6139
+        },
+        {
+          "index": 3,
+          "full": 7499,
+          "sent": 7499
+        },
+        {
+          "index": 4,
+          "full": 18225,
+          "sent": 18225
+        },
+        {
+          "index": 5,
+          "full": 19360,
+          "sent": 19360
+        },
+        {
+          "index": 6,
+          "full": 30133,
+          "sent": 30133
+        },
+        {
+          "index": 7,
+          "full": 31493,
+          "sent": 31493
+        },
+        {
+          "index": 8,
+          "full": 31994,
+          "sent": 12937
+        },
+        {
+          "index": 9,
+          "full": 32698,
+          "sent": 13411
+        },
+        {
+          "index": 10,
+          "full": 33412,
+          "sent": 13503
+        },
+        {
+          "index": 11,
+          "full": 33881,
+          "sent": 13972
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 322,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src",
+          "bytes": 224,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src/generated",
+          "bytes": 234,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "search_code",
+          "path": ".",
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": ".",
+          "bytes": 10105,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 343,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "README.md",
+          "bytes": 325,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "src/services",
+          "bytes": 231,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 411,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/retry-budget.mjs",
+          "bytes": 37,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1231,
+          "outputTokens": 29,
+          "totalTokens": 1260,
+          "bytes": 5016,
+          "requestSha256": "d7956b53927adc89e7adfacda4c7b358953db4eedbceb664334ed1e02aa18da5"
+        },
+        {
+          "inputTokens": 1465,
+          "outputTokens": 18,
+          "totalTokens": 1483,
+          "bytes": 6279,
+          "requestSha256": "dc058cbc6036fec37d1c8c4bd58d14f74f1b47526f97bc1ec57b9ee1caf8988a"
+        },
+        {
+          "inputTokens": 1734,
+          "outputTokens": 20,
+          "totalTokens": 1754,
+          "bytes": 7639,
+          "requestSha256": "eead7fb47d871e3be7bcce4c7a1a4f8ab348a0b972f0327266d9563f2b0bd733"
+        },
+        {
+          "inputTokens": 5003,
+          "outputTokens": 57,
+          "totalTokens": 5060,
+          "bytes": 18365,
+          "requestSha256": "160c5d1ae545f0f8bcedaa7126062e50acc1db602fc36d1d5a78d169ffe20373"
+        },
+        {
+          "inputTokens": 5171,
+          "outputTokens": 34,
+          "totalTokens": 5205,
+          "bytes": 19500,
+          "requestSha256": "0e0bdee78135ac437e86da74a40fe8cb70da24999ec7324ed5cb61dc857b67c5"
+        },
+        {
+          "inputTokens": 8425,
+          "outputTokens": 45,
+          "totalTokens": 8470,
+          "bytes": 30273,
+          "requestSha256": "76b586f112b74f725e83c6fafc038ccecba9ae43acaadf50b68e888880a81739"
+        },
+        {
+          "inputTokens": 8749,
+          "outputTokens": 13,
+          "totalTokens": 8762,
+          "bytes": 31633,
+          "requestSha256": "140d2a84ee88c5cc34e27eaf89fe8b988a394adb571e6ee927c96d733048c790"
+        },
+        {
+          "inputTokens": 2863,
+          "outputTokens": 18,
+          "totalTokens": 2881,
+          "bytes": 13077,
+          "requestSha256": "6308edc6ba2f82b51170c824391bb9e8ae2901534e02e2974dee546cdc5a7fda"
+        },
+        {
+          "inputTokens": 2920,
+          "outputTokens": 127,
+          "totalTokens": 3047,
+          "bytes": 13551,
+          "requestSha256": "cb197f48245d834eb03d37974fad166c5ac0107258240bd8c63bb3d8e12985e7"
+        },
+        {
+          "inputTokens": 2931,
+          "outputTokens": 19,
+          "totalTokens": 2950,
+          "bytes": 13643,
+          "requestSha256": "7169a3ee234e4354afb1ada112664792aba9d5da829b9e8c4c4fc5fef78186e3"
+        },
+        {
+          "inputTokens": 3026,
+          "outputTokens": 118,
+          "totalTokens": 3144,
+          "bytes": 14112,
+          "requestSha256": "1d160646b69bb846f22f0ea129063ce060c765b97bbd46c91a7574be8aee2986"
+        }
+      ]
+    },
+    {
+      "caseId": "large-unicode-r3",
+      "agent": "baseline",
+      "totalTokens": 9914,
+      "inputTokens": 9644,
+      "outputTokens": 270,
+      "requests": 6,
+      "first": {
+        "normalizedSha256": "5da39e1f82c6c000b5c953a0a14ee398b5b4b5ee0949e952371b31bfd3d5393c",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1227,
+        "bytes": 4999,
+        "messageBytes": 1718,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4859,
+          "sent": 4859
+        },
+        {
+          "index": 2,
+          "full": 6106,
+          "sent": 6106
+        },
+        {
+          "index": 3,
+          "full": 6659,
+          "sent": 6659
+        },
+        {
+          "index": 4,
+          "full": 7172,
+          "sent": 7172
+        },
+        {
+          "index": 5,
+          "full": 7790,
+          "sent": 7593
+        },
+        {
+          "index": 6,
+          "full": 8258,
+          "sent": 8061
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "README.md",
+          "bytes": 325,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": "src/services",
+          "bytes": 263,
+          "error": false,
+          "containsTarget": true,
+          "coverage": [
+            "scanned=1 files"
+          ]
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 232,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 163,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1227,
+          "outputTokens": 25,
+          "totalTokens": 1252,
+          "bytes": 4999,
+          "requestSha256": "4adba719391785633fb3cfc17ed0273a87680f17aa27c5776a68809c8ce0de99"
+        },
+        {
+          "inputTokens": 1509,
+          "outputTokens": 19,
+          "totalTokens": 1528,
+          "bytes": 6246,
+          "requestSha256": "feb395193574eb1dc5d3d1b563f36e834586e07c952d3f7bfe57a028571140e8"
+        },
+        {
+          "inputTokens": 1593,
+          "outputTokens": 16,
+          "totalTokens": 1609,
+          "bytes": 6799,
+          "requestSha256": "a898069168801a3df2d87d3ec198af916a0ac3a0d895de96640f15a55e341270"
+        },
+        {
+          "inputTokens": 1720,
+          "outputTokens": 100,
+          "totalTokens": 1820,
+          "bytes": 7312,
+          "requestSha256": "04c8731049a4eba3c7cb130ef8b5834442b3a1bb79cd158061b0afdb8f5360e0"
+        },
+        {
+          "inputTokens": 1751,
+          "outputTokens": 19,
+          "totalTokens": 1770,
+          "bytes": 7733,
+          "requestSha256": "662e4a1ce01254fbe9b0a50fb54030c3689a50fd12795b1747a47ceec225a273"
+        },
+        {
+          "inputTokens": 1844,
+          "outputTokens": 91,
+          "totalTokens": 1935,
+          "bytes": 8201,
+          "requestSha256": "74fb63dc4c9bc0136b8ad314668092eb2b6a5eeb40c8b1c7deb1455563d6fc65"
+        }
+      ]
+    },
+    {
+      "caseId": "large-unicode-r3",
+      "agent": "candidate",
+      "totalTokens": 37552,
+      "inputTokens": 37084,
+      "outputTokens": 468,
+      "requests": 9,
+      "first": {
+        "normalizedSha256": "5da39e1f82c6c000b5c953a0a14ee398b5b4b5ee0949e952371b31bfd3d5393c",
+        "reconstructedMatchesWire": true,
+        "initialMentionsTarget": false,
+        "inputTokens": 1227,
+        "bytes": 5000,
+        "messageBytes": 1719,
+        "toolSchemaBytes": 2280
+      },
+      "contexts": [
+        {
+          "index": 1,
+          "full": 4860,
+          "sent": 4860
+        },
+        {
+          "index": 2,
+          "full": 6154,
+          "sent": 6154
+        },
+        {
+          "index": 3,
+          "full": 7502,
+          "sent": 7502
+        },
+        {
+          "index": 4,
+          "full": 18206,
+          "sent": 18206
+        },
+        {
+          "index": 5,
+          "full": 18886,
+          "sent": 18886
+        },
+        {
+          "index": 6,
+          "full": 20097,
+          "sent": 20097
+        },
+        {
+          "index": 7,
+          "full": 20610,
+          "sent": 20610
+        },
+        {
+          "index": 8,
+          "full": 21306,
+          "sent": 21226
+        },
+        {
+          "index": 9,
+          "full": 21775,
+          "sent": 21695
+        }
+      ],
+      "calls": [
+        {
+          "name": "read_file",
+          "path": "AGENTS.md",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "package.json",
+          "bytes": 338,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "search_code",
+          "path": null,
+          "bytes": 222,
+          "error": false,
+          "containsTarget": false,
+          "coverage": [
+            "No matches in the scanned scope",
+            "scanned=700 files"
+          ]
+        },
+        {
+          "name": "list_files",
+          "path": "src",
+          "bytes": 10194,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "run_shell",
+          "path": null,
+          "bytes": 322,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "tests/public.test.mjs",
+          "bytes": 447,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "list_files",
+          "path": "README.md",
+          "bytes": 257,
+          "error": true,
+          "containsTarget": false,
+          "coverage": null
+        },
+        {
+          "name": "read_file",
+          "path": "src/services/text.mjs",
+          "bytes": 232,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "apply_patch",
+          "path": "src/services/text.mjs",
+          "bytes": 29,
+          "error": false,
+          "containsTarget": true,
+          "coverage": null
+        },
+        {
+          "name": "run_tests",
+          "path": null,
+          "bytes": 164,
+          "error": false,
+          "containsTarget": false,
+          "coverage": null
+        }
+      ],
+      "providerRequests": [
+        {
+          "inputTokens": 1227,
+          "outputTokens": 25,
+          "totalTokens": 1252,
+          "bytes": 5000,
+          "requestSha256": "b3c54d456b5fae1a49662f1eff84ea891fd15d84ee46d46a72e4e740b4cf4c30"
+        },
+        {
+          "inputTokens": 1539,
+          "outputTokens": 12,
+          "totalTokens": 1551,
+          "bytes": 6294,
+          "requestSha256": "5e1ac371fefd1dd86de1735ac8c1a8e4ce67d3231850bedf96234e93eaf72483"
+        },
+        {
+          "inputTokens": 1801,
+          "outputTokens": 12,
+          "totalTokens": 1813,
+          "bytes": 7642,
+          "requestSha256": "f20029e35235770b50bba22dac51e8477b959fd51c3b8570c02eb2c0756a975b"
+        },
+        {
+          "inputTokens": 5062,
+          "outputTokens": 34,
+          "totalTokens": 5096,
+          "bytes": 18346,
+          "requestSha256": "c2876017187c06ed882b00f2b1e82d71d1cb90d0e74e73c00cc09b46ab8e2e63"
+        },
+        {
+          "inputTokens": 5166,
+          "outputTokens": 27,
+          "totalTokens": 5193,
+          "bytes": 19026,
+          "requestSha256": "f5c61d6331a993d7ed9e02075c7b05cd8bfac3e0ad7317e353f3fb1813972361"
+        },
+        {
+          "inputTokens": 5412,
+          "outputTokens": 16,
+          "totalTokens": 5428,
+          "bytes": 20237,
+          "requestSha256": "3af065c9d8e4c11aa9f26daccef5d3426f9abac49e920ff9ca6c15d39d19c1de"
+        },
+        {
+          "inputTokens": 5539,
+          "outputTokens": 133,
+          "totalTokens": 5672,
+          "bytes": 20750,
+          "requestSha256": "8b8f3f7b8a995e7622dc010b8dd79fd299738a1908d7c4cf3d0829fd8c01dbe8"
+        },
+        {
+          "inputTokens": 5622,
+          "outputTokens": 19,
+          "totalTokens": 5641,
+          "bytes": 21366,
+          "requestSha256": "f540540bc2d9cc9d206cc7551dde65af7a7d523fb4daf2da2759253f09a9bc01"
+        },
+        {
+          "inputTokens": 5716,
+          "outputTokens": 190,
+          "totalTokens": 5906,
+          "bytes": 21835,
+          "requestSha256": "308c5a341f3711009d626e7f28d44e2f973bfad2d311d7f1be976fa83b0d49b4"
+        }
+      ]
+    }
+  ]
+}

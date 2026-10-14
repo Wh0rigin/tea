@@ -16,6 +16,23 @@ Our mission is to reduce token consumption while preserving task correctness, co
 
 ## Measured token usage
 
+### TEA fair discovery / recorded Pi / recorded Claude Code
+
+Updated TEA **d76f45f** is aligned with existing **Pi 0.87.1 / Claude Code 2.1.281** fresh-v5 data. Same **GLM-5.3-flash, enabled/low, 4096 output cap**, matching prompts and initial source. **Historical cross-round comparison; Pi/Claude were not rerun.** Only the measured small and large scales are included.
+
+![TEA fair discovery versus recorded Pi and Claude Code](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/three-agents.png)
+
+- **12 files:** TEA **28.86% fewer than Pi**, **71.07% fewer than Claude Code**.
+- **1,200 files:** TEA **86.61% fewer than Pi**, **79.74% fewer than Claude Code**.
+- **18 cases per agent:** TEA **77.41% fewer than Pi**, **76.16% fewer than Claude Code** (151,678 / 671,394 / 636,122 tokens).
+
+Full acceptance **TEA/Pi/Claude: 18/18, 18/18, 12/18**; code behavior **18/18 for all**. Six Claude final validations remain unconfirmed triangles, not failures or passes. Cache and thinking tokens count; all attempts retained. Separate rounds do not control provider-cache/backend randomness; self-authored fixtures are not production holdouts. New TEA medium/long performance is not inferred from older versions.
+
+[Report, alignment and complete data](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/README.md)
+
+<details>
+<summary>Previous TEA version comparison (historical evidence)</summary>
+
 ### TEA / Pi / Claude Code — updated measurements
 
 Measured October 13–14, 2026 with the same **GLM-5.3-flash, enabled/low, 4096/4095 output/thinking caps**, tasks and initial source. **TEA archived candidate bd41742, Pi 0.87.1 and native Claude Code 2.1.281 safe-mode CLI**. Claude Code uses GLM here, not an Anthropic Claude model.
@@ -38,6 +55,9 @@ Circles passed; triangles have only final validation unconfirmed; failure crosse
 
 [Full report](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.md)
 [All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
+
+
+</details>
 
 <details>
 <summary>Earlier v3 comparison (historical evidence)</summary>
@@ -228,9 +248,9 @@ These are self-authored JavaScript bug fixtures; larger repositories add unrelat
 
 ## Conversation compaction
 
-Use `/compact [retention instructions]` in the terminal to summarize older conversation. Enable automatic compaction with `tea --interactive --compaction auto --max-cost-usd 0.10`. It sends a structured checkpoint plus recent complete messages, preserves the original in-memory transcript, and keeps outstanding validation in authoritative runtime state.
+Use `/compact [retention instructions]` in the terminal to summarize older conversation. Automatic compaction is now enabled by default; use `--compaction off` to opt out. It sends a structured checkpoint plus recent complete messages. Default checkpoint GC moves covered originals to encrypted local storage and releases old resident bodies while preserving requirements and validation obligations. See [memory GC and resource limits](docs/MEMORY_GC.md).
 
-Summary requests share the session model, usage ledger and hard budget. Automatic compaction is opt-in; default ledgers retain hashes rather than raw summaries. In paired GLM-5.3-flash experiments on self-authored JavaScript fixtures, the tested 35% trigger reduced total provider tokens by **72.33%** in scripted seed stress and **63.14%** in model-generated inspection/repair workflows, including all summaries. All 16 re-run tasks passed acceptance. These are small-sample results for an experimental profile, not measured savings for the default 80% trigger. See [the report and chart](benchmarks/reports/compaction-glm-20261011/README.md) and [the design and configuration](docs/COMPACTION.md).
+Summary requests share the session model, usage ledger and hard budget. Summary calls remain subject to the same budget; default ledgers retain hashes while the local encrypted session retains recoverable history. In paired GLM-5.3-flash experiments on self-authored JavaScript fixtures, the tested 35% trigger reduced total provider tokens by **72.33%** in scripted seed stress and **63.14%** in model-generated inspection/repair workflows, including all summaries. All 16 re-run tasks passed acceptance. These are small-sample results for an experimental profile, not measured savings for the default 80% trigger. See [the report and chart](benchmarks/reports/compaction-glm-20261011/README.md) and [the design and configuration](docs/COMPACTION.md).
 
 ![Paired compaction off/auto provider token usage, including summaries](benchmarks/reports/compaction-glm-20261011/tokens.png)
 
@@ -266,3 +286,7 @@ Supporting research documents currently include Chinese content.
 ## License
 
 [MIT](LICENSE) — Copyright (c) 2026 Wh0rigin.
+
+## Fair discovery repair
+
+A TEA-only comparison of the previous GC version and fair-discovery repair measured **70.05% fewer provider tokens** across 18 pairs: large **82.02% fewer**, small **11.65% fewer**, with both arms achieving 18/18 final acceptance. **Small Unicode regressed 26.73%**. Both arms enabled ContextOS, automatic compaction and GC; no run compacted. Six self-authored JavaScript fixtures, three repeats, no long-session or production holdout claim. [Report, chart and complete evidence](benchmarks/reports/discovery-repair-20261014/README.md).

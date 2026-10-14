@@ -252,3 +252,22 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 ## 2026-10-14：经授权完成 Long 重测
 
 三方各3次，共9/9完整通过；587笔请求用量全部已知。TEA总量905,432，Pi 1,544,126，Claude Code 2,407,974 token；TEA分别减少41.36%和62.40%。新组费用USD3.9212916（配置保守费率，非账单）。旧中断组已知费用USD0.3135940和未知预留USD0.2674688单独保留，不补0、不用新记录填旧记录。普通任务保持v5结果，Long独立冻结。默认运行时候选仍未启用。[报告](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.zh-CN.md)。
+
+
+## 2026-10-14：检查点 GC 与默认自动压缩
+
+从已合并PR4的主分支创建独立功能分支。默认auto压缩；先归档并持久化检查点再释放旧正文，保留用户要求、规则版本、真实验证状态与未知计费责任。冷缓存256KiB、常驻历史序列化触发4MiB、单会话存储512MiB，磁盘只收集24小时以上孤儿。298/298本地、17/17 GC专项（独立进程）、18/18组合检查、18次脚本压力通过。序列化历史减少99.85%/99.95%/99.97%，不是RSS/堆或供应商Token收益；新增付费调用0。默认模型Token影响仍待独立实测。[报告](benchmarks/reports/contextos-gc-20261014/README.zh-CN.md)。
+
+## 2026-10-14: GC provider-token gate
+
+TEA-only direct-parent comparison: 60/60 accepted, complete provider usage. Candidate used 6.54% more tokens overall; small -9.87%, medium -11.66%, large +38.87%, long -0.62%. No normal task compacted. Same-candidate threshold ablation: 12/12 accepted; protected history -45.81% including 13,595 summary tokens; evictable history +5.10%, no summaries. Normal-workload token gate failed; wait for review before further optimization or merge. Reports: benchmarks/reports/contextos-gc-tokens-20261014. Pi/Claude were not rerun.
+
+Post-hoc diagnosis: reconstructed first request hashes matched 18/18; all 9 large-task pairs have equal initial payloads after workspace normalization. Shared traversal caps exclude actual targets and large listing history repeats below the 32KB target. More input explains 97.66% of the token growth; candidate has 8 shell failures versus 1. No causal GC regression established. Proposed fixes only; no runtime changes or new paid calls.
+
+## 2026-10-14: Fair discovery repair
+
+Rotating directory traversal, bounded default listing and resumable search; small inventories retain old wire schemas until capped search. 307/307 deterministic tests, 36/36 native loopback runs / 144 requests, then 36/36 provider acceptance / 226 requests. Direct-parent paired usage: 506,421 -> 151,678 (-70.05%); large -82.02%, small -11.65%. Small Unicode +26.73%, all regressions retained. No summary calls, no Pi/Claude calls, no paid retries or unknown usage. Evidence: benchmarks/reports/discovery-repair-20261014. Source/runtime frozen during calls. Stop stage and await review.
+
+## 2026-10-14: Recorded-agent comparison after discovery repair
+
+Aligned TEA d76f45f small/large data with historical Pi 0.87.1 and Claude Code 2.1.281 fresh-v5 data; zero new provider calls. All six prompt/source identities and effective model controls match. 18 runs per agent, 54 attempts / 302 complete requests. Totals TEA/Pi/Claude: 151,678 / 671,394 / 636,122; TEA 77.41% / 76.16% fewer. Full acceptance 18/18, 18/18, 12/18; six historical validation-unconfirmed attempts retain triangles. Separate rounds, no backend/cache equivalence claim; no new TEA medium/long data. Updated bilingual README and PNG/SVG; historical evidence retained.

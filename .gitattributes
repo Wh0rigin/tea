@@ -52,3 +52,19 @@ benchmarks/reports/tea-pi-claude*/*.md text eol=lf
 benchmarks/reports/tea-pi-claude*/*.svg text eol=lf
 benchmarks/reports/tea-pi-claude*/evidence.sha256 text eol=lf
 benchmarks/reports/tea-pi-claude*/*.txt text eol=lf
+benchmarks/reports/contextos-gc*/*.json text eol=lf
+benchmarks/reports/contextos-gc*/*.md text eol=lf
+benchmarks/reports/contextos-gc*/evidence.sha256 text eol=lf
+benchmarks/reports/contextos-gc-tokens-20261014/* text eol=lf
+
+benchmarks/reports/discovery-repair*/*.md text eol=lf
+benchmarks/reports/discovery-repair*/*.json text eol=lf
+benchmarks/reports/discovery-repair*/*.svg text eol=lf
+benchmarks/reports/discovery-repair*/evidence.sha256 text eol=lf
+scripts/plot-discovery-repair.py text eol=lf
+
+benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/*.json text eol=lf
+benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/*.md text eol=lf
+benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/*.svg text eol=lf
+benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/evidence.sha256 text eol=lf
+scripts/compare-recorded-agents.py text eol=lf

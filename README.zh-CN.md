@@ -16,6 +16,23 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 ## 实测 Token 用量
 
+### 新版 TEA / 历史 Pi / 历史 Claude Code
+
+公平检索修复版 **TEA d76f45f** 对齐历史 fresh-v5 的 **Pi 0.87.1 / Claude Code 2.1.281** 数据。相同 **GLM-5.3-flash、enabled/low、4096 输出上限**，任务提示与初始源码匹配。**跨轮次历史对比，未重测 Pi/Claude**；只纳入新版已测的小型与大型场景。
+
+![新版 TEA 与历史 Pi、Claude Code 对比](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/three-agents.png)
+
+- **12 文件：**TEA 对 Pi **减少 28.86%**，对 Claude Code **减少 71.07%**。
+- **1,200 文件：**TEA 对 Pi **减少 86.61%**，对 Claude Code **减少 79.74%**。
+- **每 Agent 18 次：**TEA 对 Pi **减少 77.41%**，对 Claude Code **减少 76.16%**（151,678 / 671,394 / 636,122 Token）。
+
+完整验收 **TEA/Pi/Claude：18/18、18/18、12/18**；三方代码行为均 **18/18**。Claude 6 次最终验证未确认，保留三角，不改成失败或通过。包含缓存与思考用量，所有尝试保留。跨轮次没有控制缓存/后端随机性，自建场景不保证生产泛化；新版中型与长会话数据不由旧版代替。
+
+[报告、对齐审计与完整数据](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/README.zh-CN.md)
+
+<details>
+<summary>旧 TEA 版本对比（历史证据）</summary>
+
 ### TEA / Pi / Claude Code 最新实测
 
 2026 年 10 月 13–14 日：相同 **GLM-5.3-flash、enabled/low、4096/4095 输出/思考上限**，相同任务与初始源码。受测软件为 **TEA 归档候选 bd41742、Pi 0.87.1、Claude Code 2.1.281 原生 safe-mode CLI**。Claude Code 使用的也是 GLM，不是 Anthropic Claude 模型。
@@ -38,6 +55,9 @@ Claude Code 完整验收从旧实验 **1/27 变为 18/27**，未确认三角从 
 
 [完整报告](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.zh-CN.md)
 [All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
+
+
+</details>
 
 <details>
 <summary>旧 v3 比较（历史证据）</summary>
@@ -151,9 +171,9 @@ npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
 
 ## 会话压缩
 
-交互终端中使用 `/compact [保留重点]`，可把旧对话整理成摘要。通过 `tea --interactive --compaction auto --max-cost-usd 0.10` 开启自动压缩。后续请求使用结构化摘要和近期完整消息，原始对话保留在内存中；待验证修改由运行时独立保存。
+交互终端中使用 `/compact [保留重点]`，可把旧对话整理成摘要。自动压缩现在默认开启，可用 `--compaction off` 关闭。后续请求使用结构化摘要和近期完整消息；默认检查点 GC 将已覆盖原文保留在本地加密载荷中，并释放旧常驻正文，用户要求和待验证状态继续保留。详见[垃圾回收与资源限制](docs/MEMORY_GC.zh-CN.md)。
 
-摘要请求计入会话 Token 和费用上限。自动压缩需主动开启，默认账本保存哈希而非摘要原文。GLM-5.3-flash 配对实验使用自编 JavaScript 样本和 35% 实验阈值，固定历史压力配置净节省 **72.33%**，模型生成历史的检查/修复多轮任务净节省 **63.14%**，均包含全部摘要开销；复测 16/16 通过验收。这是小样本实验结果，不是默认 80% 阈值的收益。详见[报告和图表](benchmarks/reports/compaction-glm-20261011/README.zh-CN.md)及[设计与配置](docs/COMPACTION.zh-CN.md)。
+摘要请求计入会话 Token 和费用上限。摘要仍受原预算约束；默认计量账本保存哈希，本地加密会话保存可恢复原文。GLM-5.3-flash 配对实验使用自编 JavaScript 样本和 35% 实验阈值，固定历史压力配置净节省 **72.33%**，模型生成历史的检查/修复多轮任务净节省 **63.14%**，均包含全部摘要开销；复测 16/16 通过验收。这是小样本实验结果，不是默认 80% 阈值的收益。详见[报告和图表](benchmarks/reports/compaction-glm-20261011/README.zh-CN.md)及[设计与配置](docs/COMPACTION.zh-CN.md)。
 
 ![包含全部摘要的会话压缩 off/auto 真实 Token 对比](benchmarks/reports/compaction-glm-20261011/tokens.png)
 
@@ -272,3 +292,7 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 ## 开源协议
 
 [MIT](LICENSE) — Copyright (c) 2026 Wh0rigin。
+
+## 公平检索修复
+
+仅测 TEA、对比上一版 GC 与公平检索修复：18 对实验累计 Token **减少 70.05%**，大型 **减少 82.02%**，小型 **减少 11.65%**；两版各 18/18 最终验收通过。但**小型 Unicode 增加 26.73%**。两版均开启 ContextOS、自动压缩和 GC，没有触发摘要。6 个自建 JavaScript 场景、各重复 3 次，未测本轮长会话或真实项目留出集。[报告、图表与完整证据](benchmarks/reports/discovery-repair-20261014/README.zh-CN.md)。

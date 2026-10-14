@@ -40,7 +40,10 @@ test('shows task-ranked initial inventory while keeping the full listing availab
     assert.ok(inventory.selectedFiles.includes('src/retry_limit.ts'));
     assert.match(inventory.text, /partial/);
     assert.match(await tools.listFiles({ maxFiles: 100 }), /src\/retry_limit\.ts/);
-    assert.match(await tools.listFiles({ maxFiles: 10, offset: 60 }), /src\/retry_limit\.ts/);
+    const full = await tools.listFilePaths({ maxFiles: 100 });
+    const pages = [...await tools.listFilePaths({ maxFiles: 30 }), ...await tools.listFilePaths({ maxFiles: 31, offset: 30 })];
+    assert.deepEqual(pages, full);
+    assert.ok(full.indexOf('src/retry_limit.ts') < 10, 'A large sibling directory cannot hide a small source directory');
   });
 });
 

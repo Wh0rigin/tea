@@ -10,6 +10,7 @@ import { compactConversation, requestBytes, sessionContext } from './compaction.
 import { memorySessionFields, attachSessionJournal, appendSessionMessage, restoreToolMemory,
   persistRuntimeState, closeSessionJournal, resetPersistentConversation } from './session-memory.mjs';
 import { ContextMemory } from './context-assembler.mjs';
+import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } from './memory-gc.mjs';
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
@@ -62,6 +63,8 @@ export function resetConversation(session, config) {
   if (session.tools) session.tools.contextMemory = null;
   session.taskState = null; session.memoryDiagnostics = null;
   session.capabilities = null;
+  session.pinnedRequirements = []; session.protectedRuleRefs = []; session.archivedMessageCount = 0; session.gcDiagnostics = null;
+  session.contextArchive?.sweepCache(); session.contextArchive = null;
   // Keep adapter spending and outstanding edits across /new.
 }
 
@@ -105,7 +108,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     session.contextMemory.rebuild(session.messages);
     for (const unit of session.memoryDiagnostics?.units || []) if (unit.decision === 'reference') session.contextMemory.evicted.add(unit.ref);
     tools.contextMemory = session.contextMemory;
-  } else tools.contextMemory = null;
+    attachContextArchive(session, config, signal);
+  } else {
+    tools.contextMemory = null; session.contextMemory = null;
+    session.contextArchive?.sweepCache(); session.contextArchive = null;
+  }
   if (session.budgetUnknown && !offline) throw new ModelError('Session has unresolved billing from an interrupted request; no automatic retry is allowed');
   if (session.adapter && session.offline !== offline) throw new Error('A session cannot mix scripted and provider adapters');
   const adapterConfig = session.restoredBudget ? { ...config, maxCostUsd: session.restoredBudget.maxCostUsd,
@@ -136,14 +143,24 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   const summarize = async (state, reason, instructions = '') => {
     requestPurpose = 'compaction';
     try {
-      return await compactConversation(session, config, { adapter, ledger, state, reason, instructions,
+      const outcome = await compactConversation(session, config, { adapter, ledger, state, reason, instructions,
         system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions(), signal, onEvent: emit,
-        measureContext: async context => {
+        measureContext: async (context, { willArchive = false } = {}) => {
           if (config.memoryPolicy !== 'contextos') return requestBytes(config, prepareContextRequest(context, config, tools.modelToolDefinitions()).request);
           const plan = await session.contextMemory.assemble({ messages: context, canonical: session.messages,
-            system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions({ includeMemory: false }), config, state, goal: task, commit: false });
+            system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions({ includeMemory: false }), config, state, goal: task,
+            commit: false, additionalArchive: willArchive });
           return requestBytes(config, plan.request);
         } });
+      if (outcome.status === 'compacted') {
+        const gc = await collectCompactedHistory(session, config, state);
+        emit({ type: 'memory_gc', ...gc });
+        if (gc.status === 'collected') {
+          const disk = await session.journal.collectOrphans();
+          await ledger.event({ type: 'memory_gc', ...gc, orphanCollection: disk });
+        }
+      }
+      return outcome;
     } catch (error) {
       emit({ type: 'compaction_end', reason, status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message });
       await ledger.event({ type: 'compaction_failed', reason, cancelled: Boolean(signal?.aborted),
@@ -228,7 +245,8 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       try {
         let prepared = await prepareRequest();
         while (config.compaction === 'auto' && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
-          && requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)) {
+          && (requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)
+            || (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes))) {
           const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
           if (attemptedContexts.has(fingerprint)) break;
           attemptedContexts.add(fingerprint);
@@ -236,6 +254,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           const outcome = await summarize(runtimeState(), 'threshold');
           if (outcome.status !== 'compacted') break;
           prepared = await prepareRequest();
+        }
+        if (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes) {
+          status = 'memory_limit_reached';
+          onText('Resident history limit reached; compaction could not free enough protected content. Start a new conversation or raise the explicit memory limit.');
+          break;
         }
         const { memory, request, sentPayload, fullPayload } = prepared;
         const fullBytes = Buffer.byteLength(fullPayload, 'utf8');

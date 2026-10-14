@@ -46,7 +46,7 @@ export function loadConfig(options = {}, env = process.env) {
   const historyKeepRecent = positiveNumber(options.historyKeepRecent ?? env.TEA_HISTORY_KEEP_RECENT, 2, 'History recent rounds');
   if (!Number.isInteger(historyKeepRecent) || historyKeepRecent < 2 || historyKeepRecent > 24) throw new ConfigError('History recent rounds must be an integer from 2 through 24');
 
-  const compaction = String(options.compaction || env.TEA_COMPACTION || 'off').toLowerCase();
+  const compaction = String(options.compaction || env.TEA_COMPACTION || 'auto').toLowerCase();
   if (!['off', 'auto'].includes(compaction)) throw new ConfigError('Compaction must be off or auto');
   const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
   if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
@@ -59,6 +59,14 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
   const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
   if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
+  const memoryGc = String(options.memoryGc || env.TEA_MEMORY_GC || 'auto').toLowerCase();
+  if (!['auto', 'off'].includes(memoryGc)) throw new ConfigError('Memory GC must be auto or off');
+  const memoryCacheBytes = positiveNumber(env.TEA_MEMORY_CACHE_BYTES, 262144, 'Memory cache bytes');
+  const memoryGcMaxResidentBytes = positiveNumber(env.TEA_MEMORY_MAX_RESIDENT_BYTES, 4194304, 'Resident history bytes');
+  const sessionStorageMaxBytes = positiveNumber(env.TEA_SESSION_MAX_STORAGE_BYTES, 536870912, 'Session storage bytes');
+  for (const value of [memoryCacheBytes, memoryGcMaxResidentBytes, sessionStorageMaxBytes]) {
+    if (!Number.isSafeInteger(value)) throw new ConfigError('Memory and storage byte limits must be safe integers');
+  }
 
   const maxCostUsd = nonNegativeNumber(
     options.maxCostUsd ?? env.TEA_MAX_COST_USD,
@@ -104,6 +112,10 @@ export function loadConfig(options = {}, env = process.env) {
     compactionTriggerRatio,
     compactionKeepRecentBytes,
     compactionMaxPerTurn,
+    memoryGc,
+    memoryCacheBytes,
+    memoryGcMaxResidentBytes,
+    sessionStorageMaxBytes,
     stream: env.TEA_STREAM !== '0',
     storeRaw: env.TEA_STORE_RAW === '1',
     workspace: path.resolve(options.workspace || process.cwd()),

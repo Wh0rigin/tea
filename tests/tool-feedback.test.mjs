@@ -111,7 +111,7 @@ test('unchanged capabilities are announced once per conversation and never mutat
   await runTask('Continue', { ...config, runId: 'feedback-next' }, { session, adapterFactory: adapter() });
   assert.equal(captured.length, 2); assert.equal(notices(captured[0]), 1); assert.equal(notices(captured[1]), 1);
   assert.deepEqual(captured[0].tools, captured[1].tools);
-  resetConversation(session);
+  await resetConversation(session, config);
   await runTask('New task', { ...config, runId: 'feedback-new' }, { session, adapterFactory: adapter() });
   assert.equal(notices(captured[2]), 1);
 });

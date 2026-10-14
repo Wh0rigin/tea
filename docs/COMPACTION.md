@@ -38,7 +38,7 @@ flowchart LR
     C --> M[Next coding request]
 ```
 
-- The original `session.messages` array stays intact. A checkpoint records `firstKeptIndex`; the request projection starts with its summary and retains the suffix verbatim.
+- With default checkpoint GC, covered original messages remain in encrypted storage while the live array retains the suffix. With `--memory-gc off`, the original array stays intact. Requests retain the summary, verbatim requirements and recent suffix.
 - A tool-call batch and its matching results form one indivisible group. Ambiguous IDs, orphan results and unfinished batches prevent compaction.
 - The newest complete group is always retained, even if it exceeds the recent-byte target. Older complete groups are added only while they fit that target; one oversized older batch cannot force itself into the retained suffix. When the latest user request falls inside the summarized prefix, its original text is also included in the next request.
 - Repeated compaction passes the previous checkpoint to the summarizer and summarizes messages after its previous retained boundary. It does not resend already summarized raw history.
@@ -47,15 +47,15 @@ flowchart LR
 - A successful compaction clears source-read reference caches. A subsequent read returns source again instead of referring to lines that may have been omitted from model context. Learned conversation vocabulary and outstanding validation survive.
 - `/new` clears the checkpoint and conversation vocabulary. Adapter spending and outstanding edits remain.
 
-The transcript and checkpoint currently live in process memory. This feature does not add session resume or a branch tree. Default ledgers store checkpoint hashes/counts, not raw summaries. `TEA_STORE_RAW=1` adds the summary and attempted file-operation paths to local checkpoint records, in addition to existing raw request storage.
+Original history, checkpoints and runtime state support local resume; default GC releases archived resident bodies. See [memory and disk GC](MEMORY_GC.md). Default ledgers store checkpoint hashes/counts, not raw summaries. `TEA_STORE_RAW=1` adds the summary and attempted file-operation paths to local checkpoint records, in addition to existing raw request storage.
 
 ## Automatic trigger and bounds
 
-Automatic compaction is opt-in. Before a coding request, TEA measures the **serialized wire request in UTF-8 bytes**, including system prompt, tool definitions and controls. It triggers at 80% of the configured byte guard. This is different from Pi's model-context token threshold: TEA currently has no native tokenizer or provider context-window catalog.
+Automatic compaction is enabled by default. Before a coding request, TEA measures the **serialized wire request in UTF-8 bytes**, including system prompt, tool definitions and controls. It triggers at 80% of the configured byte guard. This is different from Pi's model-context token threshold: TEA currently has no native tokenizer or provider context-window catalog.
 
 Configuration:
 
-- `--compaction off|auto` / `TEA_COMPACTION`: default `off`.
+- `--compaction off|auto` / `TEA_COMPACTION`: default `auto`.
 - `--compaction-keep-recent-bytes N` / `TEA_COMPACTION_KEEP_RECENT_BYTES`: defaults to 30% of the request byte guard; a positive safe integer.
 - `TEA_COMPACTION_TRIGGER_RATIO`: default `0.8`, strictly between zero and one.
 - `TEA_COMPACTION_MAX_PER_TURN`: default `2`, range 1–8. This limits automatic attempts across the whole submitted task, including unsuccessful attempts. A manual command makes at most one summary request.
@@ -74,3 +74,6 @@ A checkpoint is adopted only when the response has all required sections in orde
 Cancellation observed before the checkpoint ledger commit, incomplete summaries, missing sections and non-reducing output preserve the previous projection and original history. Once the ledger write succeeds, that checkpoint is adopted even if cancellation arrived during the write, like a completed tool operation. Adapter errors stop the current task; unknown usage retains its full reservation. TEA does not retry a provider overflow with uncertain billing. Recovery currently happens before submission through the local byte trigger.
 
 Paid evaluation must include summary usage, task acceptance, repeated runs, and identical starting snapshots and controls. The [2026-10-11 validation report](../benchmarks/reports/compaction-glm-20261011/README.md) records 41 dedicated tests and paired GLM-5.3-flash measurements: 72.33% fewer total provider tokens in scripted seed stress and 63.14% fewer in model-generated inspection/repair workflows, including summary costs. All 16 re-run tasks passed acceptance. These self-authored JavaScript fixtures use two repeats per case and a 35% experimental trigger; they do not establish default-profile savings or unseen-repository generalization. The measured engine and later offline UTF-8 fix are identified separately in the report.
+
+
+A 4 MiB serialized resident-history threshold also triggers automatic compaction; it is not a hard process-heap limit.

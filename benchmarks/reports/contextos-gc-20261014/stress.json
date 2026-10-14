@@ -1,0 +1,289 @@
+{
+  "kind": "deterministic cold-history GC checks; not provider tokens or measured heap",
+  "paidProviderRequests": 0,
+  "runs": 18,
+  "checksPassed": 18,
+  "pairs": [
+    {
+      "rounds": 12,
+      "repetition": 1,
+      "reductionPercent": 99.84897728477056
+    },
+    {
+      "rounds": 12,
+      "repetition": 2,
+      "reductionPercent": 99.84897728477056
+    },
+    {
+      "rounds": 12,
+      "repetition": 3,
+      "reductionPercent": 99.84897728477056
+    },
+    {
+      "rounds": 36,
+      "repetition": 1,
+      "reductionPercent": 99.94961400200366
+    },
+    {
+      "rounds": 36,
+      "repetition": 2,
+      "reductionPercent": 99.94961400200366
+    },
+    {
+      "rounds": 36,
+      "repetition": 3,
+      "reductionPercent": 99.94961400200366
+    },
+    {
+      "rounds": 72,
+      "repetition": 1,
+      "reductionPercent": 99.97480135807417
+    },
+    {
+      "rounds": 72,
+      "repetition": 2,
+      "reductionPercent": 99.97480135807417
+    },
+    {
+      "rounds": 72,
+      "repetition": 3,
+      "reductionPercent": 99.97480135807417
+    }
+  ],
+  "results": [
+    {
+      "rounds": 12,
+      "repetition": 1,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 113228,
+      "afterResidentSerializedBytes": 113228,
+      "residentMessageCount": 26,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 12,
+      "repetition": 1,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 113228,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 25,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 12,
+      "repetition": 2,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 113228,
+      "afterResidentSerializedBytes": 113228,
+      "residentMessageCount": 26,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 12,
+      "repetition": 2,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 113228,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 25,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 12,
+      "repetition": 3,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 113228,
+      "afterResidentSerializedBytes": 113228,
+      "residentMessageCount": 26,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 12,
+      "repetition": 3,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 113228,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 25,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 36,
+      "repetition": 1,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 339380,
+      "afterResidentSerializedBytes": 339380,
+      "residentMessageCount": 74,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 36,
+      "repetition": 1,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 339380,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 73,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 36,
+      "repetition": 2,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 339380,
+      "afterResidentSerializedBytes": 339380,
+      "residentMessageCount": 74,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 36,
+      "repetition": 2,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 339380,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 73,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 36,
+      "repetition": 3,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 339380,
+      "afterResidentSerializedBytes": 339380,
+      "residentMessageCount": 74,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 36,
+      "repetition": 3,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 339380,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 73,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 72,
+      "repetition": 1,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 678608,
+      "afterResidentSerializedBytes": 678608,
+      "residentMessageCount": 146,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 72,
+      "repetition": 1,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 678608,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 145,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 72,
+      "repetition": 2,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 678608,
+      "afterResidentSerializedBytes": 678608,
+      "residentMessageCount": 146,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 72,
+      "repetition": 2,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 678608,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 145,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 72,
+      "repetition": 3,
+      "memoryGc": "off",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 678608,
+      "afterResidentSerializedBytes": 678608,
+      "residentMessageCount": 146,
+      "archivedMessages": 0,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    },
+    {
+      "rounds": 72,
+      "repetition": 3,
+      "memoryGc": "auto",
+      "summaryCalls": 1,
+      "beforeResidentSerializedBytes": 678608,
+      "afterResidentSerializedBytes": 171,
+      "residentMessageCount": 1,
+      "archivedMessages": 145,
+      "checkpointCommitted": true,
+      "providerTokens": null,
+      "processRssReduction": null
+    }
+  ]
+}

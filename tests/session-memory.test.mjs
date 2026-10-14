@@ -103,7 +103,7 @@ test('different models or endpoints cannot silently reuse a session', async () =
   }
 }));
 test('legacy mode remains in-memory and creates no session journal', async () => scenario(async (root, config) => {
-  const result = await runTask('Inspect', { ...config, sessionId: undefined }, { adapterFactory: factory([done]) });
+  const result = await runTask('Inspect', { ...config, sessionId: undefined, compaction: 'off' }, { adapterFactory: factory([done]) });
   assert.equal(result.sessionId, null);
   await assert.rejects(readFile(path.join(root, '.tea', 'sessions', 'task', 'journal.jsonl')), /ENOENT/);
 }));

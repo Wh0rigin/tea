@@ -1,0 +1,14 @@
+{
+  "baselineCommit": "bdc06bcb237d1c5235247f3ac4292aff64c05f4d",
+  "tests": 298,
+  "passed": 298,
+  "failed": 0,
+  "gcSpecialTests": 17,
+  "combinationChecksPassed": 18,
+  "combinationChecksTotal": 18,
+  "stressRuns": 18,
+  "paidProviderRequestsAdded": 0,
+  "providerTokenBenefit": null,
+  "processHeapBenefit": null,
+  "processRssBenefit": null
+}

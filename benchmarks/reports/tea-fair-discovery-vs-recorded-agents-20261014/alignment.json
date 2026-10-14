@@ -1,0 +1,86 @@
+{
+  "tasks": [
+    {
+      "taskId": "small-cache-key",
+      "initialSourceSha256": "fdc6c662151f5df2f8ef0bde505d31393f3efa8a195139ac58a3c1b35a8efd0e",
+      "promptSha256": [
+        "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+      ],
+      "plannedTurns": 1,
+      "fileCount": 12
+    },
+    {
+      "taskId": "small-retry-budget",
+      "initialSourceSha256": "534c8c95c77acb707a7226eb2fbdc9c672f0b68634a77c324ae10f322d6512a5",
+      "promptSha256": [
+        "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+      ],
+      "plannedTurns": 1,
+      "fileCount": 12
+    },
+    {
+      "taskId": "small-unicode",
+      "initialSourceSha256": "2b0bc00f0aeb5b389f875ea2201f159c4e38a4e1044ff489e016ace4823ec9d5",
+      "promptSha256": [
+        "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+      ],
+      "plannedTurns": 1,
+      "fileCount": 12
+    },
+    {
+      "taskId": "large-cache-key",
+      "initialSourceSha256": "7b9436b13aa60338547527798ce0d0f9514d91df0fbffd1b47125d56fa30c2e5",
+      "promptSha256": [
+        "05eb38e17b6848e03c2576edb35b5cd82b9944da0a405ca162428de7d9710eb7"
+      ],
+      "plannedTurns": 1,
+      "fileCount": 1200
+    },
+    {
+      "taskId": "large-retry-budget",
+      "initialSourceSha256": "0e5709052771b720c824d6ad0d7cd18c61394bfa09941624d6c7838dd9838f0b",
+      "promptSha256": [
+        "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b"
+      ],
+      "plannedTurns": 1,
+      "fileCount": 1200
+    },
+    {
+      "taskId": "large-unicode",
+      "initialSourceSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "promptSha256": [
+        "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008"
+      ],
+      "plannedTurns": 1,
+      "fileCount": 1200
+    }
+  ],
+  "commonValidationSources": [
+    {
+      "path": "src/comparison-fixtures.mjs",
+      "sha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+      "identical": true
+    },
+    {
+      "path": "src/comparison-turn-audit.mjs",
+      "sha256": "96115ab504909a96d91b3fcd3a6240d1d69f9a0df5ef7e42c3287a7663f2fc6b",
+      "identical": true
+    },
+    {
+      "path": "src/comparison-source-capture.mjs",
+      "sha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+      "identical": true
+    },
+    {
+      "path": "src/contextos-benchmark.mjs",
+      "sha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c",
+      "identical": true
+    },
+    {
+      "path": "src/runtime-benchmark.mjs#hiddenAcceptance",
+      "sha256": "c3a06b75890969afb9ed9167649e8947db8438066a8ef4ca225811b2d59aedb8",
+      "identical": true
+    }
+  ],
+  "continuationDifference": "The old/new stop policy differs only after a turn. Selected tasks have one completed turn; acceptanceDimensions and per-turn observer are unchanged. Historical grades are not recomputed."
+}

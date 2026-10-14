@@ -25,7 +25,7 @@ const execute = promisify(execFile), hash = value => createHash('sha256').update
 const options = {};
 for (let n = 2; n < process.argv.length; n++) {
   const key = process.argv[n];
-  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales', '--baseline-ref', '--candidate-ref'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
+  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales', '--baseline-ref', '--candidate-ref', '--candidate-auto-gc', '--both-auto-gc'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
   options[key.slice(2)] = process.argv[++n];
 }
 const mode = options.mode || 'prepare', repeat = Number(options.repeat || 3), timeoutMs = Number(options['timeout-ms'] || 180000);
@@ -35,11 +35,14 @@ const groups = options.groups?.split(',') || ['fresh', 'long-session'];
 if (!scales.length || new Set(scales).size !== scales.length || scales.some(scale => !['small', 'medium', 'large'].includes(scale)) || !groups.length || new Set(groups).size !== groups.length || groups.some(group => !['fresh', 'long-session'].includes(group))) throw new Error('Invalid task selection');
 const runId = validateRunId(options['run-id'] || `contextos-pi-${Date.now()}`);
 const revisions = revisionPairOptions(options);
+if (options['candidate-auto-gc'] && (!revisions || options['candidate-auto-gc'] !== 'true')) throw new Error('Candidate auto GC requires a revision comparison');
+if (options['both-auto-gc'] && (!revisions || options['both-auto-gc'] !== 'true' || options['candidate-auto-gc'])) throw new Error('Both auto GC requires an exclusive revision comparison');
 const output = path.join(ROOT, 'benchmarks', 'results', runId);
 const piRoot = path.resolve(options['pi-package'] || path.join(os.homedir(), 'AppData', 'Roaming', 'npm', 'node_modules', '@earendil-works', 'pi-coding-agent'));
 const piPackage = revisions ? null : JSON.parse(await readFile(path.join(piRoot, 'package.json'), 'utf8')), piCli = revisions ? null : path.join(piRoot, 'dist', 'bundle', 'cli.js');
 const config = { ...loadConfig({ maxCostUsd: options['max-cost-usd'], memoryPolicy: 'contextos', contextosTargetBytes: 32000, compaction: 'off', contextStrategy: 'v1' }),
   comparisonMaxRequests: 100, piAutoCompaction: true, maxRequestInputTokens: 160000 };
+if (options['both-auto-gc']) Object.assign(config, { compaction: 'auto', memoryGc: 'auto' });
 if (config.storeRaw) throw new Error('Raw API storage must remain off');
 if (mode !== 'prepare') assertLiveConfig(config);
 if (mode === 'contract') {
@@ -123,6 +126,7 @@ try {
         if (fingerprint.sha256 !== identity.sha256) throw new Error('Initial workspaces differ');
         const started = Date.now(), baseUrl = `${gateway.baseUrl}/${agent}/${caseId}`;
         const turnConfig = { ...config, workspace, sessionId: 'comparison', apiKey: gateway.token, baseUrl, maxCostUsd: perCaseBudget, storeRaw: false };
+        if (options['candidate-auto-gc']) Object.assign(turnConfig, { compaction: agent === 'candidate' ? 'auto' : 'off', memoryGc: agent === 'candidate' ? 'auto' : 'off' });
         const teaEngine = revisions ? engines[agent].engine : { runTask, createAgentSession };
         const ToolClass = revisions ? engines[agent].tools.WorkspaceTools : WorkspaceTools;
         const expectedTools = new ToolClass({ workspace, deduplicateReads: false }); await expectedTools.init();
@@ -130,7 +134,7 @@ try {
         const getPackageScripts = createPackageScriptReader(workspace);
         const run = { taskId: definition.taskId, caseId, agent, repetition, scale: definition.scale, group, initialSha256: fingerprint.sha256,
           initialCommit: identity.commit, turns: [], running: true, status: 'failed', accepted: false, recoveryCalls: 0, compactions: 0, toolCalls: 0 };
-        if (revisions) Object.assign(run, { engineCommit: engines[agent].metadata.commit, engineSha256: engines[agent].metadata.sourceSha256 });
+        if (revisions) Object.assign(run, { engineCommit: engines[agent].metadata.commit, engineSha256: engines[agent].metadata.sourceSha256, compactionPolicy: turnConfig.compaction, memoryGcPolicy: turnConfig.memoryGc ?? null });
         report.runs.push(run); await save();
         let session, piSession;
         console.log(`Start ${caseId}/${agent}`);
@@ -155,7 +159,7 @@ try {
               nativeValidationPassed: agent !== 'pi' ? result.validationPassed : requirements.validatedAfterEdit,
               ledgerIntegrity: agent !== 'pi' ? result.summary.ledgerIntegrity : null,
               context: session?.memoryDiagnostics ? { fullWireBytes: session.memoryDiagnostics.fullWireBytes, sentWireBytes: session.memoryDiagnostics.sentWireBytes, evictedUnits: session.memoryDiagnostics.evictedUnits } : null });
-            run.toolCalls += result.toolCalls; run.compactions += result.compactions || 0;
+            run.toolCalls += result.toolCalls; run.compactions = session?.compactionCount ?? run.compactions + (result.compactions || 0);
             await save();
             if (phase % 5 === 4 || phase === prompts.length - 1) console.log(`  ${caseId}/${agent}: ${phase + 1}/${prompts.length} turns`);
             if (shouldStopComparisonTurn({ status: result.status, requirements, requiredPath })) { run.error = result.errorMessage || 'Native turn incomplete or protocol failure'; break; }

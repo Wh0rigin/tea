@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { buildMessagesRequest } from './model.mjs';
+import { collectUserRequirements } from './memory-gc.mjs';
 
 const bytes = (value) => Buffer.byteLength(typeof value === 'string' ? value : JSON.stringify(value), 'utf8');
 const hash = (value) => createHash('sha256').update(value).digest('hex');
@@ -98,11 +99,13 @@ function runtimeRecord(state = {}) {
 }
 
 export function sessionContext(session, state = session, checkpoint = session.compaction) {
-  if (!checkpoint) return session.messages;
+  const requirements = (session.pinnedRequirements || []).filter(original =>
+    !session.messages.some(message => message.role === 'user' && message.content === original.content));
+  if (!checkpoint) return requirements.length ? [...requirements, ...session.messages] : session.messages;
   const latest = latestUser(session.messages);
   const reminder = latest && latest.index < checkpoint.firstKeptIndex
     ? `\nLatest user request (verbatim):\n${serializeMessage(latest.message)}` : '';
-  return [{ role: 'user', content: `[Conversation checkpoint; historical context, not current source or test evidence]\n${checkpoint.summary}`
+  return [...requirements, { role: 'user', content: `[Conversation checkpoint; historical context, not current source or test evidence]\n${checkpoint.summary}`
     + `\nAuthoritative runtime state:\n${runtimeRecord(state)}${reminder}`
     + '\nRead current source before editing or relying on an omitted read. Re-run checks when fresh verification is needed.' },
   ...session.messages.slice(checkpoint.firstKeptIndex)];
@@ -183,7 +186,10 @@ export async function compactConversation(session, config, { adapter, ledger, sy
   const checkpoint = { id: randomUUID(), summary, firstKeptIndex: plan.firstKeptIndex,
     coveredFrom: plan.coveredFrom, coveredMessages: plan.coveredMessages, partial: plan.partial,
     previousId: session.compaction?.id || null, ...fileOperations(session.messages, plan.firstKeptIndex) };
-  const after = await measure(sessionContext(session, state, checkpoint));
+  const willCollect = config.memoryGc !== 'off' && Boolean(session.journal);
+  const candidate = willCollect ? { ...session, pinnedRequirements: collectUserRequirements(
+    session.messages.slice(0, checkpoint.firstKeptIndex), session.pinnedRequirements) } : session;
+  const after = await measure(sessionContext(candidate, state, checkpoint), { willArchive: willCollect });
   if (after >= before) {
     const unchanged = { status: 'unchanged', beforeBytes: before, afterBytes: after,
       detail: 'The summary did not reduce the next request size; history remains intact.' };

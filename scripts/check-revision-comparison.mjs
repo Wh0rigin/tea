@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), execute = promisify(execFile);
 const baseline = process.argv[2] || '97e8d5bdcd7e8e339247ad5ffb659bbb9c7683d9', candidate = process.argv[3] || 'HEAD';
+const scales = process.argv[5] || 'small', expectedRuns = 18 * scales.split(',').length;
 const runId = `s0-contract-${Date.now()}`, counters = new Map(), bodies = [];
 const event = value => `data: ${JSON.stringify(value)}\n\n`;
 const server = createServer(async (request, response) => {
@@ -18,7 +19,7 @@ const server = createServer(async (request, response) => {
     const user = body.messages.find(message => typeof message.content === 'string').content;
     const role = user.match(/Workspace: [^\n]+[\\/](baseline|candidate)(?:\n|$)/)?.[1];
     const task = user.includes('cache key collisions') ? 'cache-key' : user.includes('retry budget logic') ? 'retry-budget' : 'unicode';
-    const caseId = user.match(/small-(?:cache-key|retry-budget|unicode)-r\d+/)[0];
+    const caseId = user.match(/(?:small|medium|large)-(?:cache-key|retry-budget|unicode)-r\d+/)[0];
     assert.ok(role);
     const key = `${caseId}/${role}`, round = counters.get(key) || 0; counters.set(key, round + 1);
     const entry = task === 'unicode' ? 'src/services/text.mjs' : `src/services/${task}.mjs`;
@@ -51,11 +52,13 @@ try {
     ANTHROPIC_MODEL: 'glm-5.3-flash', TEA_THINKING_MODE: 'enabled', TEA_REASONING_EFFORT: 'low', TEA_MAX_OUTPUT_TOKENS: '4096',
     TEA_INPUT_PRICE_USD_PER_MTOK: '.8', TEA_OUTPUT_PRICE_USD_PER_MTOK: '2.8', TEA_STORE_RAW: '0', TEA_MAX_TOOL_CALLS: '24', TEA_STREAM: '1' };
   const child = await execute(process.execPath, ['scripts/compare-contextos-pi.mjs', '--mode', 'contract', '--baseline-ref', baseline, '--candidate-ref', candidate,
-    '--groups', 'fresh', '--scales', 'small', '--repeat', '3', '--run-id', runId, '--max-cost-usd', '1'], { cwd: ROOT, env, windowsHide: true, timeout: 180000, maxBuffer: 1_000_000 });
+    ...(process.argv[4] === 'auto-gc' ? ['--candidate-auto-gc', 'true'] : []),
+    ...(process.argv[4] === 'both-auto-gc' ? ['--both-auto-gc', 'true'] : []),
+    '--groups', 'fresh', '--scales', scales, '--repeat', '3', '--run-id', runId, '--max-cost-usd', '1'], { cwd: ROOT, env, windowsHide: true, timeout: 180000 * scales.split(',').length, maxBuffer: 1_000_000 });
   const directory = path.join(ROOT, 'benchmarks/results', runId), report = JSON.parse(await readFile(path.join(directory, 'comparison.json'), 'utf8'));
   assert.equal(report.complete, true); assert.equal(report.paidProviderRequests, 0); assert.equal(report.usageSource, 'scripted-loopback');
-  assert.equal(report.runs.length, 18); assert.ok(report.runs.every(run => run.accepted));
-  assert.equal(report.requests.length, 72); assert.ok(report.requests.every(row => row.complete && row.totalTokens === 140));
+  assert.equal(report.runs.length, expectedRuns); assert.ok(report.runs.every(run => run.accepted));
+  assert.equal(report.requests.length, expectedRuns * 4); assert.ok(report.requests.every(row => row.complete && row.totalTokens === 140));
   assert.equal(report.analysis.overall.allPairsTokenReductionPercent, null);
   assert.equal(report.analysis.validComparison, false, 'Scripted wire data must remain ineligible for provider ratios');
   assert.ok(Object.values(report.engines).every(engine => engine.sourceUnchanged));
@@ -65,9 +68,9 @@ try {
     commands: run.turns[0].requirements.calls.filter(call => call.kind === 'shell').map(call => ({ execution: call.execution, evidence: call.validationEvidence,
       sourceVersionsBefore: call.sourceVersionsBefore, sourceVersionsAfter: call.sourceVersionsAfter })) }));
   const evidence = { kind: 'native frozen-revision loopback contract', usageSource: 'scripted-loopback', paidProviderRequests: 0,
-    runId, runs: 18, requests: 72, accepted: 18, scriptedTokensPerArm: 5040, providerTokenImprovement: null,
+    runId, runs: expectedRuns, requests: expectedRuns * 4, accepted: expectedRuns, scriptedTokensPerArm: expectedRuns * 280, providerTokenImprovement: null,
     commonControlsMatched: true, allSourcesStable: true, ratiosWithheld: true,
     engines: Object.fromEntries(Object.entries(report.engines).map(([role, engine]) => [role, { commit: engine.commit, sourceSha256: engine.sourceSha256 }])), quality };
   await writeFile(path.join(directory, 'contract.json'), JSON.stringify(evidence, null, 2) + '\n');
-  console.log(JSON.stringify({ runId, accepted: '18/18', requests: 72, paidProviderRequests: 0, providerTokenImprovement: null, ratiosWithheld: true }));
+  console.log(JSON.stringify({ runId, accepted: `${expectedRuns}/${expectedRuns}`, requests: expectedRuns * 4, paidProviderRequests: 0, providerTokenImprovement: null, ratiosWithheld: true }));
 } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }

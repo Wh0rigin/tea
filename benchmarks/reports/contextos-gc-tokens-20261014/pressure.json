@@ -1,0 +1,1875 @@
+{
+  "runId": "gc-token-pressure-20261014",
+  "complete": true,
+  "sourceUnchanged": true,
+  "sourceSha256": "2a165711334af5e4e766234da235b5941289c1aecf95c68d4231ab41fb6a5293",
+  "engineCommit": "381a93796971076491e57558b7f33407f62626a8",
+  "profile": {
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "taskMaxOutputTokens": 4096,
+    "summaryMaxOutputTokens": 1200,
+    "requestGuardBytes": 80000,
+    "triggerRatio": 0.8,
+    "keepRecentBytes": 24000,
+    "contextosTargetBytes": 32000,
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "maxToolsPerTurn": 24,
+    "maxRequestsPerRun": 24,
+    "requestTimeoutMs": 180000,
+    "turnTimeoutMs": 300000,
+    "sharedGuardUsd": 8,
+    "perRunGuardUsd": 0.6,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "stream": true
+  },
+  "variants": [
+    {
+      "id": "contextos_off",
+      "memoryPolicy": "contextos",
+      "compaction": "off",
+      "memoryGc": "off"
+    },
+    {
+      "id": "contextos_auto",
+      "memoryPolicy": "contextos",
+      "compaction": "auto",
+      "memoryGc": "auto"
+    }
+  ],
+  "cases": [
+    {
+      "id": "protected",
+      "taskId": "medium-retry-budget",
+      "shape": "protected",
+      "promptSha256": "12d5768f137e194ae821aa8be00502016860bdfc86390f5db252e7ea77be0b7b",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "seedBytes": 60718,
+      "seedMessages": 28,
+      "initialIdentity": {
+        "commit": "fddd5c4532cf2ca50187545ccc52d0f47ee33a40",
+        "sha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+        "fileCount": 120,
+        "bytes": 74282,
+        "lines": 1508
+      },
+      "initialProjectedBytes": {
+        "contextos_off": 64981,
+        "contextos_auto": 64981
+      }
+    },
+    {
+      "id": "evictable",
+      "taskId": "large-unicode",
+      "shape": "inventory",
+      "promptSha256": "79a9539cd40d926fcffdd3b6a5975dd7bf66f6b09e56d72ca60ac484ebdc5008",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "seedBytes": 64246,
+      "seedMessages": 34,
+      "initialIdentity": {
+        "commit": "27c174652ead417827bbb3612d45bbe7102bcb6e",
+        "sha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+        "fileCount": 1200,
+        "bytes": 725947,
+        "lines": 14365
+      },
+      "initialProjectedBytes": {
+        "contextos_off": 18154,
+        "contextos_auto": 18154
+      }
+    }
+  ],
+  "runs": [
+    {
+      "caseId": "protected",
+      "taskId": "medium-retry-budget",
+      "repeat": 1,
+      "variant": "contextos_off",
+      "initialSha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 72810,
+      "outputTokens": 504,
+      "totalTokens": 73314,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 61861,
+      "conservativeSpentOrReservedUsd": 0.05965920000000001,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10930,
+            "output_tokens": 21,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0088028,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d73438fb7550630d99cb2eafe0b4469a1230ab89faf260c7a233308d8b2527f4",
+          "responseSha256": "2c1b9c6ea08345b1ac38c33dac66d0584491100075cde46b37c5dd9c772e4637",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 11794,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 832,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010190400000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "de7305ce48cb67cf4c9c988fd2132538defbd41d4873334bc57f304f5251aa9a",
+          "responseSha256": "8fad12ccffc75ad32a3f545d4ca50036d057824aa8b25823b13b3b3de94af6d2",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 385,
+            "output_tokens": 127,
+            "cache_read_input_tokens": 12608,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010750000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "87f6b1462b98d09d0ebf74fd0828ba9314ac3a69f62f1a4381a10512ca57b964",
+          "responseSha256": "54b0c67e3758a989e2066ab1e78dedf03c039997494b6f56d48acacb81218c34",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 11949,
+            "output_tokens": 142,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009956800000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "58137005aa412b2a82eb5b604a1ad6daffdc8727074ebef4bbed6f519d279ac6",
+          "responseSha256": "33caefc525c079bea66ce35b29fe60ba58ce41c4c0fa2e77fc830a345a212328",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 11021,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009740400000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "23c449f2ed6adda0dd50b3fbff129aabda07d9be11dc4f8685d7339a748d5494",
+          "responseSha256": "9c47ea1e7198b39d08c2e94f7c86830a09c0946f0b490fb6254dde24bd1f408f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 12203,
+            "output_tokens": 163,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0102188,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2cbdb66fa230de658719ea1868447e29cc6724849b1be62b1628995407e1d163",
+          "responseSha256": "3e1ca545c6165f81b6e9c7f43d5f57cd88d29ad0f125993acd08f270c0f2f31b",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "protected",
+      "taskId": "medium-retry-budget",
+      "repeat": 1,
+      "variant": "contextos_auto",
+      "initialSha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 41065,
+      "outputTokens": 912,
+      "totalTokens": 41977,
+      "summaryRequests": 1,
+      "summaryTokens": 4526,
+      "compactionCount": 1,
+      "elapsedMs": 53406,
+      "conservativeSpentOrReservedUsd": 0.0354056,
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 4061,
+            "output_tokens": 465,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0045508,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "59c0412949eca99e920d3456ba8ebf3e397be86ddfa8d3bda39bd477033059f0",
+          "responseSha256": "4f43d40c2b19af786fb8a2b79f1bbde99c1a08064ad8d1467a7c36d20ebd4c28",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4240,
+            "output_tokens": 6,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0042792,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "78ac8aba902ec011304059cbab021903215d8beac74885fc97d073c530ee1b2d",
+          "responseSha256": "0b749fd72b9b39d916f7231a829a1200b427f2dd53e16a2146692396f1af4b5f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5760,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.005568000000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1147d9089fbecb463d0484793758598173533f50a2b4efb623ce0ef4f94331bb",
+          "responseSha256": "c177c6a2a269bc9ffedd42b808666404e4a7c36c778654f7e866269296b1d01d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2159,
+            "output_tokens": 60,
+            "cache_read_input_tokens": 5056,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.00594,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "84596dc23dd0d23fa0f8a4e625ab3059afc26f3384d543618ce77e4720c6514c",
+          "responseSha256": "16eaee6c4d2cdfcd624d19b6fb25b0fe978ae35f3806ee51b68a67652f03751f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5735,
+            "output_tokens": 133,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004960399999999999,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "4d2afb23dbe2d00ef926e712dbd776a07ba272250c7ca6a0a981278a843a9c99",
+          "responseSha256": "3c1577d25fe39371353fecca4d6f13e477fcd10daf251a8593c3c1ff79d6b093",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5890,
+            "output_tokens": 22,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0047736,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b13151ebc0be5e063d38307b94eeb891a986c4be4d8a89a84baa948d3cdf00ab",
+          "responseSha256": "c9968b21bc2bbb922ad4def47a2f1ce371719f2739a287d4aa25964874ea53b6",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5988,
+            "output_tokens": 194,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0053336,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "3208651e9efe90a683f166d6db94cdea68633f0971737c83e82ce5235be6329f",
+          "responseSha256": "a5dd80c4d82f5e80b4778719e7376a857ac35c2402f7cf2b1409d908e7f1ae5d",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": [
+        {
+          "type": "memory_gc",
+          "status": "collected",
+          "removedMessages": 19,
+          "beforeBytes": 61737,
+          "afterBytes": 21205,
+          "orphanCollection": {
+            "scanned": 56,
+            "deleted": 0,
+            "deletedBytes": 0,
+            "graceMs": 86400000
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "protected",
+      "taskId": "medium-retry-budget",
+      "repeat": 2,
+      "variant": "contextos_auto",
+      "initialSha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 40247,
+      "outputTokens": 799,
+      "totalTokens": 41046,
+      "summaryRequests": 1,
+      "summaryTokens": 4566,
+      "compactionCount": 1,
+      "elapsedMs": 48271,
+      "conservativeSpentOrReservedUsd": 0.0344348,
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 29,
+            "output_tokens": 505,
+            "cache_read_input_tokens": 4032,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0046628,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "59c0412949eca99e920d3456ba8ebf3e397be86ddfa8d3bda39bd477033059f0",
+          "responseSha256": "98dca1877b433e8f6686c20ad07a3e3cba06ceacf23106e7f4a87231c4651d0c",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5371,
+            "output_tokens": 29,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004378,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "74a33de3424b41055cdf1964202429000d0da6c25c034622f72ed71f385f3368",
+          "responseSha256": "92b04ba709e7f3b4a943cec35ebfdc6323c8450291adf87778f855f12fba6c54",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5242,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0051536,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b065cf04ddd94a910c82b6a7374fb81a122c0405d95ba94e172c79622fc96d15",
+          "responseSha256": "3b39397ef818c914aafd488a52129c8cbc4ed7e933acdc85269b5cdae0934a34",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5609,
+            "output_tokens": 60,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0055256,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2e50747e919d5b74e896c9f6f7773a4190173fb6f661e2781a1e4e52e2566188",
+          "responseSha256": "2abd3d8715e5dc9535a44a766fc5d17c866f62cd0949f983c13c176f5531a50e",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5847,
+            "output_tokens": 54,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0048288,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "3b54f456a586202c27731c0aacc7b3b6cccaa1eeb2dc48c59d07f29ed5ae209b",
+          "responseSha256": "cd8c95087831a1fdd9170abd32fcb8df3ff4ecef81bb3e7dda47624ca9303cd0",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4835,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0047916,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "7f730a5260ab53947748684d6df595601848d235cd4df26abcfdc7bbd2d39b19",
+          "responseSha256": "1a36c9ff0b01d47b55584dd655e5dfd6e945f884049cf2cb5f1bd1b3fdb6d9b3",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4930,
+            "output_tokens": 100,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.005094400000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "9626955fd0227d66ab2c3534b2f8cc6b5b517674cebd6e52983cb707c7d38556",
+          "responseSha256": "6e81a14b9092f533807f531c48273a0774c7a8db885caea8869108b1946b49f5",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": [
+        {
+          "type": "memory_gc",
+          "status": "collected",
+          "removedMessages": 19,
+          "beforeBytes": 61737,
+          "afterBytes": 21205,
+          "orphanCollection": {
+            "scanned": 56,
+            "deleted": 0,
+            "deletedBytes": 0,
+            "graceMs": 86400000
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "protected",
+      "taskId": "medium-retry-budget",
+      "repeat": 2,
+      "variant": "contextos_off",
+      "initialSha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 72615,
+      "outputTokens": 426,
+      "totalTokens": 73041,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 45661,
+      "conservativeSpentOrReservedUsd": 0.0592848,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10930,
+            "output_tokens": 27,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0088196,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d73438fb7550630d99cb2eafe0b4469a1230ab89faf260c7a233308d8b2527f4",
+          "responseSha256": "7021b4f3ea816da141909f098cb26654a1edd72bdba4c7ec51c394ded28bf918",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1752,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 10880,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010195200000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "83660c8a8052d70a32a4b9ee7b50cefa7d6bd159c4b119a3400b3e5d66a5c5b5",
+          "responseSha256": "c470724c35a8c6bede97c891a5c1df8a4e9c27a5f9fcbf3ab18534db88d013e3",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 391,
+            "output_tokens": 119,
+            "cache_read_input_tokens": 12608,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010732400000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8bb49100cf7dd34567e981f97c62004562546383de80a4e89784e93ee6fd84cb",
+          "responseSha256": "1940893b6f738ff7a2b1ea26de757107fdb72f3f22440d880545d268befbd43d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10861,
+            "output_tokens": 39,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0096684,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d0ccda3f77afbf7101efb03c92aea3ace63f6ad388377203ce9f501a61a3421b",
+          "responseSha256": "942035cdbdd30888e6b8ed54d5afe2d864a0e489957dd6260a651dbb0567923c",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10853,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1152,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009657200000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "cac02f06802a988e837f58841f2bb2a6ead7217288ad56bfe45ad03d26cf223e",
+          "responseSha256": "d67be81b98157c9d797f58665984e3216a03c1ea2c119a97e35238b2f5e34e0b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 12100,
+            "output_tokens": 190,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010212,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8d66cd991b12a4a52c5bd4cc9154e40f31e96e0f6e17b7eb19f32248b2ad9c19",
+          "responseSha256": "0e1a520572a2995c77c2d273479cb503149ef5f7ee36373100b08d1981b22894",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "protected",
+      "taskId": "medium-retry-budget",
+      "repeat": 3,
+      "variant": "contextos_off",
+      "initialSha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 72052,
+      "outputTokens": 317,
+      "totalTokens": 72369,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 33479,
+      "conservativeSpentOrReservedUsd": 0.0585292,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10930,
+            "output_tokens": 12,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0087776,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d73438fb7550630d99cb2eafe0b4469a1230ab89faf260c7a233308d8b2527f4",
+          "responseSha256": "f5bf630e4bcedef6c112704f7673c96b2731aaedbad51cfad93788712e005385",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1576,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 10880,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010054400000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "75465b36964a81fd22bf97b65fb4b09f426d8f6d5fb8212e0c68a3618bc2396b",
+          "responseSha256": "760c396a1b1003582f7eecbde98dbc31e091ea850865912e93d27b9638d1c172",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 407,
+            "output_tokens": 119,
+            "cache_read_input_tokens": 12416,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.010591600000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "4b04dc749a1ae096724b69d4c77fb4ece74b7a0ad89565df5929a4cccd2931da",
+          "responseSha256": "f55f451ce3c1581ca42bcd7bc9e204ed88c7ea8d4da6e82bca3b9daf69ecf052",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10804,
+            "output_tokens": 18,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009564,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "8ce3c1115f3a79fa363842445aadb170a42f30d4d043295f621195656e4d79db",
+          "responseSha256": "d6f0c5b3dd96d2a52a6236333813dcabfd70fb976ad1bcb02633f32b31ae7d16",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10840,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009595600000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "02fd0fa451497d35d54d0078e0940c4c2eb8215e9aba7dd5ec5c0e22e93cf58d",
+          "responseSha256": "2716731128d707c68b1216b6f0afd235978f9c71da99d02a9257467a45072259",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 10935,
+            "output_tokens": 117,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.009946,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "d2f274db035564fdb0bfe7668e03db1eafe27734ac45b6e4af938a35bdc61b5e",
+          "responseSha256": "a5a5895b88232893c0f3c5452a83a9d03913125a581a9c827f2c083c0efddc0d",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "protected",
+      "taskId": "medium-retry-budget",
+      "repeat": 3,
+      "variant": "contextos_auto",
+      "initialSha256": "f561907a68b6879f5b796532db58d0ee3af1a2e4a245293e445fb3542e1e7bdb",
+      "seedSha256": "ec7c2f6cd6c6e5b088266a24446180c1209de4e2339b2d520c11dd2b2fc47a1c",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 34777,
+      "outputTokens": 717,
+      "totalTokens": 35494,
+      "summaryRequests": 1,
+      "summaryTokens": 4503,
+      "compactionCount": 1,
+      "elapsedMs": 47150,
+      "conservativeSpentOrReservedUsd": 0.0298292,
+      "requests": [
+        {
+          "purpose": "compaction",
+          "usage": {
+            "input_tokens": 4061,
+            "output_tokens": 442,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0044864,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "59c0412949eca99e920d3456ba8ebf3e397be86ddfa8d3bda39bd477033059f0",
+          "responseSha256": "62784c5511a19590806677fa4bd2954bac3e3bba5975da12569328d52d090b46",
+          "stopReason": "end_turn"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4220,
+            "output_tokens": 6,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004263200000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1fca08d03bfc25db64a6486dcfdd843f95cb0c3844429d5fc962ec7db6ebebf9",
+          "responseSha256": "6ddedee209107a4c10472492b600ab851f8603ef3a1623e54ff44f8b643a71a6",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 5676,
+            "output_tokens": 32,
+            "cache_read_input_tokens": 1152,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0055520000000000005,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "63d63e7e63b5a0cd410b69e97d6afa6cd4feaf540f4111ede7ad1c001ecb6e0f",
+          "responseSha256": "a9fc70b453d48ca67a33c8a118c372bfee904aa12b6fb803879ef966c5e76cf4",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 6043,
+            "output_tokens": 58,
+            "cache_read_input_tokens": 1152,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0059184,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "a4d4b27dedbae1e940ae99310ddb9937402b9933db107e8e637a8d8e297b7178",
+          "responseSha256": "0a32635647575e17a0bdf92127642300c7db32c6230827f814fe18661051c6a2",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4623,
+            "output_tokens": 22,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004630400000000001,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "7902d033f1126db540157ff488bca577c34bc0f591cec5e886a71b152dd8d993",
+          "responseSha256": "3202c475ff493e0bbe19280dbde1e9951d0cf00065eabd36a54b8386f975934b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4522,
+            "output_tokens": 157,
+            "cache_read_input_tokens": 1152,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0049788,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "5f102cf220a82e26a15ddc877da74105234d52bc869b9422c889cecc2c5ef7d9",
+          "responseSha256": "ebc560f00de19d3998ce5db82931d8d69db7e0fc890a1e0303fe230c42bf4308",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": [
+        {
+          "type": "memory_gc",
+          "status": "collected",
+          "removedMessages": 19,
+          "beforeBytes": 61737,
+          "afterBytes": 21205,
+          "orphanCollection": {
+            "scanned": 56,
+            "deleted": 0,
+            "deletedBytes": 0,
+            "graceMs": 86400000
+          }
+        }
+      ]
+    },
+    {
+      "caseId": "evictable",
+      "taskId": "large-unicode",
+      "repeat": 1,
+      "variant": "contextos_off",
+      "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 26222,
+      "outputTokens": 539,
+      "totalTokens": 26761,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 62844,
+      "conservativeSpentOrReservedUsd": 0.0224868,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3822,
+            "output_tokens": 23,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039924,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2b03372a58f607109f2e9e38904615f39c02aa89e88a34367eeb661c134ef404",
+          "responseSha256": "24d4fd825685890e4f488091056c4a80e5016b5ea15c21f3a4f3ec2c5c25a0d6",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2599,
+            "output_tokens": 30,
+            "cache_read_input_tokens": 1152,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0030848000000000004,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "ab86d408ec1122bf0fd9f56e40712c7a41cb4af2c23bbbea7c8b09c16998c9b8",
+          "responseSha256": "f891b51c46e4a23004a0129295e53df5a482737800be340a8c44bbfdd704bb19",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1591,
+            "output_tokens": 154,
+            "cache_read_input_tokens": 1152,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0026256,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "65d7ed019b429772a960bd0495ed63569025d99bf793ffae71d21d949e4e23b5",
+          "responseSha256": "d29b95267f6d74d2a05409bef18b7f95ade30df3e200bcf526022d4d665db82f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1705,
+            "output_tokens": 25,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023044000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "299248032f369e07cee948c02153b688e9b7bd818ba7d37dce3b2f594a37c7c4",
+          "responseSha256": "81fce91c229a45dcafe827641a776e21aee7a39ab004b056520a24ce9065860d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1777,
+            "output_tokens": 126,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0026448,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "0d8d8205eaa6ad8e506096ace5ca31659b378d93c6a8e5bb3b8b3b0305cad2c6",
+          "responseSha256": "b7256a67c0958bdbbeec57e34e249ee98555607d1a4e79af71b1a533695395ea",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 648,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 2240,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023552000000000004,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "0c711fb2883fe9f194e23359a2d5323136dfbe3e89e7063bf4491bda4b3c8034",
+          "responseSha256": "f8eace826ce9ca2ff68052c02b4b988b6ce50d1d640f035c404fdd0abb4fe3a7",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 849,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 2240,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0025244,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "da9655fda2c951eae22408b2715fc491eb7f68fbdaa67e3aa9f0351e27c4b95a",
+          "responseSha256": "00955b711a1ad20f0f2fec6acf4728c8f9bf7d02fc245efe658ebbc8676db02b",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2095,
+            "output_tokens": 146,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0029552,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "fa72f813dd45faa4ae1d8d60aea999f4281cc6ba0a8570d8d809dee9af89875f",
+          "responseSha256": "ba5cbdae70b0d84e1961cd8e404a4d129a736daa4c87c025bfa689ebe47d18eb",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "evictable",
+      "taskId": "large-unicode",
+      "repeat": 1,
+      "variant": "contextos_auto",
+      "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 20283,
+      "outputTokens": 307,
+      "totalTokens": 20590,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 45740,
+      "conservativeSpentOrReservedUsd": 0.017086,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 4910,
+            "output_tokens": 39,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0040371999999999995,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2b03372a58f607109f2e9e38904615f39c02aa89e88a34367eeb661c134ef404",
+          "responseSha256": "9aecee330ce74b942043b332618fce0fbb6883f24d9e8cbd202f655348427ea2",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3966,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0032176,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "a8f9e25aa2a7dace1b0973d17d4094d9fb258f3a4214c79ef43fc1ae88fc22ff",
+          "responseSha256": "9fefce076d076a2295b1ac695398b84e4674249aec6d25f939fc29165abacaf5",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1501,
+            "output_tokens": 95,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0024908,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "24247078fe34598f594eeebf0b14a79077736c98be8a01f49e0377bf3c84dc1e",
+          "responseSha256": "3a3b923d71911582f73c0dccd7cb1353420d2bfd410c85d6b54cefb961dfc0ea",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1461,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0022376,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "20c87ab0f42260b1c33c6756ab2cf27d4d2c2f884cc8b8dd88d0ebc0f2311416",
+          "responseSha256": "ae81ea02fc1f0924e2dc276e8ca90a0c6a213d9319fac0003f6c341e69cdf124",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1615,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023691999999999997,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "09305f3ae416e52f035a962030dd28207c71b22fa23a0f15b31f80d2b5206b9b",
+          "responseSha256": "822e97e291bab29d436eecfaa9f37d71e39d5b143a13bfae627781eb1535bdb3",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1710,
+            "output_tokens": 122,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0027336,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1c61a5eb2c96de9e9675b63f08648197618dbba830460324974169dae4710081",
+          "responseSha256": "5d3e7e9b48f0338d69162f15e72ad420ba182f79ff265b436d6a52e096f1c55c",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "evictable",
+      "taskId": "large-unicode",
+      "repeat": 2,
+      "variant": "contextos_auto",
+      "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 23513,
+      "outputTokens": 349,
+      "totalTokens": 23862,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 52869,
+      "conservativeSpentOrReservedUsd": 0.0197876,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3822,
+            "output_tokens": 35,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.004026,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2b03372a58f607109f2e9e38904615f39c02aa89e88a34367eeb661c134ef404",
+          "responseSha256": "2dee502c969676b2d73ed3908d25cf99eae8ade573dfca92db80a2523c1acc6e",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2632,
+            "output_tokens": 27,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0032052,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "c309787160902869db535a9ae5b1ccb2fe874d74bbcdefbf2914f78c591104ea",
+          "responseSha256": "969ec580832d4e72b45ffec009155fe38eaf6c69cdae3f6297070e95d48f7b24",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1114,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 1728,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023184,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "52861a633eba45ec78d05cf0216f2f851b2f707e667834fd12429033ab910973",
+          "responseSha256": "0ce24266d638870105ae3627118db8f170741303456ba14d871be9871ac3189c",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2958,
+            "output_tokens": 65,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0025484,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "667458733a19695557b3abe1ce3d7f2aa0a5d83012c085dd413226565f0ade6b",
+          "responseSha256": "8c1998b8f0fc325466af0b87156aee9d721825584defb7f0de2e936303b11213",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1529,
+            "output_tokens": 60,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0024152,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "553eb00afc3b85758892a60f243e1f9ddf2301225ad3cc00fd0bf1cc6d0c2cdf",
+          "responseSha256": "386c775efc1cf0a3f27ac36ea6dc1c1612f9e48e391a4b1c066a83929fa80108",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1202,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1792,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0024484,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "0f3b27ffdc86d8b54db44cbb4f9d1e73c12dad2503851b7e2e908203e9188118",
+          "responseSha256": "09f10256a6df95199253559857fa0bb624e4d94471f2afbbff8000fd306def06",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1808,
+            "output_tokens": 127,
+            "cache_read_input_tokens": 1280,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002826,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "897cc6ad6a3bf40b5a963205daa5efc53769b3115a40cfee21894c8f3e1746e1",
+          "responseSha256": "295e9a4d23c6524dff0ed4a7cdbc293f49b319ba2ee57bfceb4587aacb29590d",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "evictable",
+      "taskId": "large-unicode",
+      "repeat": 2,
+      "variant": "contextos_off",
+      "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 23432,
+      "outputTokens": 376,
+      "totalTokens": 23808,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 54353,
+      "conservativeSpentOrReservedUsd": 0.0197984,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3438,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 1472,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039812,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2b03372a58f607109f2e9e38904615f39c02aa89e88a34367eeb661c134ef404",
+          "responseSha256": "d657b4bc0cae5eb422f02532551a8bcd85344361cb5f17585c028eaf22946633",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2168,
+            "output_tokens": 45,
+            "cache_read_input_tokens": 1728,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0032428,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "1961b032b73fdd9816acbeaa100dc64fe28506288cb16e94c8e498df18a4792d",
+          "responseSha256": "ec2d19060dde67065ae26befa413b1daa603ddb72abdb60fbc9c8631dd07a5e4",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 581,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 2240,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023016000000000004,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "82909cb4266ceb29016ddf6ed039c929e8290270ae0a343c88e5d3facdcb8eb1",
+          "responseSha256": "1f0614aaad8668ae479e7005247d426d3971e3e887b09f4e81e98c17de034486",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1177,
+            "output_tokens": 75,
+            "cache_read_input_tokens": 1728,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002534,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2935231669aa68516fa9bb940850787405f998e9b2f70ddc080ac1accda27f87",
+          "responseSha256": "267206b01e7722b9c49585a05c7b4e9b291a3e107289b01a1cdf69be0f84f962",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1044,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 1792,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023136000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "57940190470a775077bfbb4cf87978310bc685be68866a4a1946d77313cd6b11",
+          "responseSha256": "9646a363c84977ddc61aea53051339305fc621bb0c8667843d0ce123e81f6cbc",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1191,
+            "output_tokens": 22,
+            "cache_read_input_tokens": 1792,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002448,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "5edd4bde180a85260d4bb60355177107994554e3f7ba0635146b4fa13d9a2350",
+          "responseSha256": "9f58b9a52fc9d96dba9d50f3159997dea295ba89d9997d95897e7893577b0376",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1289,
+            "output_tokens": 183,
+            "cache_read_input_tokens": 1792,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0029772,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "34d8462553e996ab745a6502c7c454ae3ecfea8ec176257bce61994669760ae1",
+          "responseSha256": "5e86e1d0269efd44d5be9e11486b4f83c1d2db32d9456f94ff3d427d6a6930a9",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "evictable",
+      "taskId": "large-unicode",
+      "repeat": 3,
+      "variant": "contextos_off",
+      "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 19863,
+      "outputTokens": 359,
+      "totalTokens": 20222,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 43482,
+      "conservativeSpentOrReservedUsd": 0.0168956,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 46,
+            "output_tokens": 19,
+            "cache_read_input_tokens": 4864,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0039812,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2b03372a58f607109f2e9e38904615f39c02aa89e88a34367eeb661c134ef404",
+          "responseSha256": "2a8a6106c81846200b557ebf3988dd14234fa816749a90a0350a5cf95f5c788f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 56,
+            "output_tokens": 20,
+            "cache_read_input_tokens": 3840,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0031728000000000004,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "3c6e01e230f5c0d6b2849546563d7a6cf309ee45cd88bbcf9485966053124997",
+          "responseSha256": "cd1b93364fe1635438db5c8b6c5a11c21e667d58d46030c58fdde44afa2bef1e",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 352,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 2304,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0021696000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "89f81fdd8fbdee4f7debb369bbdb45bd0e1de083718a0ac63d15a10f2f02173a",
+          "responseSha256": "78f4e4f7cb02ed6139a59847b902ca29f476de09d5bdf7c3164ef37fe0ddd527",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2740,
+            "output_tokens": 115,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002514,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "e67316cb533c9338377d735aa5a62bb0dfb20481ba2eb12bd470652cac76b62c",
+          "responseSha256": "7e446ab9df8ae1126734ddcd0fd32634dbe816d98740f6aa54ad09880f409178",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 977,
+            "output_tokens": 47,
+            "cache_read_input_tokens": 1792,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0023468,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "7b8ef7fbeb9278af76456b666aa9b00ec437f86bfa84593e78de0cca6e81c379",
+          "responseSha256": "203202f162f0ec3cbfab203ed3b073f1a88808e2ec2eff5d6dc4e2895526377d",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1100,
+            "output_tokens": 142,
+            "cache_read_input_tokens": 1792,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0027112,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "bc0e490f89f41ddaecb67e9e1c1a903453620faa46505dc4aec52f7babb2cfe9",
+          "responseSha256": "ebf261f934ec75bd8fa7d65bb2274eb0d29a806f412cb787ed8d3d4ef1d60b34",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    },
+    {
+      "caseId": "evictable",
+      "taskId": "large-unicode",
+      "repeat": 3,
+      "variant": "contextos_auto",
+      "initialSha256": "df0ec35b9dccdd7706a7ca034ddfd612c6672988b5bd324fad28d01eea2cf6a9",
+      "seedSha256": "9ab392ccbeb8644593834cc4284e7d44c5ea0ea3d0c9099352f05613e071ec5e",
+      "status": "completed",
+      "accepted": true,
+      "usageComplete": true,
+      "inputTokens": 29033,
+      "outputTokens": 914,
+      "totalTokens": 29947,
+      "summaryRequests": 0,
+      "summaryTokens": 0,
+      "compactionCount": 0,
+      "elapsedMs": 70152,
+      "conservativeSpentOrReservedUsd": 0.025785600000000002,
+      "requests": [
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 46,
+            "output_tokens": 26,
+            "cache_read_input_tokens": 4864,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0040008000000000005,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "2b03372a58f607109f2e9e38904615f39c02aa89e88a34367eeb661c134ef404",
+          "responseSha256": "e4eb0d53299a1e205acc95702c6cb4b44a6b1ea72eacefd5b74d0264160347ee",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 3718,
+            "output_tokens": 16,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0030192,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "de0cf3234fc6f1aa2346bb452d475d4e8a0cdef78bf2b97445c37ac50782ee44",
+          "responseSha256": "b425fb465c0ab8db9686c472bd6ee14e458956e8acb0c401ef92c68b8ff1a59f",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1061,
+            "output_tokens": 93,
+            "cache_read_input_tokens": 1472,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0022868000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "172887921c23ea714c0362abe556272b937ac1de6a51764438dfc55c0a2aecf6",
+          "responseSha256": "21af8dc7ce80630c2d6d0937ee0c9b85491308ab423e05689611b6c41aed2820",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2561,
+            "output_tokens": 64,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002228,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "9d8e70ad9c269e34f41c89e62eb8eef4655337df26d36bad910cb06e50b9413f",
+          "responseSha256": "16cbc55f9c5b6ab57c73e5fb09c0396e71c5cb5156ea5aa32c96413f7c7c2f04",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1690,
+            "output_tokens": 203,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0027908000000000004,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "50ceda0f1280913110f86dcdfcef3c7184ffe379d09786dc74fae41096aa4644",
+          "responseSha256": "56191477f7d36e0e51c46668ec99299344a0a9a5b7a229bd9231c4493bc7c9a8",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1353,
+            "output_tokens": 58,
+            "cache_read_input_tokens": 1536,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0024736000000000003,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "230844cdb3bb949ecd7d9f2a3f85f92b0e920ce0ecc6ff113f3f1d376d0e8276",
+          "responseSha256": "5662d39f191ef41210a08ce5c1bea1f4cf9e11ee1f316e5e50ebaea9365706f8",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 1532,
+            "output_tokens": 37,
+            "cache_read_input_tokens": 1536,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002558,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "50f7e953fc4ea9469e59491ee468d5de881f6566160686cb33efcd2dfadeec64",
+          "responseSha256": "6564728d3be1718fcd3c851ff455ee5ae86bd2902fc6b7a78a007f8f3f489af7",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2093,
+            "output_tokens": 144,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.002948,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "b9b989e1d47d104fd0eca8bb549acbca2ea293cf3ff8c2a2ced98e612514ea56",
+          "responseSha256": "133363fd1e2b2bb677ce1d92bc043fb9b01d1676aeb9a126bbe28eb1d6398966",
+          "stopReason": "tool_use"
+        },
+        {
+          "purpose": "task",
+          "usage": {
+            "input_tokens": 2307,
+            "output_tokens": 273,
+            "cache_read_input_tokens": 1088,
+            "server_tool_use": {
+              "web_search_requests": 0
+            }
+          },
+          "usageComplete": true,
+          "usageStatus": "complete",
+          "estimatedUsd": 0.0034804000000000002,
+          "costBasis": "conservative-reported-usage",
+          "requestSha256": "5b17878c9a588dde10eeed16519f7d9bf71ef05738f31b3b4eb08dbc62c401ef",
+          "responseSha256": "3e3cda21cca2ce1a060903f7106b469cfa4e728397d2faa9dcb75d10bde31756",
+          "stopReason": "end_turn"
+        }
+      ],
+      "garbageCollections": []
+    }
+  ],
+  "analysis": [
+    {
+      "caseId": "protected",
+      "accepted": 6,
+      "runs": 6,
+      "offTokens": 218724,
+      "autoGcTokens": 118517,
+      "reductionPercent": 45.814359649604064,
+      "summaryTokens": 13595
+    },
+    {
+      "caseId": "evictable",
+      "accepted": 6,
+      "runs": 6,
+      "offTokens": 70791,
+      "autoGcTokens": 74399,
+      "reductionPercent": -5.096693082453974,
+      "summaryTokens": 0
+    }
+  ],
+  "conservativeSpentOrReservedUsd": 0.3989828000000001,
+  "haltReason": null,
+  "setup": "Scripted real read-only tool outputs; setup is not billed or model-generated. Repair and summary are real provider calls."
+}
