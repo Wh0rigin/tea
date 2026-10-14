@@ -16,6 +16,23 @@ Our mission is to reduce token consumption while preserving task correctness, co
 
 ## Measured token usage
 
+### Complete coverage: TEA / recorded Pi / recorded Claude Code
+
+Current **TEA d76f45f**, **30 runs per agent**: small/medium/large nine each plus three 30-read/repair workflows. Same **GLM-5.3-flash, enabled/low, 4096 output cap**, matching initial source and prompts. TEA ContextOS 32,000-byte target with automatic compaction/GC enabled. **Pi/Claude reuse historical data; separate measurement rounds.**
+
+![Complete four-scale comparison](benchmarks/reports/tea-complete-coverage-vs-recorded-agents-20261014/three-agents.png)
+
+- **30-run total:** TEA **54.27% fewer than Pi**, **65.45% fewer than Claude Code** (1,157,270 / 2,530,728 / 3,349,998 tokens).
+- **27 fresh tasks:** **76.63% / 75.52% fewer**.
+- **Medium:** **74.96% / 74.20% fewer**; **long:** **39.99% / 61.52% fewer**.
+
+Full acceptance **TEA/Pi/Claude: 30/30, 30/30, 21/30**; code behavior **30/30 each**. Nine Claude final validations remain unconfirmed triangles. Cache and thinking count; all 90 runs retained, no unknown usage. Failures do not enter bar means. The previous 18-case ratios had different coverage. Against an earlier recorded TEA GC cohort, medium rose **12.93%**, long **0.46%**; cross-round diagnostic, not a paired causal conclusion. Self-authored fixtures and uncontrolled cache/backend state limit generalization.
+
+[Full report and alignment](benchmarks/reports/tea-complete-coverage-vs-recorded-agents-20261014/README.md) · [TEA-only supplement](benchmarks/reports/tea-coverage-completion-20261014/README.md)
+
+<details>
+<summary>Previous partial coverage: 18 current TEA runs</summary>
+
 ### TEA fair discovery / recorded Pi / recorded Claude Code
 
 Updated TEA **d76f45f** is aligned with existing **Pi 0.87.1 / Claude Code 2.1.281** fresh-v5 data. Same **GLM-5.3-flash, enabled/low, 4096 output cap**, matching prompts and initial source. **Historical cross-round comparison; Pi/Claude were not rerun.** Only the measured small and large scales are included.
@@ -29,6 +46,8 @@ Updated TEA **d76f45f** is aligned with existing **Pi 0.87.1 / Claude Code 2.1.2
 Full acceptance **TEA/Pi/Claude: 18/18, 18/18, 12/18**; code behavior **18/18 for all**. Six Claude final validations remain unconfirmed triangles, not failures or passes. Cache and thinking tokens count; all attempts retained. Separate rounds do not control provider-cache/backend randomness; self-authored fixtures are not production holdouts. New TEA medium/long performance is not inferred from older versions.
 
 [Report, alignment and complete data](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/README.md)
+
+</details>
 
 <details>
 <summary>Previous TEA version comparison (historical evidence)</summary>
