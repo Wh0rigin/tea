@@ -51,6 +51,7 @@ try {
     ANTHROPIC_MODEL: 'glm-5.3-flash', TEA_THINKING_MODE: 'enabled', TEA_REASONING_EFFORT: 'low', TEA_MAX_OUTPUT_TOKENS: '4096',
     TEA_INPUT_PRICE_USD_PER_MTOK: '.8', TEA_OUTPUT_PRICE_USD_PER_MTOK: '2.8', TEA_STORE_RAW: '0', TEA_MAX_TOOL_CALLS: '24', TEA_STREAM: '1' };
   const child = await execute(process.execPath, ['scripts/compare-contextos-pi.mjs', '--mode', 'contract', '--baseline-ref', baseline, '--candidate-ref', candidate,
+    ...(process.argv[4] === 'auto-gc' ? ['--candidate-auto-gc', 'true'] : []),
     '--groups', 'fresh', '--scales', 'small', '--repeat', '3', '--run-id', runId, '--max-cost-usd', '1'], { cwd: ROOT, env, windowsHide: true, timeout: 180000, maxBuffer: 1_000_000 });
   const directory = path.join(ROOT, 'benchmarks/results', runId), report = JSON.parse(await readFile(path.join(directory, 'comparison.json'), 'utf8'));
   assert.equal(report.complete, true); assert.equal(report.paidProviderRequests, 0); assert.equal(report.usageSource, 'scripted-loopback');

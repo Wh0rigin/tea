@@ -257,3 +257,7 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 ## 2026-10-14：检查点 GC 与默认自动压缩
 
 从已合并PR4的主分支创建独立功能分支。默认auto压缩；先归档并持久化检查点再释放旧正文，保留用户要求、规则版本、真实验证状态与未知计费责任。冷缓存256KiB、常驻历史序列化触发4MiB、单会话存储512MiB，磁盘只收集24小时以上孤儿。298/298本地、17/17 GC专项（独立进程）、18/18组合检查、18次脚本压力通过。序列化历史减少99.85%/99.95%/99.97%，不是RSS/堆或供应商Token收益；新增付费调用0。默认模型Token影响仍待独立实测。[报告](benchmarks/reports/contextos-gc-20261014/README.zh-CN.md)。
+
+## 2026-10-14: GC provider-token gate
+
+TEA-only direct-parent comparison: 60/60 accepted, complete provider usage. Candidate used 6.54% more tokens overall; small -9.87%, medium -11.66%, large +38.87%, long -0.62%. No normal task compacted. Same-candidate threshold ablation: 12/12 accepted; protected history -45.81% including 13,595 summary tokens; evictable history +5.10%, no summaries. Normal-workload token gate failed; wait for review before further optimization or merge. Reports: benchmarks/reports/contextos-gc-tokens-20261014. Pi/Claude were not rerun.

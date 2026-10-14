@@ -43,3 +43,7 @@ The final command explicitly reloads original message events, trading more RAM f
 ## Evidence boundaries
 
 Tests cover interrupted commits, crash recovery, exact cold recall, stale source and rules, budgets, reset, cache bounds, orphan cleanup and corrupt nested artifacts. `node scripts/check-memory-gc.mjs OUTPUT` compares GC off/auto over 12/36/72 tool rounds with three repeats: 18 deterministic runs, one scripted summary per run, zero provider calls. Its metric is serialized resident history, not heap/RSS or provider tokens. New default-profile token and latency benefits require separate live measurements.
+# Provider-token gate
+
+The [TEA-only live comparison](../benchmarks/reports/contextos-gc-tokens-20261014/README.md) recorded 72 accepted attempts. Normal tasks used **6.54% more tokens** than the direct parent; no normal task compacted. Same-candidate, above-threshold pressure used **45.81% fewer tokens**, including summaries. Below-threshold pressure used **5.10% more**. The normal-workload token gate failed; these results do not establish universal savings or an independent token benefit of GC.
+
