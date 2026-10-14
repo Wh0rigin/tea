@@ -297,6 +297,9 @@ Optimization work should record its hypothesis, baseline, candidate, quality che
 
 ## Documentation
 
+- [Graded coding ability tasks](docs/CODING_ABILITY.md): eight executable tasks from file creation to asynchronous scheduling and transaction repair; preflight runs without API calls.
+- [First live coding ability run](benchmarks/reports/coding-ability-glm-20261014-v1/README.md): 8/8 self-authored tasks accepted with GLM-5.3-flash / low effort, one fresh attempt each; 279,529 reported tokens in total. This is a small Node.js diagnostic suite, not a general coding accuracy claim.
+
 Supporting research documents currently include Chinese content.
 
 - [Optimization record and generalization review](docs/TOKEN_OPTIMIZATIONS.md)

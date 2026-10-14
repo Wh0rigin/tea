@@ -227,6 +227,10 @@ tea
 
 ## 基准测试与实验
 
+新增[分级编码能力测试](docs/CODING_ABILITY.md)：四档难度、每档两题，覆盖新建文件、解析器、缓存、并发、分页、事务及依赖图。`npm run benchmark:coding` 默认只做离线预检查；真实运行需要显式选择 live。
+
+[首轮真实测试结果](benchmarks/reports/coding-ability-glm-20261014-v1/README.md)：GLM-5.3-flash / low，每题一次，8/8 自编题通过完整验收，共 279,529 实际 Token。这是 Node.js 小样本诊断，不代表通用编码正确率。
+
 ```powershell
 npm run benchmark:replay
 tea benchmark run --suite core --mode replay

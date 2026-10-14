@@ -13,6 +13,7 @@
     "test": "node scripts/test.mjs",
     "benchmark:replay": "node src/cli.mjs benchmark run --suite core --mode replay",
     "benchmark:runtime": "node src/cli.mjs benchmark run --suite runtime-smoke --mode runtime",
+    "benchmark:coding": "node scripts/test-coding-ability.mjs",
     "benchmark:pi": "node scripts/compare-pi.mjs",
     "benchmark:pi:check": "node scripts/check-pi-protocol.mjs",
     "benchmark:contextos-pi": "node scripts/compare-contextos-pi.mjs",
