@@ -25,7 +25,7 @@ const execute = promisify(execFile), hash = value => createHash('sha256').update
 const options = {};
 for (let n = 2; n < process.argv.length; n++) {
   const key = process.argv[n];
-  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales', '--baseline-ref', '--candidate-ref', '--candidate-auto-gc'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
+  if (!['--mode', '--run-id', '--repeat', '--max-cost-usd', '--pi-package', '--timeout-ms', '--groups', '--scales', '--baseline-ref', '--candidate-ref', '--candidate-auto-gc', '--both-auto-gc'].includes(key) || !process.argv[n + 1]) throw new Error(`Invalid option ${key}`);
   options[key.slice(2)] = process.argv[++n];
 }
 const mode = options.mode || 'prepare', repeat = Number(options.repeat || 3), timeoutMs = Number(options['timeout-ms'] || 180000);
@@ -36,11 +36,13 @@ if (!scales.length || new Set(scales).size !== scales.length || scales.some(scal
 const runId = validateRunId(options['run-id'] || `contextos-pi-${Date.now()}`);
 const revisions = revisionPairOptions(options);
 if (options['candidate-auto-gc'] && (!revisions || options['candidate-auto-gc'] !== 'true')) throw new Error('Candidate auto GC requires a revision comparison');
+if (options['both-auto-gc'] && (!revisions || options['both-auto-gc'] !== 'true' || options['candidate-auto-gc'])) throw new Error('Both auto GC requires an exclusive revision comparison');
 const output = path.join(ROOT, 'benchmarks', 'results', runId);
 const piRoot = path.resolve(options['pi-package'] || path.join(os.homedir(), 'AppData', 'Roaming', 'npm', 'node_modules', '@earendil-works', 'pi-coding-agent'));
 const piPackage = revisions ? null : JSON.parse(await readFile(path.join(piRoot, 'package.json'), 'utf8')), piCli = revisions ? null : path.join(piRoot, 'dist', 'bundle', 'cli.js');
 const config = { ...loadConfig({ maxCostUsd: options['max-cost-usd'], memoryPolicy: 'contextos', contextosTargetBytes: 32000, compaction: 'off', contextStrategy: 'v1' }),
   comparisonMaxRequests: 100, piAutoCompaction: true, maxRequestInputTokens: 160000 };
+if (options['both-auto-gc']) Object.assign(config, { compaction: 'auto', memoryGc: 'auto' });
 if (config.storeRaw) throw new Error('Raw API storage must remain off');
 if (mode !== 'prepare') assertLiveConfig(config);
 if (mode === 'contract') {

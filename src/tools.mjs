@@ -100,44 +100,70 @@ export class WorkspaceTools {
     return candidate;
   }
 
-  async listFilePaths({ maxFiles = 250, offset = 0, path: scope = '.', includeOmitted = false } = {}) {
-    const pageSize = Math.max(1, Math.min(MAX_FILES, Math.floor(Number(maxFiles) || 250)));
-    const start = Math.max(0, Math.floor(Number(offset) || 0));
-    const stop = start + pageSize;
+  // Rotate directories and visit child directories before their sibling files.
+  // A single large directory cannot consume the whole discovery budget.
+  async *#walkFiles(scope, includeOmitted) {
     const root = await this.resolveFile(scope);
-    if (!(await stat(root)).isDirectory() || (isSensitivePath(path.relative(this.workspace, root)) || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part)))) throw new Error('Listing scope must be a non-sensitive workspace directory');
-    const rows = [];
-    const walk = async (directory, depth) => {
-      if (depth > 12 || rows.length >= stop) return;
-      const entries = await readdir(directory, { withFileTypes: true });
-      entries.sort((a, b) => a.name.localeCompare(b.name));
-      for (const entry of entries) {
-        if (rows.length >= stop) break;
-        if (!includeOmitted && entry.name.startsWith('.') && entry.name !== '.github') continue;
-        if (['.git', '.tea'].includes(entry.name) || (!includeOmitted && OMIT.has(entry.name))) continue;
-        const full = path.join(directory, entry.name);
-        if (entry.isSymbolicLink()) continue;
-        if (entry.isDirectory()) await walk(full, depth + 1);
+    if (!(await stat(root)).isDirectory() || isSensitivePath(path.relative(this.workspace, root))
+      || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part))) {
+      throw new ToolFeedbackError('INPUT_INVALID', 'Listing/search scope must be a non-sensitive workspace directory');
+    }
+    const frame = async (directory, depth) => ({ directory, depth, index: 0,
+      entries: (await readdir(directory, { withFileTypes: true })).sort((a, b) =>
+        Number(b.isDirectory()) - Number(a.isDirectory()) || a.name.localeCompare(b.name)) });
+    const queue = [await frame(root, 0)]; let head = 0;
+    while (head < queue.length) {
+      this.signal?.throwIfAborted();
+      const current = queue[head]; queue[head++] = null;
+      const entry = current.entries[current.index++];
+      if (!entry) continue;
+      const full = path.join(current.directory, entry.name), relative = path.relative(this.workspace, full);
+      if (!entry.isSymbolicLink() && !isSensitivePath(relative)
+        && !['.git', '.tea'].includes(entry.name)
+        && (includeOmitted || ((!entry.name.startsWith('.') || entry.name === '.github') && !OMIT.has(entry.name)))) {
+        if (entry.isDirectory() && current.depth < 12) queue.push(await frame(full, current.depth + 1));
         else if (entry.isFile()) {
-          if (isSensitivePath(path.relative(this.workspace, full))) continue;
-          const extension = path.extname(entry.name).toLowerCase();
-          const info = await stat(full);
-          if (TEXT_EXTENSIONS.has(extension) || !extension || (info.size <= MAX_READ_BYTES && decodeText(await readFile(full)) !== null)) rows.push(path.relative(this.workspace, full).replaceAll(path.sep, '/'));
+          const extension = path.extname(entry.name).toLowerCase(), info = await stat(full);
+          if (TEXT_EXTENSIONS.has(extension) || !extension
+            || (info.size <= MAX_READ_BYTES && decodeText(await readFile(full)) !== null)) yield relative.replaceAll(path.sep, '/');
         }
       }
-    };
-    await walk(root, 0);
-    return rows.slice(start, stop);
+      if (current.index < current.entries.length) queue.push(current);
+      if (head >= 1024 && head * 2 > queue.length) { queue.splice(0, head); head = 0; }
+    }
   }
 
-  async listFiles({ maxFiles = 250, offset = 0, path: scope = '.', includeOmitted = false } = {}) {
-    const files = await this.listFilePaths({ maxFiles, offset, path: scope, includeOmitted });
-    const listing = files.join('\n') || '(no text files found)';
-    return `Scoped listing: ${scope}; offset=${offset}; ${files.length} paths. Filters/depth limits apply; this is not proof of complete coverage. Use another page or narrower path; includeOmitted enables ordinary excluded folders.\n${listing}`;
+  async listFilePaths({ maxFiles = 250, offset = 0, path: scope = '.', includeOmitted = false } = {}) {
+    const pageSize = Math.max(1, Math.min(MAX_FILES, Math.floor(Number(maxFiles) || 250)));
+    const start = Math.max(0, Math.floor(Number(offset) || 0)), rows = []; let index = 0;
+    for await (const file of this.#walkFiles(scope, includeOmitted)) {
+      if (index++ < start) continue;
+      rows.push(file); if (rows.length >= pageSize) break;
+    }
+    return rows;
+  }
+
+  async listFiles({ maxFiles, offset = 0, path: scope = '.', includeOmitted = false } = {}) {
+    const start = Number(offset);
+    if (!Number.isSafeInteger(start) || start < 0 || start > 100000) throw new ToolFeedbackError('INPUT_INVALID', 'offset must be an integer from 0 to 100000');
+    const count = Math.max(1, Math.min(250, Math.floor(Number(maxFiles) || 32)));
+    const candidates = await this.listFilePaths({ maxFiles: count + 1, offset: start, path: scope, includeOmitted });
+    const files = []; let bodyBytes = 0;
+    for (const file of candidates.slice(0, count)) {
+      const size = Buffer.byteLength(file, 'utf8') + (files.length ? 1 : 0);
+      // Preserve one complete path even if it exceeds the default byte budget.
+      if (maxFiles === undefined && files.length && bodyBytes + size > 2048) break;
+      files.push(file); bodyBytes += size;
+    }
+    const more = candidates.length > files.length, next = start + files.length;
+    const nextOffset = more && next <= 100000 ? next : null;
+    const limitHint = more && nextOffset === null ? ' Offset limit reached; narrow path.' : '';
+    return `Scoped listing: ${scope}; offset=${start}; ${files.length} paths. nextOffset=${nextOffset}; complete=${!more}. Filters/depth limits apply. Continue with the same path/includeOmitted and nextOffset; restart at 0 after tree changes.${limitHint}\n${files.join('\n') || '(no text files found)'}`;
   }
 
   async initialInventory({ task, strategy = 'v1', limit = 8 } = {}) {
     const files = await this.listFilePaths({ maxFiles: MAX_FILES });
+    this.discoveryWide = files.length > 32;
     const inventory = strategy === 'baseline' || strategy === 'v1-dedup'
       ? buildBaselineInventory(files, 160)
       : buildProgressiveInventory(task, files, {
@@ -194,7 +220,7 @@ export class WorkspaceTools {
     if(this.sourceEvidence.size>128)this.sourceEvidence.delete(this.sourceEvidence.keys().next().value);
   }
 
-  async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false } = {}) {
+  async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false, offset = 0, startLine = 1 } = {}) {
     if (typeof query !== 'string' || !query) throw new Error('query must be a non-empty string');
     const needle = query.toLowerCase();
     const learned = [];
@@ -213,43 +239,35 @@ export class WorkspaceTools {
       else this.sessionTerms.delete(needle);
     }
     const needles = [needle, ...learned.map(mapping => mapping.target.toLowerCase())];
-    const root = await this.resolveFile(scope);
-    if (!(await stat(root)).isDirectory() || (isSensitivePath(path.relative(this.workspace, root)) || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part)))) throw new Error('Search scope must be a non-sensitive workspace directory');
-    const results = [];
-    const dependencies = new Map();
-    let filesScanned = 0;
-    let bytesScanned = 0;
-    const walk = async (directory, depth) => {
-      if (depth > 12 || results.length >= Math.min(Number(maxResults) || 30, 80) || filesScanned >= MAX_FILES || bytesScanned >= 25_000_000) return;
-      const entries = await readdir(directory, { withFileTypes: true });
-      entries.sort((a, b) => a.name.localeCompare(b.name));
-      for (const entry of entries) {
-        if (results.length >= Math.min(Number(maxResults) || 30, 80) || filesScanned >= MAX_FILES || bytesScanned >= 25_000_000) break;
-        if (!includeOmitted && entry.name.startsWith('.') && entry.name !== '.github') continue;
-        if (['.git', '.tea'].includes(entry.name) || (!includeOmitted && OMIT.has(entry.name)) || entry.isSymbolicLink()) continue;
-        const full = path.join(directory, entry.name);
-        if (entry.isDirectory()) { await walk(full, depth + 1); continue; }
-        if (isSensitivePath(path.relative(this.workspace, full))) continue;
-        if (!entry.isFile()) continue;
-        const info = await stat(full);
-        if (info.size > MAX_READ_BYTES) continue;
-        filesScanned += 1;
-        bytesScanned += info.size;
-        const decoded = decodeText(await readFile(full));
-        if (decoded === null) continue;
-        const lines = decoded.split(/\r?\n/);
-        for (let index = 0; index < lines.length; index += 1) {
-          if (needles.some(term => lines[index].toLowerCase().includes(term))) {
-            const relative = path.relative(this.workspace, full).replaceAll(path.sep, '/');
-            dependencies.set(relative, { path: relative, sourceHash: createHash('sha256').update(redactText(decoded)).digest('hex') });
-            results.push(redactText(`${path.relative(this.workspace, full).replaceAll(path.sep, '/')}:${index + 1}: ${lines[index].trim()}`));
-            if (results.length >= Math.min(Number(maxResults) || 30, 80)) break;
-          }
+    if (!Number.isSafeInteger(offset) || offset < 0 || offset > 100000 || !Number.isSafeInteger(startLine) || startLine < 1) {
+      throw new ToolFeedbackError('INPUT_INVALID', 'Search offset must be 0..100000 and startLine a positive integer');
+    }
+    const results = [], dependencies = new Map(), limit = Math.max(1, Math.min(Number(maxResults) || 30, 80));
+    let filesScanned = 0, bytesScanned = 0, fileIndex = 0, nextOffset = null, nextLine = 1;
+    for await (const relative of this.#walkFiles(scope, includeOmitted)) {
+      const index = fileIndex++; if (index < offset) continue;
+      const full = await this.resolveFile(relative), info = await stat(full);
+      if (info.size > MAX_READ_BYTES) continue;
+      if (filesScanned >= MAX_FILES || bytesScanned + info.size > 25_000_000) { nextOffset = index; break; }
+      filesScanned++; bytesScanned += info.size;
+      const decoded = decodeText(await readFile(full)); if (decoded === null) continue;
+      const lines = decoded.split(/\r?\n/);
+      for (let line = index === offset ? startLine - 1 : 0; line < lines.length; line++) {
+        if (!needles.some(term => lines[line].toLowerCase().includes(term))) continue;
+        dependencies.set(relative, { path: relative, sourceHash: createHash('sha256').update(redactText(decoded)).digest('hex') });
+        results.push(redactText(`${relative}:${line + 1}: ${lines[line].trim()}`));
+        if (results.length >= limit) {
+          nextOffset = line + 1 < lines.length ? index : index + 1;
+          nextLine = line + 1 < lines.length ? line + 2 : 1;
+          break;
         }
       }
-    };
-    await walk(root, 0);
-    const coverage = `Search scope=${scope}; scanned=${filesScanned} files/${bytesScanned} bytes. Filters, depth and size limits apply; hitting a result/file/byte cap can omit matches. Narrow path or use includeOmitted to expand discovery.`;
+      if (results.length >= limit) break;
+    }
+    const complete = nextOffset === null, cursorExceeded = nextOffset > 100000;
+    if (!complete) this.searchCursorNeeded = true;
+    if (cursorExceeded) nextOffset = null;
+    const coverage = `Search scope=${scope}; scanned=${filesScanned} files/${bytesScanned} bytes; nextOffset=${nextOffset}; nextLine=${nextLine}; complete=${complete}. Filters/depth/size limits apply. Continue the same query/path/includeOmitted with nextOffset and startLine=nextLine; restart at 0 after tree changes.${cursorExceeded ? ' Offset limit reached; narrow path.' : ''}`;
     if (!results.length) {
       if (this.unresolvedQueries.size < 32) this.unresolvedQueries.add(needle);
       return `No matches in the scanned scope. ${coverage}`;
@@ -263,7 +281,8 @@ export class WorkspaceTools {
   }
 
   modelToolDefinitions({ includeMemory = true } = {}) {
-    const definitions = this.unresolvedQueries.size ? [...TOOL_DEFINITIONS, TERM_MAPPING_TOOL] : TOOL_DEFINITIONS;
+    const base = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
+    const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
     return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
 
@@ -425,13 +444,23 @@ export class WorkspaceTools {
 }
 
 export const TOOL_DEFINITIONS = [
-  { name: 'list_files', description: 'List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
-  { name: 'search_code', description: 'Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
+  { name: 'list_files', description: 'List workspace text paths fairly across directories. Default: 32 paths / about 2KB; set maxFiles for larger pages. Use nextOffset to continue the same scope. includeOmitted expands ordinary excluded folders; secrets and Git/agent storage remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
+  { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
   { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
   { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
 ];
+
+// Small inventories retain the previous wire schemas until continuation is
+// actually needed. Additional fields should not tax unrelated short tasks.
+const SMALL_DISCOVERY_DEFINITIONS = TOOL_DEFINITIONS.map(tool => {
+  if (tool.name === 'list_files') return { ...tool, description: 'List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.' };
+  if (tool.name !== 'search_code') return tool;
+  const properties = { ...tool.input_schema.properties }; delete properties.offset; delete properties.startLine;
+  return { ...tool, description: 'Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.',
+    input_schema: { ...tool.input_schema, properties } };
+});
 
 export const TERM_MAPPING_TOOL = {
   name: 'remember_term_mapping',

@@ -105,6 +105,8 @@ export function restoreToolMemory(session, tools) {
   if (!memory) return;
   tools.sessionTerms = new Map(memory.sessionTerms || []);
   tools.unresolvedQueries = new Set(memory.unresolvedQueries || []);
+  tools.discoveryWide = memory.discoveryWide;
+  tools.searchCursorNeeded = Boolean(memory.searchCursorNeeded);
   tools.readEvidence = new Map(memory.readEvidence || []);
   tools.searchEvidence = new Map(memory.searchEvidence || []);
   tools.sourceEvidence = new Map(memory.sourceEvidence || []);
@@ -126,6 +128,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
     capabilities: session.capabilities || null,
     identity,
     tools: tools ? { sessionTerms: [...tools.sessionTerms], unresolvedQueries: [...tools.unresolvedQueries],
+      discoveryWide: tools.discoveryWide, searchCursorNeeded: Boolean(tools.searchCursorNeeded),
       readEvidence: [...tools.readEvidence], searchEvidence: [...tools.searchEvidence], sourceEvidence: [...tools.sourceEvidence], presentedSource: [...tools.presentedSource].map(([key, value]) =>
         [key, { ...value, lines: [...value.lines] }]) } : null, ...extra });
   session.lastIdentity = identity;
