@@ -271,3 +271,7 @@ Rotating directory traversal, bounded default listing and resumable search; smal
 ## 2026-10-14: Recorded-agent comparison after discovery repair
 
 Aligned TEA d76f45f small/large data with historical Pi 0.87.1 and Claude Code 2.1.281 fresh-v5 data; zero new provider calls. All six prompt/source identities and effective model controls match. 18 runs per agent, 54 attempts / 302 complete requests. Totals TEA/Pi/Claude: 151,678 / 671,394 / 636,122; TEA 77.41% / 76.16% fewer. Full acceptance 18/18, 18/18, 12/18; six historical validation-unconfirmed attempts retain triangles. Separate rounds, no backend/cache equivalence claim; no new TEA medium/long data. Updated bilingual README and PNG/SVG; historical evidence retained.
+
+## 2026-10-14: restore current TEA 30-run coverage
+
+User authorized supplement. Frozen d76f45f TEA only, 9 medium + 3 long, all 12 accepted / 241 real requests / complete usage / no paid retries. Full tests 307/307, native contract 12/12 / 228 scripted requests. Combined current runtime 30/30 acceptance; historical Pi 30/30 and Claude 21/30 (nine unconfirmed validations). Totals 1,157,270 / 2,530,728 / 3,349,998; TEA 54.27% / 65.45% fewer. Fresh 27: 76.63% / 75.52% fewer. Retained earlier TEA GC diagnostic: medium +12.93%, long +0.46%, cross-round not paired. No semantic compaction triggered. Four-scale PNG/SVG, sanitized records and hashes, bilingual READMEs. Awaiting user review; no merge.

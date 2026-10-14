@@ -1,0 +1,32 @@
+[
+  {
+    "file": "src/comparison-fixtures.mjs",
+    "historicalSha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+    "newSha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+    "identical": true
+  },
+  {
+    "file": "src/comparison-turn-audit.mjs",
+    "historicalSha256": "96115ab504909a96d91b3fcd3a6240d1d69f9a0df5ef7e42c3287a7663f2fc6b",
+    "newSha256": "96115ab504909a96d91b3fcd3a6240d1d69f9a0df5ef7e42c3287a7663f2fc6b",
+    "identical": true
+  },
+  {
+    "file": "src/comparison-source-capture.mjs",
+    "historicalSha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+    "newSha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+    "identical": true
+  },
+  {
+    "file": "src/comparison-validation.mjs",
+    "historicalSha256": "9901184f5ec6980f876a7e3d8519696208f3a48b9015b7a371802310afaf441f",
+    "newSha256": "9901184f5ec6980f876a7e3d8519696208f3a48b9015b7a371802310afaf441f",
+    "identical": true
+  },
+  {
+    "file": "src/contextos-benchmark.mjs",
+    "historicalSha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c",
+    "newSha256": "489a591e938cf60bb233c5059af1da64e7d86d1c8391bd420ceb02a25f596c3c",
+    "identical": true
+  }
+]

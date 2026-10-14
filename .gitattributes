@@ -68,3 +68,12 @@ benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/*.md text eol=lf
 benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/*.svg text eol=lf
 benchmarks/reports/tea-fair-discovery-vs-recorded-agents*/evidence.sha256 text eol=lf
 scripts/compare-recorded-agents.py text eol=lf
+
+benchmarks/reports/tea-complete-coverage*/*.json text eol=lf
+benchmarks/reports/tea-complete-coverage*/*.md text eol=lf
+benchmarks/reports/tea-complete-coverage*/*.svg text eol=lf
+benchmarks/reports/tea-complete-coverage*/evidence.sha256 text eol=lf
+benchmarks/reports/tea-coverage-completion*/*.json text eol=lf
+benchmarks/reports/tea-coverage-completion*/*.md text eol=lf
+benchmarks/reports/tea-coverage-completion*/evidence.sha256 text eol=lf
+scripts/compare-complete-coverage.py text eol=lf

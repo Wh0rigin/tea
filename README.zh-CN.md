@@ -16,6 +16,23 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 ## 实测 Token 用量
 
+### 完整覆盖：新版 TEA / 历史 Pi / 历史 Claude Code
+
+当前 **TEA d76f45f** 恢复为 **每 Agent 30 次**：小/中/大各 9 次，长会话 3 次。相同 **GLM-5.3-flash、enabled/low、4096 输出上限**，初始源码与提示词一致；TEA 为 ContextOS 32,000 字节目标，自动压缩与 GC 开启。**Pi/Claude 复用历史数据，跨轮次对比。**
+
+![四场景完整对比](benchmarks/reports/tea-complete-coverage-vs-recorded-agents-20261014/three-agents.png)
+
+- **30 次总量：**TEA 对 Pi **减少 54.27%**，对 Claude Code **减少 65.45%**（1,157,270 / 2,530,728 / 3,349,998 Token）。
+- **27 次普通任务：**减少 **76.63% / 75.52%**。
+- **中型：**减少 **74.96% / 74.20%**；**长会话：**减少 **39.99% / 61.52%**。
+
+完整验收 **TEA/Pi/Claude：30/30、30/30、21/30**；三方代码行为均 **30/30**。Claude 9 次最终验证未确认，保留三角。计入缓存和思考，90 次记录全部保留，用量全部已知；失败不影响柱形均值。原 18 次比例覆盖不同。与更早 TEA GC 历史数据相比，中型增加 **12.93%**、长会话增加 **0.46%**；不是同期配对因果结论，不说明所有场景改善。自建场景与跨轮次缓存/后端变化限制泛化。
+
+[完整报告与对齐审计](benchmarks/reports/tea-complete-coverage-vs-recorded-agents-20261014/README.zh-CN.md) · [TEA 补测报告](benchmarks/reports/tea-coverage-completion-20261014/README.zh-CN.md)
+
+<details>
+<summary>上一轮部分覆盖：当前 TEA 的 18 次测量</summary>
+
 ### 新版 TEA / 历史 Pi / 历史 Claude Code
 
 公平检索修复版 **TEA d76f45f** 对齐历史 fresh-v5 的 **Pi 0.87.1 / Claude Code 2.1.281** 数据。相同 **GLM-5.3-flash、enabled/low、4096 输出上限**，任务提示与初始源码匹配。**跨轮次历史对比，未重测 Pi/Claude**；只纳入新版已测的小型与大型场景。
@@ -29,6 +46,8 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 完整验收 **TEA/Pi/Claude：18/18、18/18、12/18**；三方代码行为均 **18/18**。Claude 6 次最终验证未确认，保留三角，不改成失败或通过。包含缓存与思考用量，所有尝试保留。跨轮次没有控制缓存/后端随机性，自建场景不保证生产泛化；新版中型与长会话数据不由旧版代替。
 
 [报告、对齐审计与完整数据](benchmarks/reports/tea-fair-discovery-vs-recorded-agents-20261014/README.zh-CN.md)
+
+</details>
 
 <details>
 <summary>旧 TEA 版本对比（历史证据）</summary>
