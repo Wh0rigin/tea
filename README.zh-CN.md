@@ -1,6 +1,6 @@
 # TEA
 
-日常 CLI 支持通过 `write_file` 原生创建 UTF-8 文件及父目录，创建后执行实际测试；已有文件使用精确补丁。默认请求保护为 160,000 字节，输出上限为 4,096 Token，ContextOS 目标为 32,000 字节，显式配置优先。自动压缩会预先跳过保守判断无收益的候选，并在摘要没有缩小请求后退避。详见[运行修复说明](docs/RUNTIME_REPAIR.md)。
+日常 CLI 支持通过 `write_file` 原生创建 UTF-8 文件及父目录，创建后执行实际测试；已有文件使用精确补丁。自动压缩按可配置的模型 Token 窗口调度，预留输出和安全空间，并独立管理请求字节保护。详见[上下文容量配置](docs/CONTEXT_BUDGET.md)和[运行修复说明](docs/RUNTIME_REPAIR.md)。
 
 <p align="center">
   <img src="assets/tea-logo.png" alt="TEA — Token Efficient Agent" width="320">
@@ -210,7 +210,7 @@ $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'
 $env:ANTHROPIC_MODEL = 'glm-5.3-flash'
 $env:TEA_INPUT_PRICE_USD_PER_MTOK = '你的Token分组输入单价'
 $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '你的Token分组输出单价'
-$env:TEA_MAX_REQUEST_INPUT_TOKENS = '160000'
+$env:TEA_MAX_REQUEST_INPUT_BYTES = '2097152'
 $env:TEA_MAX_OUTPUT_TOKENS = '4096'
 $env:TEA_REASONING_EFFORT = 'low' # 可选 low、high、max
 $env:TEA_THINKING_MODE = 'enabled'

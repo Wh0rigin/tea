@@ -8,6 +8,7 @@ import { promisify } from 'node:util';
 import { WorkspaceTools } from '../src/tools.mjs';
 import { loadConfig, loadCliConfig } from '../src/config.mjs';
 import { runTask } from '../src/agent.mjs';
+import { contextBudget, estimateContextTokens } from '../src/context-budget.mjs';
 
 async function temporary(callback) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'tea-create-'));
@@ -42,13 +43,23 @@ test('creation rejects escapes, metadata, credentials and invalid text', async (
 
 test('daily defaults allow normal requests while explicit guards and SDK defaults remain configurable', () => {
   const config = loadCliConfig({}, {});
-  assert.equal(config.maxRequestInputTokens, 160000);
+  assert.equal(config.maxRequestInputBytes, 2097152);
+  assert.equal(config.contextWindowTokens, 32768);
   assert.equal(config.maxOutputTokens, 4096);
   assert.equal(config.contextosTargetBytes, 32000);
   assert.equal(config.maxCostUsd, null);
   assert.equal(config.capabilityFeedback, true);
   assert.equal(loadConfig({}, {}).maxRequestInputTokens, 12000);
   assert.equal(loadCliConfig({ maxRequestInputBytes: 24000 }, {}).maxRequestInputTokens, 24000);
+  const large = loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '216000' });
+  const budget = contextBudget(large, { messages: [] });
+  assert.equal(budget.inputLimit, 207808); assert.equal(budget.triggerTokens, 166246);
+  assert.equal(large.maxRequestInputBytes, config.maxRequestInputBytes);
+  assert.throws(() => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '8192' }), /larger than output/);
+  assert.throws(() => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '2.5' }), /safe integer/);
+  const unicode = { messages: [{ role: 'user', content: '中文🚀'.repeat(100) }] };
+  assert.ok(estimateContextTokens(unicode) > estimateContextTokens({ messages: [] }));
+  assert.ok(Math.abs(estimateContextTokens(unicode, 2) - 2 * estimateContextTokens(unicode)) <= 1);
 });
 
 test('empty workspace completes native creation and actual Node validation without shell approval', async () => temporary(async root => {

@@ -33,9 +33,11 @@ tea config path   # 查看绝对路径
 }
 ```
 
-日常 CLI 默认开启 ContextOS、自动压缩、GC、原生文件创建和能力提示，不设置费用上限。请求保护为 160,000 UTF-8 字节，输出上限为 4,096 Token，ContextOS 目标为 32,000 字节。无需把这些默认值全部写进文件；已有显式配置优先。详见[运行修复说明](RUNTIME_REPAIR.md)。
+日常 CLI 默认开启 ContextOS、自动压缩、GC、原生文件创建和能力提示，不设置费用上限。未知模型暂按 32,768 Token 保守调度，预留 4,096 输出 Token 和 4,096 安全 Token；请按服务商说明设置窗口。独立请求体保护为 2 MiB，ContextOS 目标为 32,000 字节。已有显式配置优先。详见[上下文容量配置](CONTEXT_BUDGET.md)。
 
 ## 优先级与字段
+
+`contextWindowTokens` 和 `contextReserveTokens` 为正整数字段，窗口必须大于输出上限加安全预留；`maxRequestInputBytes` 单独保护请求体大小，不代表模型容量。
 
 优先级：**命令行选项 > 环境变量 > 用户配置文件 > 内置默认值**。环境中的 `ANTHROPIC_API_KEY` 或 `ANTHROPIC_AUTH_TOKEN` 均覆盖文件密钥；显式设置为空也会覆盖。不自动读取项目级配置或 `.env` 文件。
 

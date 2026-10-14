@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { normalizeAnthropicUsage } from './usage.mjs';
 import { hasProviderPrices } from './config.mjs';
+import { contextBudget, estimateContextTokens } from './context-budget.mjs';
 
 export class ModelError extends Error {
   constructor(message, status) { super(message); this.name = 'ModelError'; this.status = status; }
@@ -176,6 +177,10 @@ export class AnthropicMessagesAdapter {
     const url = `${config.baseUrl}/v1/messages`;
     const requestBytes = Buffer.byteLength(JSON.stringify(body), 'utf8');
     const conservativeInputBound = requestBytes;
+    const tokenBudget = contextBudget(config, { system, messages, tools, maxTokens: outputLimit }, this.contextTokenScale);
+    if (tokenBudget && tokenBudget.estimatedInputTokens > tokenBudget.inputLimit) {
+      throw new ModelError(`Request blocked by model context budget: estimated input ${tokenBudget.estimatedInputTokens} tokens exceeds ${tokenBudget.inputLimit}; compact or start a new conversation`);
+    }
     if (conservativeInputBound > config.maxRequestInputTokens) {
       throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`);
     }
@@ -237,9 +242,11 @@ export class AnthropicMessagesAdapter {
       else this.costKnown = false;
       this.spentInputBound += conservativeInputBound;
       this.actualInputTokens += counts.inputTokens;
+      if (tokenBudget) this.contextTokenScale = Math.max(this.contextTokenScale || 1,
+        counts.inputTokens / estimateContextTokens({ system, messages, tools }));
       recorded = true;
       await this.onRequest?.({ requestId, payload: body, response: result, usage, usageStatus: 'complete', costBasis: priced ? 'conservative-reported-usage' : 'reported-usage-unpriced', estimatedInputTokens: conservativeInputBound, estimatedUsd: actualUsd, elapsedMs: Date.now() - started });
-      if (counts.inputTokens > config.maxRequestInputTokens || counts.outputTokens > body.max_tokens) {
+      if (counts.inputTokens > (tokenBudget ? tokenBudget.inputLimit : config.maxRequestInputTokens) || counts.outputTokens > body.max_tokens) {
         throw new ModelError('Provider-reported usage exceeded the per-request token limits; stopping after this billed request');
       }
       if (capped && actualUsd > reserveUsd + Number.EPSILON) {

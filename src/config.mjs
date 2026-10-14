@@ -50,13 +50,21 @@ export function loadConfig(options = {}, env = process.env) {
   if (!['off', 'auto'].includes(compaction)) throw new ConfigError('Compaction must be off or auto');
   const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
   if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
-  const maxRequestInputTokens = Math.floor(positiveNumber(options.maxRequestInputBytes ?? env.TEA_MAX_REQUEST_INPUT_TOKENS,
+  const contextWindowValue = options.contextWindowTokens ?? env.TEA_CONTEXT_WINDOW_TOKENS ?? options.defaultContextWindowTokens;
+  const contextWindowTokens = contextWindowValue === undefined ? undefined : positiveNumber(contextWindowValue, undefined, 'Context window tokens');
+  const contextReserveTokens = positiveNumber(options.contextReserveTokens ?? env.TEA_CONTEXT_RESERVE_TOKENS, 4096, 'Context reserve tokens');
+  const configuredOutput = Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, options.defaultMaxOutputTokens ?? 1200, 'TEA_MAX_OUTPUT_TOKENS'));
+  if (!Number.isSafeInteger(contextReserveTokens) || (contextWindowTokens !== undefined &&
+    (!Number.isSafeInteger(contextWindowTokens) || contextWindowTokens <= configuredOutput + contextReserveTokens))) {
+    throw new ConfigError('Context window must be a safe integer larger than output plus reserve tokens');
+  }
+  const maxRequestInputTokens = Math.floor(positiveNumber(options.maxRequestInputBytes ?? env.TEA_MAX_REQUEST_INPUT_BYTES ?? env.TEA_MAX_REQUEST_INPUT_TOKENS,
     options.defaultMaxRequestInputBytes ?? 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
   const contextosTargetBytes = positiveNumber(options.contextosTargetBytes ?? env.TEA_CONTEXTOS_TARGET_BYTES,
     options.defaultContextosTargetBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * .5)), 'ContextOS target bytes');
   if (!Number.isSafeInteger(contextosTargetBytes)) throw new ConfigError('ContextOS target bytes must be a positive safe integer');
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
-    Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
+    options.defaultCompactionKeepRecentBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
   const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
   if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
@@ -94,6 +102,8 @@ export function loadConfig(options = {}, env = process.env) {
     outputRateUsdPerMillion: outputRate,
     maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, options.defaultMaxOutputTokens ?? 1200, 'TEA_MAX_OUTPUT_TOKENS')),
     maxRequestInputTokens,
+    maxRequestInputBytes: maxRequestInputTokens,
+    contextWindowTokens, contextReserveTokens,
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
@@ -145,7 +155,8 @@ export function assertLiveConfig(config) {
 export function loadCliConfig(options = {}, env = process.env) {
   return loadConfig({ ...options,
     defaultMemoryPolicy: options.historyStrategy || env.TEA_HISTORY_STRATEGY ? undefined : 'contextos',
-    defaultMaxRequestInputBytes: 160000, defaultMaxOutputTokens: 4096,
+    defaultMaxRequestInputBytes: 2097152, defaultMaxOutputTokens: 4096, defaultContextWindowTokens: 32768,
+    defaultCompactionKeepRecentBytes: 16000,
     defaultContextosTargetBytes: 32000, defaultCapabilityFeedback: true }, env);
 }
 

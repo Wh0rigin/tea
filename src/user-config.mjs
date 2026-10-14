@@ -18,7 +18,8 @@ const FIELDS = {
   stream: ['TEA_STREAM', 'boolean'], capabilityFeedback: ['TEA_CAPABILITY_FEEDBACK', 'boolean'],
   enableFileCreation: ['TEA_ENABLE_FILE_CREATION', 'boolean'],
   maxCostUsd: ['TEA_MAX_COST_USD', 'cap'], maxOutputTokens: ['TEA_MAX_OUTPUT_TOKENS', 'number'],
-  maxRequestInputBytes: ['TEA_MAX_REQUEST_INPUT_TOKENS', 'number'], maxToolCalls: ['TEA_MAX_TOOL_CALLS', 'number'],
+  maxRequestInputBytes: ['TEA_MAX_REQUEST_INPUT_BYTES', 'number'], maxToolCalls: ['TEA_MAX_TOOL_CALLS', 'number'],
+  contextWindowTokens: ['TEA_CONTEXT_WINDOW_TOKENS', 'number'], contextReserveTokens: ['TEA_CONTEXT_RESERVE_TOKENS', 'number'],
   timeoutMs: ['TEA_REQUEST_TIMEOUT_MS', 'number'], contextosTargetBytes: ['TEA_CONTEXTOS_TARGET_BYTES', 'number'],
   historyKeepRecent: ['TEA_HISTORY_KEEP_RECENT', 'number'], initialFileLimit: ['TEA_INITIAL_FILE_LIMIT', 'number'],
   contextStrategy: ['TEA_CONTEXT_STRATEGY', 'string'], compactionTriggerRatio: ['TEA_COMPACTION_TRIGGER_RATIO', 'number'],
@@ -75,6 +76,9 @@ export function readUserConfig(filename = userConfigPath()) {
 export function resolveUserEnvironment(env = process.env, filename = userConfigPath()) {
   const settings = readUserConfig(filename);
   const merged = { ...(settings ? userConfigEnvironment(settings) : {}), ...env };
+  if (env.TEA_MAX_REQUEST_INPUT_BYTES === undefined && env.TEA_MAX_REQUEST_INPUT_TOKENS !== undefined) {
+    merged.TEA_MAX_REQUEST_INPUT_BYTES = env.TEA_MAX_REQUEST_INPUT_TOKENS;
+  }
   // Either credential environment variable overrides the file key, including explicit empty values.
   if (env.ANTHROPIC_API_KEY !== undefined || env.ANTHROPIC_AUTH_TOKEN !== undefined) {
     delete merged.ANTHROPIC_API_KEY;

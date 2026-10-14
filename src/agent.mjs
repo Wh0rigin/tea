@@ -7,6 +7,7 @@ import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
 import { compactConversation, requestBytes, sessionContext } from './compaction.mjs';
+import { contextBudget } from './context-budget.mjs';
 import { memorySessionFields, attachSessionJournal, appendSessionMessage, restoreToolMemory,
   persistRuntimeState, closeSessionJournal, resetPersistentConversation } from './session-memory.mjs';
 import { ContextMemory } from './context-assembler.mjs';
@@ -124,7 +125,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
   session.adapter = adapter;
   if (session.restoredBudget) {
-    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens', 'costKnown']) if (session.restoredBudget[field] !== undefined) adapter[field] = session.restoredBudget[field];
+    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens', 'costKnown', 'contextTokenScale']) if (session.restoredBudget[field] !== undefined) adapter[field] = session.restoredBudget[field];
     session.restoredBudget = null;
   }
   session.offline = offline;
@@ -136,7 +137,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       await session.journal.append('request_settled', { requestId: event.requestId, purpose: requestPurpose,
         usage: event.usage, usageStatus: event.usageStatus, costBasis: event.costBasis,
         requestSha256: createTaskHash(JSON.stringify(event.payload)), responseSha256: createTaskHash(JSON.stringify(event.response)),
-        budget: { spentUsd: adapter.spentUsd, costKnown: adapter.costKnown, spentInputBound: adapter.spentInputBound,
+        budget: { spentUsd: adapter.spentUsd, costKnown: adapter.costKnown, contextTokenScale: adapter.contextTokenScale || 1, spentInputBound: adapter.spentInputBound,
           actualInputTokens: adapter.actualInputTokens, blockedUnknown: session.budgetUnknown } });
     }
     await ledger.request({ ...event, purpose: requestPurpose });
@@ -254,7 +255,9 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const cooledDown = !backoff || currentBytes >= backoff.requestBytes + Math.max(4096, backoff.requestBytes * 0.25)
           || currentResidentBytes >= backoff.residentBytes + Math.max(4096, backoff.residentBytes * 0.25);
         while (config.compaction === 'auto' && !autoCompactionFailedThisTurn && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
-          && (requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)
+          && ((contextBudget(config, prepared.request, adapter.contextTokenScale)?.estimatedInputTokens ?? 0) >=
+              (contextBudget(config, prepared.request, adapter.contextTokenScale)?.triggerTokens ?? Infinity)
+            || requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.contextWindowTokens ? 0.95 : (config.compactionTriggerRatio ?? 0.8))
             || (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes))) {
           const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
           if (attemptedContexts.has(fingerprint)) break;

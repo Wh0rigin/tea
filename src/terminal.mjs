@@ -95,6 +95,7 @@ export class TerminalView {
   }
 
   banner() {
+    if (this.config.contextWindowTokens) this.write(`Context window: ${tokens(this.config.contextWindowTokens)} tokens configured · automatic compaction uses local estimates · wire guard ${tokens(this.config.maxRequestInputBytes)} bytes\n`);
     this.write(this.paint('  ( )\n <___>  TEA\n        Token Efficient Agent', '32'), { raw: true });
     this.write(`Save tokens while preserving performance.\nModel: ${this.config.model}\nWorkspace: ${this.config.workspace}\nContext: ${this.config.memoryPolicy} · compaction ${this.config.compaction} · GC ${this.config.memoryGc}\n${this.demo ? 'SCRIPTED DEMO: local read-only tools, no model or billing.' : this.costCap == null ? 'No monetary cap. /status shows Token usage and available cost estimates.' : 'Budget applies to the entire session, including after /new.'}\n/help for commands · Esc to stop · /tools to expand tool details\n`);
   }

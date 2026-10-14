@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { buildMessagesRequest } from './model.mjs';
 import { collectUserRequirements } from './memory-gc.mjs';
+import { contextBudget } from './context-budget.mjs';
 
 const bytes = (value) => Buffer.byteLength(typeof value === 'string' ? value : JSON.stringify(value), 'utf8');
 const hash = (value) => createHash('sha256').update(value).digest('hex');
@@ -151,6 +152,8 @@ export function prepareCompaction(session, config, { state = session, instructio
     text += `${group.text}\n\n`;
     const request = { system: SUMMARY_PROMPT, tools: [], maxTokens, messages: [{ role: 'user', content: prefix + text }] };
     if (requestBytes(config, request) > config.maxRequestInputTokens) break;
+    const budget = contextBudget(config, request, session.adapter?.contextTokenScale);
+    if (budget && budget.estimatedInputTokens > budget.inputLimit) break;
     selected = { request, firstKeptIndex: group.end, coveredFrom: start,
       coveredMessages: group.end - start, partial: group.end < groups[keep].start };
   }

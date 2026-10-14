@@ -1,5 +1,7 @@
 # CLI file creation and compaction repair
 
+The later [Token context budget](CONTEXT_BUDGET.md) change supersedes this repair's daily CLI byte-trigger defaults. The 160,000-byte setting below records the original repair stage.
+
 ## Observed failure
 
 An empty-workspace task could not create a file with the editing-only `apply_patch` tool. The model tried Bash syntax and Windows built-ins through a direct executable runner, then hit the old 12,000-byte request guard. Two rejected summaries consumed 3,978 of the run's 20,592 provider tokens without reducing its next request. These are diagnostic measurements from one failed run, not an improvement benchmark.

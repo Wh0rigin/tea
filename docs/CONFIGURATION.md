@@ -33,9 +33,11 @@ You can also edit the JSON directly. For the GLM provider used in our experiment
 }
 ```
 
-Daily CLI defaults are ContextOS, automatic compaction, memory GC, native file creation, capability feedback and no monetary cap. The request guard is 160,000 UTF-8 bytes, output cap 4,096 tokens and ContextOS target 32,000 bytes. Those defaults do not need to appear in the file. See [runtime repair notes](RUNTIME_REPAIR.md).
+Daily CLI defaults are ContextOS, automatic compaction, memory GC, native file creation, capability feedback and no monetary cap. A conservative 32,768-token scheduling window reserves 4,096 output tokens and 4,096 safety tokens; set the window to your provider's documented capacity. The independent wire guard is 2 MiB and ContextOS target 32,000 bytes. See [Token budget configuration](CONTEXT_BUDGET.md).
 
 ## Precedence and options
+
+`contextWindowTokens` and `contextReserveTokens` are positive integer settings. The window must exceed output plus safety reserve. `maxRequestInputBytes` remains a separate request-body protection setting; it does not represent model capacity.
 
 CLI options override environment variables, which override file settings, which override built-in defaults. Either `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` in the environment overrides the file key; explicitly empty credential variables also override it. No project-level config or `.env` file is automatically loaded.
 

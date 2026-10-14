@@ -11,6 +11,13 @@ import { TokenLedger } from '../src/ledger.mjs';
 
 const headings = ['Goal', 'Constraints', 'Progress', 'Decisions', 'Next steps', 'Critical context'];
 const summary = headings.map(h => `## ${h}\nKeep the API; read source and verify outstanding edits.`).join('\n');
+
+test('summary planning respects Token capacity even when the wire guard is large', () => {
+  const s = session(); s.messages[0].content = 'x'.repeat(30000);
+  const plan = prepareCompaction(s, cfg({ maxRequestInputTokens: 2097152, contextWindowTokens: 8192,
+    contextReserveTokens: 4096, compactionKeepRecentBytes: 600 }));
+  assert.equal(plan.status, 'unavailable');
+});
 const done = (text = summary) => ({ content: [{ type: 'text', text }], stop_reason: 'end_turn' });
 const cfg = overrides => ({ ...loadConfig({}, {}), maxRequestInputTokens: 64000, maxOutputTokens: 4096,
   compactionKeepRecentBytes: 600, stream: false, ...overrides });
