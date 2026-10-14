@@ -20,9 +20,9 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 2026 年 10 月 13–14 日：相同 **GLM-5.3-flash、enabled/low、4096/4095 输出/思考上限**，相同任务与初始源码。受测软件为 **TEA 归档候选 bd41742、Pi 0.87.1、Claude Code 2.1.281 原生 safe-mode CLI**。Claude Code 使用的也是 GLM，不是 Anthropic Claude 模型。
 
-普通任务 81 次为 v5，Long v6 计划 9 次、仅尝试 2 次，两组独立冻结。v6 将正常完结的要求违规记分后继续，不以漏读或只读违规截断会话；旧 v5 Long 数据保留。不是统一的一次 90 样本源码冻结。
+普通任务 81 次为 v5，Long v6 经授权重测完成 9 次，两组独立冻结。v6 将正常完结的要求违规记分后继续，不以漏读或只读违规截断会话；旧 v5 Long 数据保留。不是统一的一次 90 样本源码冻结。
 
-![Three native coding agents](benchmarks/reports/tea-pi-claude-current-glm-20261014/three-agents.png)
+![Three native coding agents](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/three-agents.png)
 
 - **12 文件**: TEA vs Pi 减少 26.27%; vs Claude Code 减少 70.02%.
 - **120 文件**: TEA vs Pi 减少 77.18%; vs Claude Code 减少 76.48%.
@@ -32,12 +32,12 @@ TEA 是基于 Node.js 构建的独立终端编程代理，拥有自己的运行�
 
 Claude Code 完整验收从旧实验 **1/27 变为 18/27**，未确认三角从 **26 个降至 9 个**；主要命令识别问题已修复，剩余复杂命令仍未确认，不伪造通过。普通任务三方代码行为检查均为 **27/27**，完整验收 TEA/Pi/Claude 为 **27/27、27/27、18/27**。
 
-**Long v6 未完成：计划 9 次，仅尝试 2 次。TEA 完成 1 次；Pi 有一笔流式请求用量未知，触发停止；Claude Code 尚未开始。未知用量不计为 0，预算预留 USD 0.2674688 保留，不自动收费重试。不计算 Long 完整降幅。**
+**Long v6 经授权重测已完成：TEA / Pi / Claude 均完整通过 3/3，587 笔请求用量全部已知。TEA 比 Pi 减少 41.36%，比 Claude Code 减少 62.40%（总量分别为 905,432 / 1,544,126 / 2,407,974 token）。上次中断组与 USD 0.2674688 预留单独保留，本次成功不代表旧请求用量已追回。**
 
 圆点完整通过；三角最终验证未确认、其他维度通过；叉号失败不进入柱形均值，仍保留散点和报告。Long 柱形还要求完整流程，显示实际可纳入样本数；失败排除后不对柱形标全尝试百分比。包含全部缓存输入和思考输出；三类自编 JavaScript 缺陷与无关模块扩展，不证明生产泛化。**归档 TEA 候选仍未重新启用，默认运行时保持回退状态。**
 
-[完整报告](benchmarks/reports/tea-pi-claude-current-glm-20261014/README.zh-CN.md)
-[All displayed records](benchmarks/reports/tea-pi-claude-current-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-glm-20261014/chart-audit.json)
+[完整报告](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.zh-CN.md)
+[All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
 
 <details>
 <summary>旧 v3 比较（历史证据）</summary>

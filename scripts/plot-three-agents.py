@@ -41,7 +41,8 @@ for ax,scale,title in zip(axes,scales,titles):
         if any(plot_status(r)=='failed' for r in xs):label='Failures excluded from bars\nNo full-workload ratio'
         if scale=='long-session':
             completed=' / '.join(str(sum(r['qualityDimensions']['nativeCompleted'] and plot_status(r)!='failed' for r in xs if r['agent']==a)) for a in agents)
-            label='Bars: eligible completed workflows\nTEA / Pi / Claude: '+completed+'\nUnequal samples; no overall ratio'
+            full=all(sum(r['usageComplete'] and r['qualityDimensions']['nativeCompleted'] and plot_status(r)!='failed' for r in xs if r['agent']==a)==3 for a in agents)
+            label=('TEA vs Pi: '+text(stats['reductionVsPi'])+'\nTEA vs Claude: '+text(stats['reductionVsClaude'])+'\nEligible workflows: '+completed) if full else 'Bars: eligible completed workflows\nTEA / Pi / Claude: '+completed+'\nUnequal samples; no overall ratio'
         expected=3 if scale=='long-session' else 9
         if scale!='long-session' and any(v['accepted']<expected for v in stats['roles'].values()):label+='\nValidation unconfirmed; see report'
         ax.text(.5,.98,label,ha='center',va='top',transform=ax.transAxes,fontsize=9)

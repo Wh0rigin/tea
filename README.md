@@ -20,9 +20,9 @@ Our mission is to reduce token consumption while preserving task correctness, co
 
 Measured October 13–14, 2026 with the same **GLM-5.3-flash, enabled/low, 4096/4095 output/thinking caps**, tasks and initial source. **TEA archived candidate bd41742, Pi 0.87.1 and native Claude Code 2.1.281 safe-mode CLI**. Claude Code uses GLM here, not an Anthropic Claude model.
 
-81 fresh v5 runs and a planned nine-run Long v6 cohort were independently frozen. v6 records unmet inspection requirements and continues normally completed turns; missed reads/read-only noncompliance do not truncate the workflow. Superseded v5 Long evidence is retained. This is not one unified 90-run source freeze.
+81 fresh v5 runs and nine completed Long v6 retry runs were independently frozen. v6 records unmet inspection requirements and continues normally completed turns; missed reads/read-only noncompliance do not truncate the workflow. Superseded v5 Long evidence is retained. This is not one unified 90-run source freeze.
 
-![Three native coding agents](benchmarks/reports/tea-pi-claude-current-glm-20261014/three-agents.png)
+![Three native coding agents](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/three-agents.png)
 
 - **12 files**: TEA vs Pi 26.27% fewer; vs Claude Code 70.02% fewer.
 - **120 files**: TEA vs Pi 77.18% fewer; vs Claude Code 76.48% fewer.
@@ -32,12 +32,12 @@ Fresh all-attempt token totals: TEA vs Pi **50.60% fewer**, vs Claude Code **48.
 
 Claude Code full acceptance increased from **1/27 to 18/27**; uncertainty triangles decreased from **26 to nine**. Common command recognition is fixed; remaining complex commands stay unconfirmed. Fresh behavior checks: **27/27 for every agent**. Full acceptance TEA/Pi/Claude: **27/27, 27/27, 18/27**.
 
-**Long v6 is incomplete: two of nine planned runs attempted. TEA completed one run; a Pi streaming request has unknown usage and triggered the halt. Claude Code was not started. Unknown usage is never zero; USD 0.2674688 remains reserved with no automatic paid retry. No complete Long reduction is calculated.**
+**Long v6 authorized rerun completed: TEA / Pi / Claude each passed 3/3 full workflows, with all 587 request usages known. TEA used 41.36% fewer tokens than Pi and 62.40% fewer than Claude Code (905,432 / 1,544,126 / 2,407,974 tokens). The previous interrupted cohort and USD 0.2674688 reservation remain separate; this rerun does not resolve that unknown charge.**
 
 Circles passed; triangles have only final validation unconfirmed; failure crosses are excluded from bar means but retained as points and records. Long bars require full workflow completion, with actual eligible counts shown. Unfiltered ratios are not annotated on failure-filtered bars. All cache input and thinking output included. Self-authored JavaScript defects and unrelated-module scaling do not establish production generalization. **The archived TEA candidate remains reverted in the default runtime.**
 
-[Full report](benchmarks/reports/tea-pi-claude-current-glm-20261014/README.md)
-[All displayed records](benchmarks/reports/tea-pi-claude-current-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-glm-20261014/chart-audit.json)
+[Full report](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/README.md)
+[All displayed records](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/results.json) · [Chart audit](benchmarks/reports/tea-pi-claude-current-retry1-glm-20261014/chart-audit.json)
 
 <details>
 <summary>Earlier v3 comparison (historical evidence)</summary>

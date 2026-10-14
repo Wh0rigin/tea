@@ -1,0 +1,15 @@
+{
+  "paidRequestsAdded": 0,
+  "cohorts": [
+    {
+      "cohort": "long",
+      "sourceAndFixtureIdentityMatchFrozenPlan": true,
+      "sourceStable": true,
+      "pairwiseAccountingValid": true,
+      "wireLedgerMatchesReport": true,
+      "independentRawUsageRecalculationPassed": true,
+      "wireLedgerSha256": "316d1bde92b95b1eb450f4452cfd5c4e8978098d1c5a8df4bcbc77bc2cc6b4d7",
+      "paidRequestsAdded": 0
+    }
+  ]
+}
