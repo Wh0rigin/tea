@@ -261,3 +261,5 @@ node scripts/policy-experiment.mjs --run-id v3-policy-NEW
 ## 2026-10-14: GC provider-token gate
 
 TEA-only direct-parent comparison: 60/60 accepted, complete provider usage. Candidate used 6.54% more tokens overall; small -9.87%, medium -11.66%, large +38.87%, long -0.62%. No normal task compacted. Same-candidate threshold ablation: 12/12 accepted; protected history -45.81% including 13,595 summary tokens; evictable history +5.10%, no summaries. Normal-workload token gate failed; wait for review before further optimization or merge. Reports: benchmarks/reports/contextos-gc-tokens-20261014. Pi/Claude were not rerun.
+
+Post-hoc diagnosis: reconstructed first request hashes matched 18/18; all 9 large-task pairs have equal initial payloads after workspace normalization. Shared traversal caps exclude actual targets and large listing history repeats below the 32KB target. More input explains 97.66% of the token growth; candidate has 8 shell failures versus 1. No causal GC regression established. Proposed fixes only; no runtime changes or new paid calls.

@@ -40,3 +40,5 @@ Normal: `node scripts/compare-contextos-pi.mjs --mode live --baseline-ref bdc06b
 The archived [pressure harness](pressure-harness.mjs) was executed as `.tea/gc-pressure.mjs`; to reproduce, copy it to that path and run `node .tea/gc-pressure.mjs prepare NEW_OUTPUT`, inspect the frozen plan, then `live NEW_OUTPUT`. Its source fingerprint includes that harness path. Set `TEA_MAX_REQUEST_INPUT_TOKENS=80000`, model/thinking/effort/output/tool/timeout/rate/stream settings to match pressure.json. Never reuse an existing paid output or silently retry unknown usage.
 
 The native revision loopback contract passed 18/18 runs and 72 requests without provider calls before the paid experiment. Runtime deterministic coverage remains 298/298 from the feature verification. Await review; the overall token gate failed.
+
+[Post-hoc large-task diagnosis and proposed fixes (Chinese)](LARGE_ANALYSIS.zh-CN.md)
