@@ -16,6 +16,8 @@ test('revision CLI rejects incomplete controls and nonlocal contract endpoints b
     TEA_INPUT_PRICE_USD_PER_MTOK: '.8', TEA_OUTPUT_PRICE_USD_PER_MTOK: '2.8' };
   for (const [args, expected] of [
     [['--baseline-ref', 'HEAD'], /Both --baseline-ref and --candidate-ref/],
+    [['--candidate-only', 'true'], /Candidate-only requires a frozen revision/],
+    [['--baseline-ref', 'HEAD', '--candidate-ref', 'HEAD', '--candidate-only', 'false'], /Candidate-only requires a frozen revision/],
     [['--both-auto-gc', 'true'], /Both auto GC requires an exclusive revision comparison/],
     [['--baseline-ref', 'HEAD', '--candidate-ref', 'HEAD', '--both-auto-gc', 'false'], /Both auto GC requires an exclusive revision comparison/],
     [['--baseline-ref', 'HEAD', '--candidate-ref', 'HEAD', '--both-auto-gc', 'true', '--candidate-auto-gc', 'true'], /Both auto GC requires an exclusive revision comparison/],

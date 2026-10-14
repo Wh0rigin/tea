@@ -194,7 +194,9 @@ try {
   report.piSourceUnchanged = revisions ? null : hash(await readFile(piCli)) === report.pi.cliSha256;
   if (revisions) for (const role of roles) report.engines[role].sourceUnchanged = await engines[role].verify();
   report.analysis = options['candidate-only'] ? { kind: 'single frozen TEA coverage cohort', ratiosWithheld: true, runs: report.runs.length, accepted: report.runs.filter(run => run.accepted).length } : revisions ? analyzeRevisionComparison(report) : analyzeComparison(report); await save();
-  if (options['candidate-only']) {} else if (revisions) await writeRevisionComparisonReport(report, output); else await writeComparisonReport(report, output);
+  if (!options['candidate-only']) {
+    if (revisions) await writeRevisionComparisonReport(report, output); else await writeComparisonReport(report, output);
+  }
   console.log(`Saved ${output}; complete=${report.complete}; $${report.accountedUsd.toFixed(6)}`);
 } catch (error) { report.error = redactText(String(error.message)); await save(); throw error; }
 finally { if (gateway) await gateway.close(); }

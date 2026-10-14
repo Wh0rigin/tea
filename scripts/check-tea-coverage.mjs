@@ -71,7 +71,7 @@ try {
     commands: run.turns.at(-1).requirements.calls.filter(call => call.kind === 'shell').map(call => ({ execution: call.execution, evidence: call.validationEvidence,
       sourceVersionsBefore: call.sourceVersionsBefore, sourceVersionsAfter: call.sourceVersionsAfter })) }));
   const evidence = { kind: 'native frozen-revision loopback contract', usageSource: 'scripted-loopback', paidProviderRequests: 0,
-    runId, runs: expectedRuns, requests: 228, accepted: expectedRuns, scriptedTokensPerArm: expectedRuns * 280, providerTokenImprovement: null,
+    runId, runs: expectedRuns, requests: 228, accepted: expectedRuns, scriptedTokensTotal: report.requests.reduce((sum, row) => sum + row.totalTokens, 0), providerTokenImprovement: null,
     commonControlsMatched: true, allSourcesStable: true, ratiosWithheld: true,
     engines: Object.fromEntries(Object.entries(report.engines).map(([role, engine]) => [role, { commit: engine.commit, sourceSha256: engine.sourceSha256 }])), quality };
   await writeFile(path.join(directory, 'contract.json'), JSON.stringify(evidence, null, 2) + '\n');
