@@ -126,7 +126,7 @@ export function loadConfig(options = {}, env = process.env) {
 }
 
 export function assertLiveConfig(config) {
-  if (!config.apiKey) throw new ConfigError('Set ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment');
+  if (!config.apiKey) throw new ConfigError('Run tea config to save your API settings, or set ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment');
   if (config.maxCostUsd != null && (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0)) throw new ConfigError('An explicit cost cap must be finite and positive');
   if (config.maxCostUsd != null && !hasProviderPrices(config)) {
     throw new ConfigError('Set both TEA_INPUT_PRICE_USD_PER_MTOK and TEA_OUTPUT_PRICE_USD_PER_MTOK to the current provider rates before making live calls');

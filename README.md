@@ -140,7 +140,7 @@ cd tea
 npm link
 ```
 
-Configure a compatible Anthropic Messages endpoint, model and API key in the process environment. Run **`tea`** in your project to open an interactive conversation. The CLI defaults to **ContextOS, automatic compaction and memory GC**, with **no monetary cap**. Token usage is recorded without prices; dollar estimates remain unknown. The project does not automatically load `.env` files.
+Configure your provider once with **`tea config`**. The wizard saves the endpoint, model and hidden-input API key to `~/.tea/config.json`. Run **`tea`** in your project to open an interactive conversation. The CLI defaults to **ContextOS, automatic compaction and memory GC**, with **no monetary cap**. Token usage is recorded without prices; dollar estimates remain unknown. Environment variables override the file. The project does not automatically load `.env` files. [Configuration guide](docs/CONFIGURATION.md).
 
 The following PowerShell example uses placeholders; replace them with your provider settings. Use a thinking mode supported by your model; GLM-5.3-flash uses `enabled`:
 
@@ -155,7 +155,7 @@ cd ../my-project
 tea
 ```
 
-Use your credential manager or a secure environment injection mechanism for real keys. The selected endpoint and model must support the configured thinking mode and effort settings. TEA currently accepts `low`, `high`, and `max` effort, and `adaptive` or `enabled` thinking.
+Use tea config to store personal settings outside the project, or use your credential manager and environment injection. The user config is plaintext protected by filesystem permissions. The selected endpoint and model must support the configured thinking mode and effort settings. TEA currently accepts `low`, `high`, and `max` effort, and `adaptive` or `enabled` thinking.
 
 Optional monetary cap: configure both current USD-per-million-token prices (`TEA_INPUT_PRICE_USD_PER_MTOK`, `TEA_OUTPUT_PRICE_USD_PER_MTOK`) and use `--max-cost-usd 1`. An existing `TEA_MAX_COST_USD` also enables a cap; `--max-cost-usd none` overrides it for a new session. Resume preserves an existing session's stricter cap. Live benchmarks still require finite budgets and prices. Explicit memory/history options override the CLI default; programmatic `loadConfig()` retains its full-history fallback.
 
