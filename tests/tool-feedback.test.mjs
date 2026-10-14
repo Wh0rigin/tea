@@ -46,7 +46,7 @@ test('disabled S1 preserves exact parent model requests, denial flags, tool IDs 
   const { root, config } = await fixture();
   const requests = [];
   const steps = () => [calls([{ name: 'read_file', input: { path: 'value.mjs' } }, { name: 'run_shell', input: { command: 'node --version' } }]), done];
-  const disabled = { ...config, capabilityFeedback: false };
+  const disabled = { ...config, capabilityFeedback: false, enableFileCreation: false };
   const current = await runTask('Inspect value', { ...disabled, runId: 'current' }, { approveCommand: () => false, adapterFactory: adapter(steps(), requests) });
   const payloads = list => list.map(({ system, messages, tools }) => ({ system, messages, tools }));
   const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]')

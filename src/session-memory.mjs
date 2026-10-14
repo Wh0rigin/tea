@@ -61,7 +61,8 @@ export async function attachSessionJournal(session, config) {
     session.messages = messages;
     if (state) Object.assign(session, { pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
       validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
-      compaction: state.compaction, compactionCount: state.compactionCount, restoredTools: state.tools, offline: state.offline });
+      compaction: state.compaction, compactionCount: state.compactionCount, autoCompactionBackoff: state.autoCompactionBackoff || null,
+      restoredTools: state.tools, offline: state.offline });
     session.taskState = state?.taskState || null;
     session.capabilities = state?.capabilities || null;
     session.memoryDiagnostics = state?.memoryDiagnostics || null;
@@ -125,6 +126,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
     pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
     validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
     compaction: session.compaction, compactionCount: session.compactionCount, offline: session.offline,
+    autoCompactionBackoff: session.autoCompactionBackoff || null,
     taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
     gcDiagnostics: session.gcDiagnostics || null,
     capabilities: session.capabilities || null,
@@ -153,6 +155,7 @@ export async function resetPersistentConversation(session, config) {
   try {
     await session.journal?.append('conversation_reset', {});
     session.messages.length = 0; session.compaction = null; session.compactionCount = 0;
+    session.autoCompactionBackoff = null;
     session.tools?.sessionTerms.clear(); session.tools?.unresolvedQueries.clear();
     session.tools?.readEvidence.clear(); session.tools?.presentedSource.clear();
     session.tools?.searchEvidence.clear();

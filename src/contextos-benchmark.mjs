@@ -39,7 +39,7 @@ export function contextosReadAcceptance(rows, expectedOutputSha256, readOnly = f
   const fullSourceRead = calls.some(row => row.name === 'read_file' && !row.error && row.outputSha256 === expectedOutputSha256);
   // Inspection fixtures allow discovery/source tools only. A shell command
   // could edit or test without using apply_patch/run_tests, so reject it too.
-  const readOnlyHonored = !readOnly || !calls.some(row => ['apply_patch', 'run_tests', 'run_shell'].includes(row.name));
+  const readOnlyHonored = !readOnly || !calls.some(row => ['apply_patch', 'write_file', 'run_tests', 'run_shell'].includes(row.name));
   return { expectedOutputSha256, fullSourceRead, readOnlyHonored, passed: fullSourceRead && readOnlyHonored };
 }
 const hash = value => createHash('sha256').update(value).digest('hex');

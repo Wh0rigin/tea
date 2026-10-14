@@ -122,7 +122,7 @@ function fileOperations(messages, end) {
     for (const block of message.content) {
       if (block.type !== 'tool_use' || typeof block.input?.path !== 'string') continue;
       if (block.name === 'read_file') readFiles.add(block.input.path);
-      if (block.name === 'apply_patch') modifiedFiles.add(block.input.path);
+      if (['apply_patch', 'write_file'].includes(block.name)) modifiedFiles.add(block.input.path);
     }
   }
   // These are attempted operations, not proof that the tool succeeded.
@@ -171,6 +171,21 @@ export async function compactConversation(session, config, { adapter, ledger, sy
   if (plan.status !== 'prepared') return plan;
   const measure = measureContext || (messages => requestBytes(config, { system, tools, messages }));
   const before = await measure(sessionContext(session, state));
+  const willCollect = config.memoryGc !== 'off' && Boolean(session.journal);
+  if (reason === 'threshold') {
+    // Conservatively skip automatic summaries when a minimal-checkpoint preview is not smaller.
+    const minimal = { id: 'p', summary: HEADINGS.map(heading => `## ${heading}\n.`).join('\n'),
+      firstKeptIndex: plan.firstKeptIndex, ...fileOperations(session.messages, plan.firstKeptIndex) };
+    const candidate = willCollect ? { ...session, pinnedRequirements: collectUserRequirements(
+      session.messages.slice(0, minimal.firstKeptIndex), session.pinnedRequirements) } : session;
+    const minimum = await measure(sessionContext(candidate, state, minimal), { willArchive: willCollect });
+    if (minimum >= before) {
+      const outcome = { status: 'not_needed', beforeBytes: before, minimumBytes: minimum,
+        detail: 'Minimal checkpoint preview is not smaller; automatic summary skipped conservatively.' };
+      await ledger.event({ type: 'compaction_skipped', reason, ...outcome });
+      return outcome;
+    }
+  }
   onEvent({ type: 'compaction_start', reason });
   const result = await adapter.complete({ ...plan.request, signal });
   signal?.throwIfAborted();
@@ -186,7 +201,6 @@ export async function compactConversation(session, config, { adapter, ledger, sy
   const checkpoint = { id: randomUUID(), summary, firstKeptIndex: plan.firstKeptIndex,
     coveredFrom: plan.coveredFrom, coveredMessages: plan.coveredMessages, partial: plan.partial,
     previousId: session.compaction?.id || null, ...fileOperations(session.messages, plan.firstKeptIndex) };
-  const willCollect = config.memoryGc !== 'off' && Boolean(session.journal);
   const candidate = willCollect ? { ...session, pinnedRequirements: collectUserRequirements(
     session.messages.slice(0, checkpoint.firstKeptIndex), session.pinnedRequirements) } : session;
   const after = await measure(sessionContext(candidate, state, checkpoint), { willArchive: willCollect });

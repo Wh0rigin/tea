@@ -33,7 +33,7 @@ You can also edit the JSON directly. For the GLM provider used in our experiment
 }
 ```
 
-Daily CLI defaults remain ContextOS, automatic compaction, memory GC and no monetary cap. Those defaults do not need to appear in the file.
+Daily CLI defaults are ContextOS, automatic compaction, memory GC, native file creation, capability feedback and no monetary cap. The request guard is 160,000 UTF-8 bytes, output cap 4,096 tokens and ContextOS target 32,000 bytes. Those defaults do not need to appear in the file. See [runtime repair notes](RUNTIME_REPAIR.md).
 
 ## Precedence and options
 
@@ -41,7 +41,7 @@ CLI options override environment variables, which override file settings, which 
 
 Supported string fields: `apiKey`, `baseUrl`, `model`, `apiVersion`, `thinkingMode`, `effort`, `memoryPolicy`, `historyStrategy`, `compaction`, `memoryGc`, `contextStrategy`.
 
-Supported numeric fields: `maxOutputTokens`, `maxRequestInputBytes`, `maxToolCalls`, `timeoutMs`, `contextosTargetBytes`, `historyKeepRecent`, `initialFileLimit`, `compactionTriggerRatio`, `compactionKeepRecentBytes`, `inputPriceUsdPerMillion`, `outputPriceUsdPerMillion`. The input-byte guard is measured in UTF-8 bytes, not provider tokens. `stream` and `capabilityFeedback` are booleans.
+Supported numeric fields: `maxOutputTokens`, `maxRequestInputBytes`, `maxToolCalls`, `timeoutMs`, `contextosTargetBytes`, `historyKeepRecent`, `initialFileLimit`, `compactionTriggerRatio`, `compactionKeepRecentBytes`, `inputPriceUsdPerMillion`, `outputPriceUsdPerMillion`. The input-byte guard is measured in UTF-8 bytes, not provider tokens. `stream`, `capabilityFeedback` and `enableFileCreation` are booleans.
 
 `maxCostUsd` accepts a positive number or `null` for no cap. An explicit monetary cap still requires both provider prices. Resume preserves the original stricter cap. For example:
 

@@ -41,7 +41,7 @@ function validationSucceeded(output) {
 export function createAgentSession(config) {
   return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
     running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [],
-    compaction: null, compactionCount: 0, ...memorySessionFields(config) };
+    compaction: null, compactionCount: 0, autoCompactionBackoff: null, ...memorySessionFields(config) };
 }
 
 export function resetConversation(session, config) {
@@ -53,6 +53,7 @@ export function resetConversation(session, config) {
   session.messages.length = 0;
   session.compaction = null;
   session.compactionCount = 0;
+  session.autoCompactionBackoff = null;
   session.tools?.sessionTerms.clear();
   session.tools?.unresolvedQueries.clear();
   session.tools?.readEvidence.clear();
@@ -96,11 +97,13 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   await ledger.init({ workspace: config.workspace, taskSha256: createTaskHash(task), effort: config.effort,
     runType: offline ? 'offline-runtime' : 'live', usageSource: offline ? 'scripted' : 'provider' });
   const deduplicateReads = ['v1-dedup', 'v1', 'v1-expanded', 'v1-auto'].includes(config.contextStrategy);
-  const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads });
+  const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads,
+    enableFileCreation: config.enableFileCreation ?? true });
   await tools.init();
   tools.ledger = ledger;
   tools.signal = signal;
   tools.approveCommand = approveCommand;
+  tools.enableFileCreation = config.enableFileCreation ?? true;
   session.tools = tools;
   restoreToolMemory(session, tools);
   if (config.memoryPolicy === 'contextos') {
@@ -153,6 +156,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           return requestBytes(config, plan.request);
         } });
       if (outcome.status === 'compacted') {
+        session.autoCompactionBackoff = null;
         const gc = await collectCompactedHistory(session, config, state);
         emit({ type: 'memory_gc', ...gc });
         if (gc.status === 'collected') {
@@ -193,7 +197,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand }) : null;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)
@@ -238,13 +242,18 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let autoCompactionAttempts = 0;
   const attemptedContexts = new Set();
 
+  let autoCompactionFailedThisTurn = false;
   try {
     while (toolCalls <= config.maxToolCalls) {
       if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
         let prepared = await prepareRequest();
-        while (config.compaction === 'auto' && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
+        const backoff = session.autoCompactionBackoff;
+        const currentBytes = requestBytes(config, prepared.request), currentResidentBytes = residentHistoryBytes(session);
+        const cooledDown = !backoff || currentBytes >= backoff.requestBytes + Math.max(4096, backoff.requestBytes * 0.25)
+          || currentResidentBytes >= backoff.residentBytes + Math.max(4096, backoff.residentBytes * 0.25);
+        while (config.compaction === 'auto' && !autoCompactionFailedThisTurn && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
           && (requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)
             || (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes))) {
           const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
@@ -252,6 +261,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           attemptedContexts.add(fingerprint);
           autoCompactionAttempts += 1;
           const outcome = await summarize(runtimeState(), 'threshold');
+          if (outcome.status === 'unchanged') {
+            autoCompactionFailedThisTurn = true;
+            session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request), residentBytes: residentHistoryBytes(session) };
+            await persistRuntimeState(session, runtimeState());
+          }
           if (outcome.status !== 'compacted') break;
           prepared = await prepareRequest();
         }
@@ -337,7 +351,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
           output = await dispatchTool(tools, call.name, call.input || {});
-          if (call.name === 'apply_patch') {
+          if (['apply_patch', 'write_file'].includes(call.name)) {
             pendingValidation = true;
             validationPassed = false;
             const filename = call.input?.path || '(unknown file)';
@@ -360,11 +374,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
         output = appendFailureFeedback(output, feedback);
         if (feedback) isError = true;
-        await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
+        const commandTiming = ['run_tests', 'run_shell'].includes(call.name) && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
+        await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, ...commandTiming, error: isError ? output : undefined });
         const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError, ...(feedback ? { feedback } : {}) });
         if (session.taskState) {
           const taskState = session.taskState;
-          taskState.phase = call.name === 'apply_patch' ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
+          taskState.phase = ['apply_patch', 'write_file'].includes(call.name) ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
           if (call.input?.path && !taskState.active_files.includes(call.input.path)) taskState.active_files.push(call.input.path);
           const finding = { toolId: call.id, tool: call.name, provenance: 'observed', sourceEventId: observedEvent?.eventId || null,
             outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError, ...(feedback ? { feedback } : {}) };
@@ -377,7 +392,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           taskState.evidence_refs = [...(session.contextMemory?.units.keys() || [])];
         }
         await persistRuntimeState(session, runtimeState());
-        emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, isError });
+        emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, ...commandTiming, isError });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
       }
       await appendSessionMessage(session, { role: 'user', content: toolResults });

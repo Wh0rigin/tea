@@ -33,7 +33,7 @@ tea config path   # 查看绝对路径
 }
 ```
 
-日常 CLI 仍默认开启 ContextOS、自动压缩、GC，不设置费用上限，无需把这些默认值全部写进文件。
+日常 CLI 默认开启 ContextOS、自动压缩、GC、原生文件创建和能力提示，不设置费用上限。请求保护为 160,000 UTF-8 字节，输出上限为 4,096 Token，ContextOS 目标为 32,000 字节。无需把这些默认值全部写进文件；已有显式配置优先。详见[运行修复说明](RUNTIME_REPAIR.md)。
 
 ## 优先级与字段
 
@@ -41,7 +41,7 @@ tea config path   # 查看绝对路径
 
 字符串字段：`apiKey`、`baseUrl`、`model`、`apiVersion`、`thinkingMode`、`effort`、`memoryPolicy`、`historyStrategy`、`compaction`、`memoryGc`、`contextStrategy`。
 
-数值字段：`maxOutputTokens`、`maxRequestInputBytes`、`maxToolCalls`、`timeoutMs`、`contextosTargetBytes`、`historyKeepRecent`、`initialFileLimit`、`compactionTriggerRatio`、`compactionKeepRecentBytes`、`inputPriceUsdPerMillion`、`outputPriceUsdPerMillion`。输入保护按 UTF-8 字节计算。`stream`、`capabilityFeedback` 为布尔值。
+数值字段：`maxOutputTokens`、`maxRequestInputBytes`、`maxToolCalls`、`timeoutMs`、`contextosTargetBytes`、`historyKeepRecent`、`initialFileLimit`、`compactionTriggerRatio`、`compactionKeepRecentBytes`、`inputPriceUsdPerMillion`、`outputPriceUsdPerMillion`。输入保护按 UTF-8 字节计算。`stream`、`capabilityFeedback`、`enableFileCreation` 为布尔值。
 
 `maxCostUsd` 为正数，或 `null` 表示无费用上限。显式设置费用上限仍要求两个价格，恢复会话保留原较严格上限。
 

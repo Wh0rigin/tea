@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import { runTask } from './agent.mjs';
-import { loadConfig, ConfigError } from './config.mjs';
+import { loadCliConfig, loadConfig, ConfigError } from './config.mjs';
 import { compareRuns, loadRun, renderComparisonReport, renderRunReport, runReplayBenchmark, RESULT_ROOT } from './benchmark.mjs';
 import { renderExecutableReport, runExecutableBenchmark } from './runtime-benchmark.mjs';
 import { runInteractive } from './terminal.mjs';
@@ -57,7 +57,7 @@ async function main() {
   const parsed = parseOptions(args);
   const task = parsed.positional.join(' ').trim();
   const userEnvironment = resolveUserEnvironment();
-  const config = loadConfig({ ...parsed, defaultMemoryPolicy: parsed.historyStrategy || userEnvironment.TEA_HISTORY_STRATEGY ? undefined : 'contextos' }, userEnvironment);
+  const config = loadCliConfig(parsed, userEnvironment);
   if (parsed.interactive || (!task && process.stdin.isTTY)) {
     await runInteractive(config, { demo: parsed.demo, initialTask: task || undefined });
     return;

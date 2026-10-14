@@ -155,7 +155,8 @@ export class TerminalView {
       const exit = /^exit=([^\n]+)/.exec(event.output);
       const failed = event.isError || (exit && exit[1] !== '0');
       const status = event.isError ? 'error' : exit ? `exit=${exit[1]}` : 'done';
-      this.write(this.paint(`  ${failed ? '!' : '+'} [${record.id}] ${event.name} · ${status} · ${(event.elapsedMs / 1000).toFixed(1)}s · /tools ${record.id}`, failed ? '31' : '2'), { raw: true });
+      const timing = Number.isFinite(event.executionMs) ? `${(event.executionMs / 1000).toFixed(1)}s execute${event.approvalMs > 0 ? ` · ${(event.approvalMs / 1000).toFixed(1)}s approval` : ''}` : `${(event.elapsedMs / 1000).toFixed(1)}s`;
+      this.write(this.paint(`  ${failed ? '!' : '+'} [${record.id}] ${event.name} · ${status} · ${timing} · /tools ${record.id}`, failed ? '31' : '2'), { raw: true });
       if (event.name === 'apply_patch' && !event.isError) {
         const lines = (text, prefix) => terminalText(text || '').split('\n').slice(0, 6).map(line => prefix + line.slice(0, 160)).join('\n');
         this.write(this.paint(lines(event.input?.search, '- '), '31') + '\n' + this.paint(lines(event.input?.replace, '+ '), '32'), { raw: true });

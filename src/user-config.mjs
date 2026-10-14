@@ -16,6 +16,7 @@ const FIELDS = {
   memoryPolicy: ['TEA_MEMORY_POLICY', 'string'], historyStrategy: ['TEA_HISTORY_STRATEGY', 'string'],
   compaction: ['TEA_COMPACTION', 'string'], memoryGc: ['TEA_MEMORY_GC', 'string'],
   stream: ['TEA_STREAM', 'boolean'], capabilityFeedback: ['TEA_CAPABILITY_FEEDBACK', 'boolean'],
+  enableFileCreation: ['TEA_ENABLE_FILE_CREATION', 'boolean'],
   maxCostUsd: ['TEA_MAX_COST_USD', 'cap'], maxOutputTokens: ['TEA_MAX_OUTPUT_TOKENS', 'number'],
   maxRequestInputBytes: ['TEA_MAX_REQUEST_INPUT_TOKENS', 'number'], maxToolCalls: ['TEA_MAX_TOOL_CALLS', 'number'],
   timeoutMs: ['TEA_REQUEST_TIMEOUT_MS', 'number'], contextosTargetBytes: ['TEA_CONTEXTOS_TARGET_BYTES', 'number'],

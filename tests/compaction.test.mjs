@@ -50,6 +50,13 @@ test('short histories do not submit a summary request', async () => {
     assert.equal(requests.length, 0); assert.equal(outcome.status, 'not_needed');
   }
 });
+
+test('automatic compaction skips a nonreducing preview before calling the model', async () => {
+  const { outcome, requests } = await compact(session(), cfg(), {
+    reason: 'threshold', measureContext: async () => 1000,
+  });
+  assert.equal(outcome.status, 'not_needed'); assert.equal(requests.length, 0);
+});
 test('commits a smaller checkpoint without rewriting messages or retained thinking', async () => {
   const s = session();
   s.messages.at(-1).content = [{ type: 'thinking', thinking: 'retained thought', signature: 'recent-signature' },
@@ -275,6 +282,22 @@ test('automatic compaction is bounded across a task and never turns a summary in
   } }) });
   assert.equal(summaries, 1); assert.equal(tasks, 3); assert.equal(result.status, 'needs_validation');
   assert.equal(result.validationPassed, false); assert.equal(s.pendingValidation, true);
+}));
+
+test('a nonreducing automatic summary is not retried after more tools in the same turn', async () => temporary(async root => {
+  await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');
+  const config = cfg({ workspace: root, runId: 'backoff', compaction: 'auto', memoryGc: 'off',
+    compactionTriggerRatio: 0.01, compactionMaxPerTurn: 8 });
+  const s = createAgentSession(config); s.messages = history();
+  let summaries = 0, tasks = 0;
+  const result = await runTask('Inspect source', config, { session: s, adapterFactory: () => ({ complete: async request => {
+    if (!request.tools.length) { summaries++; return done(headings.map(h => `## ${h}\n${'large summary '.repeat(600)}`).join('\n')); }
+    tasks++;
+    if (tasks <= 3) return { content: [{ type: 'tool_use', id: `backoff-${tasks}`, name: 'read_file', input: { path: 'value.mjs' } }], stop_reason: 'tool_use' };
+    return done('Inspected.');
+  } }) });
+  assert.equal(result.status, 'completed'); assert.equal(summaries, 1);
+  assert.equal(s.compactionCount, 0); assert.ok(s.autoCompactionBackoff.requestBytes > 0);
 }));
 test('fresh reads after compaction return real source and actual tests can discharge pending validation', async () => temporary(async root => {
   await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');

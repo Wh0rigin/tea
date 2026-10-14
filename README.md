@@ -1,5 +1,7 @@
 # TEA
 
+Daily CLI supports native UTF-8 file creation (`write_file`), including parent directories, followed by actual test execution. Existing files use exact patches. Default request protection is 160,000 serialized UTF-8 bytes, output cap 4,096 tokens, and ContextOS target 32,000 bytes; explicit configuration overrides these values. Automatic compaction skips conservatively unhelpful previews and backs off after a nonreducing summary. See [runtime repair notes](docs/RUNTIME_REPAIR.md).
+
 <p align="center">
   <img src="assets/tea-logo.png" alt="TEA — Token Efficient Agent" width="320">
 </p>
