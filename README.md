@@ -266,3 +266,7 @@ Supporting research documents currently include Chinese content.
 ## License
 
 [MIT](LICENSE) — Copyright (c) 2026 Wh0rigin.
+
+## Fair discovery repair
+
+A TEA-only comparison of the previous GC version and fair-discovery repair measured **70.05% fewer provider tokens** across 18 pairs: large **82.02% fewer**, small **11.65% fewer**, with both arms achieving 18/18 final acceptance. **Small Unicode regressed 26.73%**. Both arms enabled ContextOS, automatic compaction and GC; no run compacted. Six self-authored JavaScript fixtures, three repeats, no long-session or production holdout claim. [Report, chart and complete evidence](benchmarks/reports/discovery-repair-20261014/README.md).

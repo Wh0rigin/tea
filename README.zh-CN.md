@@ -272,3 +272,7 @@ node scripts/request-budget-experiment.mjs v3-request-budget-NEW
 ## 开源协议
 
 [MIT](LICENSE) — Copyright (c) 2026 Wh0rigin。
+
+## 公平检索修复
+
+仅测 TEA、对比上一版 GC 与公平检索修复：18 对实验累计 Token **减少 70.05%**，大型 **减少 82.02%**，小型 **减少 11.65%**；两版各 18/18 最终验收通过。但**小型 Unicode 增加 26.73%**。两版均开启 ContextOS、自动压缩和 GC，没有触发摘要。6 个自建 JavaScript 场景、各重复 3 次，未测本轮长会话或真实项目留出集。[报告、图表与完整证据](benchmarks/reports/discovery-repair-20261014/README.zh-CN.md)。

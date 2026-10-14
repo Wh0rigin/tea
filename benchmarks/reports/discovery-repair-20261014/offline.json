@@ -1,0 +1,60 @@
+{
+  "paidProviderRequests": 0,
+  "unit": "UTF-8 serialized tool output bytes; not provider tokens",
+  "rows": [
+    {
+      "task": "large-cache-key",
+      "variant": "baseline",
+      "targetSelected": false,
+      "listingBytes": 10194,
+      "listingContainsTarget": false,
+      "searchContainsTarget": false,
+      "searchBytes": 224
+    },
+    {
+      "task": "large-cache-key",
+      "variant": "candidate",
+      "targetSelected": true,
+      "listingBytes": 1458,
+      "listingContainsTarget": true,
+      "searchContainsTarget": true,
+      "searchBytes": 560
+    },
+    {
+      "task": "large-retry-budget",
+      "variant": "baseline",
+      "targetSelected": false,
+      "listingBytes": 10194,
+      "listingContainsTarget": false,
+      "searchContainsTarget": false,
+      "searchBytes": 224
+    },
+    {
+      "task": "large-retry-budget",
+      "variant": "candidate",
+      "targetSelected": true,
+      "listingBytes": 1461,
+      "listingContainsTarget": true,
+      "searchContainsTarget": true,
+      "searchBytes": 413
+    },
+    {
+      "task": "large-unicode",
+      "variant": "baseline",
+      "targetSelected": false,
+      "listingBytes": 10194,
+      "listingContainsTarget": false,
+      "searchContainsTarget": false,
+      "searchBytes": 224
+    },
+    {
+      "task": "large-unicode",
+      "variant": "candidate",
+      "targetSelected": true,
+      "listingBytes": 1453,
+      "listingContainsTarget": true,
+      "searchContainsTarget": true,
+      "searchBytes": 312
+    }
+  ]
+}
