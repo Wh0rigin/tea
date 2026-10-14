@@ -5,7 +5,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import { createHash, randomUUID } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
-import { loadConfig, assertLiveConfig } from './config.mjs';
+import { loadConfig, assertBenchmarkConfig } from './config.mjs';
 import { taskDefinitions, prepareFixture, treeFingerprint, cloneFixture, assertNoAncestorInstructions } from './comparison-fixtures.mjs';
 import { WorkspaceTools } from './tools.mjs';
 import { attachSessionJournal, appendSessionMessage, closeSessionJournal } from './session-memory.mjs';
@@ -189,7 +189,7 @@ export async function runContextosBenchmark({ output, mode='live', options={}, o
   if (!['live','preflight'].includes(mode)) throw new Error('ContextOS benchmark mode must be live or preflight');
   const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
   const outputDir=path.resolve(output || `benchmarks/results/contextos-${Date.now()}`); await mkdir(outputDir,{recursive:false});
-  const config=loadConfig(options,process.env); if(mode==='live')assertLiveConfig(config);
+  const config=loadConfig(options,process.env); if(mode==='live')assertBenchmarkConfig(config);
   const orderedCases=orderedContextosCases(process.env.TEA_CONTEXTOS_CASE_ORDER);
   if(config.storeRaw)throw new Error('Raw API storage must remain disabled');
   const repeat=Number(process.env.TEA_CONTEXTOS_REPEAT || 3), perRun=Number(process.env.TEA_CONTEXTOS_RUN_BUDGET_USD || 1.4);

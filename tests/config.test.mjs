@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLiveConfig, ConfigError, loadConfig } from '../src/config.mjs';
 
-test('loads supported GLM-5.3-Flash effort levels and defaults to a zero live budget', () => {
+test('loads supported GLM-5.3-Flash effort levels and defaults to no monetary cap', () => {
   for (const effort of ['low', 'high', 'max']) assert.equal(loadConfig({ effort }, {}).effort, effort);
-  assert.equal(loadConfig({}, {}).maxCostUsd, 0);
+  assert.equal(loadConfig({}, {}).maxCostUsd, null);
   assert.throws(() => loadConfig({ effort: 'medium' }, {}), ConfigError);
 });
 

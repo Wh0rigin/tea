@@ -67,10 +67,12 @@ export async function attachSessionJournal(session, config) {
     session.memoryDiagnostics = state?.memoryDiagnostics || null;
     if (fullRestore) { session.compaction = null; session.pinnedRequirements = []; }
     for (const intent of inflight.values()) {
-      budget = { ...budget, spentUsd: budget.spentUsd + intent.reservedUsd,
+      budget = { ...budget, spentUsd: budget.spentUsd + (intent.reservedUsd ?? 0), costKnown: budget.costKnown !== false && intent.reservedUsd !== null,
         spentInputBound: budget.spentInputBound + intent.inputBound, blockedUnknown: true };
     }
-    const maxCostUsd = Math.min(config.maxCostUsd, created.value.maxCostUsd);
+    const costCaps = [config.maxCostUsd, created.value.maxCostUsd].filter(value => value !== undefined && value !== null);
+    if (costCaps.some(value => !Number.isFinite(value) || value < 0)) throw new Error('Invalid persisted cost cap');
+    const maxCostUsd = costCaps.length ? Math.min(...costCaps) : null;
     const inputCaps = [config.maxInputTokens, created.value.maxInputTokens].filter(value => value !== undefined && value !== null);
     session.restoredBudget = { ...budget, maxCostUsd, maxInputTokens: inputCaps.length ? Math.min(...inputCaps) : undefined };
     session.budgetUnknown = budget.blockedUnknown;

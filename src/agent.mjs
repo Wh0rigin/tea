@@ -121,7 +121,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
   session.adapter = adapter;
   if (session.restoredBudget) {
-    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens']) adapter[field] = session.restoredBudget[field];
+    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens', 'costKnown']) if (session.restoredBudget[field] !== undefined) adapter[field] = session.restoredBudget[field];
     session.restoredBudget = null;
   }
   session.offline = offline;
@@ -133,12 +133,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       await session.journal.append('request_settled', { requestId: event.requestId, purpose: requestPurpose,
         usage: event.usage, usageStatus: event.usageStatus, costBasis: event.costBasis,
         requestSha256: createTaskHash(JSON.stringify(event.payload)), responseSha256: createTaskHash(JSON.stringify(event.response)),
-        budget: { spentUsd: adapter.spentUsd, spentInputBound: adapter.spentInputBound,
+        budget: { spentUsd: adapter.spentUsd, costKnown: adapter.costKnown, spentInputBound: adapter.spentInputBound,
           actualInputTokens: adapter.actualInputTokens, blockedUnknown: session.budgetUnknown } });
     }
     await ledger.request({ ...event, purpose: requestPurpose });
     emit({ type: 'usage', totals: { ...ledger.totals }, usageComplete: ledger.completeUsageRequests === ledger.totals.requests,
-      spentUsd: adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
+      spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
   };
   const summarize = async (state, reason, instructions = '') => {
     requestPurpose = 'compaction';
@@ -178,7 +178,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     const summary = await ledger.finish({ status: outcome.status, prompt: task });
     await persistRuntimeState(session);
     onText(`Conversation compaction: ${outcome.status}.${outcome.detail ? ` ${outcome.detail}` : ''}`);
-    emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.spentUsd,
+    emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd,
       changedFiles: session.changedFiles, pendingValidation: session.pendingValidation, runDirectory: ledger.directory });
     return { ...outcome, summary, toolCalls: 0, changedFiles: [...session.changedFiles],
       validationPassed: session.validationPassed, validationAttempts: session.validationAttempts,
@@ -372,7 +372,8 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           if (isError || /^exit=[^0]/.test(output) || feedback) taskState.failed_attempts.push(finding);
           taskState.validation = runtimeState();
           taskState.pending_steps = pendingValidation ? [{ action: 'Run relevant validation on current source', provenance: 'observed', sourceEventId: observedEvent?.eventId || null }] : [];
-          taskState.budget_remaining = Math.max(0, (adapter.config?.maxCostUsd ?? config.maxCostUsd) - (adapter.spentUsd || 0));
+          const costCap = adapter.config ? adapter.config.maxCostUsd : config.maxCostUsd;
+          taskState.budget_remaining = costCap == null ? null : Math.max(0, costCap - (adapter.spentUsd || 0));
           taskState.evidence_refs = [...(session.contextMemory?.units.keys() || [])];
         }
         await persistRuntimeState(session, runtimeState());
@@ -394,7 +395,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });
-  emit({ type: 'turn_end', status, summary, spentUsd: adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
+  emit({ type: 'turn_end', status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
   return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
     runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, sessionId: session.persistent ? session.sessionId : null,
     wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };

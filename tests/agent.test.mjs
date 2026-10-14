@@ -108,7 +108,7 @@ test('stops on a truncated final response or provider error', async () => {
   await scenario([new ModelError('Provider stopped')], async (result) => assert.equal(result.status, 'failed'));
 });
 
-test('live runtime still requires credentials and a hard budget', async () => {
+test('live runtime still requires credentials', async () => {
   await assert.rejects(runTask('task', loadConfig({}, {})), /API_KEY/);
 });
 

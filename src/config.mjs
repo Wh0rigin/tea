@@ -36,7 +36,7 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isInteger(initialFileLimit) || initialFileLimit < 1 || initialFileLimit > 250) throw new ConfigError('--initial-file-limit / TEA_INITIAL_FILE_LIMIT must be an integer from 1 through 250');
   const historyStrategy = String(options.historyStrategy || env.TEA_HISTORY_STRATEGY || 'full').toLowerCase();
   if (!['full', 'compact-tools'].includes(historyStrategy)) throw new ConfigError('History strategy must be full or compact-tools');
-  const memoryPolicy = String(options.memoryPolicy || env.TEA_MEMORY_POLICY || (historyStrategy === 'compact-tools' ? 'compact-tools' : 'full-history')).toLowerCase();
+  const memoryPolicy = String(options.memoryPolicy || env.TEA_MEMORY_POLICY || (historyStrategy === 'compact-tools' ? 'compact-tools' : options.defaultMemoryPolicy || 'full-history')).toLowerCase();
   if (!['full-history', 'compact-tools', 'contextos'].includes(memoryPolicy)) throw new ConfigError('Memory policy must be full-history, compact-tools or contextos');
   const sessionId = options.sessionId || env.TEA_SESSION_ID;
   const resume = options.resume;
@@ -68,11 +68,10 @@ export function loadConfig(options = {}, env = process.env) {
     if (!Number.isSafeInteger(value)) throw new ConfigError('Memory and storage byte limits must be safe integers');
   }
 
-  const maxCostUsd = nonNegativeNumber(
-    options.maxCostUsd ?? env.TEA_MAX_COST_USD,
-    0,
-    '--max-cost-usd / TEA_MAX_COST_USD'
-  );
+  const costOption = options.maxCostUsd ?? env.TEA_MAX_COST_USD;
+  const maxCostUsd = costOption === undefined || costOption === '' || costOption === null || String(costOption).toLowerCase() === 'none'
+    ? null : nonNegativeNumber(costOption, null, '--max-cost-usd / TEA_MAX_COST_USD');
+  if (maxCostUsd === 0) throw new ConfigError('Use --max-cost-usd none to disable the monetary cap, or specify a positive amount');
   const inputRate = env.TEA_INPUT_PRICE_USD_PER_MTOK === undefined || env.TEA_INPUT_PRICE_USD_PER_MTOK === ''
     ? undefined : Number(env.TEA_INPUT_PRICE_USD_PER_MTOK);
   const outputRate = env.TEA_OUTPUT_PRICE_USD_PER_MTOK === undefined || env.TEA_OUTPUT_PRICE_USD_PER_MTOK === ''
@@ -128,17 +127,26 @@ export function loadConfig(options = {}, env = process.env) {
 
 export function assertLiveConfig(config) {
   if (!config.apiKey) throw new ConfigError('Set ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment');
-  if (!Number.isFinite(config.maxCostUsd) || !(config.maxCostUsd > 0)) throw new ConfigError('A positive finite --max-cost-usd or TEA_MAX_COST_USD is required for live calls');
-  if (config.inputRateUsdPerMillion === undefined || config.outputRateUsdPerMillion === undefined) {
+  if (config.maxCostUsd != null && (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0)) throw new ConfigError('An explicit cost cap must be finite and positive');
+  if (config.maxCostUsd != null && !hasProviderPrices(config)) {
     throw new ConfigError('Set both TEA_INPUT_PRICE_USD_PER_MTOK and TEA_OUTPUT_PRICE_USD_PER_MTOK to the current provider rates before making live calls');
   }
-  for (const value of [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion, config.cacheCreationRateUsdPerMillion ?? 0]) {
+  for (const value of [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion, config.cacheCreationRateUsdPerMillion].filter(value => value !== undefined)) {
     if (!Number.isFinite(value) || value < 0) throw new ConfigError('Provider prices must be finite non-negative numbers');
   }
   for (const field of ['maxOutputTokens', 'maxRequestInputTokens', 'maxToolCalls', 'timeoutMs']) {
     if (!Number.isSafeInteger(config[field]) || config[field] <= 0) throw new ConfigError(`${field} must be a positive safe integer`);
   }
   if (config.maxInputTokens !== undefined && (!Number.isSafeInteger(config.maxInputTokens) || config.maxInputTokens <= 0)) throw new ConfigError('maxInputTokens must be a positive safe integer');
+}
+
+export function hasProviderPrices(config) {
+  return [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion].every(value => Number.isFinite(value) && value >= 0);
+}
+
+export function assertBenchmarkConfig(config) {
+  assertLiveConfig(config);
+  if (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0) throw new ConfigError('Live experiments require a positive finite --max-cost-usd and current provider prices');
 }
 
 export function estimateUsd(inputTokens, outputTokens, config) {

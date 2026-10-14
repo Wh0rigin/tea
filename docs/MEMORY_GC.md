@@ -2,7 +2,7 @@
 
 [中文](MEMORY_GC.zh-CN.md)
 
-Automatic compaction and checkpoint GC now default to `auto`. ContextOS itself remains opt-in. Before a model request, an 80% wire-byte threshold or 4 MiB of serialized resident history triggers a bounded summary attempt. Each submitted task permits at most two automatic attempts. Summary calls use the same model and accounted budget.
+Automatic compaction and checkpoint GC default to `auto`. The CLI enables ContextOS by default; explicit memory/history options override it. Before a model request, an 80% wire-byte threshold or 4 MiB of serialized resident history triggers a bounded summary attempt. Each submitted task permits at most two automatic attempts. Summary calls use the same model, accounting and optional monetary cap.
 
 ## Commit before releasing memory
 

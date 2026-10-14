@@ -12,7 +12,7 @@ export function memoryHandoff(session) {
     evidenceRefs: task?.evidence_refs || [], pendingSteps: task?.pending_steps || [],
     validation: { pending: Boolean(session.pendingValidation), passed: Boolean(session.validationPassed),
       attempts: session.validationAttempts || 0, changedFiles: session.changedFiles || [] },
-    accounting: { spentUsd: Number.isFinite(budget.spentUsd) ? budget.spentUsd : null,
+    accounting: { spentUsd: budget.costKnown !== false && Number.isFinite(budget.spentUsd) ? budget.spentUsd : null,
       actualInputTokens: Number.isSafeInteger(budget.actualInputTokens) ? budget.actualInputTokens : null,
       unresolved: Boolean(session.budgetUnknown) },
     instructions: 'Revalidate source identity. Inferred decisions are unverified; only fresh relevant tool validation can certify completion. Preserve the original budget and all user messages.' });

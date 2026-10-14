@@ -69,7 +69,7 @@ export class TokenLedger {
     this.totals.cacheCreationInputTokens += counts.cacheCreationInputTokens;
     this.totals.reasoningTokens += counts.reasoningTokens;
     this.totals.estimatedInputTokens += estimatedInputTokens;
-    this.totals.estimatedSpendUsd += estimatedUsd;
+    this.totals.estimatedSpendUsd = this.totals.estimatedSpendUsd === null || estimatedUsd === null ? null : this.totals.estimatedSpendUsd + estimatedUsd;
     this.totals.elapsedMs += elapsedMs;
     if (purpose === 'compaction') {
       this.totals.compactionRequests += 1;
