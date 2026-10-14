@@ -216,3 +216,16 @@ test('a separate Node process resumes collected history and recalls the cold sou
     JSON.stringify({...config,sessionId:undefined,resume:'gc'}),ref],{windowsHide:true,timeout:30000});
   assert.deepEqual(JSON.parse(stdout),{recovered:true,residentMessages:1,pendingValidation:true});
 }));
+
+test('closed journals cannot write new ciphertext without the writer lock',()=>scenario(async(root)=>{
+  const journal=await SessionJournal.open({workspace:root,id:'closed'});await journal.close();
+  await assert.rejects(journal.put({data:'must not be written'}),/closed/);
+}));
+
+test('changing memory policy releases the old archive and cannot reuse a closed journal',()=>scenario(async(root,config)=>{
+  const {session}=await seed(config);await collectCompactedHistory(session,config);session.pendingValidation=false;
+  await closeSessionJournal(session);
+  const result=await runTask('Continue',{...config,memoryPolicy:'full-history',runId:'policy-change'},
+    {session,adapterFactory:()=>({complete:async()=>done('Inspected.')})});
+  assert.equal(result.status,'completed');assert.equal(session.contextMemory,null);assert.equal(session.contextArchive,null);
+}));

@@ -147,6 +147,7 @@ export class SessionJournal {
     }
   }
   async put(value) {
+    if (!this.ownedLock) throw new Error('Session journal is closed');
     const plain = Buffer.from(JSON.stringify(value)), ref = digest(plain.toString('utf8'));
     if (plain.length > MAX_ARTIFACT) throw new Error('Session artifact exceeds 64 MiB');
     const filename = path.join(this.artifacts, ref + '.bin');

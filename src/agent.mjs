@@ -109,7 +109,10 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     for (const unit of session.memoryDiagnostics?.units || []) if (unit.decision === 'reference') session.contextMemory.evicted.add(unit.ref);
     tools.contextMemory = session.contextMemory;
     attachContextArchive(session, config, signal);
-  } else tools.contextMemory = null;
+  } else {
+    tools.contextMemory = null; session.contextMemory = null;
+    session.contextArchive?.sweepCache(); session.contextArchive = null;
+  }
   if (session.budgetUnknown && !offline) throw new ModelError('Session has unresolved billing from an interrupted request; no automatic retry is allowed');
   if (session.adapter && session.offline !== offline) throw new Error('A session cannot mix scripted and provider adapters');
   const adapterConfig = session.restoredBudget ? { ...config, maxCostUsd: session.restoredBudget.maxCostUsd,

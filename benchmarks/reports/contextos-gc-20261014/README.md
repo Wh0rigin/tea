@@ -8,7 +8,7 @@ Disk GC marks all committed/nested historical artifacts, then collects only unre
 
 ## Verification
 
-- Deterministic suite 296/296; GC-specific 15/15, including a separate Node process, interrupted commits/checkpoints, source/rule invalidation, budgets, reset, cache/quota bounds and corrupt nested artifacts.
+- Deterministic suite 298/298; GC-specific 17/17, including a separate Node process, interrupted commits/checkpoints, source/rule invalidation, budgets, reset, cache/quota bounds and corrupt nested artifacts.
 - Combination contract 18/18. The summary-era history-search entry gap is repaired in these local checks; every arm performs real independent validation.
 - 18 scripted pressure runs: 12/36/72 tool rounds, three repeats, GC off/auto; one fixed scripted summary per run. Serialized resident-history reductions: 99.85% / 99.95% / 99.97%.
 

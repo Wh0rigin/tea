@@ -12,7 +12,7 @@
     },
     {
       "path": "src/agent.mjs",
-      "sha256": "ee222801f4f8f086f8a632f7bfc6e780b83efd172599ee1a9e82b7ee0434cc94"
+      "sha256": "2904e95e66bf6f72ff9b224d4b30eb1b73956c1223b4a0add7ecf56ae739f9e7"
     },
     {
       "path": "src/cli.mjs",
@@ -44,7 +44,7 @@
     },
     {
       "path": "src/session-journal.mjs",
-      "sha256": "37da0dc43cd65a3bbb9a5bedc234bb51741f1230ef8ce22099a542719e72b940"
+      "sha256": "7cad98ecd0bdab01af227a837c06f166da1875215a9c80edc5159bd240567603"
     },
     {
       "path": "src/session-memory.mjs",
@@ -68,7 +68,7 @@
     },
     {
       "path": "tests/memory-gc.test.mjs",
-      "sha256": "57d99d36822e498569c038edd97f47e56c053cdb45f11a67ea3b2f922d35b94a"
+      "sha256": "e4244f8dd125c5b12c15dd6ae803c1a3751f5975a7afc6f49a90b4da50b85741"
     },
     {
       "path": "tests/session-memory.test.mjs",
