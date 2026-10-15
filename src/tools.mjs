@@ -283,7 +283,8 @@ export class WorkspaceTools {
 
   modelToolDefinitions({ includeMemory = true } = {}) {
     const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
-    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
+    const enabled = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
+    const base = this.compactToolDescriptions ? enabled.map(compactToolDescription) : enabled;
     const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
     return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
@@ -504,6 +505,24 @@ export class WorkspaceTools {
     return output;
     } finally { this.lastCommandTiming = { ...this.lastCommandTiming, executionMs: Date.now() - executionStarted }; }
   }
+}
+
+// Presentation only: schemas, dispatch, permissions and command execution stay identical.
+const COMPACT_TOOL_DESCRIPTIONS = {
+    list_files: 'List text paths; page with offset/nextOffset, scope with path. includeOmitted includes hidden/generated/dependency folders; secrets and .git/.tea remain excluded.',
+    search_code: 'Literal search plus learned session names; bounded, not exhaustive. Scope with path; includeOmitted includes normally excluded folders.',
+    read_file: 'Read text, optionally selecting a line range.',
+    apply_patch: 'Replace one unique exact text span in a workspace file.',
+    write_file: 'Create a new UTF-8 file and parents; never overwrite. For existing files, read then apply_patch. Use this tool for creation, not shell. Validate edits.',
+    run_tests: 'Run allowlisted tests/lint/typechecks or read-only Git diagnostics. Only validation commands clear pending edits. Bounded output retains head/tail; success has a smaller budget.',
+    run_shell: 'Run a bounded executable command. Unlisted commands require explicit approval; destructive commands are blocked.',
+};
+function compactToolDescription(tool) {
+  let description = COMPACT_TOOL_DESCRIPTIONS[tool.name];
+  if (!description) return tool;
+  if (tool.name === 'list_files' && tool.description.includes('Default:')) description += ' Default: 32 paths/~2KB.';
+  if (tool.name === 'search_code' && tool.input_schema.properties.offset) description += ' Continue nextOffset/nextLine as offset/startLine in the same scope.';
+  return { ...tool, description };
 }
 
 export const TOOL_DEFINITIONS = [
