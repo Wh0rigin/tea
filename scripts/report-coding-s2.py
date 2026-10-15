@@ -106,6 +106,7 @@ ax.legend(handles=[Patch(facecolor=colors['baseline'],label='Direct parent'),Pat
 fig.suptitle('S2 coding experiment — three attempts per task and arm',fontsize=16,y=.97)
 fig.text(.5,.02,'Upper panel: accepted samples only. Lower panel: failed attempts, separate scale (all costs retained).\nGLM-5.3-flash · enabled / low · 4,096 output cap · alternating order · self-authored Node.js fixtures. Source: '+run_id,ha='center',fontsize=9)
 fig.subplots_adjust(left=.09,right=.98,bottom=.21,top=.88);fig.savefig(target/'s2-coding.png',dpi=200);fig.savefig(target/'s2-coding.svg');plt.close(fig)
+svg=target/'s2-coding.svg';svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf8').splitlines())+'\n',encoding='utf8')
 lines=['# S2 编码 Token 优化实验','',f'修改：提供可选 read_files 工具，一次最多读取四个相关文件，每个文件最多 2500 字符；沿用范围读取、脱敏、版本指纹和覆盖保护。ContextOS 按依赖检查整批有效性，任一文件变化则保守地停止召回整批旧内容。','',
        f'真实运行计划：八题 × 三次 × 两个版本 = 48 次；已完成 {len(rows)} 次，完整覆盖与用量：{complete}。','',
        f'修改前验收：{totals["baseline"]["accepted"]}/{totals["baseline"]["attempted"]}；候选：{totals["candidate"]["accepted"]}/{totals["candidate"]["attempted"]}。','']
