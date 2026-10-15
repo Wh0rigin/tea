@@ -5,7 +5,7 @@ import { promisify } from 'node:util';
 import { Writable } from 'node:stream';
 import { compactAgentSession, createAgentSession, resetConversation, runTask } from './agent.mjs';
 import { sessionContext } from './compaction.mjs';
-import { assertLiveConfig } from './config.mjs';
+import { assertLiveConfig, hasProviderPrices } from './config.mjs';
 import { redactText } from './tools.mjs';
 import { attachSessionJournal, closeSessionJournal } from './session-memory.mjs';
 
@@ -43,7 +43,8 @@ export class TerminalView {
     this.nextRecord = 1;
     this.baseUsage = { input: 0, output: 0, cached: 0, complete: true };
     this.usage = { ...this.baseUsage };
-    this.spent = 0;
+    this.spent = hasProviderPrices(config) ? 0 : null;
+    this.costCap = config.maxCostUsd;
     this.mode = 'Ready';
     this.frame = 0;
     this.streaming = false;
@@ -73,7 +74,7 @@ export class TerminalView {
       this.editorAttached = true;
       return;
     }
-    const budget = this.demo ? 'DEMO · no API calls' : `budget ${dollars(this.spent)}/${dollars(this.config.maxCostUsd)}`;
+    const budget = this.demo ? 'DEMO · no API calls' : this.costCap == null ? `spent ${dollars(this.spent)} · no cost cap` : `budget ${dollars(this.spent)}/${dollars(this.costCap)}`;
     const knownUsage = this.usage.complete && !this.demo;
     const usage = `in ${tokens(knownUsage ? this.usage.input : null)} · out ${tokens(knownUsage ? this.usage.output : null)} · cache ${tokens(knownUsage ? this.usage.cached : null)}`;
     const mark = this.busy ? ['|', '/', '-', '\\'][this.frame++ % 4] : '>';
@@ -94,8 +95,9 @@ export class TerminalView {
   }
 
   banner() {
+    if (this.config.contextWindowTokens) this.write(`Context window: ${tokens(this.config.contextWindowTokens)} tokens configured · automatic compaction uses local estimates · wire guard ${tokens(this.config.maxRequestInputBytes)} bytes\n`);
     this.write(this.paint('  ( )\n <___>  TEA\n        Token Efficient Agent', '32'), { raw: true });
-    this.write(`Save tokens while preserving performance.\nModel: ${this.config.model}\nWorkspace: ${this.config.workspace}\n${this.demo ? 'SCRIPTED DEMO: local read-only tools, no model or billing.' : 'Budget applies to the entire session, including after /new.'}\n/help for commands · Esc to stop · /tools to expand tool details\n`);
+    this.write(`Save tokens while preserving performance.\nModel: ${this.config.model}\nWorkspace: ${this.config.workspace}\nContext: ${this.config.memoryPolicy} · compaction ${this.config.compaction} · GC ${this.config.memoryGc}\n${this.demo ? 'SCRIPTED DEMO: local read-only tools, no model or billing.' : this.costCap == null ? 'No monetary cap. /status shows Token usage and available cost estimates.' : 'Budget applies to the entire session, including after /new.'}\n/help for commands · Esc to stop · /tools to expand tool details\n`);
   }
 
   delta(text) {
@@ -139,7 +141,7 @@ export class TerminalView {
         cached: this.baseUsage.cached + event.totals.cachedInputTokens,
         complete: this.baseUsage.complete && event.usageComplete,
       };
-      if (Number.isFinite(event.spentUsd)) this.spent = event.spentUsd;
+      if (event.spentUsd === null || Number.isFinite(event.spentUsd)) this.spent = event.spentUsd;
       this.prompt();
     }
     if (event.type === 'tool_start') {
@@ -154,7 +156,8 @@ export class TerminalView {
       const exit = /^exit=([^\n]+)/.exec(event.output);
       const failed = event.isError || (exit && exit[1] !== '0');
       const status = event.isError ? 'error' : exit ? `exit=${exit[1]}` : 'done';
-      this.write(this.paint(`  ${failed ? '!' : '+'} [${record.id}] ${event.name} · ${status} · ${(event.elapsedMs / 1000).toFixed(1)}s · /tools ${record.id}`, failed ? '31' : '2'), { raw: true });
+      const timing = Number.isFinite(event.executionMs) ? `${(event.executionMs / 1000).toFixed(1)}s execute${event.approvalMs > 0 ? ` · ${(event.approvalMs / 1000).toFixed(1)}s approval` : ''}` : `${(event.elapsedMs / 1000).toFixed(1)}s`;
+      this.write(this.paint(`  ${failed ? '!' : '+'} [${record.id}] ${event.name} · ${status} · ${timing} · /tools ${record.id}`, failed ? '31' : '2'), { raw: true });
       if (event.name === 'apply_patch' && !event.isError) {
         const lines = (text, prefix) => terminalText(text || '').split('\n').slice(0, 6).map(line => prefix + line.slice(0, 160)).join('\n');
         this.write(this.paint(lines(event.input?.search, '- '), '31') + '\n' + this.paint(lines(event.input?.replace, '+ '), '32'), { raw: true });
@@ -165,7 +168,7 @@ export class TerminalView {
       this.endStream();
       this.baseUsage = { ...this.usage, complete: this.usage.complete && (this.demo || event.summary.requests === 0 || event.summary.providerUsageComplete) };
       this.usage = { ...this.baseUsage };
-      if (Number.isFinite(event.spentUsd)) this.spent = event.spentUsd;
+      if (event.spentUsd === null || Number.isFinite(event.spentUsd)) this.spent = event.spentUsd;
       this.mode = event.status;
       this.write(`\nTurn: ${event.status}${event.pendingValidation ? ' · edits still require validation' : ''}\nLedger: ${event.runDirectory}`);
     }
@@ -206,7 +209,10 @@ export async function runInteractive(config, { demo = false, initialTask, input 
   if (session.persistent) {
     await attachSessionJournal(session, config);
     await closeSessionJournal(session);
-    view.spent = session.restoredBudget?.spentUsd || 0;
+    if (session.restoredBudget) {
+      view.spent = session.restoredBudget.costKnown === false || !hasProviderPrices(config) ? null : session.restoredBudget.spentUsd;
+      view.costCap = session.restoredBudget.maxCostUsd;
+    }
     // The budget is restored exactly; old output/cache totals are not inferred
     // from an input-only counter. Show '?' until a full accounting view exists.
     if (config.resume) { view.baseUsage.complete = false; view.usage.complete = false; }
@@ -289,7 +295,7 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     if (!task) { view.prompt(); return; }
     if (task.startsWith('/') && !composed.length) {
       if (task === '/help') view.write(HELP);
-      else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${dollars(Math.max(0, config.maxCostUsd - view.spent))}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') : 'none'}\nResident history messages: ${session.messages.length}\nArchived history messages: ${session.archivedMessageCount || 0}\nActive context messages: ${sessionContext(session).length}\nConversation compactions: ${session.compactionCount}\nAuto compaction: ${config.compaction}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
+      else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${view.costCap == null ? 'unlimited' : view.spent === null ? 'unknown' : dollars(Math.max(0, view.costCap - view.spent))}\nMemory policy: ${config.memoryPolicy}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') : 'none'}\nResident history messages: ${session.messages.length}\nArchived history messages: ${session.archivedMessageCount || 0}\nActive context messages: ${sessionContext(session).length}\nConversation compactions: ${session.compactionCount}\nAuto compaction: ${config.compaction}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
       else if (/^\/tools(?:\s+\d+)?$/.test(task)) view.showTools(task.split(/\s+/)[1]);
       else if (task === '/new') { await resetConversation(session, config); composed = []; view.multiline = false; view.mode = 'Ready'; view.write('New conversation. Spending and outstanding edits are retained.'); }
       else if (task === '/memory') view.write(JSON.stringify({ sessionId: session.persistent ? session.sessionId : null,

@@ -4,6 +4,23 @@ import { AnthropicMessagesAdapter, ModelError } from '../src/model.mjs';
 
 function event(type, value) { return `event: ${type}\ndata: ${JSON.stringify(value)}\n\n`; }
 
+test('Token window blocks before submission independently of bytes and calibrates cached input', async () => {
+  const previousFetch = globalThis.fetch; let calls = 0;
+  globalThis.fetch = async () => { calls++; return new Response(JSON.stringify({ content: [{ type: 'text', text: 'done' }], stop_reason: 'end_turn',
+    usage: { input_tokens: 1000, cache_read_input_tokens: 2000, cache_creation_input_tokens: 1000, output_tokens: 1 } }), { status: 200 }); };
+  try {
+    const adapter = new AnthropicMessagesAdapter({ apiKey: 'test-only', baseUrl: 'https://unused.invalid', model: 'test',
+      apiVersion: '2023-06-01', maxOutputTokens: 1200, maxRequestInputTokens: 2097152, maxCostUsd: null,
+      contextWindowTokens: 10000, contextReserveTokens: 1000, compactionTriggerRatio: 0.8,
+      thinkingMode: 'adaptive', effort: 'low', stream: false, timeoutMs: 1000 });
+    await assert.rejects(adapter.complete({ messages: [{ role: 'user', content: 'x'.repeat(50000) }] }), /model context budget/);
+    assert.equal(calls, 0);
+    await adapter.complete({ messages: [{ role: 'user', content: 'small' }] });
+    assert.equal(calls, 1); assert.equal(adapter.actualInputTokens, 4000);
+    assert.ok(adapter.contextTokenScale > 1);
+  } finally { globalThis.fetch = previousFetch; }
+});
+
 test('parses streamed tool calls, usage, and the message_stop terminal event', async () => {
   const previousFetch = globalThis.fetch;
   const stream = [

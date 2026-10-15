@@ -20,7 +20,7 @@ export async function configurePiComparison({ agentDir, baseUrl, token, config }
   await mkdir(agentDir, { recursive: true });
   await writeFile(path.join(agentDir, 'models.json'), JSON.stringify({ providers: { comparison: {
     baseUrl, api: 'anthropic-messages', apiKey: token, models: [{
-      id: config.model, name: config.model, reasoning: true, input: ['text'], contextWindow: 200000,
+      id: config.model, name: config.model, reasoning: true, input: ['text'], contextWindow: config.contextWindowTokens ?? 200000,
       maxTokens: config.maxOutputTokens, cost: { input: config.inputRateUsdPerMillion, output: config.outputRateUsdPerMillion,
         cacheRead: config.inputRateUsdPerMillion, cacheWrite: config.cacheCreationRateUsdPerMillion ?? config.inputRateUsdPerMillion * 2 },
     }],

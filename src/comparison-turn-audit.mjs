@@ -3,7 +3,7 @@ import path from 'node:path';
 import { commandArguments, recognizeValidation, nodeTestSummary } from './comparison-validation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
-const names = { read_file: 'read', read: 'read', apply_patch: 'edit', edit: 'edit', write: 'edit', run_tests: 'shell', run_shell: 'shell', powershell: 'shell', bash: 'shell' };
+const names = { read_file: 'read', read: 'read', apply_patch: 'edit', write_file: 'edit', edit: 'edit', write: 'edit', run_tests: 'shell', run_shell: 'shell', powershell: 'shell', bash: 'shell' };
 const versionsEqual = (a, b) => a !== null && b !== null && Object.keys(a).length > 0 && JSON.stringify(a) === JSON.stringify(b) && Object.values(a).every(value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value));
 
 /** Observe native events only; no changes to tools, prompts or execution policy. */

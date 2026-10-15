@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { runTask } from './agent.mjs';
 import { PROJECT_ROOT, RESULT_ROOT, sha256 } from './benchmark.mjs';
-import { assertLiveConfig, loadConfig } from './config.mjs';
+import { assertBenchmarkConfig, loadConfig } from './config.mjs';
 import { validateRunId } from './run-id.mjs';
 import { WorkspaceTools } from './tools.mjs';
 import { BoundedOutput } from './output.mjs';
@@ -125,7 +125,7 @@ export async function runExecutableBenchmark({ mode = 'runtime', suite = 'runtim
   validateRunId(runId);
   // This fixture compares tool-history policies; keep summary activation fixed.
   const validatedConfig = loadConfig({ contextStrategy: strategy, initialFileLimit, historyStrategy, historyKeepRecent, compaction: 'off' }, {});
-  if (mode === 'live') { if (!config) throw new Error('Live benchmark requires configured credentials, rates, and a total budget'); assertLiveConfig(config); }
+  if (mode === 'live') { if (!config) throw new Error('Live benchmark requires configured credentials, rates, and a total budget'); assertBenchmarkConfig(config); }
   const { manifest, manifestSha256 } = await loadExecutableManifest();
   const selected = taskIds ? manifest.tasks.filter((task) => taskIds.includes(task.taskId)) : manifest.tasks;
   if (!selected.length || (taskIds && selected.length !== new Set(taskIds).size)) throw new Error('Unknown task ID in executable benchmark selection');

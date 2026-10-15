@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { lstat, readFile, readdir, realpath, stat, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, open, readFile, readdir, realpath, stat, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
@@ -64,11 +64,12 @@ export function decodeText(buffer) {
 }
 
 export class WorkspaceTools {
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true }) {
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
+    this.enableFileCreation = enableFileCreation;
     this.readEvidence = new Map();
     // Vocabulary belongs to this run only; never modify the shared hand-written table.
     this.sessionTerms = new Map();
@@ -281,7 +282,8 @@ export class WorkspaceTools {
   }
 
   modelToolDefinitions({ includeMemory = true } = {}) {
-    const base = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
+    const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
+    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
     const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
     return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
@@ -316,9 +318,50 @@ export class WorkspaceTools {
     return `Session mapping saved with source occurrence evidence: ${query} -> ${target}; evidence=${relative}#L${line}@${sourceHash.slice(0, 16)}. Applies only to this in-memory conversation.`;
   }
 
+  async writeFile({ path: relativePath, content } = {}) {
+    if (!this.enableFileCreation) throw new ToolFeedbackError('CAPABILITY_DENIED', 'File creation is disabled in this configuration');
+    if (typeof content !== 'string' || content.includes('\0')) throw new ToolFeedbackError('INPUT_INVALID', 'write_file content must be UTF-8 text without NUL bytes');
+    const data = Buffer.from(content, 'utf8');
+    if (data.length > MAX_READ_BYTES || data.toString('utf8') !== content) throw new ToolFeedbackError('INPUT_INVALID', 'write_file content must be valid UTF-8 text of at most 160 KB');
+    const filename = await this.resolveFile(relativePath, { mustExist: false });
+    const normalized = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
+    const parts = normalized.split('/');
+    if (!normalized || parts.length > 64 || parts.some(part => !part || part.includes(':'))) throw new ToolFeedbackError('INPUT_INVALID', 'write_file requires a regular workspace-relative file path');
+    if (parts.some(part => ['.git', '.tea'].includes(part.toLowerCase())) || isSensitivePath(normalized)) {
+      throw new ToolFeedbackError('CAPABILITY_DENIED', 'Creating credential files, Git metadata or agent storage is blocked');
+    }
+    let directory = this.workspace;
+    for (const part of parts.slice(0, -1)) {
+      this.signal?.throwIfAborted();
+      directory = path.join(directory, part);
+      try { await mkdir(directory); } catch (error) { if (error.code !== 'EEXIST') throw error; }
+      const info = await lstat(directory);
+      if (!info.isDirectory() || info.isSymbolicLink()) throw new ToolFeedbackError('CAPABILITY_DENIED', 'New files cannot use symlink or non-directory parents');
+      const actual = await realpath(directory), relative = path.relative(this.workspace, actual);
+      if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Creation parent escapes the workspace');
+    }
+    this.signal?.throwIfAborted();
+    let file;
+    try { file = await open(filename, 'wx'); }
+    catch (error) {
+      if (error.code === 'EEXIST') throw new ToolFeedbackError('SOURCE_MISMATCH', 'File already exists. Read it and use apply_patch; write_file never overwrites existing files');
+      throw error;
+    }
+    let identity;
+    try { identity = await file.stat(); await file.writeFile(data); }
+    catch (error) {
+      await file.close().catch(() => {});
+      // Remove only this operation's incomplete file, preserving any replacement by another writer.
+      try { const current = await lstat(filename); if (identity && current.isFile() && current.dev === identity.dev && current.ino === identity.ino) await unlink(filename); } catch { /* retain original error */ }
+      throw error;
+    }
+    await file.close();
+    return `Created ${normalized} (${data.length} UTF-8 bytes). Run relevant tests before claiming completion.`;
+  }
+
   async applyPatch({ path: relativePath, search, replace } = {}) {
     if (typeof search !== 'string' || !search.length || typeof replace !== 'string') {
-      throw new ToolFeedbackError('INPUT_INVALID', 'apply_patch requires a non-empty search string and a replace string');
+      throw new ToolFeedbackError('INPUT_INVALID', 'apply_patch requires a non-empty search string and a replace string. To create a new file, use write_file with path and content');
     }
     if (typeof relativePath === 'string' && (relativePath === '.git' || relativePath.startsWith('.git/') || relativePath === '.env' || relativePath.startsWith('.env.'))) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
@@ -341,6 +384,7 @@ export class WorkspaceTools {
   }
 
   async runTests({ command } = {}) {
+    this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
     if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
     if (!isAllowedCommand(command)) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests');
@@ -350,6 +394,7 @@ export class WorkspaceTools {
   }
 
   async runShell({ command } = {}) {
+    this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
     if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
     const value = command.trim();
     if (BLOCKED_SHELL.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Destructive commands and Git history mutations are blocked');
@@ -359,15 +404,20 @@ export class WorkspaceTools {
       return this.#spawnCommand(value, this.maxCommandMs);
     }
     if (this.approveCommand) {
-      if (!await this.approveCommand(value)) return 'Command denied by user.';
+      const approvalStarted = Date.now();
+      let approved;
+      try { approved = await this.approveCommand(value); }
+      finally { this.lastCommandTiming.approvalMs = Date.now() - approvalStarted; }
+      if (!approved) return 'Command denied by user.';
       this.signal?.throwIfAborted();
       return this.#spawnCommand(value, this.maxCommandMs);
     }
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new ToolFeedbackError('APPROVAL_UNAVAILABLE', 'Unlisted shell commands require an interactive terminal for approval');
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     let answer;
+    const approvalStarted = Date.now();
     try { answer = await rl.question(`Allow this command in the workspace?\n  ${value}\nType yes to continue: `); }
-    finally { rl.close(); }
+    finally { this.lastCommandTiming.approvalMs = Date.now() - approvalStarted; rl.close(); }
     if (answer.trim().toLowerCase() !== 'yes') return 'Command denied by user.';
     return this.#spawnCommand(value, this.maxCommandMs);
   }
@@ -379,7 +429,9 @@ export class WorkspaceTools {
     const executable = (parts.shift() || '').replace(/^"|"$/g, '');
     const args = parts.map((part) => part.replace(/^"|"$/g, ''));
     if (!executable) throw new Error('Command is empty');
-    const safeEnv = { PATH: process.env.PATH || '', PATHEXT: process.env.PATHEXT || '', SYSTEMROOT: process.env.SYSTEMROOT || '', WINDIR: process.env.WINDIR || '', TEMP: process.env.TEMP || '', TMP: process.env.TMP || '', ComSpec: process.env.ComSpec || 'cmd.exe' };
+    const safeEnv = { PATH: process.env.PATH || '', PATHEXT: process.env.PATHEXT || '', SYSTEMROOT: process.env.SYSTEMROOT || '', WINDIR: process.env.WINDIR || '', TEMP: process.env.TEMP || '', TMP: process.env.TMP || '', ComSpec: process.env.ComSpec || 'cmd.exe', PYTHONUTF8: '1', PYTHONIOENCODING: 'utf-8' };
+    const executionStarted = Date.now();
+    try {
     const output = await new Promise((resolve, reject) => {
       const npmCommand = process.platform === 'win32' && executable.toLowerCase() === 'npm';
       const child = spawn(npmCommand ? safeEnv.ComSpec : executable, npmCommand ? ['/d', '/s', '/c', ['npm', ...args].join(' ')] : args, {
@@ -420,7 +472,17 @@ export class WorkspaceTools {
           (target === 'stdout' ? stdout : stderr).append(chunk);
         });
       }
-      child.once('error', (error) => { clearTimeout(timer); signal?.removeEventListener('abort', cancel); if (!settled) { settled = true; reject(error); } });
+      child.once('error', (error) => {
+        clearTimeout(timer); signal?.removeEventListener('abort', cancel);
+        if (!settled) {
+          settled = true;
+          if (error.code === 'ENOENT') {
+            const hint = process.platform === 'win32' ? ' Windows CMD built-ins are not standalone executables.' : '';
+            const failure = new ToolFeedbackError('EXECUTABLE_UNAVAILABLE', `Executable unavailable (ENOENT).${hint} Use write_file to create files and parents, read_file to read source, or an installed executable for validation.`);
+            failure.code = error.code; reject(failure);
+          } else reject(error);
+        }
+      });
       child.once('close', async (code, processSignal) => {
         clearTimeout(timer);
         signal?.removeEventListener('abort', cancel);
@@ -440,6 +502,7 @@ export class WorkspaceTools {
       });
     });
     return output;
+    } finally { this.lastCommandTiming = { ...this.lastCommandTiming, executionMs: Date.now() - executionStarted }; }
   }
 }
 
@@ -448,6 +511,7 @@ export const TOOL_DEFINITIONS = [
   { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
   { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
+  { name: 'write_file', description: 'Create a new UTF-8 text file within the workspace and create missing parent directories. Never overwrites an existing file: read it and use apply_patch instead. Do not use shell commands to create files. Run relevant tests after creation.', input_schema: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } }, required: ['path', 'content'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
   { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
 ];
@@ -479,6 +543,7 @@ export async function dispatchTool(tools, name, input) {
     case 'read_file': return tools.readFile(input);
     case 'remember_term_mapping': return tools.rememberTermMapping(input);
     case 'apply_patch': return tools.applyPatch(input);
+    case 'write_file': return tools.writeFile(input);
     case 'run_tests': return tools.runTests(input);
     case 'run_shell': return tools.runShell(input);
     default: throw new Error(`Unknown tool: ${name}`);

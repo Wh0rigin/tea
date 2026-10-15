@@ -69,7 +69,7 @@ export class TokenLedger {
     this.totals.cacheCreationInputTokens += counts.cacheCreationInputTokens;
     this.totals.reasoningTokens += counts.reasoningTokens;
     this.totals.estimatedInputTokens += estimatedInputTokens;
-    this.totals.estimatedSpendUsd += estimatedUsd;
+    this.totals.estimatedSpendUsd = this.totals.estimatedSpendUsd === null || estimatedUsd === null ? null : this.totals.estimatedSpendUsd + estimatedUsd;
     this.totals.elapsedMs += elapsedMs;
     if (purpose === 'compaction') {
       this.totals.compactionRequests += 1;
@@ -96,7 +96,7 @@ export class TokenLedger {
     await this.event(row);
   }
 
-  async tool({ name, input, output, elapsedMs, error }) {
+  async tool({ name, input, output, elapsedMs, approvalMs, executionMs, error }) {
     this.totals.toolCalls += 1;
     this.totals.elapsedMs += elapsedMs || 0;
     this.totals.toolOutputChars += String(output || '').length;
@@ -104,6 +104,7 @@ export class TokenLedger {
       type: 'tool_call', timestamp: new Date().toISOString(), name,
       inputSha256: digest(JSON.stringify(input)), outputSha256: digest(output || ''),
       outputChars: String(output || '').length, elapsedMs, error: error ? String(error) : undefined,
+      ...(Number.isFinite(approvalMs) ? { approvalMs } : {}), ...(Number.isFinite(executionMs) ? { executionMs } : {}),
     };
     if (this.storeRaw) {
       row.input = input;

@@ -1,5 +1,7 @@
 # TEA
 
+日常 CLI 支持通过 `write_file` 原生创建 UTF-8 文件及父目录，创建后执行实际测试；已有文件使用精确补丁。自动压缩按可配置的模型 Token 窗口调度，预留输出和安全空间，并独立管理请求字节保护。详见[上下文容量配置](docs/CONTEXT_BUDGET.md)和[运行修复说明](docs/RUNTIME_REPAIR.md)。
+
 <p align="center">
   <img src="assets/tea-logo.png" alt="TEA — Token Efficient Agent" width="320">
 </p>
@@ -134,17 +136,19 @@ Claude Code 完整验收从旧实验 **1/27 变为 18/27**，未确认三角从 
 
 - Node.js 20 或更高版本。
 - Git：用于源码版本管理和后续版本配对实验。
-- 运行真实模型任务时，还需支持 Anthropic Messages 的服务商、通过进程环境提供的 API 密钥、所选 Token 分组的当前输入/输出单价，以及正数费用上限。
+- 运行真实模型任务时，还需支持 Anthropic Messages 的接口、模型和通过用户配置文件或进程环境提供的 API 密钥。日常默认无费用上限，价格仅用于可选费用估算；显式设置费用上限和真实实验时必须填写价格。
 
 项目没有 npm 运行时依赖。
 
 ## 本地运行
 
 ```powershell
-cd token-efficient-coding-agent
-npm test
-npm run tea -- --help
+git clone https://github.com/Wh0rigin/tea.git
+cd tea
+npm link
 ```
+
+先执行 **`tea config`**，通过密钥不回显的向导将接口、模型和凭据保存到用户目录 `~/.tea/config.json`。之后在目标项目目录直接执行 **`tea`**：默认进入交互模式，开启 **ContextOS、自动压缩和内存 GC**，默认不设置费用上限。环境变量可覆盖文件，不自动读取 `.env`。[配置指南](docs/CONFIGURATION.zh-CN.md)。
 
 代理默认使用当前目录作为工作区，也可通过 `--workspace` 指定。它能够列出文件、搜索和读取文本源码、应用唯一匹配的精确文本补丁，以及执行允许的验证命令。修改文件后，必须成功运行测试，运行状态才能变为 `completed`。文件写入限制在指定工作区内。测试及只读白名单以外的 Shell 命令需要交互批准，破坏性命令会被阻止。
 
@@ -157,7 +161,7 @@ V2 提供可选策略 `--history-strategy compact-tools`，配合 `--history-kee
 启动持续对话：
 
 ```powershell
-npm run tea -- --interactive --workspace ../my-project --max-cost-usd 0.10
+tea
 ```
 
 通过 `npm link` 将本地 CLI 链接后，无参数运行 `tea` 会打开相同界面。带引号的任务保持原有单次执行方式；`--interactive "任务"` 可执行初始任务后继续对话。
@@ -172,11 +176,11 @@ npm run tea -- --demo
 
 **Esc / Ctrl+C** 可中断当前任务，已完成修改会保留，未完成验证仍需继续。`/new` 清空对话和学习词表，保留已消耗预算和待验证修改；`/clear` 仅清屏。费用和累计输入上限覆盖整个终端会话；`/exit` 退出。
 
-演示使用脚本化回答和本地只读工具，不解决真实编程任务，也不产生模型用量测量。默认会话保存在内存中；使用 `--session` 或 ContextOS 可启用本地持久化和恢复。详见[终端指南（英文）](docs/TERMINAL.md)。
+演示使用脚本化回答和本地只读工具，不解决真实编程任务，也不产生模型用量测量。CLI 默认 ContextOS，会话历史保存在本地加密日志中，可通过显示的会话 ID 恢复。详见[终端指南（英文）](docs/TERMINAL.md)。
 
 ## Agent 记忆管理：ContextOS
 
-主动开启 `--memory-policy contextos` 后，完整历史写入本地加密日志，发送给模型的旧工具输出可变为可恢复引用。保留用户要求、近期和当前源码、失败信息及待验证修改；源码变化后旧证据失效。模型需要细节时可通过工具按引用或关键词恢复。默认仍使用完整历史模式。
+CLI 默认开启 ContextOS，完整历史写入本地加密日志，发送给模型的旧工具输出可变为可恢复引用。保留用户要求、近期和当前源码、失败信息及待验证修改；源码变化后旧证据失效。模型需要细节时可通过工具按引用或关键词恢复。使用 `--memory-policy full-history` 可切换为完整历史输入。程序接口 `loadConfig()` 保留完整历史回退，CLI 单独提供 ContextOS 默认值。
 
 ```sh
 npm run tea -- --interactive --session work --memory-policy contextos --max-cost-usd 1.00
@@ -198,7 +202,7 @@ npm run tea -- benchmark contextos --mode preflight --run-id contextos-check
 
 ## 配置真实模型调用
 
-在启动进程中配置凭据和价格。不要将真实 API 密钥保存到仓库、`.env`、基准测试文件或 Shell 历史中。下列密钥和价格均为占位符。
+在启动进程中配置凭据、接口与模型。价格仅用于费用估算或显式费用上限，日常无上限运行不要求填写。不要将真实 API 密钥保存到仓库、`.env`、基准测试文件或 Shell 历史中。下列密钥和价格均为占位符。
 
 ```powershell
 $env:ANTHROPIC_API_KEY = '你的API密钥'
@@ -206,15 +210,14 @@ $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'
 $env:ANTHROPIC_MODEL = 'glm-5.3-flash'
 $env:TEA_INPUT_PRICE_USD_PER_MTOK = '你的Token分组输入单价'
 $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '你的Token分组输出单价'
-$env:TEA_MAX_COST_USD = '0.10'
-$env:TEA_MAX_REQUEST_INPUT_TOKENS = '12000'
-$env:TEA_MAX_OUTPUT_TOKENS = '1200'
+$env:TEA_MAX_REQUEST_INPUT_BYTES = '2097152'
+$env:TEA_MAX_OUTPUT_TOKENS = '4096'
 $env:TEA_REASONING_EFFORT = 'low' # 可选 low、high、max
-$env:TEA_THINKING_MODE = 'adaptive'
-tea "修复会话过期错误" --max-cost-usd 0.10
+$env:TEA_THINKING_MODE = 'enabled'
+tea
 ```
 
-项目不会猜测服务商价格。每次请求前，TEA 按配置的输入/输出上限和单价预留最坏情况下的费用。输入总量包含普通输入、缓存读取和缓存写入。缓存读取按完整输入单价计算；缓存写入默认按输入单价的两倍保守预留，依据是 [Anthropic 缓存价格说明](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)，并非 PackyAPI 实测账单。
+缺少价格时仍统计 Token，费用显示未知。填写两个价格后，可用 `--max-cost-usd 1` 设置可选费用上限；已有费用上限环境变量也会生效，可用 `--max-cost-usd none` 覆盖。恢复会话保留既有较严格上限，真实实验继续要求有限预算。项目不会猜测服务商价格。设置费用上限时，每次请求前，TEA 按配置的输入/输出上限和单价预留最坏情况下的费用。输入总量包含普通输入、缓存读取和缓存写入。缓存读取按完整输入单价计算；缓存写入默认按输入单价的两倍保守预留，依据是 [Anthropic 缓存价格说明](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)，并非 PackyAPI 实测账单。
 
 传输失败的请求会保留费用预留。用量缺失、无效或流式响应中断时，整次运行的完整实际 Token 总量为 `null`；已报告的有效计数作为下界保留。真实模型测试套件共用费用和输入预算，出现失败或未知用量后停止后续调用。
 
@@ -223,6 +226,12 @@ tea "修复会话过期错误" --max-cost-usd 0.10
 参考资料：[GLM-5.3-Flash 指南](https://docs.z.ai/guides/vlm/glm-5.3-flash)、[GLM Chat Completion 参数](https://docs.z.ai/api-reference/llm/chat-completion)、[PackyAPI Anthropic Messages 配置示例](https://docs.packyapi.com/docs/cli/7-kimi-code.html)。项目约定见[决策记录](docs/DECISIONS.md)和[基准测试规范](docs/BENCHMARK_SPEC.md)。
 
 ## 基准测试与实验
+
+新增[分级编码能力测试](docs/CODING_ABILITY.md)：四档难度、每档两题，覆盖新建文件、解析器、缓存、并发、分页、事务及依赖图。`npm run benchmark:coding` 默认只做离线预检查；真实运行需要显式选择 live。
+
+[首轮真实测试结果](benchmarks/reports/coding-ability-glm-20261014-v1/README.md)：GLM-5.3-flash / low，每题一次，8/8 自编题通过完整验收，共 279,529 实际 Token。这是 Node.js 小样本诊断，不代表通用编码正确率。
+
+[与原生 Pi 的编码横向对比](benchmarks/reports/coding-ability-tea-pi-glm-20261014-v1/README.md)：功能验收 TEA 8/8、Pi 7/8；全尝试 Token 为 279,529 / 172,953，TEA 多 61.62%。双方功能通过的 7 题中，TEA 多 18.84%。复用 TEA 首轮，新增 Pi 单次运行；失败保留实际用量，验证未确认单列。
 
 ```powershell
 npm run benchmark:replay

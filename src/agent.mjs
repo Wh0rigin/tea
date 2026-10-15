@@ -7,6 +7,7 @@ import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
 import { compactConversation, requestBytes, sessionContext } from './compaction.mjs';
+import { contextBudget } from './context-budget.mjs';
 import { memorySessionFields, attachSessionJournal, appendSessionMessage, restoreToolMemory,
   persistRuntimeState, closeSessionJournal, resetPersistentConversation } from './session-memory.mjs';
 import { ContextMemory } from './context-assembler.mjs';
@@ -41,7 +42,7 @@ function validationSucceeded(output) {
 export function createAgentSession(config) {
   return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
     running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [],
-    compaction: null, compactionCount: 0, ...memorySessionFields(config) };
+    compaction: null, compactionCount: 0, autoCompactionBackoff: null, ...memorySessionFields(config) };
 }
 
 export function resetConversation(session, config) {
@@ -53,6 +54,7 @@ export function resetConversation(session, config) {
   session.messages.length = 0;
   session.compaction = null;
   session.compactionCount = 0;
+  session.autoCompactionBackoff = null;
   session.tools?.sessionTerms.clear();
   session.tools?.unresolvedQueries.clear();
   session.tools?.readEvidence.clear();
@@ -96,11 +98,13 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   await ledger.init({ workspace: config.workspace, taskSha256: createTaskHash(task), effort: config.effort,
     runType: offline ? 'offline-runtime' : 'live', usageSource: offline ? 'scripted' : 'provider' });
   const deduplicateReads = ['v1-dedup', 'v1', 'v1-expanded', 'v1-auto'].includes(config.contextStrategy);
-  const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads });
+  const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads,
+    enableFileCreation: config.enableFileCreation ?? true });
   await tools.init();
   tools.ledger = ledger;
   tools.signal = signal;
   tools.approveCommand = approveCommand;
+  tools.enableFileCreation = config.enableFileCreation ?? true;
   session.tools = tools;
   restoreToolMemory(session, tools);
   if (config.memoryPolicy === 'contextos') {
@@ -121,7 +125,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (!adapter || typeof adapter.complete !== 'function') throw new TypeError('Adapter must implement complete');
   session.adapter = adapter;
   if (session.restoredBudget) {
-    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens']) adapter[field] = session.restoredBudget[field];
+    for (const field of ['spentUsd', 'spentInputBound', 'actualInputTokens', 'costKnown', 'contextTokenScale']) if (session.restoredBudget[field] !== undefined) adapter[field] = session.restoredBudget[field];
     session.restoredBudget = null;
   }
   session.offline = offline;
@@ -133,12 +137,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       await session.journal.append('request_settled', { requestId: event.requestId, purpose: requestPurpose,
         usage: event.usage, usageStatus: event.usageStatus, costBasis: event.costBasis,
         requestSha256: createTaskHash(JSON.stringify(event.payload)), responseSha256: createTaskHash(JSON.stringify(event.response)),
-        budget: { spentUsd: adapter.spentUsd, spentInputBound: adapter.spentInputBound,
+        budget: { spentUsd: adapter.spentUsd, costKnown: adapter.costKnown, contextTokenScale: adapter.contextTokenScale || 1, spentInputBound: adapter.spentInputBound,
           actualInputTokens: adapter.actualInputTokens, blockedUnknown: session.budgetUnknown } });
     }
     await ledger.request({ ...event, purpose: requestPurpose });
     emit({ type: 'usage', totals: { ...ledger.totals }, usageComplete: ledger.completeUsageRequests === ledger.totals.requests,
-      spentUsd: adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
+      spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, reserved: event.costBasis === 'full-preflight-reservation' });
   };
   const summarize = async (state, reason, instructions = '') => {
     requestPurpose = 'compaction';
@@ -153,6 +157,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           return requestBytes(config, plan.request);
         } });
       if (outcome.status === 'compacted') {
+        session.autoCompactionBackoff = null;
         const gc = await collectCompactedHistory(session, config, state);
         emit({ type: 'memory_gc', ...gc });
         if (gc.status === 'collected') {
@@ -178,7 +183,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     const summary = await ledger.finish({ status: outcome.status, prompt: task });
     await persistRuntimeState(session);
     onText(`Conversation compaction: ${outcome.status}.${outcome.detail ? ` ${outcome.detail}` : ''}`);
-    emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.spentUsd,
+    emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd,
       changedFiles: session.changedFiles, pendingValidation: session.pendingValidation, runDirectory: ledger.directory });
     return { ...outcome, summary, toolCalls: 0, changedFiles: [...session.changedFiles],
       validationPassed: session.validationPassed, validationAttempts: session.validationAttempts,
@@ -193,7 +198,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand }) : null;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)
@@ -238,20 +243,32 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let autoCompactionAttempts = 0;
   const attemptedContexts = new Set();
 
+  let autoCompactionFailedThisTurn = false;
   try {
     while (toolCalls <= config.maxToolCalls) {
       if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
         let prepared = await prepareRequest();
-        while (config.compaction === 'auto' && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
-          && (requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.compactionTriggerRatio ?? 0.8)
+        const backoff = session.autoCompactionBackoff;
+        const currentBytes = requestBytes(config, prepared.request), currentResidentBytes = residentHistoryBytes(session);
+        const cooledDown = !backoff || currentBytes >= backoff.requestBytes + Math.max(4096, backoff.requestBytes * 0.25)
+          || currentResidentBytes >= backoff.residentBytes + Math.max(4096, backoff.residentBytes * 0.25);
+        while (config.compaction === 'auto' && !autoCompactionFailedThisTurn && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
+          && ((contextBudget(config, prepared.request, adapter.contextTokenScale)?.estimatedInputTokens ?? 0) >=
+              (contextBudget(config, prepared.request, adapter.contextTokenScale)?.triggerTokens ?? Infinity)
+            || requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.contextWindowTokens ? 0.95 : (config.compactionTriggerRatio ?? 0.8))
             || (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes))) {
           const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
           if (attemptedContexts.has(fingerprint)) break;
           attemptedContexts.add(fingerprint);
           autoCompactionAttempts += 1;
           const outcome = await summarize(runtimeState(), 'threshold');
+          if (outcome.status === 'unchanged') {
+            autoCompactionFailedThisTurn = true;
+            session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request), residentBytes: residentHistoryBytes(session) };
+            await persistRuntimeState(session, runtimeState());
+          }
           if (outcome.status !== 'compacted') break;
           prepared = await prepareRequest();
         }
@@ -337,7 +354,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
           output = await dispatchTool(tools, call.name, call.input || {});
-          if (call.name === 'apply_patch') {
+          if (['apply_patch', 'write_file'].includes(call.name)) {
             pendingValidation = true;
             validationPassed = false;
             const filename = call.input?.path || '(unknown file)';
@@ -360,11 +377,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
         output = appendFailureFeedback(output, feedback);
         if (feedback) isError = true;
-        await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, error: isError ? output : undefined });
+        const commandTiming = ['run_tests', 'run_shell'].includes(call.name) && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
+        await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, ...commandTiming, error: isError ? output : undefined });
         const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError, ...(feedback ? { feedback } : {}) });
         if (session.taskState) {
           const taskState = session.taskState;
-          taskState.phase = call.name === 'apply_patch' ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
+          taskState.phase = ['apply_patch', 'write_file'].includes(call.name) ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
           if (call.input?.path && !taskState.active_files.includes(call.input.path)) taskState.active_files.push(call.input.path);
           const finding = { toolId: call.id, tool: call.name, provenance: 'observed', sourceEventId: observedEvent?.eventId || null,
             outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError, ...(feedback ? { feedback } : {}) };
@@ -372,11 +390,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           if (isError || /^exit=[^0]/.test(output) || feedback) taskState.failed_attempts.push(finding);
           taskState.validation = runtimeState();
           taskState.pending_steps = pendingValidation ? [{ action: 'Run relevant validation on current source', provenance: 'observed', sourceEventId: observedEvent?.eventId || null }] : [];
-          taskState.budget_remaining = Math.max(0, (adapter.config?.maxCostUsd ?? config.maxCostUsd) - (adapter.spentUsd || 0));
+          const costCap = adapter.config ? adapter.config.maxCostUsd : config.maxCostUsd;
+          taskState.budget_remaining = costCap == null ? null : Math.max(0, costCap - (adapter.spentUsd || 0));
           taskState.evidence_refs = [...(session.contextMemory?.units.keys() || [])];
         }
         await persistRuntimeState(session, runtimeState());
-        emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, isError });
+        emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, ...commandTiming, isError });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
       }
       await appendSessionMessage(session, { role: 'user', content: toolResults });
@@ -394,7 +413,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });
-  emit({ type: 'turn_end', status, summary, spentUsd: adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
+  emit({ type: 'turn_end', status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
   return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
     runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, sessionId: session.persistent ? session.sessionId : null,
     wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };

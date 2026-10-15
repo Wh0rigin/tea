@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { normalizeAnthropicUsage } from './usage.mjs';
+import { hasProviderPrices } from './config.mjs';
+import { contextBudget, estimateContextTokens } from './context-budget.mjs';
 
 export class ModelError extends Error {
   constructor(message, status) { super(message); this.name = 'ModelError'; this.status = status; }
@@ -144,21 +146,23 @@ async function readSseMessage(body, onTextDelta) {
 }
 
 export class AnthropicMessagesAdapter {
-  constructor(config) { this.config = config; }
+  constructor(config) { this.config = config; this.costKnown = hasProviderPrices(config); }
 
   async complete({ system, messages, tools, maxTokens, signal, onTextDelta }) {
     signal?.throwIfAborted();
     const config = this.config;
     const outputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
-    if (this.requestInFlight) throw new ModelError('Concurrent requests are blocked to preserve the hard budget');
-    if (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0
-      || !Number.isFinite(config.inputRateUsdPerMillion) || config.inputRateUsdPerMillion < 0
-      || !Number.isFinite(config.outputRateUsdPerMillion) || config.outputRateUsdPerMillion < 0
+    if (this.requestInFlight) throw new ModelError('Concurrent requests are blocked to preserve session accounting');
+    const capped = config.maxCostUsd != null;
+    const priced = hasProviderPrices(config);
+    if ((capped && (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0 || !priced))
+      || [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion].some(value => value !== undefined && (!Number.isFinite(value) || value < 0))
       || !Number.isSafeInteger(config.maxRequestInputTokens) || config.maxRequestInputTokens <= 0
       || !Number.isSafeInteger(config.maxOutputTokens) || config.maxOutputTokens <= 0
       || !Number.isSafeInteger(outputLimit) || outputLimit <= 0) {
-      throw new ModelError('Live requests require a finite positive cost cap, valid input/output rates, and positive integer token limits');
+      throw new ModelError('Live requests require valid optional prices, a positive explicit cost cap with prices when configured, and positive integer token limits');
     }
+    if (capped && !this.costKnown) throw new ModelError('Cannot apply a monetary cap to a session with unpriced historical spending; start a new session');
     if (outputLimit > config.maxOutputTokens) throw new ModelError('Request output limit cannot exceed the configured maxOutputTokens cap');
     if (!['adaptive', 'enabled'].includes(config.thinkingMode)) throw new ModelError('Unsupported thinking mode');
     if (!['low', 'high', 'max'].includes(config.effort)) throw new ModelError('Unsupported reasoning effort');
@@ -173,20 +177,24 @@ export class AnthropicMessagesAdapter {
     const url = `${config.baseUrl}/v1/messages`;
     const requestBytes = Buffer.byteLength(JSON.stringify(body), 'utf8');
     const conservativeInputBound = requestBytes;
+    const tokenBudget = contextBudget(config, { system, messages, tools, maxTokens: outputLimit }, this.contextTokenScale);
+    if (tokenBudget && tokenBudget.estimatedInputTokens > tokenBudget.inputLimit) {
+      throw new ModelError(`Request blocked by model context budget: estimated input ${tokenBudget.estimatedInputTokens} tokens exceeds ${tokenBudget.inputLimit}; compact or start a new conversation`);
+    }
     if (conservativeInputBound > config.maxRequestInputTokens) {
       throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`);
     }
     // Cache reads are charged without their discount; unknown write TTL uses
     // the standard Anthropic 1-hour (2x input) rate as a conservative default.
     const cacheCreationRate = config.cacheCreationRateUsdPerMillion ?? config.inputRateUsdPerMillion * 2;
-    if (!Number.isFinite(cacheCreationRate) || cacheCreationRate < 0) {
+    if ((priced || config.cacheCreationRateUsdPerMillion !== undefined) && (!Number.isFinite(cacheCreationRate) || cacheCreationRate < 0)) {
       throw new ModelError('Cache creation rate must be a non-negative finite number');
     }
     const reserveInputRate = Math.max(config.inputRateUsdPerMillion, cacheCreationRate);
-    const reserveUsd = (config.maxRequestInputTokens * reserveInputRate + body.max_tokens * config.outputRateUsdPerMillion) / 1_000_000;
-    const reportedCost = (counts) => ((counts.uncachedInputTokens + counts.cachedInputTokens) * config.inputRateUsdPerMillion
-      + counts.cacheCreationInputTokens * cacheCreationRate + counts.outputTokens * config.outputRateUsdPerMillion) / 1_000_000;
-    if (this.spentUsd + reserveUsd > config.maxCostUsd + Number.EPSILON) {
+    const reserveUsd = priced ? (config.maxRequestInputTokens * reserveInputRate + body.max_tokens * config.outputRateUsdPerMillion) / 1_000_000 : null;
+    const reportedCost = (counts) => priced ? ((counts.uncachedInputTokens + counts.cachedInputTokens) * config.inputRateUsdPerMillion
+      + counts.cacheCreationInputTokens * cacheCreationRate + counts.outputTokens * config.outputRateUsdPerMillion) / 1_000_000 : null;
+    if (capped && this.spentUsd + reserveUsd > config.maxCostUsd + Number.EPSILON) {
       throw new ModelError(`Request blocked by hard cost budget: estimated upper bound $${reserveUsd.toFixed(6)} would exceed remaining $${Math.max(0, config.maxCostUsd - this.spentUsd).toFixed(6)}`);
     }
     if (config.maxInputTokens !== undefined && this.spentInputBound + conservativeInputBound > config.maxInputTokens) {
@@ -230,18 +238,21 @@ export class AnthropicMessagesAdapter {
         throw error;
       }
       const actualUsd = reportedCost(counts);
-      this.spentUsd += actualUsd;
+      if (actualUsd !== null) this.spentUsd += actualUsd;
+      else this.costKnown = false;
       this.spentInputBound += conservativeInputBound;
       this.actualInputTokens += counts.inputTokens;
+      if (tokenBudget) this.contextTokenScale = Math.max(this.contextTokenScale || 1,
+        counts.inputTokens / estimateContextTokens({ system, messages, tools }));
       recorded = true;
-      await this.onRequest?.({ requestId, payload: body, response: result, usage, usageStatus: 'complete', costBasis: 'conservative-reported-usage', estimatedInputTokens: conservativeInputBound, estimatedUsd: actualUsd, elapsedMs: Date.now() - started });
-      if (counts.inputTokens > config.maxRequestInputTokens || counts.outputTokens > body.max_tokens) {
+      await this.onRequest?.({ requestId, payload: body, response: result, usage, usageStatus: 'complete', costBasis: priced ? 'conservative-reported-usage' : 'reported-usage-unpriced', estimatedInputTokens: conservativeInputBound, estimatedUsd: actualUsd, elapsedMs: Date.now() - started });
+      if (counts.inputTokens > (tokenBudget ? tokenBudget.inputLimit : config.maxRequestInputTokens) || counts.outputTokens > body.max_tokens) {
         throw new ModelError('Provider-reported usage exceeded the per-request token limits; stopping after this billed request');
       }
-      if (actualUsd > reserveUsd + Number.EPSILON) {
+      if (capped && actualUsd > reserveUsd + Number.EPSILON) {
         throw new ModelError('Provider-reported usage exceeded the preflight reservation; stopping to protect the hard budget');
       }
-      if (this.spentUsd > config.maxCostUsd + Number.EPSILON) {
+      if (capped && this.spentUsd > config.maxCostUsd + Number.EPSILON) {
         throw new ModelError('Provider-reported usage exceeded the hard cost budget; stopping after this billed request');
       }
       if (config.maxInputTokens !== undefined && this.actualInputTokens > config.maxInputTokens) {
@@ -256,13 +267,14 @@ export class AnthropicMessagesAdapter {
         const counts = normalizeAnthropicUsage(usage);
         const completeUsage = error.usageStatus === 'complete' && counts.complete;
         const retainedUsd = completeUsage ? reportedCost(counts) : reserveUsd;
-        this.spentUsd += retainedUsd;
+        if (retainedUsd !== null) this.spentUsd += retainedUsd;
+        else this.costKnown = false;
         this.spentInputBound += conservativeInputBound;
         if (completeUsage) this.actualInputTokens += counts.inputTokens;
         recorded = true;
         await this.onRequest?.({ requestId, payload: body, response: result || null, usage,
           usageStatus: error.usageStatus || 'unknown',
-          costBasis: completeUsage ? 'conservative-reported-usage' : 'full-preflight-reservation',
+          costBasis: priced ? (completeUsage ? 'conservative-reported-usage' : 'full-preflight-reservation') : 'unpriced-unknown-or-reported-usage',
           estimatedInputTokens: conservativeInputBound, estimatedUsd: retainedUsd,
           elapsedMs: Date.now() - started, error: safeProviderError(error.message) });
       }

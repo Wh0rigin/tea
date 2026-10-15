@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import { runTask } from './agent.mjs';
-import { loadConfig, ConfigError } from './config.mjs';
+import { loadCliConfig, loadConfig, ConfigError } from './config.mjs';
 import { compareRuns, loadRun, renderComparisonReport, renderRunReport, runReplayBenchmark, RESULT_ROOT } from './benchmark.mjs';
 import { renderExecutableReport, runExecutableBenchmark } from './runtime-benchmark.mjs';
 import { runInteractive } from './terminal.mjs';
 import { listSessions, deleteSession } from './session-journal.mjs';
 import { inspectSession } from './session-memory.mjs';
 import { validateRunId } from './run-id.mjs';
+import { resolveUserEnvironment, userConfigCommand } from './user-config.mjs';
 
-const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea <task> [--workspace PATH] [--context-strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--max-cost-usd USD] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 24\n\nLive calls require an API key, a positive hard budget, and provider-specific input/output prices.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.`;
+const HELP = `tea — independent terminal coding agent\n\nUsage:\n  tea                         # interactive; ContextOS/compaction/GC on; no cost cap\n  tea <task> [--workspace PATH] [--context-strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--max-cost-usd USD|none] [--max-input-tokens N] [--effort low|high|max]\n  tea benchmark run --suite core --mode replay [--strategy baseline|v1-dedup|v1-inventory|v1|v1-inventory-expanded|v1-expanded|v1-inventory-auto|v1-auto] [--initial-file-limit N] [--run-id ID]\n  tea benchmark compare --base-run ID --candidate-run ID\n  tea benchmark report --run ID\n\nExamples (PowerShell):\n  $env:ANTHROPIC_API_KEY = '…'\n  $env:ANTHROPIC_BASE_URL = 'https://cf.api.fan'\n  $env:ANTHROPIC_MODEL = 'glm-5.3-flash'\n  $env:TEA_INPUT_PRICE_USD_PER_MTOK = '...' # current price from your token group\n  $env:TEA_OUTPUT_PRICE_USD_PER_MTOK = '...'\n  tea "Fix the session expiration bug" --max-cost-usd 0.10\n  tea benchmark run --suite core --mode replay --strategy v1 --initial-file-limit 24\n\nCLI defaults: interactive when no task is supplied, ContextOS, automatic compaction and memory GC. No monetary cap by default. Live calls require an API key from tea config or the environment; prices are optional unless you set a cost cap.\nSet TEA_REASONING_EFFORT to low, high, or max for GLM-5.3-Flash.`;
 
-const COMPACTION_HELP = '\nConversation compaction:\n  tea --interactive --compaction auto --max-cost-usd USD\n  /compact [retention instructions]   # summarize older conversation\n  --compaction off|auto               # default auto; use off to opt out\n  --compaction-keep-recent-bytes N     # recent message retention in UTF-8 bytes\nSummary requests share the session model, usage ledger and hard budget.\n  --memory-gc auto|off                # default auto; durable checkpoint collection\n';
-const SESSION_HELP = '\nPersistent memory (opt-in):\n  --session ID                       # create a durable session\n  --resume ID                        # continue the original workspace/model/budget\n  --memory-policy full-history|compact-tools|contextos\n  --contextos-target-bytes N          # soft request target; not provider tokens\n  tea sessions list|inspect|delete [ID] [--workspace PATH]\n  tea benchmark contextos --mode preflight|live [--run-id ID]\n  /memory                            # explain the last context working set\n';
+const COMPACTION_HELP = '\nConversation compaction:\n  tea --interactive --compaction auto --max-cost-usd USD|none\n  /compact [retention instructions]   # summarize older conversation\n  --compaction off|auto               # default auto; use off to opt out\n  --compaction-keep-recent-bytes N     # recent message retention in UTF-8 bytes\nSummary requests share the session model, usage ledger and optional monetary cap.\n  --memory-gc auto|off                # default auto; durable checkpoint collection\n';
+const USER_CONFIG_HELP = '\nUser configuration:\n  tea config            # interactive setup; API key input is hidden\n  tea config init       # create ~/.tea/config.json without overwriting\n  tea config show       # show file settings with the key hidden\n  tea config path       # print the user config path\nCLI options override environment; environment overrides user file.\n';
+const SESSION_HELP = '\nPersistent memory (ContextOS enabled by default in the CLI):\n  --session ID                       # create a durable session\n  --resume ID                        # continue the original workspace/model/budget\n  --memory-policy full-history|compact-tools|contextos  # CLI default contextos\n  --contextos-target-bytes N          # soft request target; not provider tokens\n  tea sessions list|inspect|delete [ID] [--workspace PATH]\n  tea benchmark contextos --mode preflight|live [--run-id ID]\n  /memory                            # explain the last context working set\n';
 
 function parseOptions(args) {
   const options = {};
@@ -38,12 +40,13 @@ function parseOptions(args) {
 
 async function main() {
   const args = process.argv.slice(2);
-  if (args.includes('--help') || args.includes('-h')) process.stdout.write(SESSION_HELP);
+  if (args.includes('--help') || args.includes('-h')) process.stdout.write(USER_CONFIG_HELP + SESSION_HELP);
   if (args.includes('--help') || args.includes('-h') || (!args.length && !process.stdin.isTTY)) { process.stdout.write(HELP + COMPACTION_HELP + '\n\nInteractive terminal:\n  tea                         # start a conversation in a terminal\n  tea --interactive [task]     # keep talking after the initial task\n  tea --demo                  # offline interface preview, no API calls\n  /help /status /tools /diff /compact /new /clear /cancel /exit\n  Esc or Ctrl+C stops the current turn; spending is shared across turns.\n\nHistory experiments:\n  tea <task> --history-strategy full|compact-tools [--history-keep-recent 2]\n  tea benchmark memory [--history-keep-recent 2] [--run-id ID]\n\nExecutable fixtures:\n  tea benchmark run --suite runtime-smoke --mode runtime [--strategy baseline|v1] [--history-strategy full|compact-tools] [--fixture-variant solution|extended] [--run-id ID]\n  tea benchmark run --suite runtime-smoke --mode live --max-cost-usd USD\n\nRuntime mode uses scripted tool choices and real code/tests, without network access.\nThe extended variant is an artificial verbose-log stress profile, available only in runtime mode.\nHistory experiments measure serialized input size, not provider tokens or model success.\nLive mode applies --max-cost-usd to the whole suite and requires current provider rates.\n'); return; }
   const group = args[0];
+  if (group === 'config') { await userConfigCommand(args.slice(1)); return; }
   if (group === 'benchmark') { await benchmarkCommand(args.slice(1)); return; }
   if (group === 'sessions') {
-    const parsed = parseOptions(args.slice(2)), config = loadConfig(parsed), id = parsed.positional[0];
+    const parsed = parseOptions(args.slice(2)), config = loadConfig(parsed, resolveUserEnvironment()), id = parsed.positional[0];
     if (args[1] === 'list') console.log(JSON.stringify(await listSessions(config.workspace), null, 2));
     else if (args[1] === 'inspect' && id) console.log(JSON.stringify(await inspectSession(config, id), null, 2));
     else if (args[1] === 'delete' && id) { await deleteSession(config.workspace, id); console.log('Session deleted: ' + id); }
@@ -53,7 +56,8 @@ async function main() {
 
   const parsed = parseOptions(args);
   const task = parsed.positional.join(' ').trim();
-  const config = loadConfig(parsed);
+  const userEnvironment = resolveUserEnvironment();
+  const config = loadCliConfig(parsed, userEnvironment);
   if (parsed.interactive || (!task && process.stdin.isTTY)) {
     await runInteractive(config, { demo: parsed.demo, initialTask: task || undefined });
     return;

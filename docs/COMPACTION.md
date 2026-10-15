@@ -23,7 +23,7 @@ tea --interactive --compaction auto --max-cost-usd 0.10
 tea "Fix the retry budget" --compaction auto --max-cost-usd 0.10
 ```
 
-Normal live credential and price configuration is required. The offline terminal demo does not generate summaries.
+Normal live credentials are required. Prices are optional without a monetary cap; explicit cost caps and live experiments require prices. The offline terminal demo does not generate summaries.
 
 ## Context and original history
 

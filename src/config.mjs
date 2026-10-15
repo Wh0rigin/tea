@@ -36,7 +36,7 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isInteger(initialFileLimit) || initialFileLimit < 1 || initialFileLimit > 250) throw new ConfigError('--initial-file-limit / TEA_INITIAL_FILE_LIMIT must be an integer from 1 through 250');
   const historyStrategy = String(options.historyStrategy || env.TEA_HISTORY_STRATEGY || 'full').toLowerCase();
   if (!['full', 'compact-tools'].includes(historyStrategy)) throw new ConfigError('History strategy must be full or compact-tools');
-  const memoryPolicy = String(options.memoryPolicy || env.TEA_MEMORY_POLICY || (historyStrategy === 'compact-tools' ? 'compact-tools' : 'full-history')).toLowerCase();
+  const memoryPolicy = String(options.memoryPolicy || env.TEA_MEMORY_POLICY || (historyStrategy === 'compact-tools' ? 'compact-tools' : options.defaultMemoryPolicy || 'full-history')).toLowerCase();
   if (!['full-history', 'compact-tools', 'contextos'].includes(memoryPolicy)) throw new ConfigError('Memory policy must be full-history, compact-tools or contextos');
   const sessionId = options.sessionId || env.TEA_SESSION_ID;
   const resume = options.resume;
@@ -50,12 +50,21 @@ export function loadConfig(options = {}, env = process.env) {
   if (!['off', 'auto'].includes(compaction)) throw new ConfigError('Compaction must be off or auto');
   const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
   if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
-  const maxRequestInputTokens = Math.floor(positiveNumber(env.TEA_MAX_REQUEST_INPUT_TOKENS, 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
+  const contextWindowValue = options.contextWindowTokens ?? env.TEA_CONTEXT_WINDOW_TOKENS ?? options.defaultContextWindowTokens;
+  const contextWindowTokens = contextWindowValue === undefined ? undefined : positiveNumber(contextWindowValue, undefined, 'Context window tokens');
+  const contextReserveTokens = positiveNumber(options.contextReserveTokens ?? env.TEA_CONTEXT_RESERVE_TOKENS, 4096, 'Context reserve tokens');
+  const configuredOutput = Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, options.defaultMaxOutputTokens ?? 1200, 'TEA_MAX_OUTPUT_TOKENS'));
+  if (!Number.isSafeInteger(contextReserveTokens) || (contextWindowTokens !== undefined &&
+    (!Number.isSafeInteger(contextWindowTokens) || contextWindowTokens <= configuredOutput + contextReserveTokens))) {
+    throw new ConfigError('Context window must be a safe integer larger than output plus reserve tokens');
+  }
+  const maxRequestInputTokens = Math.floor(positiveNumber(options.maxRequestInputBytes ?? env.TEA_MAX_REQUEST_INPUT_BYTES ?? env.TEA_MAX_REQUEST_INPUT_TOKENS,
+    options.defaultMaxRequestInputBytes ?? 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
   const contextosTargetBytes = positiveNumber(options.contextosTargetBytes ?? env.TEA_CONTEXTOS_TARGET_BYTES,
-    Math.max(1, Math.floor(maxRequestInputTokens * .5)), 'ContextOS target bytes');
+    options.defaultContextosTargetBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * .5)), 'ContextOS target bytes');
   if (!Number.isSafeInteger(contextosTargetBytes)) throw new ConfigError('ContextOS target bytes must be a positive safe integer');
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
-    Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
+    options.defaultCompactionKeepRecentBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
   const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
   if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
@@ -68,11 +77,10 @@ export function loadConfig(options = {}, env = process.env) {
     if (!Number.isSafeInteger(value)) throw new ConfigError('Memory and storage byte limits must be safe integers');
   }
 
-  const maxCostUsd = nonNegativeNumber(
-    options.maxCostUsd ?? env.TEA_MAX_COST_USD,
-    0,
-    '--max-cost-usd / TEA_MAX_COST_USD'
-  );
+  const costOption = options.maxCostUsd ?? env.TEA_MAX_COST_USD;
+  const maxCostUsd = costOption === undefined || costOption === '' || costOption === null || String(costOption).toLowerCase() === 'none'
+    ? null : nonNegativeNumber(costOption, null, '--max-cost-usd / TEA_MAX_COST_USD');
+  if (maxCostUsd === 0) throw new ConfigError('Use --max-cost-usd none to disable the monetary cap, or specify a positive amount');
   const inputRate = env.TEA_INPUT_PRICE_USD_PER_MTOK === undefined || env.TEA_INPUT_PRICE_USD_PER_MTOK === ''
     ? undefined : Number(env.TEA_INPUT_PRICE_USD_PER_MTOK);
   const outputRate = env.TEA_OUTPUT_PRICE_USD_PER_MTOK === undefined || env.TEA_OUTPUT_PRICE_USD_PER_MTOK === ''
@@ -92,10 +100,13 @@ export function loadConfig(options = {}, env = process.env) {
     maxCostUsd,
     inputRateUsdPerMillion: inputRate,
     outputRateUsdPerMillion: outputRate,
-    maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, 1200, 'TEA_MAX_OUTPUT_TOKENS')),
+    maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, options.defaultMaxOutputTokens ?? 1200, 'TEA_MAX_OUTPUT_TOKENS')),
     maxRequestInputTokens,
+    maxRequestInputBytes: maxRequestInputTokens,
+    contextWindowTokens, contextReserveTokens,
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
-    capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === '1',
+    capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
+    enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
     effort,
     thinkingMode,
@@ -127,18 +138,35 @@ export function loadConfig(options = {}, env = process.env) {
 }
 
 export function assertLiveConfig(config) {
-  if (!config.apiKey) throw new ConfigError('Set ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment');
-  if (!Number.isFinite(config.maxCostUsd) || !(config.maxCostUsd > 0)) throw new ConfigError('A positive finite --max-cost-usd or TEA_MAX_COST_USD is required for live calls');
-  if (config.inputRateUsdPerMillion === undefined || config.outputRateUsdPerMillion === undefined) {
+  if (!config.apiKey) throw new ConfigError('Run tea config to save your API settings, or set ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment');
+  if (config.maxCostUsd != null && (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0)) throw new ConfigError('An explicit cost cap must be finite and positive');
+  if (config.maxCostUsd != null && !hasProviderPrices(config)) {
     throw new ConfigError('Set both TEA_INPUT_PRICE_USD_PER_MTOK and TEA_OUTPUT_PRICE_USD_PER_MTOK to the current provider rates before making live calls');
   }
-  for (const value of [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion, config.cacheCreationRateUsdPerMillion ?? 0]) {
+  for (const value of [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion, config.cacheCreationRateUsdPerMillion].filter(value => value !== undefined)) {
     if (!Number.isFinite(value) || value < 0) throw new ConfigError('Provider prices must be finite non-negative numbers');
   }
   for (const field of ['maxOutputTokens', 'maxRequestInputTokens', 'maxToolCalls', 'timeoutMs']) {
     if (!Number.isSafeInteger(config[field]) || config[field] <= 0) throw new ConfigError(`${field} must be a positive safe integer`);
   }
   if (config.maxInputTokens !== undefined && (!Number.isSafeInteger(config.maxInputTokens) || config.maxInputTokens <= 0)) throw new ConfigError('maxInputTokens must be a positive safe integer');
+}
+
+export function loadCliConfig(options = {}, env = process.env) {
+  return loadConfig({ ...options,
+    defaultMemoryPolicy: options.historyStrategy || env.TEA_HISTORY_STRATEGY ? undefined : 'contextos',
+    defaultMaxRequestInputBytes: 2097152, defaultMaxOutputTokens: 4096, defaultContextWindowTokens: 32768,
+    defaultCompactionKeepRecentBytes: 16000,
+    defaultContextosTargetBytes: 32000, defaultCapabilityFeedback: true }, env);
+}
+
+export function hasProviderPrices(config) {
+  return [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion].every(value => Number.isFinite(value) && value >= 0);
+}
+
+export function assertBenchmarkConfig(config) {
+  assertLiveConfig(config);
+  if (!Number.isFinite(config.maxCostUsd) || config.maxCostUsd <= 0) throw new ConfigError('Live experiments require a positive finite --max-cost-usd and current provider prices');
 }
 
 export function estimateUsd(inputTokens, outputTokens, config) {

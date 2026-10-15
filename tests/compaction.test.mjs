@@ -11,6 +11,13 @@ import { TokenLedger } from '../src/ledger.mjs';
 
 const headings = ['Goal', 'Constraints', 'Progress', 'Decisions', 'Next steps', 'Critical context'];
 const summary = headings.map(h => `## ${h}\nKeep the API; read source and verify outstanding edits.`).join('\n');
+
+test('summary planning respects Token capacity even when the wire guard is large', () => {
+  const s = session(); s.messages[0].content = 'x'.repeat(30000);
+  const plan = prepareCompaction(s, cfg({ maxRequestInputTokens: 2097152, contextWindowTokens: 8192,
+    contextReserveTokens: 4096, compactionKeepRecentBytes: 600 }));
+  assert.equal(plan.status, 'unavailable');
+});
 const done = (text = summary) => ({ content: [{ type: 'text', text }], stop_reason: 'end_turn' });
 const cfg = overrides => ({ ...loadConfig({}, {}), maxRequestInputTokens: 64000, maxOutputTokens: 4096,
   compactionKeepRecentBytes: 600, stream: false, ...overrides });
@@ -49,6 +56,13 @@ test('short histories do not submit a summary request', async () => {
     const { requests, outcome } = await compact({ messages });
     assert.equal(requests.length, 0); assert.equal(outcome.status, 'not_needed');
   }
+});
+
+test('automatic compaction skips a nonreducing preview before calling the model', async () => {
+  const { outcome, requests } = await compact(session(), cfg(), {
+    reason: 'threshold', measureContext: async () => 1000,
+  });
+  assert.equal(outcome.status, 'not_needed'); assert.equal(requests.length, 0);
 });
 test('commits a smaller checkpoint without rewriting messages or retained thinking', async () => {
   const s = session();
@@ -275,6 +289,22 @@ test('automatic compaction is bounded across a task and never turns a summary in
   } }) });
   assert.equal(summaries, 1); assert.equal(tasks, 3); assert.equal(result.status, 'needs_validation');
   assert.equal(result.validationPassed, false); assert.equal(s.pendingValidation, true);
+}));
+
+test('a nonreducing automatic summary is not retried after more tools in the same turn', async () => temporary(async root => {
+  await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');
+  const config = cfg({ workspace: root, runId: 'backoff', compaction: 'auto', memoryGc: 'off',
+    compactionTriggerRatio: 0.01, compactionMaxPerTurn: 8 });
+  const s = createAgentSession(config); s.messages = history();
+  let summaries = 0, tasks = 0;
+  const result = await runTask('Inspect source', config, { session: s, adapterFactory: () => ({ complete: async request => {
+    if (!request.tools.length) { summaries++; return done(headings.map(h => `## ${h}\n${'large summary '.repeat(600)}`).join('\n')); }
+    tasks++;
+    if (tasks <= 3) return { content: [{ type: 'tool_use', id: `backoff-${tasks}`, name: 'read_file', input: { path: 'value.mjs' } }], stop_reason: 'tool_use' };
+    return done('Inspected.');
+  } }) });
+  assert.equal(result.status, 'completed'); assert.equal(summaries, 1);
+  assert.equal(s.compactionCount, 0); assert.ok(s.autoCompactionBackoff.requestBytes > 0);
 }));
 test('fresh reads after compaction return real source and actual tests can discharge pending validation', async () => temporary(async root => {
   await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');

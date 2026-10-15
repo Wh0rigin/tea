@@ -1,5 +1,7 @@
 # TEA terminal
 
+Run `tea` in your project after configuring your API key, endpoint and model. The CLI defaults to ContextOS, automatic compaction and memory GC, with no monetary cap. Prices are optional without a cap; missing prices show unknown USD estimates while Token usage remains recorded. An explicit `--max-cost-usd USD` or `TEA_MAX_COST_USD` enables a shared session cap and requires both prices. Use `--max-cost-usd none` to override an environment cap for a new session. Resume retains any existing stricter cap. Live benchmarks still require finite budgets.
+
 TEA supports an interactive conversation and the original single-task command.
 The interface uses Node.js readline and ANSI terminal output with no additional
 runtime packages. Windows Terminal, PowerShell, and standard Unix terminals can
@@ -82,10 +84,10 @@ the conversation context; it does not replenish spending. Optional
 [Conversation compaction](COMPACTION.md) for the byte trigger, retained boundaries,
 request accounting, failure handling and limits.
 
-Conversation and expanded tool records remain in process memory by default.
-`--session ID` enables an encrypted local journal; `--resume ID` restores the
-original workspace/model/endpoint and cumulative budget. ContextOS adds a
-retrievable request projection via `--memory-policy contextos`. `/memory`
+The CLI defaults to ContextOS with an encrypted local journal and bounded cold
+evidence caches. `--session ID` assigns a session name; `--resume ID` restores the
+original workspace/model/endpoint, cumulative spending and any existing cap.
+`--memory-policy full-history` opts out of ContextOS selection. `/memory`
 explains retained/referenced evidence. Resumed terminal token totals show `?`
 because the restored budget's input-only counter cannot establish old output
 and cache totals. Per-turn ledgers still retain known provider counts. See
