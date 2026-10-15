@@ -21,7 +21,7 @@ const output=path.join(root,'benchmarks/results',runId);await mkdir(path.dirname
 await mkdir(path.join(output,'engines'));
 const engines={};
 for(const arm of ['baseline','candidate'])engines[arm]=await prepareRevisionEngine({repository:root,
-  ref:options[`${arm}-ref`]||(arm==='baseline'?'e9ff015':'HEAD'),directory:path.join(output,'engines',arm)});
+  ref:options[`${arm}-ref`]||(arm==='baseline'?'e9ff015':'7ea8d82'),directory:path.join(output,'engines',arm)});
 const env=mode==='live'?resolveUserEnvironment():{};
 const config=loadCliConfig({maxCostUsd:1,maxRequestInputBytes:256000,contextWindowTokens:32768,contextReserveTokens:4096},
   {...env,ANTHROPIC_MODEL:'glm-5.3-flash',TEA_THINKING_MODE:'enabled',TEA_REASONING_EFFORT:'low',TEA_MAX_OUTPUT_TOKENS:'4096',

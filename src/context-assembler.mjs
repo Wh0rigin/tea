@@ -46,7 +46,7 @@ export function utf8Page(text, offset, limit) {
 
 function evictable(unit) {
   if (unit.error) return false;
-  if (['list_files', 'search_code', 'read_file', 'read_files', 'recall_context', 'search_history'].includes(unit.name)) return true;
+  if (['list_files', 'search_code', 'read_file', 'recall_context', 'search_history'].includes(unit.name)) return true;
   if (!['run_tests', 'run_shell'].includes(unit.name) || !/^exit=0\b/.test(unit.output)) return false;
   return isValidationCommand(unit.input?.command) || /^git\s+(?:status|diff|log)\b/.test(unit.input?.command || '');
 }
@@ -77,14 +77,6 @@ export class ContextMemory {
           const sourceSnapshot = ['read_file','recall_context'].includes(call.name) ? this.tools.sourceEvidence.get(digest(block.content)) : null;
           if (sourceSnapshot?.sourceDependencies) dependencies = sourceSnapshot.sourceDependencies;
           if (searchSnapshot) dependencies = searchSnapshot;
-          if (call.name === 'read_files') {
-            try {
-              const batch = JSON.parse(block.content);
-              if (batch.batch === 1 && Array.isArray(batch.files)) dependencies = batch.files
-                .filter(row => typeof row.path === 'string' && /^[a-f0-9]{64}$/.test(row.sourceHash))
-                .map(({ path, sourceHash }) => ({ path, sourceHash }));
-            } catch { /* A failed batch has no recoverable source. */ }
-          }
           const failed = Boolean(block.is_error) || (['run_tests','run_shell'].includes(call.name) && /^exit=(?!0\b)/.test(block.content));
           const unit = { ref, kind: call.name === 'read_file' ? 'source_evidence' : block.is_error ? 'test_failure' : 'tool_result',
             provenance: inherited?.provenance || sourceSnapshot?.provenance || 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
@@ -200,8 +192,7 @@ export class ContextMemory {
         if (!call) return block;
         const ref = refFor(call, block), unit = this.units.get(ref);
         if (!unit) return block;
-        const batchProtected = unit.name === 'read_files' && unit.sourceDependencies.some(source => activeFiles.has(source.path) || /(?:^|[\\/])(?:AGENTS\.md|README(?:\.[^/\\]+)?)$/i.test(source.path));
-        const pinned = batchProtected || recent.has(index) || unit.error || !evictable(unit)
+        const pinned = recent.has(index) || unit.error || !evictable(unit)
           || (unit.path && (activeFiles.has(unit.path) || /(?:^|[\\/])(?:AGENTS\.md|README(?:\.[^/\\]+)?)$/i.test(unit.path)));
         decisions.push({ ref, path: unit.path, kind: unit.kind, provenance: unit.provenance, bytes: unit.bytes,
           estimatedTokens: estimateTextTokens(unit.output), decision: 'resident', reason: pinned ? 'recent-active-or-protected' : 'recoverable-older-output', validity: unit.validity });
