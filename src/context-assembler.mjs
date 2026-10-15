@@ -45,6 +45,7 @@ export function utf8Page(text, offset, limit) {
 }
 
 function evictable(unit) {
+  if (unit.supersededBy) return true;
   if (unit.error) return false;
   if (['list_files', 'search_code', 'read_file', 'recall_context', 'search_history'].includes(unit.name)) return true;
   if (!['run_tests', 'run_shell'].includes(unit.name) || !/^exit=0\b/.test(unit.output)) return false;
@@ -158,6 +159,31 @@ export class ContextMemory {
   }
   async assemble({ messages, canonical, system, tools, config, state, goal = '', commit = true, additionalArchive = false }) {
     this.rebuild(canonical);
+    // Projection only: never rewrite canonical messages or encrypted history.
+    // A pass supersedes failures of the exact command in this user turn only.
+    if (config.compactResolvedTests === true) {
+      const pending = new Map();
+      const byMessage = new Map();
+      for (const unit of this.units.values()) {
+        const group = byMessage.get(unit.messageIndex) || [];
+        group.push(unit); byMessage.set(unit.messageIndex, group);
+      }
+      for (let index = 0; index < canonical.length; index++) {
+        if (canonical[index].role === 'user' && typeof canonical[index].content === 'string') pending.clear();
+        for (const unit of byMessage.get(index) || []) {
+          if (!['run_tests', 'run_shell'].includes(unit.name) || !isValidationCommand(unit.input?.command)) continue;
+          const command = unit.input.command;
+          if (/^exit=[1-9]\d*\b/.test(unit.output)) {
+            const failures = pending.get(command) || [];
+            failures.push(unit); pending.set(command, failures);
+          } else if (!unit.error && /^exit=0\b/.test(unit.output)
+            && !/(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+(?:tests|pass)\s+0\s*(?:\n|$)/.test(unit.output)) {
+            for (const failure of pending.get(command) || []) failure.supersededBy = unit.callId;
+            pending.delete(command);
+          }
+        }
+      }
+    }
     for (const [,ref] of this.protectedRuleRefs || []) {
       if (!this.units.has(ref)) {
         const unit = await this.archive?.get(ref);
@@ -192,12 +218,13 @@ export class ContextMemory {
         if (!call) return block;
         const ref = refFor(call, block), unit = this.units.get(ref);
         if (!unit) return block;
-        const pinned = recent.has(index) || unit.error || !evictable(unit)
+        const pinned = recent.has(index) || (unit.error && !unit.supersededBy) || !evictable(unit)
           || (unit.path && (activeFiles.has(unit.path) || /(?:^|[\\/])(?:AGENTS\.md|README(?:\.[^/\\]+)?)$/i.test(unit.path)));
         decisions.push({ ref, path: unit.path, kind: unit.kind, provenance: unit.provenance, bytes: unit.bytes,
-          estimatedTokens: estimateTextTokens(unit.output), decision: 'resident', reason: pinned ? 'recent-active-or-protected' : 'recoverable-older-output', validity: unit.validity });
-        if (pinned || before <= (config.contextosTargetBytes ?? Math.floor(config.maxRequestInputTokens * .5))) return block;
-        const replacement = `[ContextOS historical ${unit.kind}; ref=${ref}; bytes=${unit.bytes}] Recover details with recall_context. This is not current validation.`;
+          estimatedTokens: estimateTextTokens(unit.output), decision: 'resident', reason: pinned ? 'recent-active-or-protected' : 'recoverable-older-output', validity: unit.validity,
+          ...(unit.supersededBy ? { supersededBy: unit.supersededBy } : {}) });
+        if (pinned || (!unit.supersededBy && before <= (config.contextosTargetBytes ?? Math.floor(config.maxRequestInputTokens * .5)))) return block;
+        const replacement = `[ContextOS historical ${unit.kind}; ref=${ref}; bytes=${unit.bytes}${unit.supersededBy ? '; supersededBy=' + unit.supersededBy : ''}] Recover details with recall_context. This is not current validation.`;
         if (bytes(replacement) >= unit.bytes) return block;
         selected.push(ref); changed = true;
         return { ...block, content: replacement };
@@ -242,7 +269,7 @@ export class ContextMemory {
           const block=originals?.find(block=>block.tool_use_id===call.id);return block?refFor(call,block):null;
         }) : [];
         if(refs.length&&refs.every(ref=>selectedRefs.has(ref)&&!stale.has(ref))){
-          directory.push(...refs.map(ref=>{const unit=this.units.get(ref);return{ref,tool:unit.name,path:unit.path,kind:unit.kind};}));coldRounds++;index++;
+          directory.push(...refs.map(ref=>{const unit=this.units.get(ref);return{ref,tool:unit.name,path:unit.path,kind:unit.kind,...(unit.supersededBy ? {supersededBy:unit.supersededBy} : {})};}));coldRounds++;index++;
         }else paged.push(message);
       }
       if(directory.length)paged.unshift({role:'user',content:'Historical tool rounds are archived, not executed again. Recover exact content with these references: '+JSON.stringify(directory)});
@@ -277,6 +304,7 @@ export class ContextMemory {
     return { request, diagnostics: { policy: 'contextos', fullWireBytes: before, sentWireBytes: after,
       fullEstimatedTokens: estimateTextTokens(JSON.stringify(base)), sentEstimatedTokens: estimateTextTokens(JSON.stringify(request)),
       evictedUnits: active.size, staleUnits: stale.size, recoveries: this.recalls, searches: this.searches,
+      ...(config.compactResolvedTests === true ? { resolvedFailureReferences: decisions.filter(unit => unit.supersededBy && unit.decision === 'reference').length } : {}),
       archivedUnits: this.archive?.count || 0, coldCacheBytes: this.archive?.cachedBytes || 0,
       targetBytes: config.contextosTargetBytes, activeFiles: [...activeFiles], coldRounds, activeGoalAnchored:recoverable&&!fallback, repinnedRequirements:missing.length, units: decisions, fallback } };
   }
