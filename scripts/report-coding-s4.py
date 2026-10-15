@@ -61,7 +61,7 @@ for repeat in [1,2,3]:
         samples=[x for x in arms[arm] if x['repeat']==repeat]
         row[arm]={'accepted':sum(bool(x['accepted']) for x in samples),'tokens':sum(x['usage']['totalTokens'] for x in samples) if len(samples)==8 and all(x['usage'] for x in samples) else None}
     per_repeat.append(row)
-mechanism={arm:{'initialInputTokens':[], 'readRounds':0,'multiReadRounds':0} for arm in arms}
+mechanism={arm:{'initialInputTokens':[], 'readRounds':0,'multiReadRounds':0,'lastRequestTokensByAttempt':{}} for arm in arms}
 initial_pairs={}
 for row in rows:
     location=json.loads((source.parent/(row['id']+'-workspace.json')).read_text(encoding='utf8'))
@@ -69,6 +69,10 @@ for row in rows:
     if not ledger.exists():continue
     records=[json.loads(line) for line in ledger.read_text(encoding='utf8').splitlines()]
     requests=[x for x in records if x['type']=='model_request']
+    if row['usage'] and sum((x.get('reportedInputTokens') or 0)+(x.get('reportedOutputTokens') or 0) for x in requests)!=row['usage']['totalTokens']:
+        raise RuntimeError('Ledger totals do not match measured attempt usage')
+    if requests and all(isinstance(requests[-1].get(field),int) for field in ['reportedInputTokens','reportedOutputTokens']):
+        mechanism[row['arm']]['lastRequestTokensByAttempt'][row['id']]=requests[-1]['reportedInputTokens']+requests[-1]['reportedOutputTokens']
     if requests and isinstance(requests[0].get('reportedInputTokens'),int):
         first=requests[0]['reportedInputTokens']
         mechanism[row['arm']]['initialInputTokens'].append(first)
@@ -87,6 +91,15 @@ report={key:raw.get(key) for key in ['schema','runId','createdAt','endedAt','eng
 report.update({'mechanism':mechanism,'rawSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'coverageComplete':complete,'totals':totals,'changePercent':change,
                'bothAcceptedPairs':{'count':len(matched),'totals':matched_totals,'changePercent':matched_change,'candidateLowerPairs':sum(x<0 for x in pair_changes),'medianPairChangePercent':statistics.median(pair_changes) if pair_changes else None},'qualityGatePassed':quality_ok,'gatePassed':gate,'perTask':by_task,'perRepeat':per_repeat,'rows':rows})
 report['projectionControls']=json.loads((source.parent/'projection-controls.json').read_text(encoding='utf8'))
+report['triggerAudit']=json.loads((source.parent/'trigger-audit.json').read_text(encoding='utf8'))
+report['qualityGateMeaning']='Preregistered overall and per-task full acceptance counts; independent code-behavior counts are reported separately, without post-hoc regrading'
+if report['triggerAudit']['partial'] or report['triggerAudit']['completedAttempts']!=len(rows):raise RuntimeError('Final report requires complete trigger audit')
+audit_by_id={x['id']:x for x in report['triggerAudit']['rows']}
+final_only=[x for x in arms['candidate'] if x['usage'] and x['uniqueResolvedFailures'] and x['requestsWithResolvedFailures']==1 and audit_by_id[x['id']]['toolUsesAfterFirstReference']==0]
+final_only_total=sum(x['usage']['totalTokens'] for x in final_only if x['usage'])
+final_only_last=sum(mechanism['candidate']['lastRequestTokensByAttempt'][x['id']] for x in final_only)
+report['activationWindow']={'finalRequestOnlyAttempts':[x['id'] for x in final_only],'totalTokens':final_only_total,'beforeFinalRequestTokens':final_only_total-final_only_last,'finalRequestTokens':final_only_last,
+    'note':'Provider usage partition by observed execution window, not a counterfactual savings estimate'}
 target=ROOT/'benchmarks/reports'/run_id;target.mkdir(exist_ok=False)
 (target/'summary.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top':False,'axes.spines.right':False})
@@ -116,7 +129,7 @@ lines=['# S4 编码 Token 优化实验','',f'修改：同一用户回合内，�
 lines += [f'单看独立代码行为（原有测试、新增测试及隐藏断言）：修改前 {totals["baseline"]["codeBehaviorPass"]}/24，候选 {totals["candidate"]["codeBehaviorPass"]}/24。完整验收还要求保护文件保持不变。','']
 if complete:lines += [f'全尝试累计 Token：修改前 {totals["baseline"]["providerTokens"]:,}，候选 {totals["candidate"]["providerTokens"]:,}；候选 {"增加" if change>=0 else "减少"} **{abs(change):.2f}%**。','']
 lines += [f'已有文件创建误用：{totals["baseline"]["writeExistingErrors"]} → {totals["candidate"]["writeExistingErrors"]}。',
-          f'质量门槛通过：{quality_ok}；综合门槛（完整覆盖、各题质量不降低、全尝试 Token 更低）：**{gate}**。','',
+          f'预设完整验收门槛通过：{quality_ok}；综合门槛（完整覆盖、各题完整验收不降低、全尝试 Token 更低）：**{gate}**。','',
           '![S4 逐题对照](s4-coding.png)','','## 每题结果','']
 for x in by_task:lines += [f'- **{x["title"]}**：修改前 {x["baseline"]["accepted"]}/{x["baseline"]["attempted"]}，候选 {x["candidate"]["accepted"]}/{x["candidate"]["attempted"]}；Token 总量 {x["baseline"]["providerTokens"]} / {x["candidate"]["providerTokens"]}。']
 lines += ['',f'双方均通过的配对：{len(matched)} 对；Token 总量 {matched_totals["baseline"]} / {matched_totals["candidate"]}；变化 {round(matched_change,2) if matched_change is not None else "未知"}%。','','累计 Token 包含缓存输入；输出包含思考，不重复累加思考。此处使用 provider 实测，不使用字符或字节估算。','','']
@@ -143,6 +156,12 @@ for arm in arms:
 lines += ['','触发计数来自请求发出前的 ContextOS 投影，非 provider Token。没有触发的任务不能把随机用量变化归因于 S4；即使全组成本更低，也要结合触发样本判断机制是否有实证。','',
     '已解决匹配不保证后来源码仍正确；待验证状态、最新失败与最后验证结果继续保留。每题三次，未证明统计显著性或生产泛化。','',
     '## 未通过的尝试','']
+audit=report['triggerAudit']['totals']['candidate']
+lines[-2:-2]=['## 触发边界审计','',
+    f'候选投影中共观察到 {audit["failuresObservedInProjections"]} 条不同的测试/命令失败；其中 {audit["eligibleFailures"]} 条有完全相同命令的后续成功，{audit["referencedFailures"]} 条实际转为引用。有符合条件的失败但整体无净字节收益的投影共 {audit["noNetReductionProjections"]} 次；符合条件但仍受近期保护的出现次数为 {audit["recentProtectedOccurrences"]}。','',
+    '审计读取加密日志中的结构化投影诊断，只公开计数。失败必须先在请求投影中出现才计入；基线未计算候选专用资格字段。详见 summary.json 的 triggerAudit。','']
+lines[-2:-2]=[f'候选首次使用旧失败引用后，总共继续调用工具 {audit["toolUsesAfterFirstReference"]} 次。成功执行的源码补丁 {report["triggerAudit"]["totals"]["baseline"]["sourcePatches"]} → {audit["sourcePatches"]}，测试补丁 {report["triggerAudit"]["totals"]["baseline"]["testPatches"]} → {audit["testPatches"]}；这些是实际执行轨迹计数，不能单独当作因果关系。','']
+lines[-2:-2]=[f'有 {len(final_only)} 次触发任务的引用仅用于最后一次模型请求，且之后没有工具调用。这些任务累计 {final_only_total:,} Token，其中 {final_only_total-final_only_last:,} 发生于最后请求之前，最后请求 {final_only_last:,}。这是执行时间窗口的实测用量分解，不是反事实节省估计；S4 不能减少此前已经消耗的修复成本。','']
 for row in rows:
     if not row['accepted']:
         lines += [f'- {row["id"]}：status={row["status"]}；public={row["publicPassed"]}；hidden={row["hiddenPassed"]}；addedTests={row["addedTestsPassed"]}；protectedFiles={row["protectedFilesUnchanged"]}；allowedChanges={row["allowedChanges"]}；validation={row["validationPassed"]}；Token={row["usage"]["totalTokens"] if row["usage"] else "未知"}。']
