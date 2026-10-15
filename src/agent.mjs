@@ -99,13 +99,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     runType: offline ? 'offline-runtime' : 'live', usageSource: offline ? 'scripted' : 'provider' });
   const deduplicateReads = ['v1-dedup', 'v1', 'v1-expanded', 'v1-auto'].includes(config.contextStrategy);
   const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads,
-    enableFileCreation: config.enableFileCreation ?? true, editGuidance: Boolean(config.editGuidance) });
+    enableFileCreation: config.enableFileCreation ?? true });
   await tools.init();
   tools.ledger = ledger;
   tools.signal = signal;
   tools.approveCommand = approveCommand;
   tools.enableFileCreation = config.enableFileCreation ?? true;
-  tools.editGuidance = Boolean(config.editGuidance);
   session.tools = tools;
   restoreToolMemory(session, tools);
   if (config.memoryPolicy === 'contextos') {
@@ -199,7 +198,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation, editGuidance: tools.editGuidance }) : null;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)

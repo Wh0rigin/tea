@@ -64,13 +64,12 @@ export function decodeText(buffer) {
 }
 
 export class WorkspaceTools {
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true, editGuidance = false }) {
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
     this.enableFileCreation = enableFileCreation;
-    this.editGuidance = editGuidance;
     this.readEvidence = new Map();
     // Vocabulary belongs to this run only; never modify the shared hand-written table.
     this.sessionTerms = new Map();
@@ -196,7 +195,7 @@ export class WorkspaceTools {
     const rangeKey = `${relative}:${start}-${end}`;
     const sourceHash = createHash('sha256').update(source).digest('hex');
     const evidenceRef = `${relative}#L${start}-L${end}@${sourceHash.slice(0, 16)}`;
-    const fullEvidence = `[evidence ref=${evidenceRef} sha256=${sourceHash}]\n${this.editGuidance ? 'Existing file: edit with apply_patch.\n' : ''}${lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')}`;
+    const fullEvidence = `[evidence ref=${evidenceRef} sha256=${sourceHash}]\n${lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')}`;
     const complete = fullEvidence.length <= MAX_TOOL_OUTPUT;
     const partialHint = '\nOnly a prefix of the requested lines is shown. Use smaller startLine/endLine ranges to read omitted lines; this range is not cached as complete evidence.';
     const evidence = complete ? fullEvidence : `${truncate(fullEvidence, MAX_TOOL_OUTPUT - partialHint.length - 80)}${partialHint}`;
@@ -284,11 +283,7 @@ export class WorkspaceTools {
 
   modelToolDefinitions({ includeMemory = true } = {}) {
     const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
-    const available = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
-    const descriptions = { read_file: 'Read an existing text file, optionally a line range. Edit it with apply_patch.',
-      apply_patch: 'Edit an EXISTING file: replace one unique exact search span with replace. Read current source first; use this even for a full implementation replacement.',
-      write_file: 'CREATE ONLY: create a file at an ABSENT path and any missing parent directories. Existing paths from inventory/search/read MUST use apply_patch. write_file cannot overwrite or replace existing files. Run relevant tests after creation.' };
-    const base = this.editGuidance ? available.map(tool => descriptions[tool.name] ? { ...tool, description: descriptions[tool.name] } : tool) : available;
+    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
     const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
     return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
@@ -349,7 +344,7 @@ export class WorkspaceTools {
     let file;
     try { file = await open(filename, 'wx'); }
     catch (error) {
-      if (error.code === 'EEXIST') throw new ToolFeedbackError('SOURCE_MISMATCH', this.editGuidance ? 'File already exists; no write occurred. Use apply_patch on text from read_file.' : 'File already exists. Read it and use apply_patch; write_file never overwrites existing files');
+      if (error.code === 'EEXIST') throw new ToolFeedbackError('SOURCE_MISMATCH', 'File already exists. Read it and use apply_patch; write_file never overwrites existing files');
       throw error;
     }
     let identity;
