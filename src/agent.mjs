@@ -105,7 +105,6 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   tools.signal = signal;
   tools.approveCommand = approveCommand;
   tools.enableFileCreation = config.enableFileCreation ?? true;
-  tools.compactToolDescriptions = config.compactToolDescriptions === true;
   session.tools = tools;
   restoreToolMemory(session, tools);
   if (config.memoryPolicy === 'contextos') {
