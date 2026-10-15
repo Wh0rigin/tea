@@ -64,12 +64,13 @@ export function decodeText(buffer) {
 }
 
 export class WorkspaceTools {
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true, batchReads = false }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
     this.enableFileCreation = enableFileCreation;
+    this.batchReads = batchReads;
     this.readEvidence = new Map();
     // Vocabulary belongs to this run only; never modify the shared hand-written table.
     this.sessionTerms = new Map();
@@ -177,7 +178,7 @@ export class WorkspaceTools {
     return inventory;
   }
 
-  async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
+  async readFile({ path: relativePath, startLine = 1, endLine } = {}, outputLimit = MAX_TOOL_OUTPUT) {
     const filename = await this.resolveFile(relativePath);
     const normalizedPath = path.relative(this.workspace, filename);
     if (normalizedPath.split(path.sep).some(part => ['.tea', '.git'].includes(part))) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Reading agent storage and Git metadata is blocked');
@@ -196,9 +197,9 @@ export class WorkspaceTools {
     const sourceHash = createHash('sha256').update(source).digest('hex');
     const evidenceRef = `${relative}#L${start}-L${end}@${sourceHash.slice(0, 16)}`;
     const fullEvidence = `[evidence ref=${evidenceRef} sha256=${sourceHash}]\n${lines.slice(start - 1, end).map((line, index) => `${start + index}: ${line}`).join('\n')}`;
-    const complete = fullEvidence.length <= MAX_TOOL_OUTPUT;
+    const complete = fullEvidence.length <= outputLimit;
     const partialHint = '\nOnly a prefix of the requested lines is shown. Use smaller startLine/endLine ranges to read omitted lines; this range is not cached as complete evidence.';
-    const evidence = complete ? fullEvidence : `${truncate(fullEvidence, MAX_TOOL_OUTPUT - partialHint.length - 80)}${partialHint}`;
+    const evidence = complete ? fullEvidence : `${truncate(fullEvidence, outputLimit - partialHint.length - 80)}${partialHint}`;
     const seen = this.presentedSource.get(relative);
     const presented = seen?.sourceHash === sourceHash ? seen : { sourceHash, lines: new Map() };
     for (const match of evidence.matchAll(/^(\d+): (.*)$/gm)) presented.lines.set(Number(match[1]), match[2]);
@@ -214,6 +215,35 @@ export class WorkspaceTools {
       else this.readEvidence.delete(rangeKey);
     }
     this.recordSourceSnapshot(evidence,relative,sourceHash);return evidence;
+  }
+
+  async readFiles({ files } = {}) {
+    if (!this.batchReads) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Batch reading is disabled');
+    if (!Array.isArray(files) || files.length < 1 || files.length > 4) throw new ToolFeedbackError('INPUT_INVALID', 'files must contain 1..4 file ranges');
+    for (const file of files) {
+      if (!file || typeof file.path !== 'string' || !file.path.trim() || file.path.length > 512
+        || Object.keys(file).some(key => !['path','startLine','endLine'].includes(key))
+        || ['startLine','endLine'].some(key => file[key] !== undefined && (!Number.isSafeInteger(file[key]) || file[key] < 1))
+        || (file.endLine !== undefined && file.endLine < (file.startLine ?? 1))) throw new ToolFeedbackError('INPUT_INVALID', 'Invalid batch file range');
+    }
+    const rows = [], dependencies = [];
+    for (const file of files) {
+      this.signal?.throwIfAborted();
+      try {
+        const output = await this.readFile(file, 2500);
+        this.signal?.throwIfAborted();
+        const source = this.sourceEvidence.get(createHash('sha256').update(output).digest('hex'));
+        rows.push({ path: source.path, sourceHash: source.sourceHash, output });
+        dependencies.push(source);
+      } catch (error) {
+        this.signal?.throwIfAborted();
+        rows.push({ path: file.path, error: redactText(String(error.message)).replaceAll(this.workspace, '<workspace>').slice(0, 400) });
+      }
+    }
+    const output = JSON.stringify({ batch: 1, files: rows });
+    this.sourceEvidence.set(createHash('sha256').update(output).digest('hex'), { sourceDependencies: dependencies });
+    if (this.sourceEvidence.size > 128) this.sourceEvidence.delete(this.sourceEvidence.keys().next().value);
+    return output;
   }
 
   recordSourceSnapshot(output,relative,sourceHash) {
@@ -283,7 +313,8 @@ export class WorkspaceTools {
 
   modelToolDefinitions({ includeMemory = true } = {}) {
     const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
-    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
+    let base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
+    if (this.batchReads) base = [...base, BATCH_READ_TOOL];
     const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
     return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
@@ -506,6 +537,7 @@ export class WorkspaceTools {
   }
 }
 
+export const BATCH_READ_TOOL = { name: 'read_files', description: 'Read 1..4 related text file ranges in one call. Each file returns versioned evidence or its own error. Output is capped at 2500 characters per file; use read_file with narrower ranges for omitted lines.', input_schema: { type: 'object', properties: { files: { type: 'array', minItems: 1, maxItems: 4, items: { type: 'object', properties: { path: { type: 'string', maxLength: 512 }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } } }, required: ['files'], additionalProperties: false } };
 export const TOOL_DEFINITIONS = [
   { name: 'list_files', description: 'List workspace text paths fairly across directories. Default: 32 paths / about 2KB; set maxFiles for larger pages. Use nextOffset to continue the same scope. includeOmitted expands ordinary excluded folders; secrets and Git/agent storage remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
   { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
@@ -541,6 +573,7 @@ export async function dispatchTool(tools, name, input) {
     case 'list_files': return tools.listFiles(input);
     case 'search_code': return tools.searchCode(input);
     case 'read_file': return tools.readFile(input);
+    case 'read_files': return tools.readFiles(input);
     case 'remember_term_mapping': return tools.rememberTermMapping(input);
     case 'apply_patch': return tools.applyPatch(input);
     case 'write_file': return tools.writeFile(input);

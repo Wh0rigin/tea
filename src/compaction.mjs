@@ -121,6 +121,9 @@ function fileOperations(messages, end) {
   for (const message of messages.slice(0, end)) {
     if (message.role !== 'assistant' || !Array.isArray(message.content)) continue;
     for (const block of message.content) {
+      if (block.type === 'tool_use' && block.name === 'read_files') for (const file of block.input?.files || []) {
+        if (typeof file?.path === 'string') readFiles.add(file.path);
+      }
       if (block.type !== 'tool_use' || typeof block.input?.path !== 'string') continue;
       if (block.name === 'read_file') readFiles.add(block.input.path);
       if (['apply_patch', 'write_file'].includes(block.name)) modifiedFiles.add(block.input.path);
