@@ -26,3 +26,28 @@ S4 的收益只能在验证成功后出现。本轮在验证失败时改进诊�
 付费前冻结源码、入口、任务清单与模型配置，验证初始/参考实现和固定工具定义指纹。记录新反馈触发次数、验证失败、命令超时和超时后无成功文件编辑的同命令重试次数；后者是轨迹计数，不自动判定重试无依据。
 
 失败成本保留，图表成功均值不含失败，失败成本单独显示；未知不按零。无收益或质量下降即撤销运行时改动、保留实验记录。阶段结束等待审核，不开始下一阶段。每题三次仅为诊断性小样本，不证明统计显著性或生产泛化。
+
+## 冻结身份与离线验证
+
+基线 `6a50dc5b131678fbc2d41cf181414f7896c70b50`，候选 `158ca4c7ce89d924137e97dc4561e4cf3600fc8e`，付费入口 `cbd3a9d`。候选专项 7/7、最终全量 327/327，无跳过。
+
+冻结引擎的首次请求离线指纹完全一致。成功、网络超时、非验证错误、权限拒绝和取消反馈均保持一致；断言反馈 JSON 196 → 454 字节，命令超时反馈 220 → 414 字节。这是字节而非 provider Token，且实际请求仍携带原始错误及历史；不能把更长的建议本身算作收益。
+
+## 复现入口
+
+每次使用新 run ID，保留历史结果；本地需要有上述基线和候选 Git 提交。
+
+```sh
+# 无模型调用：验证冻结版本、固定工具定义及初始/参考实现。
+node scripts/compare-coding-s5.mjs --mode=prepare --run-id=s5-preflight-new
+
+# 有限预算的真实付费对比，沿用用户 API 凭据。
+node scripts/compare-coding-s5.mjs --mode=live --run-id=s5-live-new
+
+# 运行结束后，检查首次请求/反馈指纹、审计私有加密日志、生成公开汇总。
+node scripts/check-coding-s5-feedback.mjs s5-live-new
+node scripts/audit-coding-s5-feedback.mjs s5-live-new
+python scripts/report-coding-s5.py s5-live-new
+```
+
+审计通过 `--completed-only` 可检查已结束样本，输出明确标记 partial 的私有文件；公开最终汇总不接受该文件。
