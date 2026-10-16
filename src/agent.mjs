@@ -105,6 +105,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   tools.signal = signal;
   tools.approveCommand = approveCommand;
   tools.enableFileCreation = config.enableFileCreation ?? true;
+  tools.versionedWrite = config.versionedWrite === true;
   session.tools = tools;
   restoreToolMemory(session, tools);
   if (config.memoryPolicy === 'contextos') {
@@ -198,7 +199,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation }) : null;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation, versionedWrite: tools.versionedWrite }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)
@@ -399,6 +400,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
       }
       await appendSessionMessage(session, { role: 'user', content: toolResults });
+      tools.acknowledgeVersionedReads(toolResults);
       if (signal?.aborted) status = 'cancelled';
       if (['tool_limit_reached', 'cancelled'].includes(status)) break;
     }
