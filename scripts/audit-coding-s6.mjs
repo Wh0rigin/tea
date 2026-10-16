@@ -49,6 +49,12 @@ for (const row of raw.rows) {
     assert(requests.every(x => x.usageComplete));
     assert.equal(requests.reduce((n, x) => n + x.reportedInputTokens + x.reportedOutputTokens, 0), row.usage.totalTokens);
   }
+  if (row.knownPartialUsage) {
+    assert.equal(row.usage, null); assert.equal(row.usageComplete, false);
+    assert(requests.every(x => x.usageComplete));
+    assert.equal(requests.length, row.knownPartialUsage.requests);
+    assert.equal(requests.reduce((n, x) => n + x.reportedInputTokens + x.reportedOutputTokens, 0), row.knownPartialUsage.totalTokens);
+  }
   rows.push({ id: row.id, arm: row.arm, ...counts });
 }
 const totals = Object.fromEntries(['baseline', 'candidate'].map(arm => [arm, Object.fromEntries(Object.keys(rows[0] || {}).filter(k => !['id', 'arm'].includes(k)).map(k => [k, rows.filter(x => x.arm === arm).reduce((n, x) => n + x[k], 0)]))]));

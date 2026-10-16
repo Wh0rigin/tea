@@ -6,7 +6,6 @@ import { createInterface } from 'node:readline/promises';
 import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
 import { BoundedOutput } from './output.mjs';
 import { ToolFeedbackError } from './tool-feedback.mjs';
-import { replaceVersionedFile } from './versioned-write.mjs';
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -65,16 +64,6 @@ export function decodeText(buffer) {
 }
 
 export class WorkspaceTools {
-  #writeEvidence = new Map();
-
-  acknowledgeVersionedReads(results) {
-    if (!this.versionedWrite || this.signal?.aborted) return;
-    for (const result of results) if (!result.is_error) {
-      const hash = createHash('sha256').update(result.content).digest('hex');
-      for (const receipt of this.#writeEvidence.values()) if (receipt.outputHash === hash) receipt.delivered = true;
-    }
-  }
-
   constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
@@ -195,8 +184,7 @@ export class WorkspaceTools {
     if (isSensitivePath(normalizedPath)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Reading credential and key files is blocked');
     const info = await stat(filename);
     if (!info.isFile() || info.size > MAX_READ_BYTES) throw new Error(`File must be a regular text file smaller than ${MAX_READ_BYTES} bytes`);
-    const raw = await readFile(filename);
-    const decoded = decodeText(raw);
+    const decoded = decodeText(await readFile(filename));
     if (decoded === null) throw new Error('File must be valid UTF-8 text without NUL bytes');
     const source = redactText(decoded);
     const lines = source.split(/\r?\n/);
@@ -211,32 +199,21 @@ export class WorkspaceTools {
     const complete = fullEvidence.length <= MAX_TOOL_OUTPUT;
     const partialHint = '\nOnly a prefix of the requested lines is shown. Use smaller startLine/endLine ranges to read omitted lines; this range is not cached as complete evidence.';
     const evidence = complete ? fullEvidence : `${truncate(fullEvidence, MAX_TOOL_OUTPUT - partialHint.length - 80)}${partialHint}`;
-    if (this.versionedWrite) { this.signal?.throwIfAborted(); this.#writeEvidence.delete(relative); }
     const seen = this.presentedSource.get(relative);
     const presented = seen?.sourceHash === sourceHash ? seen : { sourceHash, lines: new Map() };
     for (const match of evidence.matchAll(/^(\d+): (.*)$/gm)) presented.lines.set(Number(match[1]), match[2]);
     this.presentedSource.set(relative, presented);
     if (this.presentedSource.size > 32) this.presentedSource.delete(this.presentedSource.keys().next().value);
-    const register = output => {
-      if (this.versionedWrite && complete && start === 1 && end === lines.length && source === decoded) {
-        this.signal?.throwIfAborted();
-        this.#writeEvidence.set(relative, { sourceHash, rawHash: createHash('sha256').update(raw).digest('hex'),
-          dev: info.dev, ino: info.ino, mode: info.mode, presented,
-          outputHash: createHash('sha256').update(output).digest('hex'), delivered: false });
-        if (this.#writeEvidence.size > 32) this.#writeEvidence.delete(this.#writeEvidence.keys().next().value);
-      }
-      return output;
-    };
     if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
       const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
       const output = reference.length < evidence.length ? reference : evidence;
-      this.recordSourceSnapshot(output,relative,sourceHash);return register(output);
+      this.recordSourceSnapshot(output,relative,sourceHash);return output;
     }
     if (this.deduplicateReads) {
       if (complete) this.readEvidence.set(rangeKey, sourceHash);
       else this.readEvidence.delete(rangeKey);
     }
-    this.recordSourceSnapshot(evidence,relative,sourceHash);return register(evidence);
+    this.recordSourceSnapshot(evidence,relative,sourceHash);return evidence;
   }
 
   recordSourceSnapshot(output,relative,sourceHash) {
@@ -306,11 +283,7 @@ export class WorkspaceTools {
 
   modelToolDefinitions({ includeMemory = true } = {}) {
     const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
-    let base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
-    if (this.versionedWrite) base = base.map(tool => tool.name !== 'write_file' ? tool : {
-      ...tool, description: 'Create a new UTF-8 file and missing parents. For a full rewrite of an existing file, first read its complete current content, then supply expected_sha256 from that read receipt. Omit expected_sha256 for creation only. Use apply_patch for narrow edits. Preserve user changes and run relevant tests.',
-      input_schema: { ...tool.input_schema, properties: { ...tool.input_schema.properties, expected_sha256: { type: 'string', pattern: '^[a-f0-9]{64}$' } } },
-    });
+    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
     const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
     return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
   }
@@ -345,9 +318,8 @@ export class WorkspaceTools {
     return `Session mapping saved with source occurrence evidence: ${query} -> ${target}; evidence=${relative}#L${line}@${sourceHash.slice(0, 16)}. Applies only to this in-memory conversation.`;
   }
 
-  async writeFile({ path: relativePath, content, expected_sha256 } = {}) {
+  async writeFile({ path: relativePath, content } = {}) {
     if (!this.enableFileCreation) throw new ToolFeedbackError('CAPABILITY_DENIED', 'File creation is disabled in this configuration');
-    if (expected_sha256 !== undefined && !this.versionedWrite) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Versioned replacement is disabled');
     if (typeof content !== 'string' || content.includes('\0')) throw new ToolFeedbackError('INPUT_INVALID', 'write_file content must be UTF-8 text without NUL bytes');
     const data = Buffer.from(content, 'utf8');
     if (data.length > MAX_READ_BYTES || data.toString('utf8') !== content) throw new ToolFeedbackError('INPUT_INVALID', 'write_file content must be valid UTF-8 text of at most 160 KB');
@@ -357,17 +329,6 @@ export class WorkspaceTools {
     if (!normalized || parts.length > 64 || parts.some(part => !part || part.includes(':'))) throw new ToolFeedbackError('INPUT_INVALID', 'write_file requires a regular workspace-relative file path');
     if (parts.some(part => ['.git', '.tea'].includes(part.toLowerCase())) || isSensitivePath(normalized)) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Creating credential files, Git metadata or agent storage is blocked');
-    }
-    if (expected_sha256 !== undefined) {
-      if (typeof expected_sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(expected_sha256)) throw new ToolFeedbackError('INPUT_INVALID', 'expected_sha256 must be the full SHA-256 from a complete read receipt');
-      const receipt = this.#writeEvidence.get(normalized);
-      if (!receipt?.delivered || receipt.sourceHash !== expected_sha256 || this.presentedSource.get(normalized) !== receipt.presented) {
-        throw new ToolFeedbackError('SOURCE_MISMATCH', 'No delivered complete unredacted read for this version. Read the complete current file or use apply_patch.');
-      }
-      this.#writeEvidence.delete(normalized);
-      try { await replaceVersionedFile({ workspace: this.workspace, filename, evidence: receipt, data, signal: this.signal }); }
-      finally { this.readEvidence.clear(); }
-      return `Updated ${normalized} (${data.length} UTF-8 bytes, version checked). Run relevant tests before claiming completion.`;
     }
     let directory = this.workspace;
     for (const part of parts.slice(0, -1)) {
@@ -419,7 +380,6 @@ export class WorkspaceTools {
     if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
     if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text is ambiguous; include more surrounding lines');
     await writeFile(filename, source.slice(0, first) + replace + source.slice(first + search.length), 'utf8');
-    this.#writeEvidence.delete(normalizedPath);
     return `Updated ${normalizedPath}`;
   }
 

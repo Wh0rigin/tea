@@ -2,10 +2,10 @@ import { createHash } from 'node:crypto';
 
 // Versioned descriptions of existing policy. This module grants no permissions.
 export function runtimeCapabilities({ platform = process.platform, approveCommand,
-  stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false, versionedWrite = false } = {}) {
+  stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false } = {}) {
   const approval = typeof approveCommand === 'function' ? 'handler' : stdinIsTTY && stdoutIsTTY ? 'interactive' : 'unavailable';
   const identity = { schemaVersion: 1, policyVersion: fileCreation ? 2 : 1, platform, approval,
-    ...(fileCreation ? { fileCreation: true } : {}), ...(fileCreation && versionedWrite ? { versionedWrite: true } : {}) };
+    ...(fileCreation ? { fileCreation: true } : {}) };
   return { ...identity, version: `v1-${createHash('sha256').update(JSON.stringify(identity)).digest('hex').slice(0, 12)}` };
 }
 
@@ -15,8 +15,7 @@ export function capabilityNotice(capabilities) {
     : 'Unlisted run_shell needs explicit approval; approval can be refused.';
   const windows = capabilities.platform === 'win32' ? ' Windows allowlisted commands also reject quotes, parentheses, %, ! and ^.' : '';
   const creation = capabilities.fileCreation ? ' Create new files and missing parent directories with write_file; edit existing files with apply_patch. run_shell starts executables directly, not Bash or PowerShell: no cd, redirects or heredocs. On Windows, mkdir/md/cd/dir/type/echo are CMD built-ins and may not exist as executables. Do not create files via shell or encoded inline scripts. If no tests exist, create a small regression test with write_file and run it with run_tests.' : '';
-  const editing = capabilities.versionedWrite ? creation.replace('edit existing files with apply_patch.', 'use apply_patch for narrow edits or write_file with the complete read receipt expected_sha256 for full rewrites.') : creation;
-  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest; read-only git status/diff/log. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.${editing}`;
+  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest; read-only git status/diff/log. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.${creation}`;
 }
 
 const actions = {

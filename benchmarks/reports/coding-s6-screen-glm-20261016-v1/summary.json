@@ -1,0 +1,1485 @@
+{
+  "runId": "coding-s6-screen-glm-20261016-v1",
+  "phase": "screen",
+  "createdAt": "2026-10-16T05:45:03.747Z",
+  "endedAt": "2026-10-16T06:35:10.069Z",
+  "engine": {
+    "baseline": {
+      "commit": "6a50dc5b131678fbc2d41cf181414f7896c70b50",
+      "sourceSha256": "ccb080cefd43c22a3e788d97ed353b5b9f272241a79f452c417f0feb41df6f4b",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "9041772e4fe8a3e08d784e89beeb1d9dff8dbfed39e7e134686f00ac3bceb2a4",
+          "bytes": 1365
+        },
+        {
+          "path": "src/agent.mjs",
+          "sha256": "7184542e45280d7265f94fb6819b87bb936fb7dc89a0ba0e80f599ac0eafa883",
+          "bytes": 29208
+        },
+        {
+          "path": "src/benchmark.mjs",
+          "sha256": "c5e52911bf7f38a9f33754a5c819a157daa5683e39cfeef905bbd6fdc10b6289",
+          "bytes": 12644
+        },
+        {
+          "path": "src/cli.mjs",
+          "sha256": "8df0e2d54159aaa36261b6ce3ab22b3f8ad39e0b7fab9809bf24f2693cac20bc",
+          "bytes": 13155
+        },
+        {
+          "path": "src/compaction-experiment.mjs",
+          "sha256": "78769248909ef041ad6ec7cfc54df2a391ca74958d78406efa44927ce3b2633c",
+          "bytes": 3913
+        },
+        {
+          "path": "src/compaction.mjs",
+          "sha256": "d999c444d9ac920e3e2be73de07cf9284d175d49f0d74abc400033a54af5999a",
+          "bytes": 14990
+        },
+        {
+          "path": "src/comparison-claude.mjs",
+          "sha256": "fe9e3e38a28f6a3f89e44f5ede60019ff2ea078b082d1e92b0cb6076a7ee780e",
+          "bytes": 7218
+        },
+        {
+          "path": "src/comparison-fixtures.mjs",
+          "sha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+          "bytes": 8113
+        },
+        {
+          "path": "src/comparison-gateway.mjs",
+          "sha256": "050fdb8aac013357e29df85e2dce3d3ec27ae7a630de0a1d41e4d676d06e7203",
+          "bytes": 9898
+        },
+        {
+          "path": "src/comparison-pi-rpc.mjs",
+          "sha256": "fbf30c26fb542c85533db68d7eea75efe253d52d7db1428bc6a726711b35b239",
+          "bytes": 5732
+        },
+        {
+          "path": "src/comparison-pi.mjs",
+          "sha256": "9cef87672f679088fac7c4445f94d388cfee6873e79b062f72bad3d666babf55",
+          "bytes": 4535
+        },
+        {
+          "path": "src/comparison-report.mjs",
+          "sha256": "becc1d41f17d222df375b62e79251057a32455248ae9a4aa1d8389c3c4e06f6e",
+          "bytes": 8222
+        },
+        {
+          "path": "src/comparison-revision-report.mjs",
+          "sha256": "9a7db34af8ba3a5386b0dcda9b765b6984a3bee510a63d04c457c36e56f2fa1b",
+          "bytes": 3830
+        },
+        {
+          "path": "src/comparison-revisions.mjs",
+          "sha256": "0b22a4a38d7bf3646ad4ca5d84148ec98b8139d6523b57d72eac85cc04108da0",
+          "bytes": 3989
+        },
+        {
+          "path": "src/comparison-source-capture.mjs",
+          "sha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+          "bytes": 1860
+        },
+        {
+          "path": "src/comparison-three-report.mjs",
+          "sha256": "11e28a056754ebcabcaf30adeeee37270f015c382489b0f84997c2f40eeb5d72",
+          "bytes": 808
+        },
+        {
+          "path": "src/comparison-turn-audit.mjs",
+          "sha256": "8281cf2be85a3e0653708cf17fc95325e65028a669f3c510a5bc2512cce8c0f3",
+          "bytes": 6589
+        },
+        {
+          "path": "src/comparison-validation.mjs",
+          "sha256": "9901184f5ec6980f876a7e3d8519696208f3a48b9015b7a371802310afaf441f",
+          "bytes": 7650
+        },
+        {
+          "path": "src/config.mjs",
+          "sha256": "97b5cc5be69cc55177a4c25adc44de506a24ed495a75e57f92e4ba9029de9453",
+          "bytes": 12183
+        },
+        {
+          "path": "src/context-archive.mjs",
+          "sha256": "334e3a4b41d97a078e346afe668804c795f19b12d584a2c9965377f75cfd42c4",
+          "bytes": 3163
+        },
+        {
+          "path": "src/context-assembler.mjs",
+          "sha256": "5a4d3444e0bc175ebc976c610e34c5b8df9cb92fc22b8a2114c45e67582dea78",
+          "bytes": 21609
+        },
+        {
+          "path": "src/context-budget.mjs",
+          "sha256": "24203d8cfdc59ef683859a7ebc5f3470e4fb6a62fc2f64b7ea57e9f04d4f98e8",
+          "bytes": 1063
+        },
+        {
+          "path": "src/context.mjs",
+          "sha256": "fe3712bf50f965d8fdcf4a84290e7e78f58e70c96476865cd5cf4f6fa1f386ca",
+          "bytes": 6356
+        },
+        {
+          "path": "src/contextos-benchmark.mjs",
+          "sha256": "37242cd2ab9c33ca100f2c30bae2a3511f9f87a91340993d80fa7c4d8b054700",
+          "bytes": 32979
+        },
+        {
+          "path": "src/ledger.mjs",
+          "sha256": "0c51dfad105931024b511a2a6bd397af37a8f96d3ea94e0782d33c205ee4dba5",
+          "bytes": 7426
+        },
+        {
+          "path": "src/memory-benchmark.mjs",
+          "sha256": "9096cba9b8a6d96e26a9eb2f7e075aedc0901943636ef60a16c7450aa10c5543",
+          "bytes": 17271
+        },
+        {
+          "path": "src/memory-gc.mjs",
+          "sha256": "daa38a39c3326eec5cb9abdcfc852583dbbe4ebe1e38bf192109a3e1beada3ef",
+          "bytes": 4540
+        },
+        {
+          "path": "src/memory-handoff.mjs",
+          "sha256": "ada1e1126dc2a13feb30a334278580375be57e4faacb173e5c27406fd34813c0",
+          "bytes": 1617
+        },
+        {
+          "path": "src/memory.mjs",
+          "sha256": "0b215e127d7973d9fd164a334eecc5c986c3b5fcb2849d87fefdb642c8bb9692",
+          "bytes": 4923
+        },
+        {
+          "path": "src/model.mjs",
+          "sha256": "e9b147c2fff1777b6b1d925d9087ad02d95b29bc069ec31525a4534a0130c102",
+          "bytes": 15576
+        },
+        {
+          "path": "src/output.mjs",
+          "sha256": "d35dbc4031dbb94f9b6be11ad56ec28f369ebe5764c7fa01adf06a0515870def",
+          "bytes": 2469
+        },
+        {
+          "path": "src/policy.mjs",
+          "sha256": "bf4c5c51c387a5c320de993e20f7cef998d37133d59cf51c7f663e27530354cd",
+          "bytes": 12790
+        },
+        {
+          "path": "src/run-id.mjs",
+          "sha256": "13ed48178930c77d1b2b0ced0b320e6c5461bafc1a01ddb88b625e1ec579a475",
+          "bytes": 373
+        },
+        {
+          "path": "src/runtime-benchmark.mjs",
+          "sha256": "f9847d334eea4826aa0ffddd185719d643e503769528a674bd24c2671a397d8f",
+          "bytes": 20052
+        },
+        {
+          "path": "src/session-journal.mjs",
+          "sha256": "7cad98ecd0bdab01af227a837c06f166da1875215a9c80edc5159bd240567603",
+          "bytes": 14333
+        },
+        {
+          "path": "src/session-memory.mjs",
+          "sha256": "5163110b9e6ae6d7a4d88a427f0003caffdcc05e8c2171b22fc4b6066a8848c0",
+          "bytes": 12513
+        },
+        {
+          "path": "src/terminal.mjs",
+          "sha256": "6aef84015f9e4089423eaac91987422eb2a5ef2d4f353c52576f6905545b72f6",
+          "bytes": 20870
+        },
+        {
+          "path": "src/tool-feedback.mjs",
+          "sha256": "43669d4b13e1e12f12b42b755284305992160950f109496a6a4ad6303b3ce340",
+          "bytes": 5261
+        },
+        {
+          "path": "src/tools.mjs",
+          "sha256": "826e19289e024c97f3300a54f315df5a43bd7da422e82272f508baca1ded248d",
+          "bytes": 38338
+        },
+        {
+          "path": "src/usage.mjs",
+          "sha256": "eb3e7f7b1f91dc9fc35d49b37d891d0db55a58ac2b5566f866f0298652c08bd4",
+          "bytes": 2347
+        },
+        {
+          "path": "src/user-config.mjs",
+          "sha256": "c34416ae07b4b5f0118ce138f888b2330c24f381cbdc6e3cbad7c6bdb3b3a2d6",
+          "bytes": 9855
+        }
+      ]
+    },
+    "candidate": {
+      "commit": "96d85a96f7acc2087c89cb5729990b908b568240",
+      "sourceSha256": "2661ffc250838f885ee6e52fe22fcf5f2c75dbdd0e9e6a56c2892734c085014c",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "9041772e4fe8a3e08d784e89beeb1d9dff8dbfed39e7e134686f00ac3bceb2a4",
+          "bytes": 1365
+        },
+        {
+          "path": "src/agent.mjs",
+          "sha256": "d35fe4b643f30005d0d36dec104a5885a1beef076e527cc2fb7afc6fdde73cd2",
+          "bytes": 29355
+        },
+        {
+          "path": "src/benchmark.mjs",
+          "sha256": "c5e52911bf7f38a9f33754a5c819a157daa5683e39cfeef905bbd6fdc10b6289",
+          "bytes": 12644
+        },
+        {
+          "path": "src/cli.mjs",
+          "sha256": "8df0e2d54159aaa36261b6ce3ab22b3f8ad39e0b7fab9809bf24f2693cac20bc",
+          "bytes": 13155
+        },
+        {
+          "path": "src/compaction-experiment.mjs",
+          "sha256": "78769248909ef041ad6ec7cfc54df2a391ca74958d78406efa44927ce3b2633c",
+          "bytes": 3913
+        },
+        {
+          "path": "src/compaction.mjs",
+          "sha256": "d999c444d9ac920e3e2be73de07cf9284d175d49f0d74abc400033a54af5999a",
+          "bytes": 14990
+        },
+        {
+          "path": "src/comparison-claude.mjs",
+          "sha256": "fe9e3e38a28f6a3f89e44f5ede60019ff2ea078b082d1e92b0cb6076a7ee780e",
+          "bytes": 7218
+        },
+        {
+          "path": "src/comparison-fixtures.mjs",
+          "sha256": "29fba99a91fd5d5cddd8b1f2b3d270a56753cc8bbfc0e271aeb1e44e8eed331d",
+          "bytes": 8113
+        },
+        {
+          "path": "src/comparison-gateway.mjs",
+          "sha256": "050fdb8aac013357e29df85e2dce3d3ec27ae7a630de0a1d41e4d676d06e7203",
+          "bytes": 9898
+        },
+        {
+          "path": "src/comparison-pi-rpc.mjs",
+          "sha256": "fbf30c26fb542c85533db68d7eea75efe253d52d7db1428bc6a726711b35b239",
+          "bytes": 5732
+        },
+        {
+          "path": "src/comparison-pi.mjs",
+          "sha256": "9cef87672f679088fac7c4445f94d388cfee6873e79b062f72bad3d666babf55",
+          "bytes": 4535
+        },
+        {
+          "path": "src/comparison-report.mjs",
+          "sha256": "becc1d41f17d222df375b62e79251057a32455248ae9a4aa1d8389c3c4e06f6e",
+          "bytes": 8222
+        },
+        {
+          "path": "src/comparison-revision-report.mjs",
+          "sha256": "9a7db34af8ba3a5386b0dcda9b765b6984a3bee510a63d04c457c36e56f2fa1b",
+          "bytes": 3830
+        },
+        {
+          "path": "src/comparison-revisions.mjs",
+          "sha256": "0b22a4a38d7bf3646ad4ca5d84148ec98b8139d6523b57d72eac85cc04108da0",
+          "bytes": 3989
+        },
+        {
+          "path": "src/comparison-source-capture.mjs",
+          "sha256": "8470dfdbcc07d082cd2efa0bfa488e66fcb1671df63b05ed15a0852eea3363fa",
+          "bytes": 1860
+        },
+        {
+          "path": "src/comparison-three-report.mjs",
+          "sha256": "11e28a056754ebcabcaf30adeeee37270f015c382489b0f84997c2f40eeb5d72",
+          "bytes": 808
+        },
+        {
+          "path": "src/comparison-turn-audit.mjs",
+          "sha256": "8281cf2be85a3e0653708cf17fc95325e65028a669f3c510a5bc2512cce8c0f3",
+          "bytes": 6589
+        },
+        {
+          "path": "src/comparison-validation.mjs",
+          "sha256": "9901184f5ec6980f876a7e3d8519696208f3a48b9015b7a371802310afaf441f",
+          "bytes": 7650
+        },
+        {
+          "path": "src/config.mjs",
+          "sha256": "97b5cc5be69cc55177a4c25adc44de506a24ed495a75e57f92e4ba9029de9453",
+          "bytes": 12183
+        },
+        {
+          "path": "src/context-archive.mjs",
+          "sha256": "334e3a4b41d97a078e346afe668804c795f19b12d584a2c9965377f75cfd42c4",
+          "bytes": 3163
+        },
+        {
+          "path": "src/context-assembler.mjs",
+          "sha256": "5a4d3444e0bc175ebc976c610e34c5b8df9cb92fc22b8a2114c45e67582dea78",
+          "bytes": 21609
+        },
+        {
+          "path": "src/context-budget.mjs",
+          "sha256": "24203d8cfdc59ef683859a7ebc5f3470e4fb6a62fc2f64b7ea57e9f04d4f98e8",
+          "bytes": 1063
+        },
+        {
+          "path": "src/context.mjs",
+          "sha256": "fe3712bf50f965d8fdcf4a84290e7e78f58e70c96476865cd5cf4f6fa1f386ca",
+          "bytes": 6356
+        },
+        {
+          "path": "src/contextos-benchmark.mjs",
+          "sha256": "37242cd2ab9c33ca100f2c30bae2a3511f9f87a91340993d80fa7c4d8b054700",
+          "bytes": 32979
+        },
+        {
+          "path": "src/ledger.mjs",
+          "sha256": "0c51dfad105931024b511a2a6bd397af37a8f96d3ea94e0782d33c205ee4dba5",
+          "bytes": 7426
+        },
+        {
+          "path": "src/memory-benchmark.mjs",
+          "sha256": "9096cba9b8a6d96e26a9eb2f7e075aedc0901943636ef60a16c7450aa10c5543",
+          "bytes": 17271
+        },
+        {
+          "path": "src/memory-gc.mjs",
+          "sha256": "daa38a39c3326eec5cb9abdcfc852583dbbe4ebe1e38bf192109a3e1beada3ef",
+          "bytes": 4540
+        },
+        {
+          "path": "src/memory-handoff.mjs",
+          "sha256": "ada1e1126dc2a13feb30a334278580375be57e4faacb173e5c27406fd34813c0",
+          "bytes": 1617
+        },
+        {
+          "path": "src/memory.mjs",
+          "sha256": "0b215e127d7973d9fd164a334eecc5c986c3b5fcb2849d87fefdb642c8bb9692",
+          "bytes": 4923
+        },
+        {
+          "path": "src/model.mjs",
+          "sha256": "e9b147c2fff1777b6b1d925d9087ad02d95b29bc069ec31525a4534a0130c102",
+          "bytes": 15576
+        },
+        {
+          "path": "src/output.mjs",
+          "sha256": "d35dbc4031dbb94f9b6be11ad56ec28f369ebe5764c7fa01adf06a0515870def",
+          "bytes": 2469
+        },
+        {
+          "path": "src/policy.mjs",
+          "sha256": "bf4c5c51c387a5c320de993e20f7cef998d37133d59cf51c7f663e27530354cd",
+          "bytes": 12790
+        },
+        {
+          "path": "src/run-id.mjs",
+          "sha256": "13ed48178930c77d1b2b0ced0b320e6c5461bafc1a01ddb88b625e1ec579a475",
+          "bytes": 373
+        },
+        {
+          "path": "src/runtime-benchmark.mjs",
+          "sha256": "f9847d334eea4826aa0ffddd185719d643e503769528a674bd24c2671a397d8f",
+          "bytes": 20052
+        },
+        {
+          "path": "src/session-journal.mjs",
+          "sha256": "7cad98ecd0bdab01af227a837c06f166da1875215a9c80edc5159bd240567603",
+          "bytes": 14333
+        },
+        {
+          "path": "src/session-memory.mjs",
+          "sha256": "5163110b9e6ae6d7a4d88a427f0003caffdcc05e8c2171b22fc4b6066a8848c0",
+          "bytes": 12513
+        },
+        {
+          "path": "src/terminal.mjs",
+          "sha256": "6aef84015f9e4089423eaac91987422eb2a5ef2d4f353c52576f6905545b72f6",
+          "bytes": 20870
+        },
+        {
+          "path": "src/tool-feedback.mjs",
+          "sha256": "8d63ccc25ec057534c41c84e894e4d95510ece6ab0846a3b850f8f66caa70d06",
+          "bytes": 5587
+        },
+        {
+          "path": "src/tools.mjs",
+          "sha256": "eb6bae71d362cf75ceb438b6000dcdc9eb793fb68d1193eadfab00c76dec739d",
+          "bytes": 41318
+        },
+        {
+          "path": "src/usage.mjs",
+          "sha256": "eb3e7f7b1f91dc9fc35d49b37d891d0db55a58ac2b5566f866f0298652c08bd4",
+          "bytes": 2347
+        },
+        {
+          "path": "src/user-config.mjs",
+          "sha256": "c34416ae07b4b5f0118ce138f888b2330c24f381cbdc6e3cbad7c6bdb3b3a2d6",
+          "bytes": 9855
+        },
+        {
+          "path": "src/versioned-write.mjs",
+          "sha256": "022c1539099a690060074de8aa075a47a7ce8f2d77171aadacaa351c448c1978",
+          "bytes": 2536
+        }
+      ]
+    }
+  },
+  "config": {
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "contextWindowTokens": 32768,
+    "contextReserveTokens": 4096,
+    "maxRequestInputBytes": 256000,
+    "memoryPolicy": "contextos",
+    "historyStrategy": "full",
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "commandTimeoutMs": 120000,
+    "contextosTargetBytes": 32000,
+    "compaction": "auto",
+    "maxToolCalls": 24,
+    "requestTimeoutMs": 90000,
+    "taskTimeoutMs": 600000,
+    "taskCapUsd": 1,
+    "suiteCapUsd": 4,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8
+  },
+  "taskIds": [
+    "l1-narcissistic",
+    "l1-intervals",
+    "l2-ttl-cache"
+  ],
+  "repeats": 2,
+  "planned": 12,
+  "candidateFlag": {
+    "name": "versionedWrite",
+    "baseline": false,
+    "candidate": true
+  },
+  "hypothesis": "Explicit version-checked full replacement reduces existing-file write refusals and edit reconstruction; fixed schema and capability overhead are measured",
+  "stoppingPolicy": "Unknown usage stops suite with task reservation retained; no paid retry or acceptance edits",
+  "gate": "All usage/coverage complete; candidate full acceptance and independent code behavior not lower overall or in any task family; all-attempt total tokens lower and at least one versioned replacement successful; confirm phase only after screen passes",
+  "scope": "Self-authored Node tasks; screen: three tasks twice per arm; confirm: eight tasks three times per arm, conditional on screen; no production/general superiority claim",
+  "harnessSha256": "421b8f9635c26caf9d1e1d0656c6245a9c55e68c1a29111e7444a3d8a7eb50c9",
+  "harnessNormalizedSha256": "df7bdfa0763681a00418b499720ff7ff9eefd9dd871ebbab4f95358e15da4351",
+  "manifestSha256": "8f1efd65bb1ab10fb0f126040140dec6ee0d6d8eeaf017774a07090e6643c095",
+  "preflight": [
+    {
+      "id": "l1-narcissistic",
+      "passed": true,
+      "initialTreeSha256": "a3e4d75727c94d7e46b5fc20111b55046011281f6c875f10029e9751a00f9294",
+      "promptSha256": "83caa5ba6988c3ec36d38f34ea8b60b5f78d25121f588e7126d94b30decdfbfb",
+      "acceptanceSha256": "bd55f86fa0fa77eb99de4d6c439a196c302411564b19acbfc3ff9fad79a1d794"
+    },
+    {
+      "id": "l1-intervals",
+      "passed": true,
+      "initialTreeSha256": "ce6a80f2ee53fd74ff7332c506baa3186db120f8ca9a70cbb3233acff5372ffb",
+      "promptSha256": "07f77212e3d1cdeca6a204d18c5ef9df992f5c5fdfd5940ca240c1adbdd175a0",
+      "acceptanceSha256": "34c60e791ddf1c37962c87ff337316407b5a6e400c0a9ff18994001bcb146e51"
+    },
+    {
+      "id": "l2-csv",
+      "passed": true,
+      "initialTreeSha256": "974d452e1fc8d46b599bfed6f250e213217ea90013704dfff75fa5ff9f05d09e",
+      "promptSha256": "6bbf6ceab1ca3717d20f662223e7b8a00b862897e82ac07299374e29e3691923",
+      "acceptanceSha256": "43ba67c2f38844d3c6c34463da4e29af6b7cfa678b0d78b8fb9b472acf2b018a"
+    },
+    {
+      "id": "l2-ttl-cache",
+      "passed": true,
+      "initialTreeSha256": "ea7e0ba208b801ca73948348956fab5fb3f8adb1f8922c1945cc7cb70cd0803d",
+      "promptSha256": "30fb2605069568d8be7caec486dd6a5731fe8c8f04747f89b69b2ae8fd94887d",
+      "acceptanceSha256": "3c353805ebc173f99e1931a6c5ed284d73c5359f66d3e4796303de81033462b0"
+    },
+    {
+      "id": "l3-scheduler",
+      "passed": true,
+      "initialTreeSha256": "87b7f60f186b9de458a24eb98c825d271dd6ce35e5b51a92cb9a68bf1147965b",
+      "promptSha256": "17248615831a6455937d05a8a6ecbb6c720953ba53816647590bcacb7045ea43",
+      "acceptanceSha256": "c2edb23a3f71fc72e6a09087fdaec0faaae07fcce79a46a8d74c17cf33824b98"
+    },
+    {
+      "id": "l3-pagination",
+      "passed": true,
+      "initialTreeSha256": "c208b7fc8d990ceb58c84f31a17cb307de5c8b95133bab331b37d43165d84fec",
+      "promptSha256": "2c20a806b105d63361561287b8e87229abd8f99ab37e8cba595b88057702c6eb",
+      "acceptanceSha256": "e0442da90e84be69fc3c54605fe6887f8212025beaa12fc49c89cc1edb6c2cb9"
+    },
+    {
+      "id": "l4-transfers",
+      "passed": true,
+      "initialTreeSha256": "e07cfb1427e16590dff6eb4211ba350ac759441409d32ea97968089267fdbab1",
+      "promptSha256": "0a01f089acd20af59866b7fa5c1d1a5c84b1278ada61c53aa121fa0394ef9570",
+      "acceptanceSha256": "c65eb7eb3540c0dfb6103be4924dd4241ecb5c5e66b3d2c5b100ae8c40aabee5"
+    },
+    {
+      "id": "l4-dependency-plan",
+      "passed": true,
+      "initialTreeSha256": "eb4983eb2fc19cd424effdb66cd44beba42cf8bdd0852ed747e6b22124155227",
+      "promptSha256": "a93013e0ba464774676c30d1198d03347f2cc7d02eeccb4784656f943204931b",
+      "acceptanceSha256": "5741e5ab3d45c90cf9e3d272c3ab79dd40bf20caa52e3a360cc66ce72ae662f1"
+    }
+  ],
+  "fixedDefinitions": [
+    {
+      "discoveryWide": false,
+      "baselineSchemaSha256": "656394bf998d6403538fc67f59f8348664afc7fc9c375c46bbcac67a916c2012",
+      "candidateComparableSchemaSha256": "656394bf998d6403538fc67f59f8348664afc7fc9c375c46bbcac67a916c2012",
+      "baselineBytes": 2717,
+      "candidateBytes": 2839,
+      "unit": "serialized tool-definition UTF-8 bytes, not provider tokens"
+    },
+    {
+      "discoveryWide": true,
+      "baselineSchemaSha256": "474f65f67b17359d617530b54ab4a108c270b6c4a5f3e18e8f8e1ef2c5793e3c",
+      "candidateComparableSchemaSha256": "474f65f67b17359d617530b54ab4a108c270b6c4a5f3e18e8f8e1ef2c5793e3c",
+      "baselineBytes": 2953,
+      "candidateBytes": 3075,
+      "unit": "serialized tool-definition UTF-8 bytes, not provider tokens"
+    }
+  ],
+  "sourceUnchanged": true,
+  "stopReason": "interrupted_unknown_usage_reservation_retained_no_retry",
+  "consumedUsd": 1.1069179999999998,
+  "interruption": {
+    "originalComparisonSha256": "172f28b23fb85589bda4d64924dbaf290cc38224a7793098fae42f9339145cfd",
+    "unresolvedRequests": 1,
+    "settledRequests": 1,
+    "retainedReservationUsd": 1,
+    "completedAttempts": 8,
+    "note": "Original runner no longer active. Offline administrative closure and local grading only; no model retry. This is not an agent coding failure."
+  },
+  "rawSha256": "ed7ebbc25094689bd7d3f0cb6b982cc0d99904963d549c17092ef6121f77fc33",
+  "coverageComplete": false,
+  "totals": {
+    "baseline": {
+      "attempted": 5,
+      "accepted": 4,
+      "codeBehaviorPass": 4,
+      "providerTokens": null,
+      "knownTokenSubtotal": 53490,
+      "knownPartialTokenSubtotal": 1422,
+      "interruptedAttempts": 1,
+      "completedAttempts": 4,
+      "completedAccepted": 4,
+      "completedCodeBehaviorPass": 4,
+      "attemptsWithReplacement": 0,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "toolCalls": 29,
+      "toolErrors": 1,
+      "writeExistingErrors": 1,
+      "singleReadCalls": 15,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedInputTokens": null,
+      "cacheCreationInputTokens": null,
+      "requests": null,
+      "compactionRequests": null
+    },
+    "candidate": {
+      "attempted": 4,
+      "accepted": 4,
+      "codeBehaviorPass": 4,
+      "providerTokens": 54760,
+      "knownTokenSubtotal": 54760,
+      "knownPartialTokenSubtotal": 0,
+      "interruptedAttempts": 0,
+      "completedAttempts": 4,
+      "completedAccepted": 4,
+      "completedCodeBehaviorPass": 4,
+      "attemptsWithReplacement": 0,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "toolCalls": 29,
+      "toolErrors": 2,
+      "writeExistingErrors": 2,
+      "singleReadCalls": 14,
+      "inputTokens": 49797,
+      "outputTokens": 4963,
+      "cachedInputTokens": 18496,
+      "cacheCreationInputTokens": 0,
+      "requests": 20,
+      "compactionRequests": 0
+    }
+  },
+  "changePercent": null,
+  "qualityGatePassed": false,
+  "gatePassed": false,
+  "perTask": [
+    {
+      "id": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codeBehaviorPass": 2,
+        "providerTokens": 21779,
+        "knownTokenSubtotal": 21779,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 2,
+        "completedAccepted": 2,
+        "completedCodeBehaviorPass": 2,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 12,
+        "toolErrors": 0,
+        "writeExistingErrors": 0,
+        "singleReadCalls": 6,
+        "inputTokens": 19553,
+        "outputTokens": 2226,
+        "cachedInputTokens": 14208,
+        "cacheCreationInputTokens": 0,
+        "requests": 9,
+        "compactionRequests": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 2,
+        "codeBehaviorPass": 2,
+        "providerTokens": 19640,
+        "knownTokenSubtotal": 19640,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 2,
+        "completedAccepted": 2,
+        "completedCodeBehaviorPass": 2,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 12,
+        "toolErrors": 0,
+        "writeExistingErrors": 0,
+        "singleReadCalls": 6,
+        "inputTokens": 17562,
+        "outputTokens": 2078,
+        "cachedInputTokens": 7040,
+        "cacheCreationInputTokens": 0,
+        "requests": 8,
+        "compactionRequests": 0
+      }
+    },
+    {
+      "id": "l1-intervals",
+      "title": "区间合并与输入保护",
+      "baseline": {
+        "attempted": 2,
+        "accepted": 1,
+        "codeBehaviorPass": 1,
+        "providerTokens": null,
+        "knownTokenSubtotal": 13514,
+        "knownPartialTokenSubtotal": 1422,
+        "interruptedAttempts": 1,
+        "completedAttempts": 1,
+        "completedAccepted": 1,
+        "completedCodeBehaviorPass": 1,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 9,
+        "toolErrors": 0,
+        "writeExistingErrors": 0,
+        "singleReadCalls": 5,
+        "inputTokens": null,
+        "outputTokens": null,
+        "cachedInputTokens": null,
+        "cacheCreationInputTokens": null,
+        "requests": null,
+        "compactionRequests": null
+      },
+      "candidate": {
+        "attempted": 1,
+        "accepted": 1,
+        "codeBehaviorPass": 1,
+        "providerTokens": 15461,
+        "knownTokenSubtotal": 15461,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 1,
+        "completedAccepted": 1,
+        "completedCodeBehaviorPass": 1,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 7,
+        "toolErrors": 1,
+        "writeExistingErrors": 1,
+        "singleReadCalls": 3,
+        "inputTokens": 14184,
+        "outputTokens": 1277,
+        "cachedInputTokens": 6720,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      }
+    },
+    {
+      "id": "l2-ttl-cache",
+      "title": "TTL 缓存跨文件修复",
+      "baseline": {
+        "attempted": 1,
+        "accepted": 1,
+        "codeBehaviorPass": 1,
+        "providerTokens": 18197,
+        "knownTokenSubtotal": 18197,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 1,
+        "completedAccepted": 1,
+        "completedCodeBehaviorPass": 1,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 8,
+        "toolErrors": 1,
+        "writeExistingErrors": 1,
+        "singleReadCalls": 4,
+        "inputTokens": 16344,
+        "outputTokens": 1853,
+        "cachedInputTokens": 11072,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      },
+      "candidate": {
+        "attempted": 1,
+        "accepted": 1,
+        "codeBehaviorPass": 1,
+        "providerTokens": 19659,
+        "knownTokenSubtotal": 19659,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 1,
+        "completedAccepted": 1,
+        "completedCodeBehaviorPass": 1,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 10,
+        "toolErrors": 1,
+        "writeExistingErrors": 1,
+        "singleReadCalls": 5,
+        "inputTokens": 18051,
+        "outputTokens": 1608,
+        "cachedInputTokens": 4736,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      }
+    }
+  ],
+  "perRepeat": [
+    {
+      "repeat": 1,
+      "baseline": {
+        "attempted": 3,
+        "accepted": 3,
+        "codeBehaviorPass": 3,
+        "providerTokens": 41905,
+        "knownTokenSubtotal": 41905,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 3,
+        "completedAccepted": 3,
+        "completedCodeBehaviorPass": 3,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 20,
+        "toolErrors": 1,
+        "writeExistingErrors": 1,
+        "singleReadCalls": 9,
+        "inputTokens": 37711,
+        "outputTokens": 4194,
+        "cachedInputTokens": 24768,
+        "cacheCreationInputTokens": 0,
+        "requests": 16,
+        "compactionRequests": 0
+      },
+      "candidate": {
+        "attempted": 3,
+        "accepted": 3,
+        "codeBehaviorPass": 3,
+        "providerTokens": 44984,
+        "knownTokenSubtotal": 44984,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 3,
+        "completedAccepted": 3,
+        "completedCodeBehaviorPass": 3,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 23,
+        "toolErrors": 2,
+        "writeExistingErrors": 2,
+        "singleReadCalls": 11,
+        "inputTokens": 41036,
+        "outputTokens": 3948,
+        "cachedInputTokens": 14656,
+        "cacheCreationInputTokens": 0,
+        "requests": 16,
+        "compactionRequests": 0
+      }
+    },
+    {
+      "repeat": 2,
+      "baseline": {
+        "attempted": 2,
+        "accepted": 1,
+        "codeBehaviorPass": 1,
+        "providerTokens": null,
+        "knownTokenSubtotal": 11585,
+        "knownPartialTokenSubtotal": 1422,
+        "interruptedAttempts": 1,
+        "completedAttempts": 1,
+        "completedAccepted": 1,
+        "completedCodeBehaviorPass": 1,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 9,
+        "toolErrors": 0,
+        "writeExistingErrors": 0,
+        "singleReadCalls": 6,
+        "inputTokens": null,
+        "outputTokens": null,
+        "cachedInputTokens": null,
+        "cacheCreationInputTokens": null,
+        "requests": null,
+        "compactionRequests": null
+      },
+      "candidate": {
+        "attempted": 1,
+        "accepted": 1,
+        "codeBehaviorPass": 1,
+        "providerTokens": 9776,
+        "knownTokenSubtotal": 9776,
+        "knownPartialTokenSubtotal": 0,
+        "interruptedAttempts": 0,
+        "completedAttempts": 1,
+        "completedAccepted": 1,
+        "completedCodeBehaviorPass": 1,
+        "attemptsWithReplacement": 0,
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "toolCalls": 6,
+        "toolErrors": 0,
+        "writeExistingErrors": 0,
+        "singleReadCalls": 3,
+        "inputTokens": 8761,
+        "outputTokens": 1015,
+        "cachedInputTokens": 3840,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      }
+    }
+  ],
+  "rows": [
+    {
+      "id": "l1-narcissistic-r1-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "baseline",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 1,
+      "usage": {
+        "inputTokens": 8970,
+        "outputTokens": 1224,
+        "totalTokens": 10194,
+        "cachedInputTokens": 5952,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "toolErrors": 0,
+      "writeExistingErrors": 0,
+      "singleReadCalls": 3,
+      "firstRequestInputTokens": 1408,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 37843,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l1-narcissistic-r1-candidate",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "candidate",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 1,
+      "usage": {
+        "inputTokens": 8801,
+        "outputTokens": 1063,
+        "totalTokens": 9864,
+        "cachedInputTokens": 3200,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "toolErrors": 0,
+      "writeExistingErrors": 0,
+      "singleReadCalls": 3,
+      "firstRequestInputTokens": 1460,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 44766,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l1-intervals-r1-candidate",
+      "taskId": "l1-intervals",
+      "title": "区间合并与输入保护",
+      "repeat": 1,
+      "arm": "candidate",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/intervals.mjs",
+        "tests/regression.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 1,
+      "usage": {
+        "inputTokens": 14184,
+        "outputTokens": 1277,
+        "totalTokens": 15461,
+        "cachedInputTokens": 6720,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 7,
+      "toolErrors": 1,
+      "writeExistingErrors": 1,
+      "singleReadCalls": 3,
+      "firstRequestInputTokens": 1435,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 47714,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l1-intervals-r1-baseline",
+      "taskId": "l1-intervals",
+      "title": "区间合并与输入保护",
+      "repeat": 1,
+      "arm": "baseline",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/intervals.mjs",
+        "tests/mergeIntervals.regression.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 2,
+      "usage": {
+        "inputTokens": 12397,
+        "outputTokens": 1117,
+        "totalTokens": 13514,
+        "cachedInputTokens": 7744,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "toolErrors": 0,
+      "writeExistingErrors": 0,
+      "singleReadCalls": 2,
+      "firstRequestInputTokens": 1381,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 44768,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l2-ttl-cache-r1-baseline",
+      "taskId": "l2-ttl-cache",
+      "title": "TTL 缓存跨文件修复",
+      "repeat": 1,
+      "arm": "baseline",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/cache.mjs",
+        "tests/regression.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 1,
+      "usage": {
+        "inputTokens": 16344,
+        "outputTokens": 1853,
+        "totalTokens": 18197,
+        "cachedInputTokens": 11072,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 8,
+      "toolErrors": 1,
+      "writeExistingErrors": 1,
+      "singleReadCalls": 4,
+      "firstRequestInputTokens": 1486,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 53820,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l2-ttl-cache-r1-candidate",
+      "taskId": "l2-ttl-cache",
+      "title": "TTL 缓存跨文件修复",
+      "repeat": 1,
+      "arm": "candidate",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/cache.mjs",
+        "tests/cache.regression.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 2,
+      "usage": {
+        "inputTokens": 18051,
+        "outputTokens": 1608,
+        "totalTokens": 19659,
+        "cachedInputTokens": 4736,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 10,
+      "toolErrors": 1,
+      "writeExistingErrors": 1,
+      "singleReadCalls": 5,
+      "firstRequestInputTokens": 1537,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 60284,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l1-narcissistic-r2-candidate",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 2,
+      "arm": "candidate",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 1,
+      "usage": {
+        "inputTokens": 8761,
+        "outputTokens": 1015,
+        "totalTokens": 9776,
+        "cachedInputTokens": 3840,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "toolErrors": 0,
+      "writeExistingErrors": 0,
+      "singleReadCalls": 3,
+      "firstRequestInputTokens": 1458,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 35670,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l1-narcissistic-r2-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 2,
+      "arm": "baseline",
+      "status": "completed",
+      "accepted": true,
+      "publicPassed": true,
+      "hiddenPassed": true,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "deletedFiles": [],
+      "validationPassed": true,
+      "validationAttempts": 1,
+      "usage": {
+        "inputTokens": 10583,
+        "outputTokens": 1002,
+        "totalTokens": 11585,
+        "cachedInputTokens": 8256,
+        "cacheCreationInputTokens": 0,
+        "requests": 5,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "toolErrors": 0,
+      "writeExistingErrors": 0,
+      "singleReadCalls": 3,
+      "firstRequestInputTokens": 1407,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": 35465,
+      "knownPartialUsage": null,
+      "retainedReservationUsd": null,
+      "codeBehaviorPass": true
+    },
+    {
+      "id": "l1-intervals-r2-baseline",
+      "taskId": "l1-intervals",
+      "title": "区间合并与输入保护",
+      "repeat": 2,
+      "arm": "baseline",
+      "status": "interrupted_unknown_usage",
+      "accepted": false,
+      "publicPassed": true,
+      "hiddenPassed": false,
+      "addedTestsPassed": true,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "changedFiles": [],
+      "deletedFiles": [],
+      "validationPassed": false,
+      "validationAttempts": 0,
+      "usage": null,
+      "usageComplete": false,
+      "toolCalls": 3,
+      "toolErrors": 0,
+      "writeExistingErrors": 0,
+      "singleReadCalls": 3,
+      "firstRequestInputTokens": 1380,
+      "versionedWriteAttempts": 0,
+      "versionedWriteSuccesses": 0,
+      "versionedWriteErrors": 0,
+      "commandTimeouts": 0,
+      "elapsedMs": null,
+      "knownPartialUsage": {
+        "requests": 1,
+        "inputTokens": 1380,
+        "outputTokens": 42,
+        "totalTokens": 1422,
+        "cachedInputTokens": 0,
+        "cacheCreationInputTokens": 0
+      },
+      "retainedReservationUsd": 1,
+      "codeBehaviorPass": false
+    }
+  ],
+  "audit": {
+    "auditedAttempts": 9,
+    "unit": "tool event counts; mismatched-hash errors may also be unavailable-evidence errors",
+    "totals": {
+      "baseline": {
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      "candidate": {
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "arm": "baseline",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l1-narcissistic-r1-candidate",
+        "arm": "candidate",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l1-intervals-r1-candidate",
+        "arm": "candidate",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l1-intervals-r1-baseline",
+        "arm": "baseline",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l2-ttl-cache-r1-baseline",
+        "arm": "baseline",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l2-ttl-cache-r1-candidate",
+        "arm": "candidate",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-candidate",
+        "arm": "candidate",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-baseline",
+        "arm": "baseline",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      },
+      {
+        "id": "l1-intervals-r2-baseline",
+        "arm": "baseline",
+        "versionedWriteAttempts": 0,
+        "versionedWriteSuccesses": 0,
+        "versionedWriteErrors": 0,
+        "commandTimeouts": 0,
+        "hashMismatchErrors": 0,
+        "unavailableEvidenceErrors": 0,
+        "sourceChangedErrors": 0,
+        "versionedSourceEdits": 0,
+        "versionedTestEdits": 0,
+        "versionedOtherEdits": 0
+      }
+    ]
+  },
+  "bothAccepted": {
+    "pairs": 4,
+    "totals": {
+      "baseline": 53490,
+      "candidate": 54760
+    },
+    "changePercent": 2.3742755655262737
+  },
+  "firstInputDeltas": [
+    52,
+    54,
+    51,
+    51
+  ]
+}

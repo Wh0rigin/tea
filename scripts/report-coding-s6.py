@@ -12,7 +12,7 @@ assert raw['mode']=='live' and raw.get('endedAt') and not any(x['running'] for x
 keys=['id','taskId','title','repeat','arm','status','accepted','publicPassed','hiddenPassed','addedTestsPassed',
       'protectedFilesUnchanged','allowedChanges','changedFiles','deletedFiles','validationPassed','validationAttempts',
       'usage','usageComplete','toolCalls','toolErrors','writeExistingErrors','singleReadCalls','firstRequestInputTokens',
-      'versionedWriteAttempts','versionedWriteSuccesses','versionedWriteErrors','commandTimeouts','elapsedMs']
+      'versionedWriteAttempts','versionedWriteSuccesses','versionedWriteErrors','commandTimeouts','elapsedMs','knownPartialUsage','retainedReservationUsd']
 rows=[{k:r.get(k) for k in keys} for r in raw['rows']]
 for r,original in zip(rows,raw['rows']):
  r['codeBehaviorPass']=bool(r['publicPassed'] and r['hiddenPassed'] and r['addedTestsPassed'])
@@ -24,6 +24,11 @@ def aggregate(samples):
  result={'attempted':len(samples),'accepted':sum(bool(r['accepted']) for r in samples),'codeBehaviorPass':sum(r['codeBehaviorPass'] for r in samples),
   'providerTokens':sum(r['usage']['totalTokens'] for r in samples) if known else None,
   'knownTokenSubtotal':sum(r['usage']['totalTokens'] for r in samples if r['usage']),
+  'knownPartialTokenSubtotal':sum((r.get('knownPartialUsage') or {}).get('totalTokens',0) for r in samples),
+  'interruptedAttempts':sum(r['status']=='interrupted_unknown_usage' for r in samples),
+  'completedAttempts':sum(bool(r['usageComplete']) for r in samples),
+  'completedAccepted':sum(bool(r['accepted']) for r in samples if r['usageComplete']),
+  'completedCodeBehaviorPass':sum(r['codeBehaviorPass'] for r in samples if r['usageComplete']),
   'attemptsWithReplacement':sum(bool(r['versionedWriteSuccesses']) for r in samples)}
  for k in ['versionedWriteAttempts','versionedWriteSuccesses','versionedWriteErrors','commandTimeouts','toolCalls','toolErrors','writeExistingErrors','singleReadCalls']:result[k]=sum(r.get(k) or 0 for r in samples)
  for k in ['inputTokens','outputTokens','cachedInputTokens','cacheCreationInputTokens','requests','compactionRequests']:result[k]=sum(r['usage'][k] or 0 for r in samples) if known else None
@@ -45,7 +50,7 @@ for r in arms['baseline']:
 paired={a:sum(pair[i]['usage']['totalTokens'] for pair in matched) for i,a in enumerate(arms)}
 paired_change=100*(paired['candidate']/paired['baseline']-1) if paired['baseline'] else None
 repeats=[{'repeat':n,**{a:aggregate([r for r in rs if r['repeat']==n]) for a,rs in arms.items()}} for n in range(1,raw['repeats']+1)]
-summary={k:raw.get(k) for k in ['runId','phase','createdAt','endedAt','engine','config','taskIds','repeats','planned','candidateFlag','hypothesis','stoppingPolicy','gate','scope','harnessSha256','harnessNormalizedSha256','manifestSha256','preflight','fixedDefinitions','sourceUnchanged','stopReason','consumedUsd']}
+summary={k:raw.get(k) for k in ['runId','phase','createdAt','endedAt','engine','config','taskIds','repeats','planned','candidateFlag','hypothesis','stoppingPolicy','gate','scope','harnessSha256','harnessNormalizedSha256','manifestSha256','preflight','fixedDefinitions','sourceUnchanged','stopReason','consumedUsd','interruption']}
 summary.update({'rawSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'coverageComplete':complete,'totals':totals,'changePercent':change,'qualityGatePassed':quality,'gatePassed':gate,'perTask':tasks,'perRepeat':repeats,'rows':rows,'audit':audit,
  'bothAccepted':{'pairs':len(matched),'totals':paired,'changePercent':paired_change},'firstInputDeltas':first})
 target=ROOT/'benchmarks/reports'/run_id;target.mkdir(exist_ok=False)
@@ -60,22 +65,30 @@ for i,t in enumerate(tasks):
   else:ax.annotate('n/a',(i+shift,0),xytext=(0,5),textcoords='offset points',ha='center')
   for n,r in enumerate(samples):
    if r['usage']:(ax if r['accepted'] else bx).scatter(i+shift+(n-(len(samples)-1)/2)*.06,r['usage']['totalTokens']/1000,marker='o' if r['accepted'] else 'x',color=colors[a],edgecolors='white' if r['accepted'] else None,zorder=3)
+  unknown=sum(not r['usage'] for r in samples)
+  if unknown:bx.text(i+shift,.5,f'{unknown} unknown\n(interrupted)',transform=bx.get_xaxis_transform(),ha='center',va='center',color=colors[a],fontsize=9)
   ax.annotate(f'{len(passed)}/{len(samples)}',(i+shift,0),xytext=(0,-15),textcoords='offset points',ha='center',fontsize=8)
 ax.set_title('Accepted attempts only: mean bars and individual dots');ax.set_ylabel('Provider tokens / attempt (thousands)');ax.margins(y=.2)
 ax.legend(handles=[Patch(facecolor=colors[a],label=a) for a in arms],frameon=False)
 bx.set_title('Failed attempt costs: separate scale, included in total');bx.set_ylabel('Failed attempts\n(thousands)');bx.set_ylim(bottom=0)
+bx.set_title('Failed/interrupted attempts: unknown usage has no numeric value')
+if not any(not r['accepted'] and r['usage'] for r in rows):bx.set_yticks([]);bx.set_ylabel('Unknown usage\nnot plotted as zero')
 labels={'l1-narcissistic':'New module','l1-intervals':'Interval merge','l2-ttl-cache':'TTL cache'}
 bx.set_xticks(range(len(tasks)),[labels.get(t['id'],t['id']) for t in tasks]);bx.tick_params(axis='x',pad=8);bx.set_xlabel('Task; acceptance counts below upper bars')
 for axis in [ax,bx]:axis.grid(axis='y',alpha=.15);axis.set_axisbelow(True)
-fig.suptitle(f'S6 {raw["phase"]} — version-checked full replacement',fontsize=15)
-fig.text(.5,.02,f'GLM-5.3-flash · enabled / low · {raw["repeats"]} repeats per task and arm · all failed costs retained.\nSource: {run_id}. Self-authored Node.js tasks; no production/generalization claim.',ha='center',fontsize=8)
+fig.suptitle(f'S6 {raw["phase"]} — '+('version-checked full replacement' if complete else 'INCOMPLETE; no full-suite token ratio'),fontsize=15)
+fig.text(.5,.02,f'GLM-5.3-flash · enabled / low · {raw["repeats"]} repeats planned per task and arm · unknown usage unplotted.\nSource: {run_id}. Self-authored Node.js tasks; no production/generalization claim.',ha='center',fontsize=8)
 fig.subplots_adjust(left=.12,right=.97,top=.89,bottom=.19)
 fig.savefig(target/'s6-coding.png',dpi=200);fig.savefig(target/'s6-coding.svg');plt.close(fig)
 svg=target/'s6-coding.svg';svg.write_text('\n'.join(x.rstrip() for x in svg.read_text(encoding='utf8').splitlines())+'\n',encoding='utf8')
-lines=[f'# S6 {raw["phase"]}：版本校验完整替换','',f'计划 {raw["planned"]} 次，结束 {len(rows)} 次，覆盖与用量完整：{complete}。','',
- f'完整验收：{totals["baseline"]["accepted"]}/{len(arms["baseline"])} → {totals["candidate"]["accepted"]}/{len(arms["candidate"])}；独立代码行为：{totals["baseline"]["codeBehaviorPass"]}/{len(arms["baseline"])} → {totals["candidate"]["codeBehaviorPass"]}/{len(arms["candidate"])}。','']
+lines=[f'# S6 {raw["phase"]}：版本校验完整替换','',f'计划 {raw["planned"]} 次，尝试 {len(rows)} 次，其中用量完整 {sum(bool(r["usageComplete"]) for r in rows)} 次；覆盖与用量完整：{complete}。','']
+if not raw.get('interruption'):lines += [f'完整验收：{totals["baseline"]["accepted"]}/{len(arms["baseline"])} → {totals["candidate"]["accepted"]}/{len(arms["candidate"])}；独立代码行为：{totals["baseline"]["codeBehaviorPass"]}/{len(arms["baseline"])} → {totals["candidate"]["codeBehaviorPass"]}/{len(arms["candidate"])}。','']
 if complete:lines += [f'全尝试 provider Token **{totals["baseline"]["providerTokens"]:,} → {totals["candidate"]["providerTokens"]:,}，{"增加" if change>=0 else "减少"} {abs(change):.2f}%**。','']
 else:lines += ['用量或覆盖不完整，不给整组百分比；未知不按零处理。','']
+if raw.get('interruption'):
+ lines += ['**运行中断，不能据此推断 Agent 正确率下降。** 原测试进程已不存在，第九次尝试有一个未结算请求；原始结果快照保留，离线结束记录，不重试模型请求。',
+  f'已完成且用量完整的样本：基线验收 {totals["baseline"]["completedAccepted"]}/{totals["baseline"]["completedAttempts"]}、代码行为 {totals["baseline"]["completedCodeBehaviorPass"]}/{totals["baseline"]["completedAttempts"]}；候选验收 {totals["candidate"]["completedAccepted"]}/{totals["candidate"]["completedAttempts"]}、代码行为 {totals["candidate"]["completedCodeBehaviorPass"]}/{totals["candidate"]["completedAttempts"]}。',
+  f'中断尝试的已确认请求片段另有 {totals["baseline"]["knownPartialTokenSubtotal"]+totals["candidate"]["knownPartialTokenSubtotal"]:,} Token；该尝试总用量未知，预留 1 USD 保持，不伪造为完整计费。','']
 lines += [f'质量门槛：{quality}；综合门槛：**{gate}**。Token 包含缓存输入与输出中的思考，不重复累加。','',
  '![逐题结果](s6-coding.png)','','## 每题与每轮','']
 for t in tasks:lines += [f'- {t["title"]}：验收 {t["baseline"]["accepted"]} → {t["candidate"]["accepted"]}；代码行为 {t["baseline"]["codeBehaviorPass"]} → {t["candidate"]["codeBehaviorPass"]}；Token {t["baseline"]["providerTokens"]} → {t["candidate"]["providerTokens"]}。']
