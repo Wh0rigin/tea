@@ -25,6 +25,7 @@ test('S5 assertion advice preserves original output, demands contract evidence a
   assert.equal(feedback.code, 'VALIDATION_FAILED'); assert.equal(feedback.retryable, false);
   assert.match(feedback.next, /task contract/); assert.match(feedback.next, /only with evidence/);
   assert.match(feedback.next, /preserve existing tests and user changes/);
+  assert.match(feedback.next, /unless the task requires modifying them/); assert.match(feedback.next, /Never weaken required checks/);
   assert.match(feedback.next, /smallest relevant check/); assert.match(feedback.next, /required suite/);
   assert.ok(appendFailureFeedback(failed.output, feedback).startsWith(failed.output + '\n[tool_feedback]'));
   assert.equal(repair({ output: 'exit=0\npassed', toolName: 'run_tests', validation: true }), null);

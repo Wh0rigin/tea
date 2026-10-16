@@ -51,7 +51,7 @@ export function toolFailureFeedback({ error, output, toolName, validation = fals
   if (!code) return null;
   const [missingCapability, originalNext] = actions[code] || actions.TOOL_FAILED;
   const next = repair && code === 'VALIDATION_FAILED'
-    ? 'Compare the failing assertion with the task contract and existing tests. Fix the implementation or an incorrect newly added test expectation only with evidence; preserve existing tests and user changes. Rerun the smallest relevant check, then the required suite. A passing new test alone does not establish the full contract.'
+    ? 'Compare the failing assertion with the task contract and existing tests. Fix the implementation or an incorrect newly added test expectation only with evidence; preserve existing tests and user changes unless the task requires modifying them. Never weaken required checks just to pass. Rerun the smallest relevant check, then the required suite.'
     : originalNext;
   return { version: 1, code, retryable: code === 'EXECUTION_TRANSIENT', missingCapability, next };
 }
