@@ -6,6 +6,7 @@ import { createInterface } from 'node:readline/promises';
 import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
 import { BoundedOutput } from './output.mjs';
 import { ToolFeedbackError } from './tool-feedback.mjs';
+import { ToolContext, ToolSpec, ToolService } from './tools/core.mjs';
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -64,6 +65,7 @@ export function decodeText(buffer) {
 }
 
 export class WorkspaceTools {
+  get toolService() { return workspaceToolService(this); }
   constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
@@ -282,10 +284,7 @@ export class WorkspaceTools {
   }
 
   modelToolDefinitions({ includeMemory = true } = {}) {
-    const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
-    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
-    const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
-    return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
+    return this.toolService.definitions({ includeMemory });
   }
 
   async rememberTermMapping({ query, target, path: relativePath, line } = {}) {
@@ -532,20 +531,40 @@ export const TERM_MAPPING_TOOL = {
   input_schema: { type: 'object', properties: { query: { type: 'string', maxLength: 160 }, target: { type: 'string', maxLength: 80 }, path: { type: 'string' }, line: { type: 'integer', minimum: 1 } }, required: ['query', 'target', 'path', 'line'], additionalProperties: false },
 };
 
+function workspaceDefinitions(tools, { includeMemory = true } = {}) {
+  const selected = tools.discoveryWide === false && !tools.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
+  const base = tools.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
+  const definitions = tools.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
+  return includeMemory && tools.contextMemory?.evicted.size ? [...definitions, ...tools.contextMemory.definitions] : definitions;
+}
+
+const WORKSPACE_SERVICES = new WeakMap();
+function workspaceToolService(tools) {
+  let service = WORKSPACE_SERVICES.get(tools);
+  if (service) return service;
+  const bindings = [
+    ['list_files', 'listFiles'], ['search_code', 'searchCode'], ['read_file', 'readFile'],
+    ['remember_term_mapping', 'rememberTermMapping'], ['apply_patch', 'applyPatch', 'edit'],
+    ['write_file', 'writeFile', 'edit'], ['run_tests', 'runTests', 'verify'], ['run_shell', 'runShell', 'verify'],
+  ];
+  const definition = name => context => workspaceDefinitions(context.backend).find(tool => tool.name === name);
+  const specs = bindings.map(([name, method, phase = 'locate']) => new ToolSpec({ name, definition: definition(name), phase,
+    mutatesWorkspace: phase === 'edit', commandTiming: phase === 'verify',
+    validatesSource: input => phase === 'verify' && isValidationCommand(input?.command),
+    execute: (context, input) => context.backend[method](input),
+  }));
+  for (const [name, method] of [['recall_context', 'recall'], ['search_history', 'search']]) {
+    specs.push(new ToolSpec({ name, definition: definition(name), execute: (context, input) => {
+      if (!context.memory) throw new Error('ContextOS retrieval is unavailable in this session');
+      return context.memory[method](input);
+    } }));
+  }
+  service = new ToolService({ context: new ToolContext({ backend: tools }), specs,
+    selectDefinitions: (context, options) => workspaceDefinitions(context.backend, options).map(tool => tool.name) });
+  WORKSPACE_SERVICES.set(tools, service); return service;
+}
+
+// Compatibility facade for benchmarks and existing SDK callers.
 export async function dispatchTool(tools, name, input) {
-  if (['recall_context', 'search_history'].includes(name)) {
-    if (!tools.contextMemory) throw new Error('ContextOS retrieval is unavailable in this session');
-    return name === 'recall_context' ? tools.contextMemory.recall(input) : tools.contextMemory.search(input);
-  }
-  switch (name) {
-    case 'list_files': return tools.listFiles(input);
-    case 'search_code': return tools.searchCode(input);
-    case 'read_file': return tools.readFile(input);
-    case 'remember_term_mapping': return tools.rememberTermMapping(input);
-    case 'apply_patch': return tools.applyPatch(input);
-    case 'write_file': return tools.writeFile(input);
-    case 'run_tests': return tools.runTests(input);
-    case 'run_shell': return tools.runShell(input);
-    default: throw new Error(`Unknown tool: ${name}`);
-  }
+  return workspaceToolService(tools).execute(name, input);
 }
