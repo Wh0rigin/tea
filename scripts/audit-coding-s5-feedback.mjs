@@ -18,7 +18,8 @@ for (const row of raw.rows.filter(row => !row.running && typeof row.functionalPa
   const journal = await SessionJournal.open({ workspace, id: ids[0], resume: true });
   const counts = { repairGuidanceResults: 0, validationTimeoutResults: 0, validationFailureResults: 0,
     commandTimeouts: 0, retriesAfterTimeoutWithoutEdit: 0, sourceEditsAfterGuidance: 0,
-    testEditsAfterGuidance: 0, otherEditsAfterGuidance: 0, modelRequestsAfterGuidance: 0 };
+    testEditsAfterGuidance: 0, otherEditsAfterGuidance: 0, modelRequestsAfterGuidance: 0,
+    sourceEdits: 0, testEdits: 0, otherEdits: 0 };
   const calls = new Map(), timedOutCommands = new Map();
   let revision = 0, active = false;
   try {
@@ -34,9 +35,11 @@ for (const row of raw.rows.filter(row => !row.running && typeof row.functionalPa
       if (!call) throw Error('Completion lacks intent');
       if (!result.isError && ['apply_patch', 'write_file'].includes(call.name)) {
         revision++;
+        const filename = String(call.input?.path || '').replaceAll('\\', '/');
+        const kind = filename.startsWith('src/') ? 'sourceEdits' : filename.startsWith('tests/') ? 'testEdits' : 'otherEdits';
+        counts[kind]++;
         if (active) {
-          const filename = String(call.input?.path || '').replaceAll('\\', '/');
-          counts[filename.startsWith('src/') ? 'sourceEditsAfterGuidance' : filename.startsWith('tests/') ? 'testEditsAfterGuidance' : 'otherEditsAfterGuidance']++;
+          counts[kind + 'AfterGuidance']++;
         }
       }
       if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
@@ -61,6 +64,6 @@ const fields = Object.keys(rows[0] || {}).filter(key => !['id', 'arm'].includes(
 const totals = Object.fromEntries(['baseline', 'candidate'].map(arm => [arm, Object.fromEntries(fields.map(key =>
   [key, rows.filter(row => row.arm === arm).reduce((sum, row) => sum + row[key], 0)]))]));
 const report = { partial, completedAttempts: rows.length, unit: 'encrypted execution-event counts; not provider-token estimates',
-  note: 'No-edit retry counts do not establish whether new diagnostic evidence justified a retry. Post-guidance edits are opportunities, not proof of causal improvement.', totals, rows };
+  note: 'No-edit retry counts do not establish whether new diagnostic evidence justified a retry. Baseline post-guidance counters are zero by construction, not absence of ordinary repairs. Post-guidance edits are opportunities, not proof of causal improvement.', totals, rows };
 await writeFile(path.join(directory, partial ? 'feedback-audit-partial.json' : 'feedback-audit.json'), JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ completedAttempts: rows.length, totals }));

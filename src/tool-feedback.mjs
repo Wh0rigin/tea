@@ -25,7 +25,6 @@ const actions = {
   INPUT_INVALID: ['valid-input', 'Correct the input using workspace-relative paths and documented tool parameters.'],
   SOURCE_MISMATCH: ['current-source-evidence', 'Read the current target and construct a new unique patch from that evidence.'],
   VALIDATION_FAILED: ['passing-validation', 'Inspect the test failure, fix supported source defects, then rerun relevant validation.'],
-  VALIDATION_TIMEOUT: ['bounded-validation', 'Validation exceeded its command deadline; no pass was established. Inspect the runner, control flow and test cleanup for hangs or unfinished work before retrying. A timeout alone does not identify a code or environment defect. Do not rerun the unchanged command without new evidence or a relevant change.'],
   EXECUTABLE_UNAVAILABLE: ['installed-executable', 'Check the available project validation entry; an unavailable executable is not a source-code failure.'],
   EXECUTION_FAILED: ['successful-execution', 'Inspect this command failure and its inputs; a failed diagnostic does not establish test failure or validation.'],
   EXECUTION_TRANSIENT: ['completed-execution', 'Inspect the execution failure before retrying; successful edits remain and this attempt proves no validation.'],
@@ -37,22 +36,17 @@ export class ToolFeedbackError extends Error {
   constructor(code, message) { super(message); this.name = 'ToolFeedbackError'; this.feedbackCode = code; }
 }
 
-export function toolFailureFeedback({ error, output, toolName, validation = false, repairGuidance = false }) {
+export function toolFailureFeedback({ error, output, toolName, validation = false }) {
   let code = error?.feedbackCode;
   const text = String(output ?? error?.message ?? '');
   if (!code && /^Command denied by user\./.test(text)) code = 'APPROVAL_DENIED';
   if (!code && /^exit=(?!0\b)-?\d+\b/.test(text)) code = validation ? 'VALIDATION_FAILED' : 'EXECUTION_FAILED';
   if (!code && error?.code === 'ENOENT') code = ['run_tests', 'run_shell'].includes(toolName) ? 'EXECUTABLE_UNAVAILABLE' : 'INPUT_INVALID';
   if (!code && error && /cancelled|AbortError/i.test(text)) code = 'EXECUTION_CANCELLED';
-  const repair = repairGuidance && validation && ['run_tests', 'run_shell'].includes(toolName);
-  if (!code && repair && error && /^Command timed out after \d+ ms$/.test(text)) code = 'VALIDATION_TIMEOUT';
   if (!code && error && (/timed out/.test(text) || ['EAGAIN', 'EBUSY', 'ECONNRESET', 'ETIMEDOUT'].includes(error.code))) code = 'EXECUTION_TRANSIENT';
   if (!code && error) code = 'TOOL_FAILED';
   if (!code) return null;
-  const [missingCapability, originalNext] = actions[code] || actions.TOOL_FAILED;
-  const next = repair && code === 'VALIDATION_FAILED'
-    ? 'Compare the failing assertion with the task contract and existing tests. Fix the implementation or an incorrect newly added test expectation only with evidence; preserve existing tests and user changes unless the task requires modifying them. Never weaken required checks just to pass. Rerun the smallest relevant check, then the required suite.'
-    : originalNext;
+  const [missingCapability, next] = actions[code] || actions.TOOL_FAILED;
   return { version: 1, code, retryable: code === 'EXECUTION_TRANSIENT', missingCapability, next };
 }
 

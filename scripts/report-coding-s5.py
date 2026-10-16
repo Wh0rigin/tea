@@ -116,7 +116,8 @@ for arm,x in totals.items():
     a=audit['totals'][arm];lines += [f'- {arm}：新反馈触发任务 {x["attemptsWithRepairGuidance"]}/24，结果 {x["repairGuidanceResults"]} 次；验证失败反馈 {x["validationFailureResults"]} 次，命令超时 {x["commandTimeouts"]} 次，其中新超时分类 {x["validationTimeoutResults"]} 次；超时后无成功文件编辑的同命令重试 {x["retriesAfterTimeoutWithoutEdit"]} 次。',
         f'  新反馈之后源码/测试编辑 {a["sourceEditsAfterGuidance"]}/{a["testEditsAfterGuidance"]} 次，模型请求 {a["modelRequestsAfterGuidance"]} 次。']
 lines += ['',f'总模型请求 {totals["baseline"]["requests"]} → {totals["candidate"]["requests"]}；工具错误 {totals["baseline"]["toolErrors"]} → {totals["candidate"]["toolErrors"]}。',
-    '计数由实时观察器与加密日志逐项交叉验证。重试计数不判断是否有新的诊断证据，反馈后的编辑也不单独证明因果改善。未触发的独立任务用量变化不能归因于 S5。','','## 无固定开销控制','',
+    f'工具成功执行的全部源码编辑 {audit["totals"]["baseline"]["sourceEdits"]} → {audit["totals"]["candidate"]["sourceEdits"]}；全部测试编辑 {audit["totals"]["baseline"]["testEdits"]} → {audit["totals"]["candidate"]["testEdits"]}。',
+    '计数由实时观察器与加密日志逐项交叉验证。基线未启用 S5，其“新反馈后”计数为零不代表没有普通修复。重试计数不判断是否有新的诊断证据，反馈后的编辑也不单独证明因果改善。未触发的独立任务用量变化不能归因于 S5。','','## 无固定开销控制','',
     f'冻结引擎的离线首次请求完全相同：{controls["firstRequest"]["identical"]}；序列化 {controls["firstRequest"]["bytes"]} 字节，不调用 API。']
 for c in controls['controls']:lines += [f'- {c["kind"]}：反馈一致 {c["identical"]}，JSON 字节 {c["baseline"]["bytes"]} → {c["candidate"]["bytes"]}。']
 if first_deltas:lines += ['',f'真实首次输入配对差（候选减基线）均值 {statistics.mean(first_deltas):.2f} Token，范围 {min(first_deltas)}–{max(first_deltas)}；独立临时工作区标识可能造成分词差异。']

@@ -374,7 +374,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
             if (changedFiles.length) pendingValidation = true;
           }
         }
-        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command), repairGuidance: config.testRepairFeedback === true }) : null;
+        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
         output = appendFailureFeedback(output, feedback);
         if (feedback) isError = true;
         const commandTiming = ['run_tests', 'run_shell'].includes(call.name) && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
