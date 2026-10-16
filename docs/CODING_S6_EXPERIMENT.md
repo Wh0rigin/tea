@@ -32,3 +32,15 @@ SDK `versionedWrite: true` 默认关闭；不增加 CLI 开关。扩展已有 `w
 价格输入 0.8/输出 2.8 USD/MTok 仅作保守预算，非账单证明。未知用量保留预留并停止，不付费重试；质量失败继续收集其余已知独立样本。先验证所有题目初始/参考实现，冻结源码、题目、入口和配置。统计版本替换尝试/成功/错误、写入拒绝、请求数和首次输入开销。失败成本计入总量，在成功柱之外单列。
 
 无收益或质量下降则撤销运行时候选，保留实现提交与实验记录。若确认通过，也保持默认关闭等待审核，不自动发布生产功能。阶段结束等待用户审核，不启动下一项。
+
+## 冻结与离线控制
+
+候选源码冻结于 `96d85a96f7acc2087c89cb5729990b908b568240`。付费前 prepare 对原八题完成初始/参考控制，并检查两种目录模式下只有 write_file 的说明和可选参数变化。
+
+固定同一文件和目标内容、真实执行本地 Node 验证的脚本控制：基线有意复现观测到的创建拒绝→补丁路径，候选显式提供版本；两版均验证通过。脚本请求 5 → 4、累计序列化请求 29,971 → 23,785 字节，首次请求 5,147 → 5,344 字节（增加 197）。这是构造轨迹，不证明模型会自行采用，也不是 provider Token 收益。
+
+```sh
+node scripts/compare-coding-s6.mjs --mode=prepare --phase=screen --run-id=s6-preflight-new
+node scripts/check-coding-s6.mjs s6-preflight-new
+node scripts/compare-coding-s6.mjs --mode=live --phase=screen --run-id=coding-s6-screen-glm-20261016-v1
+```
