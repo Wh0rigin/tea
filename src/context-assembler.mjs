@@ -46,7 +46,7 @@ export function utf8Page(text, offset, limit) {
 
 function evictable(unit) {
   if (unit.error) return false;
-  if (['list_files', 'search_code', 'read_file', 'recall_context', 'search_history', 'retrieve_code'].includes(unit.name)) return true;
+  if (['list_files', 'search_code', 'read_file', 'recall_context', 'search_history'].includes(unit.name)) return true;
   if (!['run_tests', 'run_shell'].includes(unit.name) || !/^exit=0\b/.test(unit.output)) return false;
   return isValidationCommand(unit.input?.command) || /^git\s+(?:status|diff|log)\b/.test(unit.input?.command || '');
 }
@@ -74,15 +74,15 @@ export class ContextMemory {
             }); } catch { /* Error results do not contain indexed source previews. */ }
           }
           const searchSnapshot = ['search_code','search_history'].includes(call.name) ? this.tools.searchEvidence.get(digest(block.content)) : null;
-          const sourceSnapshot = ['read_file','recall_context','retrieve_code'].includes(call.name) ? this.tools.sourceEvidence.get(digest(block.content)) : null;
+          const sourceSnapshot = ['read_file','recall_context'].includes(call.name) ? this.tools.sourceEvidence.get(digest(block.content)) : null;
           if (sourceSnapshot?.sourceDependencies) dependencies = sourceSnapshot.sourceDependencies;
           if (searchSnapshot) dependencies = searchSnapshot;
           const failed = Boolean(block.is_error) || (['run_tests','run_shell'].includes(call.name) && /^exit=(?!0\b)/.test(block.content));
           const unit = { ref, kind: call.name === 'read_file' ? 'source_evidence' : block.is_error ? 'test_failure' : 'tool_result',
             provenance: inherited?.provenance || sourceSnapshot?.provenance || 'observed', callId: call.id, name: call.name, input: call.input, output: block.content,
             error: failed, path: inherited?.path || sourceSnapshot?.path || (call.name === 'read_file' ? (typeof call.input?.path==='string' ? path.posix.normalize(call.input.path.replaceAll('\\','/')) : null) : null),
-            sourceHash: inherited?.sourceHash || sourceSnapshot?.sourceHash || (call.name === 'retrieve_code' ? null : evidence?.[2] || cached?.[2]) || null, sourceDependencies: dependencies,
-            unversionedSearch: (call.name==='retrieve_code' && !sourceSnapshot) || (call.name==='search_code' && !searchSnapshot && /^[^\n]+:\d+:\s/m.test(block.content)),
+            sourceHash: inherited?.sourceHash || sourceSnapshot?.sourceHash || evidence?.[2] || cached?.[2] || null, sourceDependencies: dependencies,
+            unversionedSearch: call.name==='search_code' && !searchSnapshot && /^[^\n]+:\d+:\s/m.test(block.content),
             messageIndex: index + 1, bytes: bytes(block.content), validity: inherited?.validity || 'historical' };
           if (inherited?.sourceHash) unit.kind='source_evidence';
           if (sourceSnapshot?.kind) unit.kind=sourceSnapshot.kind;
@@ -255,9 +255,8 @@ export class ContextMemory {
       if(last?.role==='user'&&Array.isArray(last.content))finalMessages[finalMessages.length-1]={...last,content:[...last.content,{type:'text',text:anchor}]};
       else finalMessages.push({role:'user',content:anchor});
     }
-    const requestTools = recoverable && !config.codeFirst ? [...tools, ...MEMORY_TOOLS] : tools;
-    const guidance = config.codeFirst ? CONTEXT_GUIDANCE.replace('Use recall_context for exact details or search_history for discovery;', 'Use retrieve_code with recall({ref}) for exact details or history({query}) for discovery and emit the selected result;') : CONTEXT_GUIDANCE;
-    const projectedSystem = recoverable ? system + guidance
+    const requestTools = recoverable ? [...tools, ...MEMORY_TOOLS] : tools;
+    const projectedSystem = recoverable ? system + CONTEXT_GUIDANCE
       + ` Runtime validation: pending=${Boolean(state.pendingValidation)}; passed=${Boolean(state.validationPassed)}; changed=${JSON.stringify(state.changedFiles || [])}.` : system;
     let request = { messages: finalMessages, system: projectedSystem, tools: requestTools }, after = requestBytes(config, request);
     let fallback = null;
