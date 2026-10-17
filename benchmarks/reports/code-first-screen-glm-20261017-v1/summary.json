@@ -1,0 +1,1039 @@
+{
+  "runId": "code-first-screen-glm-20261017-v1",
+  "scope": "Three previously used self-authored Node tasks, two repeats per arm; code-first mode versus normal tools; whole-mode screening including declarations/routing; not unseen or production evidence",
+  "sourceCommits": {
+    "baseline": "85124ff728170a799e7cf95c6d82cad16841aec3",
+    "candidate": "ed9ea6a9eb866ecbb159652b273f1ff41a0330bb"
+  },
+  "harnessSha256": "bdf044fc0223789b893af5b3a4dde78b1076e40428baa1292a2369f218f7fb27",
+  "manifestSha256": "3deb03bde5fa92561c18e55780e81f517cba1950e81ea6f9ffbe0af8e847b6c8",
+  "config": {
+    "stream": true,
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "contextWindowTokens": 32768,
+    "contextReserveTokens": 4096,
+    "maxRequestInputBytes": 256000,
+    "memoryPolicy": "contextos",
+    "historyStrategy": "full",
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "commandTimeoutMs": 120000,
+    "contextosTargetBytes": 32000,
+    "compaction": "auto",
+    "maxToolCalls": 24,
+    "requestTimeoutMs": 90000,
+    "taskTimeoutMs": 600000,
+    "taskCapUsd": 1,
+    "suiteCapUsd": 4,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8
+  },
+  "sourceUnchanged": true,
+  "harnessUnchanged": true,
+  "complete": true,
+  "planned": 12,
+  "stopReason": null,
+  "changePercent": 29.223011689204668,
+  "qualityGate": true,
+  "gatePassed": false,
+  "mechanismExercised": true,
+  "successfulProgramEvidence": true,
+  "totals": {
+    "baseline": {
+      "attempted": 6,
+      "accepted": 6,
+      "codePassed": 6,
+      "unknown": 0,
+      "knownTokenSubtotal": 165794,
+      "requests": 49,
+      "adoptingAttempts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0
+    },
+    "candidate": {
+      "attempted": 6,
+      "accepted": 6,
+      "codePassed": 6,
+      "unknown": 0,
+      "knownTokenSubtotal": 214244,
+      "requests": 63,
+      "adoptingAttempts": 6,
+      "retrievalCalls": 34,
+      "retrievalErrors": 13,
+      "retrievalSuboperations": 39,
+      "retrievalSuccessfulOps": 38,
+      "codeFirstRouteDenials": 0,
+      "multiOperationPrograms": 8,
+      "successfulMultiOperationPrograms": 6
+    }
+  },
+  "perTask": {
+    "l1-narcissistic": {
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 20920,
+        "requests": 9,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 26831,
+        "requests": 11,
+        "adoptingAttempts": 2,
+        "retrievalCalls": 2,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 4,
+        "retrievalSuccessfulOps": 4,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 2,
+        "successfulMultiOperationPrograms": 2
+      }
+    },
+    "retrieval-retry": {
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 47195,
+        "requests": 17,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 65055,
+        "requests": 25,
+        "adoptingAttempts": 2,
+        "retrievalCalls": 17,
+        "retrievalErrors": 10,
+        "retrievalSuboperations": 9,
+        "retrievalSuccessfulOps": 9,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 1,
+        "successfulMultiOperationPrograms": 1
+      }
+    },
+    "l3-pagination": {
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 97679,
+        "requests": 23,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 122358,
+        "requests": 27,
+        "adoptingAttempts": 2,
+        "retrievalCalls": 15,
+        "retrievalErrors": 3,
+        "retrievalSuboperations": 26,
+        "retrievalSuccessfulOps": 25,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 5,
+        "successfulMultiOperationPrograms": 3
+      }
+    }
+  },
+  "perRepeat": {
+    "1": {
+      "baseline": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 74826,
+        "requests": 23,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 120189,
+        "requests": 31,
+        "adoptingAttempts": 3,
+        "retrievalCalls": 16,
+        "retrievalErrors": 4,
+        "retrievalSuboperations": 15,
+        "retrievalSuccessfulOps": 14,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 2,
+        "successfulMultiOperationPrograms": 2
+      }
+    },
+    "2": {
+      "baseline": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 90968,
+        "requests": 26,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 94055,
+        "requests": 32,
+        "adoptingAttempts": 3,
+        "retrievalCalls": 18,
+        "retrievalErrors": 9,
+        "retrievalSuboperations": 24,
+        "retrievalSuccessfulOps": 24,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 6,
+        "successfulMultiOperationPrograms": 4
+      }
+    }
+  },
+  "firstInputDeltas": [
+    52,
+    -24,
+    56,
+    52,
+    -23,
+    55
+  ],
+  "rows": [
+    {
+      "id": "l1-narcissistic-r1-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 8582,
+        "outputTokens": 982,
+        "totalTokens": 9564,
+        "cachedInputTokens": 5696,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "outerToolCalls": 6,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l1-narcissistic-r1-candidate",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 10837,
+        "outputTokens": 996,
+        "totalTokens": 11833,
+        "cachedInputTokens": 5248,
+        "cacheCreationInputTokens": 0,
+        "requests": 5,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "outerToolCalls": 5,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 1,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 2,
+      "retrievalSuccessfulOps": 2,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r1-candidate",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 1,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 22803,
+        "outputTokens": 1233,
+        "totalTokens": 24036,
+        "cachedInputTokens": 15872,
+        "cacheCreationInputTokens": 0,
+        "requests": 10,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 10,
+      "outerToolCalls": 10,
+      "toolErrors": 3,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 6,
+      "retrievalErrors": 3,
+      "retrievalSuboperations": 3,
+      "retrievalSuccessfulOps": 3,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {
+        "unsupported-syntax": 3
+      }
+    },
+    {
+      "id": "retrieval-retry-r1-baseline",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 16046,
+        "outputTokens": 1061,
+        "totalTokens": 17107,
+        "cachedInputTokens": 12672,
+        "cacheCreationInputTokens": 0,
+        "requests": 7,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 8,
+      "outerToolCalls": 8,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l3-pagination-r1-baseline",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 45435,
+        "outputTokens": 2720,
+        "totalTokens": 48155,
+        "cachedInputTokens": 19712,
+        "cacheCreationInputTokens": 0,
+        "requests": 12,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 15,
+      "outerToolCalls": 15,
+      "toolErrors": 2,
+      "successfulEdits": 5,
+      "validationToolResults": 4,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l3-pagination-r1-candidate",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 1,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 79946,
+        "outputTokens": 4374,
+        "totalTokens": 84320,
+        "cachedInputTokens": 40448,
+        "cacheCreationInputTokens": 0,
+        "requests": 16,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 20,
+      "outerToolCalls": 19,
+      "toolErrors": 4,
+      "successfulEdits": 5,
+      "validationToolResults": 3,
+      "commandTimeouts": 0,
+      "retrievalCalls": 9,
+      "retrievalErrors": 1,
+      "retrievalSuboperations": 10,
+      "retrievalSuccessfulOps": 9,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {
+        "instruction-read-route": 1
+      }
+    },
+    {
+      "id": "l1-narcissistic-r2-candidate",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 2,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 13726,
+        "outputTokens": 1272,
+        "totalTokens": 14998,
+        "cachedInputTokens": 8704,
+        "cacheCreationInputTokens": 0,
+        "requests": 6,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 7,
+      "outerToolCalls": 6,
+      "toolErrors": 0,
+      "successfulEdits": 3,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 1,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 2,
+      "retrievalSuccessfulOps": 2,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l1-narcissistic-r2-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 2,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 10444,
+        "outputTokens": 912,
+        "totalTokens": 11356,
+        "cachedInputTokens": 5824,
+        "cacheCreationInputTokens": 0,
+        "requests": 5,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "outerToolCalls": 6,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r2-baseline",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 2,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 28501,
+        "outputTokens": 1587,
+        "totalTokens": 30088,
+        "cachedInputTokens": 23360,
+        "cacheCreationInputTokens": 0,
+        "requests": 10,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 11,
+      "outerToolCalls": 11,
+      "toolErrors": 1,
+      "successfulEdits": 3,
+      "validationToolResults": 2,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r2-candidate",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 2,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 39503,
+        "outputTokens": 1516,
+        "totalTokens": 41019,
+        "cachedInputTokens": 28736,
+        "cacheCreationInputTokens": 0,
+        "requests": 15,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 17,
+      "outerToolCalls": 15,
+      "toolErrors": 7,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 11,
+      "retrievalErrors": 7,
+      "retrievalSuboperations": 6,
+      "retrievalSuccessfulOps": 6,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read",
+            "read",
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {
+        "unsupported-syntax": 5,
+        "grammar-or-api": 2
+      }
+    },
+    {
+      "id": "l3-pagination-r2-candidate",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 2,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 35016,
+        "outputTokens": 3022,
+        "totalTokens": 38038,
+        "cachedInputTokens": 16704,
+        "cacheCreationInputTokens": 0,
+        "requests": 11,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 21,
+      "outerToolCalls": 11,
+      "toolErrors": 3,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 6,
+      "retrievalErrors": 2,
+      "retrievalSuboperations": 16,
+      "retrievalSuccessfulOps": 16,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read",
+            "read",
+            "read",
+            "read"
+          ],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read",
+            "read",
+            "read",
+            "read",
+            "read"
+          ],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 4,
+      "successfulMultiOperationPrograms": 2,
+      "retrievalErrorCategories": {
+        "bounded-execution": 2
+      }
+    },
+    {
+      "id": "l3-pagination-r2-baseline",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 2,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 46744,
+        "outputTokens": 2780,
+        "totalTokens": 49524,
+        "cachedInputTokens": 28352,
+        "cacheCreationInputTokens": 0,
+        "requests": 11,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 15,
+      "outerToolCalls": 15,
+      "toolErrors": 3,
+      "successfulEdits": 6,
+      "validationToolResults": 3,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    }
+  ],
+  "audit": {
+    "auditedAttempts": 12,
+    "totals": {
+      "baseline": {
+        "successfulEdits": 20,
+        "validationToolResults": 12,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      "candidate": {
+        "successfulEdits": 16,
+        "validationToolResults": 8,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 5,
+        "validationToolResults": 4,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 5,
+        "validationToolResults": 3,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-candidate",
+        "arm": "candidate",
+        "successfulEdits": 3,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r2-baseline",
+        "arm": "baseline",
+        "successfulEdits": 3,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r2-candidate",
+        "arm": "candidate",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r2-candidate",
+        "arm": "candidate",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r2-baseline",
+        "arm": "baseline",
+        "successfulEdits": 6,
+        "validationToolResults": 3,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    ]
+  }
+}
