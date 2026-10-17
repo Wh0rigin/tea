@@ -15,6 +15,8 @@ export class ToolContext {
   get signal() { return this.backend.signal; }
   get ledger() { return this.backend.ledger; }
   get memory() { return this.backend.contextMemory; }
+  get approveEdit() { return this.backend.approveEdit; }
+  get editPermissions() { return this.backend.editPermissions?.rules; }
   get approveCommand() { return this.backend.approveCommand; }
 }
 
@@ -40,10 +42,13 @@ export class ToolSpec {
 export class ToolService {
   #specs = new Map();
   #selectDefinitions;
-  constructor({ context, specs = [], selectDefinitions } = {}) {
+  #beforeExecute;
+  constructor({ context, specs = [], selectDefinitions, beforeExecute } = {}) {
     if (!(context instanceof ToolContext)) throw new TypeError('ToolService requires ToolContext');
     if (selectDefinitions !== undefined && typeof selectDefinitions !== 'function') throw new TypeError('Invalid definition selector');
     Object.defineProperty(this, 'context', { value: context });
+    if(beforeExecute!==undefined&&typeof beforeExecute!=='function')throw new TypeError('Invalid beforeExecute hook');
+    this.#beforeExecute=beforeExecute;
     this.#selectDefinitions = selectDefinitions;
     for (const spec of specs) this.register(spec);
   }
@@ -74,6 +79,14 @@ export class ToolService {
     if (spec.validateInput) {
       await spec.validateInput(input, this.context);
       this.context.signal?.throwIfAborted();
+    }
+    if(this.#beforeExecute){
+      const decision=await this.#beforeExecute({name,input},this.context);
+      this.context.signal?.throwIfAborted();
+      if(decision!==undefined){
+        if(!decision||!['allow','deny'].includes(decision.decision))throw new TypeError('Tool hook must return undefined or an allow/deny decision');
+        if(decision.decision==='deny')throw Object.assign(new Error(String(decision.reason||'Tool blocked by host policy')),{feedbackCode:'TOOL_POLICY_DENIED'});
+      }
     }
     // No Promise.race timeout: never report an operation finished while its writes continue.
     // Backend validation, authorization, deadlines and evidence checks remain authoritative.

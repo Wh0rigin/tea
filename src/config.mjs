@@ -1,3 +1,4 @@
+import { normalizeEditPermissions } from './edit-permissions.mjs';
 import path from 'node:path';
 import { validateRunId } from './run-id.mjs';
 
@@ -92,7 +93,11 @@ export function loadConfig(options = {}, env = process.env) {
     throw new ConfigError('TEA_OUTPUT_PRICE_USD_PER_MTOK must be a non-negative number');
   }
 
+  let editPermissions;
+  try { editPermissions=normalizeEditPermissions((options.editPermissions !== undefined ? options.editPermissions : (env.TEA_EDIT_PERMISSIONS === undefined ? {} : JSON.parse(env.TEA_EDIT_PERMISSIONS)))); }
+  catch { throw new ConfigError('Invalid editPermissions / TEA_EDIT_PERMISSIONS; use workspace-relative allow, ask and deny arrays'); }
   return {
+    editPermissions,
     apiKey,
     baseUrl: String(env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, ''),
     model: String(env.ANTHROPIC_MODEL || 'claude-sonnet-4-5'),

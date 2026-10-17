@@ -1,3 +1,4 @@
+import { EditPermissions, requestEditApproval } from './edit-permissions.mjs';
 import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { lstat, mkdir, open, readFile, readdir, realpath, stat, unlink, writeFile } from 'node:fs/promises';
@@ -66,12 +67,13 @@ export function decodeText(buffer) {
 
 export class WorkspaceTools {
   get toolService() { return workspaceToolService(this); }
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true, editPermissions }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
     this.enableFileCreation = enableFileCreation;
+    this.setEditPermissions(editPermissions);
     this.readEvidence = new Map();
     // Vocabulary belongs to this run only; never modify the shared hand-written table.
     this.sessionTerms = new Map();
@@ -79,6 +81,24 @@ export class WorkspaceTools {
     this.presentedSource = new Map();
     this.searchEvidence = new Map();
     this.sourceEvidence = new Map();
+  }
+
+  setEditPermissions(value) { this.editPermissions=new EditPermissions(value); }
+
+  async authorizeEdit(relativePath, filename, operation, change) {
+    const requested=path.relative(this.workspace,path.resolve(this.workspace,relativePath)).replaceAll(path.sep,'/');
+    const resolved=path.relative(this.workspace,filename).replaceAll(path.sep,'/');
+    const policy=this.editPermissions, decision=policy.decide([requested,resolved]);
+    if(policy.active)await this.ledger?.event?.({type:'edit_permission',path:requested,operation,decision:decision.decision,rule:decision.rule??null,policyVersion:policy.version});
+    if(decision.decision==='deny')throw new ToolFeedbackError('EDIT_PERMISSION_DENIED',`Edit blocked by policy: ${requested} (${decision.rule}). Keep this file unchanged; create a separate regression test when appropriate. Do not bypass with scripts.`);
+    if(decision.decision==='ask'){
+      const approved=await requestEditApproval(this.approveEdit,{path:requested,resolvedPath:resolved,operation,rule:decision.rule,change:Object.freeze(change)},this.signal);
+      this.signal?.throwIfAborted();
+      await this.ledger?.event?.({type:'edit_permission_approval',path:requested,operation,approved,policyVersion:policy.version});
+      if(this.editPermissions!==policy)throw new ToolFeedbackError('EDIT_PERMISSION_DENIED','Edit permissions changed during approval; request a new edit under the current policy.');
+      if(!approved)throw new ToolFeedbackError('EDIT_APPROVAL_DENIED',`Edit approval denied for ${requested}. Keep this file unchanged; do not resubmit variants or use scripts.`);
+      if(operation==='edit'&&await this.resolveFile(relativePath)!==filename)throw new ToolFeedbackError('EDIT_PERMISSION_DENIED','Edit target changed during approval; re-read the target and request approval again.');
+    }
   }
 
   async init() {
@@ -329,6 +349,7 @@ export class WorkspaceTools {
     if (parts.some(part => ['.git', '.tea'].includes(part.toLowerCase())) || isSensitivePath(normalized)) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Creating credential files, Git metadata or agent storage is blocked');
     }
+    await this.authorizeEdit(relativePath, filename, 'create', {content});
     let directory = this.workspace;
     for (const part of parts.slice(0, -1)) {
       this.signal?.throwIfAborted();
@@ -374,6 +395,7 @@ export class WorkspaceTools {
     if (normalizedPath === '.git' || normalizedPath.startsWith('.git/') || normalizedPath === '.env' || normalizedPath.startsWith('.env.')) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
+    await this.authorizeEdit(relativePath, filename, 'edit', {search,replace});
     const source = await readFile(filename, 'utf8');
     const first = source.indexOf(search);
     if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
@@ -560,6 +582,7 @@ function workspaceToolService(tools) {
     } }));
   }
   service = new ToolService({ context: new ToolContext({ backend: tools }), specs,
+    beforeExecute: (event, context) => context.backend.beforeToolUse?.(event, context),
     selectDefinitions: (context, options) => workspaceDefinitions(context.backend, options).map(tool => tool.name) });
   WORKSPACE_SERVICES.set(tools, service); return service;
 }

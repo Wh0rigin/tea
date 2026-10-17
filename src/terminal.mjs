@@ -286,6 +286,15 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     view.write(`\nAllow this command in ${config.workspace}?\n${command}\nType yes to approve; anything else denies it.`);
   });
 
+  const approveEdit = (event) => new Promise(resolve => {
+    if (controller?.signal.aborted || closed) { resolve(false); return; }
+    view.approval = true;
+    approval = allowed => { view.approval = false; resolve(allowed); };
+    const proposal=event.operation==='create'?event.change.content:`- ${event.change.search}\n+ ${event.change.replace}`;
+    const preview=terminalText(redactText(proposal));
+    view.write(`\nAllow this ${event.operation} in ${config.workspace}?\n${event.path}${event.resolvedPath===event.path?'':` -> ${event.resolvedPath}`}\n${preview.slice(0,4000)}${preview.length>4000?'\n[Preview truncated]':''}\nType yes to approve once; anything else denies it.`);
+  });
+
   const submit = async (line) => {
     const task = line.trim();
     if (approval) { const answer = approval; approval = undefined; answer(task.toLowerCase() === 'yes'); view.prompt(); return; }
@@ -344,7 +353,7 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     view.prompt();
     try {
       await runTask(prompt, { ...config, runId: `${config.runId}-${randomUUID().slice(0, 8)}` }, {
-        session, signal: controller.signal, adapterFactory, approveCommand,
+        session, signal: controller.signal, adapterFactory, approveCommand, approveEdit,
         onText: text => view.write(`\nTEA\n${text}\n`), onDelta: text => view.delta(text), onEvent: event => view.event(event),
       });
     } catch (error) { view.endStream(); view.write(`Turn error: ${error.message}`); view.mode = 'Failed'; }

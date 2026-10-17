@@ -71,6 +71,7 @@ export function resetConversation(session, config) {
 }
 
 export async function runTask(task, config, options = {}) {
+  for(const name of ['approveEdit','beforeToolUse'])if(options[name]!==undefined&&typeof options[name]!=='function')throw new TypeError(`${name} must be a function`);
   const session = options.session || createAgentSession(config);
   if (session.running) throw new Error('This session already has a running turn');
   if (session.workspace !== path.resolve(config.workspace) || session.model !== config.model) throw new Error('A session cannot change workspace or model');
@@ -86,7 +87,7 @@ export async function compactAgentSession(config, options = {}) {
   return runTask(options.instructions || '', config, { ...options, compactionOnly: true });
 }
 
-async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand, compactionOnly = false } = {}) {
+async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand, approveEdit, beforeToolUse, compactionOnly = false } = {}) {
   // Presentation observers must not change execution or accounting.
   const emit = (event) => { try { onEvent(event); } catch { /* UI is observational. */ } };
   // Injected adapters are for deterministic integration checks, never live usage evidence.
@@ -104,6 +105,9 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   tools.ledger = ledger;
   tools.signal = signal;
   tools.approveCommand = approveCommand;
+  tools.approveEdit = approveEdit;
+  tools.beforeToolUse = beforeToolUse;
+  tools.setEditPermissions(config.editPermissions);
   tools.enableFileCreation = config.enableFileCreation ?? true;
   session.tools = tools;
   restoreToolMemory(session, tools);
@@ -200,7 +204,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation }) : null;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation, editPermissions: tools.editPermissions }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)

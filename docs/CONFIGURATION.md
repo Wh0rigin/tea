@@ -62,3 +62,7 @@ Invalid JSON, unsupported fields and invalid values stop configuration loading w
 ## Experiments and programmatic use
 
 Live benchmark commands and comparison harnesses keep their explicit environment configuration and finite budget requirements; they do not automatically consume the personal config. `loadConfig()` remains a pure options/environment loader. Programmatic clients can explicitly call `resolveUserEnvironment()` and pass its result to `loadConfig()` to opt into user settings.
+
+## Edit permissions
+
+`editPermissions` accepts workspace-relative `deny`, `ask` and `allow` lists. Configure protected existing tests, approval-only files and optional write scopes in your user config or per-task options. See [Edit permissions and tool policy](EDIT_PERMISSIONS.md) for matching, SDK hooks and subprocess limitations.
