@@ -1,0 +1,429 @@
+{
+  "runId": "tool-core-stream-diag-glm-20261017-v1",
+  "scope": "one streaming diagnostic pair, not a general Token comparison",
+  "frozenRunnerCommit": "241dc228b1b0b2283dbc18dcf8c4575db4067e9e",
+  "runnerSha256": "6f3ccceb5fd06cb3d5e6f9fa9940dd8c081fad3270d736bfaee584ff38d21ea7",
+  "observerSha256": "9765cd69b08d3278ec65c31089c2131f5c4da2c221a919d4acecae0fd00b1d9a",
+  "sourceCommits": {
+    "baseline": "6a50dc5b131678fbc2d41cf181414f7896c70b50",
+    "candidate": "3d014c03012cda9207d4e27874ba82402ed1de4b"
+  },
+  "config": {
+    "stream": true,
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "contextWindowTokens": 32768,
+    "contextReserveTokens": 4096,
+    "maxRequestInputBytes": 256000,
+    "memoryPolicy": "contextos",
+    "historyStrategy": "full",
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "commandTimeoutMs": 120000,
+    "contextosTargetBytes": 32000,
+    "compaction": "auto",
+    "maxToolCalls": 24,
+    "requestTimeoutMs": 90000,
+    "taskTimeoutMs": 600000,
+    "taskCapUsd": 1,
+    "suiteCapUsd": 2,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8
+  },
+  "sourceUnchanged": true,
+  "diagnosticComplete": true,
+  "codingBenchmarkCoverageComplete": false,
+  "rootCauseLocated": false,
+  "productionFixClaim": false,
+  "pairChangePercent": 159.81807395689142,
+  "rows": [
+    {
+      "id": "l1-narcissistic-r1-baseline",
+      "taskId": "l1-narcissistic",
+      "arm": "baseline",
+      "accepted": true,
+      "codeBehaviorPass": true,
+      "usageComplete": true,
+      "usage": {
+        "inputTokens": 8927,
+        "outputTokens": 1187,
+        "totalTokens": 10114,
+        "cachedInputTokens": 2816,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "toolCalls": 7,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 2,
+      "commandTimeouts": 0
+    },
+    {
+      "id": "l1-narcissistic-r1-candidate",
+      "taskId": "l1-narcissistic",
+      "arm": "candidate",
+      "accepted": true,
+      "codeBehaviorPass": true,
+      "usageComplete": true,
+      "usage": {
+        "inputTokens": 25007,
+        "outputTokens": 1271,
+        "totalTokens": 26278,
+        "cachedInputTokens": 16448,
+        "cacheCreationInputTokens": 0,
+        "requests": 9,
+        "compactionRequests": 0
+      },
+      "toolCalls": 10,
+      "toolErrors": 1,
+      "successfulEdits": 4,
+      "validationToolResults": 3,
+      "commandTimeouts": 0
+    }
+  ],
+  "transport": [
+    {
+      "id": 1,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 4683,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 3,
+        "content_block_delta": 25,
+        "content_block_stop": 3,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 2,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 115518,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 2,
+        "content_block_delta": 858,
+        "content_block_stop": 2,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 3,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 4319,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 2,
+        "content_block_delta": 24,
+        "content_block_stop": 2,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 4,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 29132,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 237,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 5,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 4683,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 3,
+        "content_block_delta": 25,
+        "content_block_stop": 3,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 6,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 33122,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 241,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 7,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 78510,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 585,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 8,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 2715,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 14,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 9,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 11401,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 3,
+        "content_block_delta": 79,
+        "content_block_stop": 3,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 10,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 9593,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 66,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 11,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 2714,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 14,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 12,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 2194,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 10,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    },
+    {
+      "id": 13,
+      "status": 200,
+      "media": "text/event-stream",
+      "bytes": 21182,
+      "events": {
+        "message_start": 1,
+        "ping": 1,
+        "content_block_start": 1,
+        "content_block_delta": 170,
+        "content_block_stop": 1,
+        "message_delta": 1,
+        "message_stop": 1
+      },
+      "malformedData": 0,
+      "oversizedLines": 0,
+      "bom": false,
+      "firstCharacter": "other",
+      "terminal": true,
+      "messageStart": true,
+      "jsonEnvelope": false,
+      "phase": "body_complete"
+    }
+  ],
+  "audit": {
+    "auditedAttempts": 2,
+    "totals": {
+      "baseline": {
+        "successfulEdits": 2,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      "candidate": {
+        "successfulEdits": 4,
+        "validationToolResults": 3,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 4,
+        "validationToolResults": 3,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    ]
+  }
+}

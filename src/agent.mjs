@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { TokenLedger } from './ledger.mjs';
 import { AnthropicMessagesAdapter, ModelError } from './model.mjs';
-import { WorkspaceTools, dispatchTool, isValidationCommand } from './tools.mjs';
+import { WorkspaceTools, isValidationCommand } from './tools.mjs';
 import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
@@ -71,6 +71,7 @@ export function resetConversation(session, config) {
 }
 
 export async function runTask(task, config, options = {}) {
+  for(const name of ['approveEdit','beforeToolUse'])if(options[name]!==undefined&&typeof options[name]!=='function')throw new TypeError(`${name} must be a function`);
   const session = options.session || createAgentSession(config);
   if (session.running) throw new Error('This session already has a running turn');
   if (session.workspace !== path.resolve(config.workspace) || session.model !== config.model) throw new Error('A session cannot change workspace or model');
@@ -86,7 +87,7 @@ export async function compactAgentSession(config, options = {}) {
   return runTask(options.instructions || '', config, { ...options, compactionOnly: true });
 }
 
-async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand, compactionOnly = false } = {}) {
+async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand, approveEdit, beforeToolUse, compactionOnly = false } = {}) {
   // Presentation observers must not change execution or accounting.
   const emit = (event) => { try { onEvent(event); } catch { /* UI is observational. */ } };
   // Injected adapters are for deterministic integration checks, never live usage evidence.
@@ -104,9 +105,14 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   tools.ledger = ledger;
   tools.signal = signal;
   tools.approveCommand = approveCommand;
+  tools.approveEdit = approveEdit;
+  tools.beforeToolUse = beforeToolUse;
+  tools.setEditPermissions(config.editPermissions);
   tools.enableFileCreation = config.enableFileCreation ?? true;
   session.tools = tools;
   restoreToolMemory(session, tools);
+  const toolService = tools.toolService;
+  toolService.context.bindSession(session);
   if (config.memoryPolicy === 'contextos') {
     session.contextMemory ||= new ContextMemory(tools);
     session.contextMemory.rebuild(session.messages);
@@ -198,7 +204,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     selectedFileCount: inventory.selectedFiles.length, selectedPathsSha256: selectedHash,
     queryExpansionApplied: inventory.queryExpansionApplied ?? false,
   });
-  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation }) : null;
+  const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation, editPermissions: tools.editPermissions }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
     + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)
@@ -350,16 +356,17 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         let output;
         let isError = false;
         let toolError;
+        const effects = toolService.effects(call.name, call.input);
         emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
         await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
-          output = await dispatchTool(tools, call.name, call.input || {});
-          if (['apply_patch', 'write_file'].includes(call.name)) {
+          output = await toolService.execute(call.name, call.input || {});
+          if (effects.mutatesWorkspace) {
             pendingValidation = true;
             validationPassed = false;
             const filename = call.input?.path || '(unknown file)';
             if (!changedFiles.includes(filename)) changedFiles.push(filename);
-          } else if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
+          } else if (effects.validatesSource) {
             validationAttempts += 1;
             validationPassed = validationSucceeded(output);
             if (changedFiles.length || pendingValidation) pendingValidation = !validationPassed;
@@ -368,7 +375,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           isError = true;
           toolError = error;
           output = error.message;
-          if (['run_tests', 'run_shell'].includes(call.name) && isValidationCommand(call.input?.command)) {
+          if (effects.validatesSource) {
             validationAttempts += 1;
             validationPassed = false;
             if (changedFiles.length) pendingValidation = true;
@@ -377,12 +384,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
         output = appendFailureFeedback(output, feedback);
         if (feedback) isError = true;
-        const commandTiming = ['run_tests', 'run_shell'].includes(call.name) && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
+        const commandTiming = effects.commandTiming && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, ...commandTiming, error: isError ? output : undefined });
         const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError, ...(feedback ? { feedback } : {}) });
         if (session.taskState) {
           const taskState = session.taskState;
-          taskState.phase = ['apply_patch', 'write_file'].includes(call.name) ? 'edit' : ['run_tests', 'run_shell'].includes(call.name) ? 'verify' : 'locate';
+          taskState.phase = effects.phase;
           if (call.input?.path && !taskState.active_files.includes(call.input.path)) taskState.active_files.push(call.input.path);
           const finding = { toolId: call.id, tool: call.name, provenance: 'observed', sourceEventId: observedEvent?.eventId || null,
             outputSha256: createTaskHash(output), fileVersion: String(output).match(/^\[evidence ref=[^\n]+ sha256=([a-f0-9]{64})\]/)?.[1] || null, isError, ...(feedback ? { feedback } : {}) };

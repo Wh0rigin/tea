@@ -1,0 +1,802 @@
+{
+  "kind": "offline-tool-core-parity",
+  "paidCalls": 0,
+  "providerTokensMeasured": false,
+  "definitions": [
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2280,
+      "sha256": "984b953c95c2a8131cb29737beefa14a1593545689c280d64a43f015613d88d9"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2280,
+      "sha256": "984b953c95c2a8131cb29737beefa14a1593545689c280d64a43f015613d88d9"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2280,
+      "sha256": "984b953c95c2a8131cb29737beefa14a1593545689c280d64a43f015613d88d9"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3195,
+      "sha256": "1d3592810c3beb4ccb2aeae6e42255a36b1cca5b4e42cad7d36c7cb3c74a5afa"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3139,
+      "sha256": "3bf2be4e0afb441a924b9b8ae9034f7e66f4715b502db3ceadfb1d186cc96f11"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3139,
+      "sha256": "3bf2be4e0afb441a924b9b8ae9034f7e66f4715b502db3ceadfb1d186cc96f11"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3139,
+      "sha256": "3bf2be4e0afb441a924b9b8ae9034f7e66f4715b502db3ceadfb1d186cc96f11"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4054,
+      "sha256": "e529850c866d770f393a68310ded3cb3badb4aa66f4c761fb0139243384c11b1"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2717,
+      "sha256": "1df222a6b130dafedf40fa2d46908dc44488a1a89d877a2adeb41b43a88af162"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2717,
+      "sha256": "1df222a6b130dafedf40fa2d46908dc44488a1a89d877a2adeb41b43a88af162"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2717,
+      "sha256": "1df222a6b130dafedf40fa2d46908dc44488a1a89d877a2adeb41b43a88af162"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3632,
+      "sha256": "0a0b83ccf17f2edc19183e5d5a47e0caf15b494006ad4c0a325bf67f2aa4ba6b"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3576,
+      "sha256": "a2e8be56b2d77bf4a0c63b0b6f8f135a2c479c0ac44b81d9e1eab18bdc221e38"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3576,
+      "sha256": "a2e8be56b2d77bf4a0c63b0b6f8f135a2c479c0ac44b81d9e1eab18bdc221e38"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3576,
+      "sha256": "a2e8be56b2d77bf4a0c63b0b6f8f135a2c479c0ac44b81d9e1eab18bdc221e38"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4491,
+      "sha256": "a8293fae9cc384e78a9531d821910c4417049c1c32de91ccbc1b50281d430953"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3431,
+      "sha256": "e1c2def86b75906f5621c22cc1e50b3be448e96d8b003eb07a97f8fdb561cd09"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4290,
+      "sha256": "68ad153fa197e05ec5da1e52314f2d8f2323a1b9414e3df025b22d015a188d54"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3868,
+      "sha256": "e1c1efe413a149e537fa833159fb753e6a6c7ebee5d7c743ce22b2e7cc5211da"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": false,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4727,
+      "sha256": "b682561f86fe87335955bd03fac8f6a3b98b06bbc9918aa35ab1c05a12ca2312"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3431,
+      "sha256": "e1c2def86b75906f5621c22cc1e50b3be448e96d8b003eb07a97f8fdb561cd09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4290,
+      "sha256": "68ad153fa197e05ec5da1e52314f2d8f2323a1b9414e3df025b22d015a188d54"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3868,
+      "sha256": "e1c1efe413a149e537fa833159fb753e6a6c7ebee5d7c743ce22b2e7cc5211da"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": false,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4727,
+      "sha256": "b682561f86fe87335955bd03fac8f6a3b98b06bbc9918aa35ab1c05a12ca2312"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2516,
+      "sha256": "4ed23a681341830e64dee6e06bbceaf787c35bafdeb849e5d3806cdc8d86ebd0"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3431,
+      "sha256": "e1c2def86b75906f5621c22cc1e50b3be448e96d8b003eb07a97f8fdb561cd09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3375,
+      "sha256": "060094ee61c86d70ff2cc8b6fa8b0c537be2e1f678a6da23f46c2caffd482c28"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": false,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4290,
+      "sha256": "68ad153fa197e05ec5da1e52314f2d8f2323a1b9414e3df025b22d015a188d54"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 2953,
+      "sha256": "b17459c925bf78dc68abbe220695ab8e15e35903d2fa46a568e7dbea0c1cef67"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": false,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3868,
+      "sha256": "e1c1efe413a149e537fa833159fb753e6a6c7ebee5d7c743ce22b2e7cc5211da"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": false,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": false,
+      "identical": true,
+      "bytes": 3812,
+      "sha256": "5a205998ab625bcd7b74de7cf5053c3b2efb4b8f5b297a4849781fff4f6fec09"
+    },
+    {
+      "discoveryWide": true,
+      "searchCursorNeeded": true,
+      "creation": true,
+      "terms": true,
+      "memory": true,
+      "includeMemory": true,
+      "identical": true,
+      "bytes": 4727,
+      "sha256": "b682561f86fe87335955bd03fac8f6a3b98b06bbc9918aa35ab1c05a12ca2312"
+    }
+  ],
+  "conversations": [
+    {
+      "policy": "full-history",
+      "identical": true,
+      "observations": {
+        "status": "completed",
+        "scriptedValidationPassed": true,
+        "toolCalls": 4,
+        "scriptedRecalls": 0
+      },
+      "requests": [
+        {
+          "index": 0,
+          "bytes": 5174,
+          "sha256": "639407eb229c6e20130a9d643bdecfbf2325bc350e2af293289473394c3d1707"
+        },
+        {
+          "index": 1,
+          "bytes": 5549,
+          "sha256": "f4e6213e94cb311f13a9d7115757395479bbea100108e675b548dccee6c33b61"
+        },
+        {
+          "index": 2,
+          "bytes": 5834,
+          "sha256": "1c3153369c8635c51e0c4e96eedd2974f9b43d2ae2e794b2e7d75efffd482294"
+        },
+        {
+          "index": 3,
+          "bytes": 6209,
+          "sha256": "05091159dcac538e6e72f99cf7bb8c9bddbcbe5aea96a255c62aaba1f6093288"
+        },
+        {
+          "index": 4,
+          "bytes": 6481,
+          "sha256": "a7231f85ab55cff51a478dde9e10c0bd7dd10a2bd7f57145a05d50057081ecdb"
+        }
+      ]
+    },
+    {
+      "policy": "contextos",
+      "identical": true,
+      "observations": {
+        "status": "completed",
+        "scriptedValidationPassed": true,
+        "toolCalls": 5,
+        "scriptedRecalls": 1
+      },
+      "requests": [
+        {
+          "index": 0,
+          "bytes": 24729,
+          "sha256": "d1a958ad53a735860a5a9fd9428e30952f435785ba8062189dcaa8693ac00f88"
+        },
+        {
+          "index": 1,
+          "bytes": 16789,
+          "sha256": "5945a3c6c08e008e64b9c816b82ff41fee2b0ff25ee3fd827c0762967e368086"
+        },
+        {
+          "index": 2,
+          "bytes": 8581,
+          "sha256": "0a0855cdb11d8da245a0d03178d68c9e6b089b385484156a904193e25f0a5d04"
+        },
+        {
+          "index": 3,
+          "bytes": 8330,
+          "sha256": "974dcce7131356e34f432f2bece75fdba35fe78104f4a7380dea0e775c100c7b"
+        },
+        {
+          "index": 4,
+          "bytes": 8705,
+          "sha256": "e2c7e29a60f8fa933fc23ef5a349f0f52ed5a36fef40090f826e29402a72e13e"
+        },
+        {
+          "index": 5,
+          "bytes": 8977,
+          "sha256": "fdb29144123f83d65bd4be29620ab03c2b5306990708bb7f764022f9738056bd"
+        }
+      ]
+    }
+  ],
+  "engines": {
+    "baseline": {
+      "commit": "6a50dc5b131678fbc2d41cf181414f7896c70b50",
+      "sourceSha256": "ccb080cefd43c22a3e788d97ed353b5b9f272241a79f452c417f0feb41df6f4b"
+    },
+    "candidate": {
+      "commit": "3d014c03012cda9207d4e27874ba82402ed1de4b",
+      "sourceSha256": "1414ab0c23c0cf9a3aefe677af1794af88ef42aa2bd9ad4aad6d5ab1e12346be"
+    }
+  }
+}

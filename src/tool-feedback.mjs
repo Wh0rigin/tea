@@ -2,10 +2,11 @@ import { createHash } from 'node:crypto';
 
 // Versioned descriptions of existing policy. This module grants no permissions.
 export function runtimeCapabilities({ platform = process.platform, approveCommand,
-  stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false } = {}) {
+  stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false, editPermissions } = {}) {
   const approval = typeof approveCommand === 'function' ? 'handler' : stdinIsTTY && stdoutIsTTY ? 'interactive' : 'unavailable';
   const identity = { schemaVersion: 1, policyVersion: fileCreation ? 2 : 1, platform, approval,
-    ...(fileCreation ? { fileCreation: true } : {}) };
+    ...(fileCreation ? { fileCreation: true } : {}),
+    ...(editPermissions?.active ? { editPermissions: editPermissions.version } : {}) };
   return { ...identity, version: `v1-${createHash('sha256').update(JSON.stringify(identity)).digest('hex').slice(0, 12)}` };
 }
 
@@ -14,16 +15,24 @@ export function capabilityNotice(capabilities) {
     ? 'Unlisted run_shell cannot obtain approval in this session; rephrasing cannot enable it.'
     : 'Unlisted run_shell needs explicit approval; approval can be refused.';
   const windows = capabilities.platform === 'win32' ? ' Windows allowlisted commands also reject quotes, parentheses, %, ! and ^.' : '';
+  const edits=capabilities.editPermissions ? ' File edits follow configured deny/ask/allow paths; a denial means keep that target unchanged, not write it through shell. These tool rules are not a subprocess filesystem sandbox.' : '';
   const creation = capabilities.fileCreation ? ' Create new files and missing parent directories with write_file; edit existing files with apply_patch. run_shell starts executables directly, not Bash or PowerShell: no cd, redirects or heredocs. On Windows, mkdir/md/cd/dir/type/echo are CMD built-ins and may not exist as executables. Do not create files via shell or encoded inline scripts. If no tests exist, create a small regression test with write_file and run it with run_tests.' : '';
-  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest; read-only git status/diff/log. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.${creation}`;
+  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest; read-only git status/diff/log. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.${creation}${edits}`;
 }
 
 const actions = {
+  EDIT_PERMISSION_DENIED: ['allowed-edit-target','Keep protected files unchanged. Use an allowed file or a new regression test; do not bypass via scripts.'],
+  EDIT_APPROVAL_UNAVAILABLE: ['edit-approval','This edit requires explicit approval. Use an interactive session or report the protected edit as blocked.'],
+  EDIT_APPROVAL_DENIED: ['edit-approval','Keep the refused target unchanged; do not retry variants or use scripts.'],
+  TOOL_POLICY_DENIED: ['allowed-tool-call','Follow the host policy reason and choose an allowed operation.'],
   CAPABILITY_DENIED: ['operation-policy', 'Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.'],
   APPROVAL_UNAVAILABLE: ['explicit-approval', 'This session cannot approve unlisted commands. Use an existing run_tests entry; report required checks that remain unverified.'],
   APPROVAL_DENIED: ['explicit-approval', 'The user refused this command. Do not resubmit variants; use a permitted entry or report the verification limit.'],
   INPUT_INVALID: ['valid-input', 'Correct the input using workspace-relative paths and documented tool parameters.'],
   SOURCE_MISMATCH: ['current-source-evidence', 'Read the current target and construct a new unique patch from that evidence.'],
+  FILE_EXISTS: ['edit-existing-file', 'Use apply_patch with current source evidence; read only if it is missing or stale. File existence alone does not invalidate a prior read.'],
+  PATCH_NOT_FOUND: ['matching-search-text', 'Check the exact search text against current source; refresh the relevant range if needed. A missing match does not prove a version change.'],
+  PATCH_AMBIGUOUS: ['unique-search-text', 'Use a unique search with more surrounding context from current evidence; read the relevant range only if needed.'],
   VALIDATION_FAILED: ['passing-validation', 'Inspect the test failure, fix supported source defects, then rerun relevant validation.'],
   EXECUTABLE_UNAVAILABLE: ['installed-executable', 'Check the available project validation entry; an unavailable executable is not a source-code failure.'],
   EXECUTION_FAILED: ['successful-execution', 'Inspect this command failure and its inputs; a failed diagnostic does not establish test failure or validation.'],
