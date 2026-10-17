@@ -7,7 +7,6 @@ import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs
 import { BoundedOutput } from './output.mjs';
 import { ToolFeedbackError } from './tool-feedback.mjs';
 import { ToolContext, ToolSpec, ToolService } from './tools/core.mjs';
-import { executeRetrieval, RETRIEVAL_TOOL } from './retrieval-code.mjs';
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -67,13 +66,12 @@ export function decodeText(buffer) {
 
 export class WorkspaceTools {
   get toolService() { return workspaceToolService(this); }
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true, retrievalCode = false }) {
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
     this.enableFileCreation = enableFileCreation;
-    this.retrievalCode = retrievalCode === true;
     this.readEvidence = new Map();
     // Vocabulary belongs to this run only; never modify the shared hand-written table.
     this.sessionTerms = new Map();
@@ -225,7 +223,7 @@ export class WorkspaceTools {
     if(this.sourceEvidence.size>128)this.sourceEvidence.delete(this.sourceEvidence.keys().next().value);
   }
 
-  async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false, offset = 0, startLine = 1 } = {}, { structured = false } = {}) {
+  async searchCode({ query, maxResults = 30, path: scope = '.', includeOmitted = false, offset = 0, startLine = 1 } = {}) {
     if (typeof query !== 'string' || !query) throw new Error('query must be a non-empty string');
     const needle = query.toLowerCase();
     const learned = [];
@@ -247,7 +245,7 @@ export class WorkspaceTools {
     if (!Number.isSafeInteger(offset) || offset < 0 || offset > 100000 || !Number.isSafeInteger(startLine) || startLine < 1) {
       throw new ToolFeedbackError('INPUT_INVALID', 'Search offset must be 0..100000 and startLine a positive integer');
     }
-    const results = [], items = [], dependencies = new Map(), limit = Math.max(1, Math.min(Number(maxResults) || 30, 80));
+    const results = [], dependencies = new Map(), limit = Math.max(1, Math.min(Number(maxResults) || 30, 80));
     let filesScanned = 0, bytesScanned = 0, fileIndex = 0, nextOffset = null, nextLine = 1;
     for await (const relative of this.#walkFiles(scope, includeOmitted)) {
       const index = fileIndex++; if (index < offset) continue;
@@ -261,7 +259,6 @@ export class WorkspaceTools {
         if (!needles.some(term => lines[line].toLowerCase().includes(term))) continue;
         dependencies.set(relative, { path: relative, sourceHash: createHash('sha256').update(redactText(decoded)).digest('hex') });
         results.push(redactText(`${relative}:${line + 1}: ${lines[line].trim()}`));
-        if (structured) items.push({ path: relative, line: line + 1, text: redactText(lines[line].trim()).slice(0,240), sourceHash: dependencies.get(relative).sourceHash });
         if (results.length >= limit) {
           nextOffset = line + 1 < lines.length ? index : index + 1;
           nextLine = line + 1 < lines.length ? line + 2 : 1;
@@ -274,7 +271,6 @@ export class WorkspaceTools {
     if (!complete) this.searchCursorNeeded = true;
     if (cursorExceeded) nextOffset = null;
     const coverage = `Search scope=${scope}; scanned=${filesScanned} files/${bytesScanned} bytes; nextOffset=${nextOffset}; nextLine=${nextLine}; complete=${complete}. Filters/depth/size limits apply. Continue the same query/path/includeOmitted with nextOffset and startLine=nextLine; restart at 0 after tree changes.${cursorExceeded ? ' Offset limit reached; narrow path.' : ''}`;
-    if (structured) return { items, coverage, complete, nextOffset, nextLine, dependencies: [...dependencies.values()] };
     if (!results.length) {
       if (this.unresolvedQueries.size < 32) this.unresolvedQueries.add(needle);
       return `No matches in the scanned scope. ${coverage}`;
@@ -286,8 +282,6 @@ export class WorkspaceTools {
     if (this.searchEvidence.size > 128) this.searchEvidence.delete(this.searchEvidence.keys().next().value);
     return output;
   }
-
-  async retrieveCode(input) { return executeRetrieval(this, input); }
 
   modelToolDefinitions({ includeMemory = true } = {}) {
     return this.toolService.definitions({ includeMemory });
@@ -540,8 +534,7 @@ export const TERM_MAPPING_TOOL = {
 function workspaceDefinitions(tools, { includeMemory = true } = {}) {
   const selected = tools.discoveryWide === false && !tools.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
   const base = tools.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
-  const selectedBase = tools.retrievalCode ? [...base, RETRIEVAL_TOOL] : base;
-  const definitions = tools.unresolvedQueries.size ? [...selectedBase, TERM_MAPPING_TOOL] : selectedBase;
+  const definitions = tools.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
   return includeMemory && tools.contextMemory?.evicted.size ? [...definitions, ...tools.contextMemory.definitions] : definitions;
 }
 
@@ -560,8 +553,6 @@ function workspaceToolService(tools) {
     validatesSource: input => phase === 'verify' && isValidationCommand(input?.command),
     execute: (context, input) => context.backend[method](input),
   }));
-  if (tools.retrievalCode) specs.push(new ToolSpec({ name: 'retrieve_code', definition: RETRIEVAL_TOOL,
-    execute: (context, input) => context.backend.retrieveCode(input) }));
   for (const [name, method] of [['recall_context', 'recall'], ['search_history', 'search']]) {
     specs.push(new ToolSpec({ name, definition: definition(name), execute: (context, input) => {
       if (!context.memory) throw new Error('ContextOS retrieval is unavailable in this session');

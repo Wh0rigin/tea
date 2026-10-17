@@ -13,7 +13,6 @@ import { memorySessionFields, attachSessionJournal, appendSessionMessage, restor
 import { ContextMemory } from './context-assembler.mjs';
 import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } from './memory-gc.mjs';
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
-import { commitRetrieval } from './retrieval-code.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -100,11 +99,9 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     runType: offline ? 'offline-runtime' : 'live', usageSource: offline ? 'scripted' : 'provider' });
   const deduplicateReads = ['v1-dedup', 'v1', 'v1-expanded', 'v1-auto'].includes(config.contextStrategy);
   const tools = session.tools || new WorkspaceTools({ workspace: config.workspace, ledger, deduplicateReads,
-    enableFileCreation: config.enableFileCreation ?? true, retrievalCode: config.retrievalCode });
-  if (tools.retrievalCode !== (config.retrievalCode === true)) throw new Error('A session cannot change retrieval-code mode');
+    enableFileCreation: config.enableFileCreation ?? true });
   await tools.init();
   tools.ledger = ledger;
-  tools.retrievalObserver = event => ledger.event({type:'retrieval_operation',...event});
   tools.signal = signal;
   tools.approveCommand = approveCommand;
   tools.enableFileCreation = config.enableFileCreation ?? true;
@@ -322,7 +319,6 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       if (textBlocks.length && session.taskState) session.taskState.decisions.push({ text: finalText,
         provenance: 'inferred', sourceEventId: assistantEvent?.eventId || null });
       const toolUses = content.filter((block) => block.type === 'tool_use');
-      const retrievalCommits = [];
       if (!toolUses.length) {
         if (signal?.aborted) { status = 'cancelled'; break; }
         if (result.stop_reason === 'max_tokens') {
@@ -357,8 +353,6 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         let isError = false;
         let toolError;
         const effects = toolService.effects(call.name, call.input);
-        tools.retrievalRemaining = config.maxToolCalls - toolCalls + 1;
-        tools.retrievalSubcalls = 0;
         emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
         await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
@@ -382,11 +376,6 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
             validationPassed = false;
             if (changedFiles.length) pendingValidation = true;
           }
-        }
-        if (call.name === 'retrieve_code') {
-          toolCalls += Math.max(0,tools.retrievalSubcalls-1);
-          if (!isError && tools.pendingRetrieval) retrievalCommits.push({output,pending:tools.pendingRetrieval});
-          tools.pendingRetrieval = null;
         }
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
         output = appendFailureFeedback(output, feedback);
@@ -413,8 +402,6 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
       }
       await appendSessionMessage(session, { role: 'user', content: toolResults });
-      for (const item of retrievalCommits) { tools.pendingRetrieval=item.pending; commitRetrieval(tools,item.output); }
-      if (retrievalCommits.length) await persistRuntimeState(session,runtimeState());
       if (signal?.aborted) status = 'cancelled';
       if (['tool_limit_reached', 'cancelled'].includes(status)) break;
     }
