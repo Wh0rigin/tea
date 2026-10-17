@@ -50,9 +50,10 @@ test('whole program failure and missing emit discard staged evidence',async()=>f
 }));
 
 test('abort after a read cannot poison delivery or dedup caches',async()=>fixture(async t=>{
-  const controller=new AbortController();t.signal=controller.signal;t.retrievalObserver=()=>controller.abort();
+  const controller=new AbortController();let finished=false;t.signal=controller.signal;t.retrievalObserver=e=>{if(e.stage==='settled'){finished=true;controller.abort();}};
   await assert.rejects(execute(t,'const x=await read({path:"src/a.mjs"}); emit(x);'),{name:'AbortError'});
   assert.equal(t.pendingRetrieval,null);assert.equal(t.presentedSource.size,0);assert.equal(t.readEvidence.size,0);
+  assert(finished);
   t.signal=undefined;assert.match(await t.readFile({path:'src/a.mjs'}),/export const retry/);
 }));
 
@@ -67,9 +68,11 @@ test('restricted syntax cannot access imports, host functions, prototypes or wri
 
 test('existing path and secret guards apply to composed reads and searches',async()=>fixture(async(t,root)=>{
   await writeFile(path.join(root,'.env'),'PASSWORD=secret');
+  await writeFile(path.join(root,'AGENTS.md'),'Keep rule identity.');
   for(const code of ['emit(await read({path:"../outside"}));','emit(await read({path:".env"}));','emit(await list({path:".tea"}));'])await assert.rejects(execute(t,code));
   const output=await execute(t,'const s=await search({query:"export",path:"src"}); emit(s);');
   assert.match(output,/Filters\/depth\/size/);assert.match(output,/"sourceHash"/);
+  await assert.rejects(execute(t,'emit(await read({path:"src/../AGENTS.md"}));'),/ordinary read_file/);
 }));
 
 test('operation and output limits do not commit partial evidence',async()=>fixture(async t=>{
