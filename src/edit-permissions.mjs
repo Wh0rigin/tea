@@ -18,10 +18,12 @@ export function normalizeEditPermissions(value = {}) {
 }
 // Bounded dynamic programming avoids backtracking-regexp attacks in user patterns.
 function segmentMatches(pattern,value) {
-  let row=new Array(value.length+1).fill(false);row[0]=true;
-  for(const c of pattern){const next=new Array(value.length+1).fill(false);if(c==='*')next[0]=row[0];for(let j=1;j<=value.length;j++)next[j]=c==='*'?row[j]||next[j-1]:(c==='?'||c===value[j-1])&&row[j-1];row=next;}
-  return row[value.length];
+  const characters=Array.from(value);
+  let row=new Array(characters.length+1).fill(false);row[0]=true;
+  for(const c of pattern){const next=new Array(characters.length+1).fill(false);if(c==='*')next[0]=row[0];for(let j=1;j<=characters.length;j++)next[j]=c==='*'?row[j]||next[j-1]:(c==='?'||c===characters[j-1])&&row[j-1];row=next;}
+  return row[characters.length];
 }
+
 export function editPathMatches(pattern, target, platform=process.platform) {
   if(platform==='win32'){pattern=pattern.toLowerCase();target=target.toLowerCase();}
   const p=pattern.split('/'),v=target.split('/');let row=new Array(v.length+1).fill(false);row[0]=true;
