@@ -1,0 +1,292 @@
+{
+  "runId": "python-code-first-screen-glm-20261017-v1",
+  "scope": "Three previously used self-authored Node tasks, two repeats per arm; code-first mode versus normal tools; whole-mode screening including declarations/routing; not unseen or production evidence",
+  "sourceCommits": {
+    "baseline": "b6f9395dde461a00bf80ef8aaeafc6f21cd1a8af",
+    "candidate": "61b0992f0a26cdf7467e4004bc8bfc1fd9637d7e"
+  },
+  "harnessSha256": "ff0d70854a8c0e5956f53f817c7643665256dd03fd89fd3017343ba8cf291c90",
+  "manifestSha256": "3deb03bde5fa92561c18e55780e81f517cba1950e81ea6f9ffbe0af8e847b6c8",
+  "dependencySha256": "9dc440f40ba5ad229958cf5eb14521a4eaf42e2e5877411cf4810ba953d7eacb",
+  "dependenciesUnchanged": true,
+  "observerSha256": "9765cd69b08d3278ec65c31089c2131f5c4da2c221a919d4acecae0fd00b1d9a",
+  "python": {
+    "version": "3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]",
+    "binarySha256": "08a64dc73ac3e3776b49f0097c6306bdb9c8f7990a037065213324d328467bf5",
+    "restrictedPythonVersion": "8.5"
+  },
+  "priorInterruptedRun": null,
+  "prefixAudit": {
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 2,
+        "multiAtomicRetrievalMessages": 1
+      }
+    ]
+  },
+  "config": {
+    "stream": true,
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "contextWindowTokens": 32768,
+    "contextReserveTokens": 4096,
+    "maxRequestInputBytes": 256000,
+    "memoryPolicy": "contextos",
+    "historyStrategy": "full",
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "commandTimeoutMs": 120000,
+    "contextosTargetBytes": 32000,
+    "compaction": "auto",
+    "maxToolCalls": 24,
+    "requestTimeoutMs": 90000,
+    "taskTimeoutMs": 600000,
+    "taskCapUsd": 1,
+    "suiteCapUsd": 4,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8
+  },
+  "sourceUnchanged": true,
+  "harnessUnchanged": true,
+  "complete": false,
+  "planned": 12,
+  "stopReason": "operator_stop_after_current",
+  "changePercent": null,
+  "qualityGate": false,
+  "gatePassed": false,
+  "mechanismExercised": false,
+  "successfulProgramEvidence": false,
+  "totals": {
+    "baseline": {
+      "attempted": 1,
+      "accepted": 1,
+      "codePassed": 1,
+      "unknown": 0,
+      "knownTokenSubtotal": 9647,
+      "requests": 4,
+      "adoptingAttempts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0
+    },
+    "candidate": {
+      "attempted": 0,
+      "accepted": 0,
+      "codePassed": 0,
+      "unknown": 0,
+      "knownTokenSubtotal": 0,
+      "requests": 0,
+      "adoptingAttempts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0
+    }
+  },
+  "perTask": {
+    "l1-narcissistic": {
+      "baseline": {
+        "attempted": 1,
+        "accepted": 1,
+        "codePassed": 1,
+        "unknown": 0,
+        "knownTokenSubtotal": 9647,
+        "requests": 4,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 0,
+        "accepted": 0,
+        "codePassed": 0,
+        "unknown": 0,
+        "knownTokenSubtotal": 0,
+        "requests": 0,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      }
+    }
+  },
+  "perRepeat": {
+    "1": {
+      "baseline": {
+        "attempted": 1,
+        "accepted": 1,
+        "codePassed": 1,
+        "unknown": 0,
+        "knownTokenSubtotal": 9647,
+        "requests": 4,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 0,
+        "accepted": 0,
+        "codePassed": 0,
+        "unknown": 0,
+        "knownTokenSubtotal": 0,
+        "requests": 0,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      }
+    },
+    "2": {
+      "baseline": {
+        "attempted": 0,
+        "accepted": 0,
+        "codePassed": 0,
+        "unknown": 0,
+        "knownTokenSubtotal": 0,
+        "requests": 0,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 0,
+        "accepted": 0,
+        "codePassed": 0,
+        "unknown": 0,
+        "knownTokenSubtotal": 0,
+        "requests": 0,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      }
+    }
+  },
+  "firstInputDeltas": [],
+  "rows": [
+    {
+      "id": "l1-narcissistic-r1-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 8633,
+        "outputTokens": 1014,
+        "totalTokens": 9647,
+        "cachedInputTokens": 5696,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "outerToolCalls": 6,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    }
+  ],
+  "audit": {
+    "auditedAttempts": 1,
+    "totals": {
+      "baseline": {
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      "candidate": {
+        "successfulEdits": 0,
+        "validationToolResults": 0,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    ]
+  }
+}

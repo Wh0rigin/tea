@@ -2,16 +2,14 @@ import { createHash } from 'node:crypto';
 
 // Versioned descriptions of existing policy. This module grants no permissions.
 export function runtimeCapabilities({ platform = process.platform, approveCommand,
-  stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false, codeFirst = false } = {}) {
+  stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false } = {}) {
   const approval = typeof approveCommand === 'function' ? 'handler' : stdinIsTTY && stdoutIsTTY ? 'interactive' : 'unavailable';
   const identity = { schemaVersion: 1, policyVersion: fileCreation ? 2 : 1, platform, approval,
-    ...(codeFirst ? { retrievalMode:'code-first',retrievalLanguage:'python-sync',commandScope:'validation-only' } : {}),
     ...(fileCreation ? { fileCreation: true } : {}) };
   return { ...identity, version: `v1-${createHash('sha256').update(JSON.stringify(identity)).digest('hex').slice(0, 12)}` };
 }
 
 export function capabilityNotice(capabilities) {
-  if (capabilities.retrievalMode==='code-first') return `Runtime capabilities ${capabilities.version} (${capabilities.platform}): workspace-relative paths only. read_file reads AGENTS.md instructions only; retrieve_code runs synchronous Python (no await) for source discovery, reads and historical retrieval. Create new files with write_file and edit existing files with apply_patch. run_tests/run_shell allow actual node --test, npm test/run test|lint|check|typecheck, pytest/unittest validation only; installed runners depend on the project. No arbitrary command approval, inline scripts or Git diagnostic fallback. A denied operation is not evidence of a source defect. Validate edits and report checks that could not run.`;
   const approval = capabilities.approval === 'unavailable'
     ? 'Unlisted run_shell cannot obtain approval in this session; rephrasing cannot enable it.'
     : 'Unlisted run_shell needs explicit approval; approval can be refused.';

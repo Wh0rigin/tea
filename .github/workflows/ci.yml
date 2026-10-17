@@ -32,8 +32,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           package-manager-cache: false
-      - name: Install optional Python retrieval test dependency
-        run: python -m pip install --disable-pip-version-check --require-hashes --no-deps --target .tea/python-runtime -r requirements-python-retrieval.txt
       - name: Deterministic tests (no provider credentials)
         run: npm test
       - name: CLI help
