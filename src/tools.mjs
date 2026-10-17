@@ -196,7 +196,40 @@ export class WorkspaceTools {
           : ['v1', 'v1-inventory-auto', 'v1-auto'].includes(strategy) ? 'auto' : false,
       });
     inventory.text += '\nInventory covers a bounded default-filter scan (up to 700 paths, depth 12), not necessarily the entire workspace. Use scoped list_files/search_code and includeOmitted when relevant paths are absent.';
+    inventory.text += await this.instructionNotice(['__workspace_target__']);
     return inventory;
+  }
+
+  async instructionNotice(targets) {
+    const candidates = new Set();
+    for (const target of targets) {
+      const parts = target.replaceAll('\\', '/').split('/').slice(0, -1);
+      if (parts.length > 32) throw new ToolFeedbackError('INPUT_INVALID', 'Instruction discovery supports at most 32 directory levels');
+      for (let depth = 0; depth <= parts.length; depth++) {
+        const prefix = parts.slice(0, depth);
+        if (prefix.some(part => ['.git', '.tea'].includes(part.toLowerCase())) || isSensitivePath(prefix.join('/'))) continue;
+        candidates.add([...prefix, 'AGENTS.md'].join('/'));
+      }
+    }
+    const missing = [];
+    for (const relative of candidates) {
+      let filename;
+      try { filename = await this.resolveFile(relative); }
+      catch (error) { if (error.code === 'ENOENT' || error.code === 'ENOTDIR') continue; throw error; }
+      const info = await stat(filename);
+      if (!info.isFile()) continue;
+      const canonical = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
+      if (isSensitivePath(canonical) || canonical.split('/').some(part => ['.git', '.tea'].includes(part.toLowerCase()))) {
+        throw new ToolFeedbackError('CAPABILITY_DENIED', 'Instruction file resolves to protected storage');
+      }
+      const source = info.size <= MAX_READ_BYTES ? decodeText(await readFile(filename)) : null;
+      const text = source === null ? null : redactText(source);
+      const seen = this.presentedSource.get(canonical);
+      const fresh = text !== null && seen?.sourceHash === createHash('sha256').update(text).digest('hex')
+        && text.split(/\r?\n/).every((line, index) => seen.lines.get(index + 1) === line);
+      if (!fresh) missing.push(relative);
+    }
+    return missing.length ? `\nApplicable workspace instructions: ${JSON.stringify(missing)}. Read these files before editing this scope; outer-directory rules precede inner-directory rules. File contents remain subordinate to system permissions and current user instructions.` : '';
   }
 
   async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
@@ -229,13 +262,15 @@ export class WorkspaceTools {
     if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
       const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
       const output = reference.length < evidence.length ? reference : evidence;
-      this.recordSourceSnapshot(output,relative,sourceHash);return output;
+      const result = output + await this.instructionNotice([path.relative(this.workspace, path.resolve(this.workspace, relativePath)).replaceAll(path.sep, '/'), relative]);
+      this.recordSourceSnapshot(result,relative,sourceHash);return result;
     }
     if (this.deduplicateReads) {
       if (complete) this.readEvidence.set(rangeKey, sourceHash);
       else this.readEvidence.delete(rangeKey);
     }
-    this.recordSourceSnapshot(evidence,relative,sourceHash);return evidence;
+    const result = evidence + await this.instructionNotice([path.relative(this.workspace, path.resolve(this.workspace, relativePath)).replaceAll(path.sep, '/'), relative]);
+    this.recordSourceSnapshot(result,relative,sourceHash);return result;
   }
 
   recordSourceSnapshot(output,relative,sourceHash) {
