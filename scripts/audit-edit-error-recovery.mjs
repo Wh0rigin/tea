@@ -12,9 +12,16 @@ for (const row of report.rows) {
   const ids = await readdir(path.join(workspace, '.tea/sessions'));
   if (ids.length !== 1) throw Error('Ambiguous session');
   const journal = await SessionJournal.open({ workspace, id: ids[0], resume: true });
-  const calls = new Map(), sequence = [], readRules = new Set(), signatures = new Map();
+  const calls = new Map(), sequence = [], readRules = new Set(), signatures = new Map(), callTurns = new Map();
+  let assistantTurn = 0;
   let notices = 0, existingWriteErrors = 0, duplicateReadCalls = 0;
   try { for await (const event of journal.iterateEvents()) {
+    if (event.kind === 'message' && event.value.role === 'assistant') {
+      assistantTurn++;
+      for (const block of Array.isArray(event.value.content) ? event.value.content : []) {
+        if (block.type === 'tool_use') callTurns.set(block.id, assistantTurn);
+      }
+    }
     if (event.kind === 'tool_intent') calls.set(event.value.id, event.value);
     if (event.kind !== 'tool_completed') continue;
     const result = event.value, call = calls.get(result.id); if (!call) throw Error('Missing intent');
@@ -27,7 +34,7 @@ for (const row of report.rows) {
       signatures.set(signature, true);
       if (!result.isError && /(?:^|\/)AGENTS\.md$/.test(input.path || '')) readRules.add(input.path);
     }
-    sequence.push({ tool: call.name, ...(input.path ? { path: input.path } : {}), ...(input.query ? { query: input.query } : {}),
+    sequence.push({ tool: call.name, assistantTurn: callTurns.get(result.id) ?? null, ...(input.path ? { path: input.path } : {}), ...(input.query ? { query: input.query } : {}),
       ...(input.command ? { command: input.command } : {}), error: Boolean(result.isError),
       feedbackCode: result.isError ? /"code":"([A-Z_]+)"/.exec(output)?.[1] || 'UNCLASSIFIED' : null,
       instructionNotice: output.includes('Applicable workspace instructions:'),
@@ -56,6 +63,8 @@ for (const row of report.rows) {
     const suffix = sequence.slice(i + 1), patchIndex = suffix.findIndex(e => e.tool === 'apply_patch' && e.path === event.path && !e.error);
     const recovery = patchIndex < 0 ? suffix : suffix.slice(0, patchIndex);
     existingFileRecoveries.push({ path: event.path, code: event.feedbackCode, recovered: patchIndex >= 0,
+      errorTurn: event.assistantTurn, patchTurn: patchIndex < 0 ? null : suffix[patchIndex].assistantTurn,
+      feedbackCouldInfluenceRecovery: patchIndex >= 0 && suffix[patchIndex].assistantTurn > event.assistantTurn,
       interveningCalls: recovery.length, targetReads: recovery.filter(e => e.tool === 'read_file' && e.path === event.path).length,
       listings: recovery.filter(e => e.tool === 'list_files').length });
   }
