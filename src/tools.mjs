@@ -399,7 +399,7 @@ export class WorkspaceTools {
     let file;
     try { file = await open(filename, 'wx'); }
     catch (error) {
-      if (error.code === 'EEXIST') throw new ToolFeedbackError('SOURCE_MISMATCH', 'File already exists. Read it and use apply_patch; write_file never overwrites existing files');
+      if (error.code === 'EEXIST') throw new ToolFeedbackError('FILE_EXISTS', 'File already exists; write_file never overwrites existing files. Use apply_patch with current source evidence; read only if that evidence is missing or stale.');
       throw error;
     }
     let identity;
@@ -433,8 +433,8 @@ export class WorkspaceTools {
     await this.authorizeEdit(relativePath, filename, 'edit', {search,replace});
     const source = await readFile(filename, 'utf8');
     const first = source.indexOf(search);
-    if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
-    if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text is ambiguous; include more surrounding lines');
+    if (first < 0) throw new ToolFeedbackError('PATCH_NOT_FOUND', 'Patch search text was not found');
+    if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('PATCH_AMBIGUOUS', 'Patch search text is ambiguous; include more surrounding lines');
     await writeFile(filename, source.slice(0, first) + replace + source.slice(first + search.length), 'utf8');
     return `Updated ${normalizedPath}`;
   }

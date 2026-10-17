@@ -102,7 +102,7 @@ test('input/source categories retain path, secret and unique patch restrictions'
   await assert.rejects(tools.resolveFile('../outside', { mustExist: false }), e => e.feedbackCode === 'CAPABILITY_DENIED');
   await assert.rejects(tools.readFile({ path: '.env' }), e => e.feedbackCode === 'CAPABILITY_DENIED');
   await assert.rejects(tools.runTests({ command: 42 }), e => e.feedbackCode === 'INPUT_INVALID');
-  await assert.rejects(tools.applyPatch({ path: 'value.mjs', search: 'absent', replace: 'different' }), e => e.feedbackCode === 'SOURCE_MISMATCH');
+  await assert.rejects(tools.applyPatch({ path: 'value.mjs', search: 'absent', replace: 'different' }), e => e.feedbackCode === 'PATCH_NOT_FOUND');
 });
 
 test('unchanged capabilities are announced once per conversation and never mutate tool definitions', async () => {
