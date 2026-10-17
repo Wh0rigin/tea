@@ -26,5 +26,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "quickjs-emscripten": "0.32.0"
   }
 }

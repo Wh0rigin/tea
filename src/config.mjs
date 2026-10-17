@@ -92,6 +92,7 @@ export function loadConfig(options = {}, env = process.env) {
     throw new ConfigError('TEA_OUTPUT_PRICE_USD_PER_MTOK must be a non-negative number');
   }
 
+  const codeFirst = options.codeFirst ?? env.TEA_CODE_FIRST === '1';
   return {
     apiKey,
     baseUrl: String(env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, ''),
@@ -107,6 +108,8 @@ export function loadConfig(options = {}, env = process.env) {
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
+    codeFirst,
+    retrievalCode: codeFirst || (options.retrievalCode ?? env.TEA_RETRIEVAL_CODE === '1'),
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
     effort,
     thinkingMode,
