@@ -6,7 +6,7 @@ import os from 'node:os';
 
 // RestrictedPython is a language policy, not an OS sandbox. No credentials are inherited.
 const WORKER=String.raw`
-import sys, json
+import sys, json, operator
 sys.path.insert(0, sys.argv[1])
 from RestrictedPython import compile_restricted
 from RestrictedPython.Guards import safe_builtins, safer_getattr_raise, guarded_iter_unpack_sequence, guarded_unpack_sequence, full_write_guard
@@ -73,6 +73,9 @@ def operation(name):
 def get_attr(obj,name):
     if isinstance(obj,EvidencePage): raise TypeError('Opaque evidence page; emit it directly')
     return safer_getattr_raise(obj,name)
+def inplace(op,left,right):
+    methods={'+=':operator.iadd,'-=':operator.isub,'*=':operator.imul,'/=':operator.itruediv,'//=':operator.ifloordiv,'%=':operator.imod,'**=':operator.ipow,'&=':operator.iand,'|=':operator.ior,'^=':operator.ixor,'<<=':operator.ilshift,'>>=':operator.irshift}
+    return methods[op](left,right)
 def get_item(obj,key):
     if isinstance(obj,EvidencePage): raise TypeError('Opaque evidence page; emit it directly')
     return obj[key]
@@ -95,7 +98,7 @@ def trace(frame,event,arg):
 builtins=dict(safe_builtins)
 for key in ['BaseException','__build_class__','setattr','delattr']: builtins.pop(key,None)
 builtins.update({'list':list,'dict':dict,'set':set,'tuple':tuple,'enumerate':enumerate,'zip':zip,'sorted':sorted,'sum':sum,'min':min,'max':max,'any':any,'all':all,'reversed':reversed})
-namespace={'__builtins__':builtins,'_print_':PrintSink,'_getattr_':get_attr,'_getitem_':get_item,'_getiter_':iter,'_write_':full_write_guard,'_iter_unpack_sequence_':guarded_iter_unpack_sequence,'_unpack_sequence_':guarded_unpack_sequence}
+namespace={'__builtins__':builtins,'_inplacevar_':inplace,'_print_':PrintSink,'_getattr_':get_attr,'_getitem_':get_item,'_getiter_':iter,'_write_':full_write_guard,'_iter_unpack_sequence_':guarded_iter_unpack_sequence,'_unpack_sequence_':guarded_unpack_sequence}
 for name,op in [('search','search'),('list_files','list'),('read','read'),('read_hit','readHit'),('history','history'),('recall','recall')]: namespace[name]=operation(op)
 namespace['emit']=lambda value:rpc('emit',value)
 try:
@@ -114,7 +117,7 @@ export async function runPythonRetrieval(code,api,{check=()=>{},isPage=()=>false
   if(typeof code!=='string'||!code.trim()||code.length>6000)throw Error('Retrieval code must be 1..6000 characters');
   check();signal?.throwIfAborted();
   const env={};for(const key of ['SystemRoot','SYSTEMROOT','WINDIR','PATH','Path','TEMP','TMP'])if(process.env[key])env[key]=process.env[key];
-  const child=spawn(python,['-I','-S','-B','-u','-c',WORKER,path.resolve(dependencies)],{cwd:os.tmpdir(),env,windowsHide:true,stdio:['pipe','pipe','pipe']});
+  const child=spawn(python,['-I','-S','-B','-X','utf8','-u','-c',WORKER,path.resolve(dependencies)],{cwd:os.tmpdir(),env,windowsHide:true,stdio:['pipe','pipe','pipe']});
   const pages=new Map();let fatal,done=false,bytes=0,stderr='',active=Promise.resolve();
   const fail=error=>{fatal??=error;child.kill();};
   const abort=()=>fail(signal.reason||Error('Python retrieval aborted'));

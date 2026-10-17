@@ -17,7 +17,7 @@
 
 ## 离线门槛
 
-30/30 专项通过：真实同步返回、上一轮错误调用模式的 Python 对应操作、字段错误、页序列化/伪造、部分交付、计数、取消、超时、CPU/内存、非法路径、导入与反射、ContextOS 过期及历史召回、真实编辑后验证。完整回归结果将在冻结源码前确认。
+31/31 专项通过：真实同步返回、上一轮错误调用模式的 Python 对应操作、字段错误、页序列化/伪造、部分交付、计数、取消、超时、CPU/内存、非法路径、导入与反射、ContextOS 过期及历史召回、真实编辑后验证。完整回归首版 364/364；UTF-8 修正及完整同步调用策略回归后 **365/365 通过**。
 
 本轮不把旧 JavaScript 程序翻译成 Python 后声称“原样回放成功”；使用明确的 Python 对应回归验证接口契约。
 
@@ -46,4 +46,12 @@ npm test
 
 [RestrictedPython 官方边界说明](https://restrictedpython.readthedocs.io/en/latest/) · [Windows Job 内存限制](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_extended_limit_information)
 
-结果待冻结测量后补充。
+## 首次启动后的编码检查与中止记录
+
+首版候选 61b0992、runner 2306a48 在 `python-code-first-screen-glm-20261017-v1` 启动。额外离线 Unicode 探测发现本机 Python 管道默认为 GBK，UTF-8 字面量往返失真。立即设置 STOP_AFTER_CURRENT，待当前基线结算后停止；没有启动候选。
+
+这次基线验收通过，9,647 provider Token；已知控制估价 0.0097456 USD。该孤立样本保留在中止报告，不纳入重新冻结的配对比例。首版冻结源码/依赖在中止时未改变。没有未知用量或自动重试。
+
+修正：显式传递 Python `-X utf8`，新增中文程序字面量、查询、源码与文件名的双向 IPC 回归。之后另开 v2 对照，同一计划；v2 控制上限调整为 3.99 USD，加上前次已知支出小于原总控制上限 4 USD。
+
+最终结果待 v2 冻结测量后补充。

@@ -31,5 +31,11 @@ test('Python print returns real pages and does not lose output in a collector',a
   assert.match(await execute(t,'print("hits",len(search("retry")["items"]))'),/hits 1/);
 }));
 test('Python standard functions, comprehensions and f-strings need no custom syntax interpreter',async()=>fixture(async t=>{
-  const out=await execute(t,'def paths(hits):\n    return [h["path"] for h in hits]\nitems=paths(search("retry")["items"])\nemit(f"count={len(items)}")\nfor p in items:\n    emit(read(p))');assert.match(out,/count=1/);assert.match(out,/export const retry/);
+  const out=await execute(t,'def paths(hits):\n    count=0\n    for hit in hits:\n        count+=1\n    return [h["path"] for h in hits]\nitems=paths(search("retry")["items"])\nemit(f"count={len(items)}")\nfor p in items:\n    emit(read(p))');assert.match(out,/count=1/);assert.match(out,/export const retry/);
+}));
+
+test('Python IPC uses UTF-8 for program literals, queries, source and Chinese filenames',async()=>fixture(async(t,root)=>{
+  await writeFile(path.join(root,'src/中文.mjs'),'export const 重试 = "你好";\n');
+  const out=await execute(t,'emit("你好")\nhits=search(query="重试",path="src")\nfor h in hits["items"]:\n    emit(h["text"])\n    emit(read_hit(h))');
+  assert.match(out,/你好/);assert.match(out,/export const 重试 = "你好"/);assert(!out.includes('浣犲ソ'));commitRetrieval(t,out);assert(t.presentedSource.has('src/中文.mjs'));
 }));
