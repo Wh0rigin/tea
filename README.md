@@ -4,6 +4,8 @@ Daily CLI supports native UTF-8 file creation (`write_file`), including parent d
 
 Configured edit-path permissions can deny protected files or request approval before a write. See [edit permissions and pre-tool policy](docs/EDIT_PERMISSIONS.md) for setup and subprocess limits.
 
+See [command execution and benchmark artifacts](docs/COMMAND_EXECUTION.md) for Go/Git validation, approval decisions, native argument handling and recoverable patch export.
+
 <p align="center">
   <img src="assets/tea-logo.png" alt="TEA — Token Efficient Agent" width="320">
 </p>

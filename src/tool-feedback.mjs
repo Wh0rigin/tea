@@ -4,7 +4,10 @@ import { createHash } from 'node:crypto';
 export function runtimeCapabilities({ platform = process.platform, approveCommand,
   stdinIsTTY = Boolean(process.stdin.isTTY), stdoutIsTTY = Boolean(process.stdout.isTTY), fileCreation = false, editPermissions } = {}) {
   const approval = typeof approveCommand === 'function' ? 'handler' : stdinIsTTY && stdoutIsTTY ? 'interactive' : 'unavailable';
-  const identity = { schemaVersion: 1, policyVersion: fileCreation ? 2 : 1, platform, approval,
+  const hints = Array.isArray(approveCommand?.commandHints) ? approveCommand.commandHints.filter(x=>typeof x==='string'&&x.length<=160&&!/[\r\n]/.test(x)).slice(0,4) : [];
+  const identity = { schemaVersion: 1, policyVersion: 3, platform, approval,
+    ...(/^[a-f0-9]{16}$/.test(approveCommand?.commandPolicyId || '') ? { commandPolicyId: approveCommand.commandPolicyId } : {}),
+    ...(hints.length ? { commandHints: hints } : {}),
     ...(fileCreation ? { fileCreation: true } : {}),
     ...(editPermissions?.active ? { editPermissions: editPermissions.version } : {}) };
   return { ...identity, version: `v1-${createHash('sha256').update(JSON.stringify(identity)).digest('hex').slice(0, 12)}` };
@@ -14,10 +17,11 @@ export function capabilityNotice(capabilities) {
   const approval = capabilities.approval === 'unavailable'
     ? 'Unlisted run_shell cannot obtain approval in this session; rephrasing cannot enable it.'
     : 'Unlisted run_shell needs explicit approval; approval can be refused.';
-  const windows = capabilities.platform === 'win32' ? ' Windows allowlisted commands also reject quotes, parentheses, %, ! and ^.' : '';
+  const windows = capabilities.platform === 'win32' ? ' Windows npm allowlisted commands additionally reject CMD metacharacters; direct executables accept quoted arguments.' : '';
+  const hints = capabilities.commandHints?.length ? ` Host-approved command examples (other restrictions still apply): ${capabilities.commandHints.join(' / ')}.` : '';
   const edits=capabilities.editPermissions ? ' File edits follow configured deny/ask/allow paths; a denial means keep that target unchanged, not write it through shell. These tool rules are not a subprocess filesystem sandbox.' : '';
   const creation = capabilities.fileCreation ? ' Create new files and missing parent directories with write_file; edit existing files with apply_patch. run_shell starts executables directly, not Bash or PowerShell: no cd, redirects or heredocs. On Windows, mkdir/md/cd/dir/type/echo are CMD built-ins and may not exist as executables. Do not create files via shell or encoded inline scripts. If no tests exist, create a small regression test with write_file and run it with run_tests.' : '';
-  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python -m pytest|unittest; pytest; read-only git status/diff/log. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.${creation}${edits}`;
+  return `Runtime capabilities ${capabilities.version} (${capabilities.platform}, approval=${capabilities.approval}): workspace-relative paths only. run_tests command forms: node --test FILE; npm test/run test|lint|check|typecheck; python/python3 -m pytest|unittest; pytest; go test/build/vet; read-only git status/diff/log/show/rev-parse/ls-files and branch listing. Installed runners depend on the project. Shell operators and multiline text are blocked, including quoted JavaScript.${windows} ${approval}${hints} Use an existing permitted validation entry. If required checks cannot run, report which remain unverified. A capability denial gives no evidence that source code is wrong.${creation}${edits}`;
 }
 
 const actions = {
@@ -27,7 +31,11 @@ const actions = {
   TOOL_POLICY_DENIED: ['allowed-tool-call','Follow the host policy reason and choose an allowed operation.'],
   CAPABILITY_DENIED: ['operation-policy', 'Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.'],
   APPROVAL_UNAVAILABLE: ['explicit-approval', 'This session cannot approve unlisted commands. Use an existing run_tests entry; report required checks that remain unverified.'],
-  APPROVAL_DENIED: ['explicit-approval', 'The user refused this command. Do not resubmit variants; use a permitted entry or report the verification limit.'],
+  APPROVAL_DENIED: ['explicit-approval', 'The approval handler did not grant permission. Do not resubmit variants; use a permitted entry or report the verification limit.'],
+  COMMAND_POLICY_DENIED: ['command-policy', 'The host command policy denied this operation. Follow its reason; use an allowed entry or report the missing capability.'],
+  USER_APPROVAL_DENIED: ['explicit-approval', 'The user refused this command. Do not resubmit variants or bypass the refusal.'],
+  APPROVAL_INVALID: ['valid-approval-decision', 'The host returned an invalid approval decision. Command was not executed; report the host configuration error.'],
+  APPROVAL_HANDLER_FAILED: ['working-approval-handler', 'The host approval handler failed. Command was not executed; report the host configuration error.'],
   INPUT_INVALID: ['valid-input', 'Correct the input using workspace-relative paths and documented tool parameters.'],
   SOURCE_MISMATCH: ['current-source-evidence', 'Read the current target and construct a new unique patch from that evidence.'],
   FILE_EXISTS: ['edit-existing-file', 'Use apply_patch with current source evidence; read only if it is missing or stale. File existence alone does not invalidate a prior read.'],
@@ -49,6 +57,7 @@ export function toolFailureFeedback({ error, output, toolName, validation = fals
   let code = error?.feedbackCode;
   const text = String(output ?? error?.message ?? '');
   if (!code && /^Command denied by user\./.test(text)) code = 'APPROVAL_DENIED';
+  if (!code && /^Command not approved by approval handler\./.test(text)) code = 'APPROVAL_DENIED';
   if (!code && /^exit=(?!0\b)-?\d+\b/.test(text)) code = validation ? 'VALIDATION_FAILED' : 'EXECUTION_FAILED';
   if (!code && error?.code === 'ENOENT') code = ['run_tests', 'run_shell'].includes(toolName) ? 'EXECUTABLE_UNAVAILABLE' : 'INPUT_INVALID';
   if (!code && error && /cancelled|AbortError/i.test(text)) code = 'EXECUTION_CANCELLED';

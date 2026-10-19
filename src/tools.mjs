@@ -8,6 +8,8 @@ import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs
 import { BoundedOutput } from './output.mjs';
 import { ToolFeedbackError } from './tool-feedback.mjs';
 import { ToolContext, ToolSpec, ToolService } from './tools/core.mjs';
+import { parseCommand, assertCommandPolicy, isAllowedCommand, isValidationCommand, commandEnvironment, windowsNpmArguments } from './commands.mjs';
+export { isValidationCommand };
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -18,32 +20,6 @@ const MAX_SHELL_MS = 120_000;
 const SENSITIVE_FILE = /^(?:\.env(?:\..*)?|credentials?(?:\..*)?|secrets?(?:\..*)?|auth\.json|service-account(?:\..*)?|private[_-]?key(?:\..*)?|id_(?:rsa|ed25519).*)$/i;
 const SECRET_TEXT = /(?:\bsk-[A-Za-z0-9_-]{12,}\b|\bgh[pousr]_[A-Za-z0-9_]{20,}\b|\bgithub_pat_[A-Za-z0-9_]{20,}\b|\bAKIA[0-9A-Z]{16}\b|\bxox[baprs]-[A-Za-z0-9-]{10,}\b)/g;
 const SECRET_ASSIGNMENT = /(["']?(?:api[_-]?key|access[_-]?token|refresh[_-]?token|client[_-]?secret|password|passwd|secret)["']?\s*[=:]\s*)(["']?)([^\s"'`,;}]+)/ig;
-const VALIDATION_COMMANDS = [
-  /^node\s+--test(?:\s+[^;&|<>`]+)?$/,
-  /^npm\s+(?:test|run\s+(?:test|lint|check|typecheck))(?:\s+--\s+[^;&|<>`]+)?$/,
-  /^python\s+-m\s+(?:pytest|unittest)(?:\s+[^;&|<>`]+)?$/,
-  /^pytest(?:\s+[^;&|<>`]+)?$/,
-];
-const DIAGNOSTIC_COMMANDS = [/^git\s+(?:status(?:\s+--short)?|diff(?:\s+--check)?|log\s+-\d+(?:\s+--oneline)?)$/];
-const NON_VALIDATING_FLAGS = /(?:^|\s)(?:-h|--help|--version|--list(?:-[a-z-]+)?|--collect-only|--collectonly|--co|--fixtures(?:-per-test)?|--inspect(?:-brk)?|--eval|--print)(?:=|\s|$)/i;
-const BLOCKED_SHELL = /(?:\brm\b|\bdel\b|\berase\b|\brmdir\b|\bformat\b|\bmkfs\b|\bshutdown\b|\breg\s+(?:add|delete)\b|git\s+(?:reset|clean|push|restore|checkout\s+-f)|\bRemove-Item\b)/i;
-
-function isAllowedCommand(command) {
-  return typeof command === 'string' && !/[;&|<>`\n\r]/.test(command)
-    && [...VALIDATION_COMMANDS, ...DIAGNOSTIC_COMMANDS].some((pattern) => pattern.test(command.trim()));
-}
-
-export function isValidationCommand(command) {
-  return isAllowedCommand(command) && VALIDATION_COMMANDS.some((pattern) => pattern.test(command.trim()))
-    && !NON_VALIDATING_FLAGS.test(command)
-    && !(command.trim().split(/\s+/)[0] === 'node' && /(?:^|\s)(?:-v|-e|-p)(?:\s|$)/.test(command));
-}
-
-function assertWindowsCommand(command) {
-  if (process.platform === 'win32' && /[%!^()\"']/.test(command)) {
-    throw new ToolFeedbackError('CAPABILITY_DENIED', 'CMD metacharacters are not allowed in Windows validation commands');
-  }
-}
 
 function truncate(text, max = MAX_TOOL_OUTPUT) {
   const value = String(text);
@@ -441,32 +417,39 @@ export class WorkspaceTools {
 
   async runTests({ command } = {}) {
     this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
-    if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
-    if (!isAllowedCommand(command)) {
+    const parsed = parseCommand(command);
+    assertCommandPolicy(parsed);
+    if (!isAllowedCommand(parsed)) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests');
     }
-    assertWindowsCommand(command);
-    return this.#spawnCommand(command.trim(), this.maxCommandMs);
+    return this.#spawnCommand(parsed, this.maxCommandMs);
   }
 
   async runShell({ command } = {}) {
     this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
-    if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
+    const parsed = parseCommand(command);
+    assertCommandPolicy(parsed);
     const value = command.trim();
-    if (BLOCKED_SHELL.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Destructive commands and Git history mutations are blocked');
-    if (/[;&|<>`\n\r]/.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Shell operators and multiline commands are blocked');
-    if (isAllowedCommand(value)) {
-      assertWindowsCommand(value);
-      return this.#spawnCommand(value, this.maxCommandMs);
-    }
+    if (isAllowedCommand(parsed)) return this.#spawnCommand(parsed, this.maxCommandMs);
     if (this.approveCommand) {
       const approvalStarted = Date.now();
       let approved;
       try { approved = await this.approveCommand(value); }
+      catch (error) { this.signal?.throwIfAborted(); throw new ToolFeedbackError('APPROVAL_HANDLER_FAILED', 'Command approval handler failed; command was not executed'); }
       finally { this.lastCommandTiming.approvalMs = Date.now() - approvalStarted; }
-      if (!approved) return 'Command denied by user.';
       this.signal?.throwIfAborted();
-      return this.#spawnCommand(value, this.maxCommandMs);
+      if (approved === false) return 'Command not approved by approval handler.';
+      if (approved !== true) {
+        if (!approved || !['allow','deny'].includes(approved.decision) || ![undefined,'policy','user'].includes(approved.source)) {
+          throw new ToolFeedbackError('APPROVAL_INVALID', 'Invalid command approval decision; command was not executed');
+        }
+        if (approved.decision === 'deny') {
+          const code = approved.source === 'user' ? 'USER_APPROVAL_DENIED' : 'COMMAND_POLICY_DENIED';
+          const reason = typeof approved.reason === 'string' ? redactText(approved.reason).slice(0, 240) : 'Command is outside the configured approval policy';
+          throw new ToolFeedbackError(code, reason);
+        }
+      }
+      return this.#spawnCommand(parsed, this.maxCommandMs);
     }
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new ToolFeedbackError('APPROVAL_UNAVAILABLE', 'Unlisted shell commands require an interactive terminal for approval');
     const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -474,23 +457,20 @@ export class WorkspaceTools {
     const approvalStarted = Date.now();
     try { answer = await rl.question(`Allow this command in the workspace?\n  ${value}\nType yes to continue: `); }
     finally { this.lastCommandTiming.approvalMs = Date.now() - approvalStarted; rl.close(); }
-    if (answer.trim().toLowerCase() !== 'yes') return 'Command denied by user.';
-    return this.#spawnCommand(value, this.maxCommandMs);
+    this.signal?.throwIfAborted();
+    if (answer.trim().toLowerCase() !== 'yes') throw new ToolFeedbackError('USER_APPROVAL_DENIED', 'Command denied by user.');
+    return this.#spawnCommand(parsed, this.maxCommandMs);
   }
 
-  async #spawnCommand(command, timeoutMs) {
+  async #spawnCommand({ executable, args }, timeoutMs) {
     this.signal?.throwIfAborted();
     const signal = this.signal;
-    const parts = command.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
-    const executable = (parts.shift() || '').replace(/^"|"$/g, '');
-    const args = parts.map((part) => part.replace(/^"|"$/g, ''));
-    if (!executable) throw new Error('Command is empty');
-    const safeEnv = { PATH: process.env.PATH || '', PATHEXT: process.env.PATHEXT || '', SYSTEMROOT: process.env.SYSTEMROOT || '', WINDIR: process.env.WINDIR || '', TEMP: process.env.TEMP || '', TMP: process.env.TMP || '', ComSpec: process.env.ComSpec || 'cmd.exe', PYTHONUTF8: '1', PYTHONIOENCODING: 'utf-8' };
+    const safeEnv = commandEnvironment(this.workspace);
     const executionStarted = Date.now();
     try {
     const output = await new Promise((resolve, reject) => {
-      const npmCommand = process.platform === 'win32' && executable.toLowerCase() === 'npm';
-      const child = spawn(npmCommand ? safeEnv.ComSpec : executable, npmCommand ? ['/d', '/s', '/c', ['npm', ...args].join(' ')] : args, {
+      const npmCommand = process.platform === 'win32' && /^npm(?:\.exe)?$/i.test(executable);
+      const child = spawn(npmCommand ? (safeEnv.ComSpec || 'cmd.exe') : executable, npmCommand ? windowsNpmArguments(args) : args, {
         cwd: this.workspace,
         env: safeEnv,
         shell: false,

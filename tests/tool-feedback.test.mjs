@@ -42,14 +42,16 @@ test('S1 is explicitly opt-in and disabled by default', () => {
   assert.equal(loadConfig({}, { TEA_CAPABILITY_FEEDBACK: '1' }).capabilityFeedback, true);
 });
 
-test('disabled S1 preserves exact parent model requests, denial flags, tool IDs and outcomes', async () => {
+test('disabled feedback preserves parent requests except the intentionally neutral legacy-handler denial', async () => {
   const { root, config } = await fixture();
   const requests = [];
   const steps = () => [calls([{ name: 'read_file', input: { path: 'value.mjs' } }, { name: 'run_shell', input: { command: 'node --version' } }]), done];
   const disabled = { ...config, capabilityFeedback: false, enableFileCreation: false };
   const current = await runTask('Inspect value', { ...disabled, runId: 'current' }, { approveCommand: () => false, adapterFactory: adapter(steps(), requests) });
   const payloads = list => list.map(({ system, messages, tools }) => ({ system, messages, tools }));
-  const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]')
+  // Keep the historical fixture immutable. Only the newly corrected handler
+  // attribution is normalized; definitions, IDs and all other text must match.
+  const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]').replaceAll('Command not approved by approval handler.','Command denied by user.')
     : Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,normalize(v)])) : value;
   const baseline = JSON.parse(await readFile(new URL('./fixtures/s1-default-parent-requests.json', import.meta.url), 'utf8'));
   assert.equal(baseline.parentCommit, 'c97b950797294f48e31752508af11a80814e66d8');
@@ -61,14 +63,14 @@ test('disabled S1 preserves exact parent model requests, denial flags, tool IDs 
 test('capability notices describe headless/interactive Windows and other platforms without granting runners', () => {
   const windows = capabilityNotice(runtimeCapabilities(unavailable));
   assert.match(windows, /cannot obtain approval/); assert.match(windows, /including quoted JavaScript/);
-  assert.match(windows, /Windows allowlisted commands/); assert.match(windows, /Installed runners depend on the project/);
+  assert.match(windows, /Windows npm allowlisted commands/); assert.match(windows, /Installed runners depend on the project/);
   const interactive = capabilityNotice(runtimeCapabilities({ ...unavailable, stdinIsTTY: true, stdoutIsTTY: true }));
   assert.match(interactive, /needs explicit approval/); assert.doesNotMatch(interactive, /cannot obtain approval/);
   assert.doesNotMatch(capabilityNotice(runtimeCapabilities({ ...unavailable, platform: 'linux' })), /Windows allowlisted/);
 });
 
 test('failure categories distinguish policy, approval, input, source, tests and transient execution', () => {
-  for (const code of ['CAPABILITY_DENIED', 'APPROVAL_UNAVAILABLE', 'INPUT_INVALID', 'SOURCE_MISMATCH']) {
+  for (const code of ['CAPABILITY_DENIED', 'APPROVAL_UNAVAILABLE', 'INPUT_INVALID', 'SOURCE_MISMATCH','COMMAND_POLICY_DENIED','USER_APPROVAL_DENIED','APPROVAL_INVALID','APPROVAL_HANDLER_FAILED']) {
     const result = toolFailureFeedback({ error: new ToolFeedbackError(code, 'failure') });
     assert.equal(result.code, code); assert.equal(result.retryable, false); assert.ok(result.missingCapability && result.next);
   }
@@ -83,6 +85,19 @@ test('failure categories distinguish policy, approval, input, source, tests and 
   assert.equal(appendFailureFeedback('unchanged', null), 'unchanged');
 });
 
+test('structured host policy and user refusals reach the agent as distinct failed results', async () => {
+  for(const source of ['policy','user']) {
+    const {config}=await fixture(),captured=[];
+    const result=await runTask('Inspect',config,{approveCommand:()=>({decision:'deny',source,reason:'Refused by '+source}),adapterFactory:adapter([
+      calls([{name:'run_shell',input:{command:'node --version'}}]),done,
+    ],captured)});
+    const response=captured[1].messages.at(-1).content[0];assert.equal(response.is_error,true);
+    assert.match(response.content,new RegExp(source==='policy'?'COMMAND_POLICY_DENIED':'USER_APPROVAL_DENIED'));
+    if(source==='policy')assert.doesNotMatch(response.content,/user refused/i);
+    assert.equal(result.validationAttempts,0);assert.equal(result.validationPassed,false);
+  }
+});
+
 test('policy still blocks before approval and approved unlisted commands retain explicit authorization', async () => {
   const { root } = await fixture(), tools = new WorkspaceTools({ workspace: root }); await tools.init();
   let approvals = 0; tools.approveCommand = () => { approvals++; return true; };
@@ -92,7 +107,7 @@ test('policy still blocks before approval and approved unlisted commands retain 
   assert.equal(approvals, 0);
   assert.match(await tools.runShell({ command: 'node --version' }), /^exit=0\b/); assert.equal(approvals, 1);
   tools.approveCommand = () => false;
-  assert.equal(await tools.runShell({ command: 'node --version' }), 'Command denied by user.');
+  assert.equal(await tools.runShell({ command: 'node --version' }), 'Command not approved by approval handler.');
 });
 
 test('input/source categories retain path, secret and unique patch restrictions', async () => {
@@ -161,7 +176,7 @@ test('approval denial is failed feedback and never proves validation or changes 
     calls([{ name: 'run_shell', input: { command: 'node --version' } }]), done,
   ], captured) });
   const response = captured[1].messages.at(-1).content[0];
-  assert.equal(response.is_error, true); assert.match(response.content, /^Command denied by user\./); assert.match(response.content, /APPROVAL_DENIED/);
+  assert.equal(response.is_error, true); assert.match(response.content, /^Command not approved by approval handler\./); assert.match(response.content, /APPROVAL_DENIED/);
   assert.equal(result.validationPassed, false); assert.equal(result.validationAttempts, 0);
   assert.equal(await readFile(path.join(root, 'value.mjs'), 'utf8'), 'export const value = 1;\n');
 });

@@ -4,6 +4,8 @@
 
 可配置编辑路径权限，在写入前拒绝受保护文件或要求审批。详见[编辑权限与执行前策略](docs/EDIT_PERMISSIONS.zh-CN.md)，包括配置方法和子进程边界。
 
+Go/Git 验证、审批结果、原生命令参数和可恢复补丁导出，详见[命令能力与评测修复](docs/COMMAND_EXECUTION.zh-CN.md)。
+
 <p align="center">
   <img src="assets/tea-logo.png" alt="TEA — Token Efficient Agent" width="320">
 </p>

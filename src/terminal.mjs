@@ -282,7 +282,7 @@ export async function runInteractive(config, { demo = false, initialTask, input 
   const approveCommand = (command) => new Promise(resolve => {
     if (controller?.signal.aborted || closed) { resolve(false); return; }
     view.approval = true;
-    approval = (allowed) => { view.approval = false; resolve(allowed); };
+    approval = (allowed) => { view.approval = false; resolve({ decision: allowed ? 'allow' : 'deny', source: 'user', reason: 'Command denied by user.' }); };
     view.write(`\nAllow this command in ${config.workspace}?\n${command}\nType yes to approve; anything else denies it.`);
   });
 
