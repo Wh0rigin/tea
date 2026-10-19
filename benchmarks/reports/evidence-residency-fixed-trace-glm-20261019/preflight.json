@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "providerCalls": 0,
+  "requestDifferencesRestrictedToTwoReadResults": true,
+  "cases": [
+    {
+      "id": "r1-baseline",
+      "requestBytes": 33787,
+      "receipts": 0
+    },
+    {
+      "id": "r1-candidate",
+      "requestBytes": 14875,
+      "receipts": 2
+    },
+    {
+      "id": "r2-candidate",
+      "requestBytes": 14879,
+      "receipts": 2
+    },
+    {
+      "id": "r2-baseline",
+      "requestBytes": 33795,
+      "receipts": 0
+    },
+    {
+      "id": "r3-baseline",
+      "requestBytes": 33795,
+      "receipts": 0
+    },
+    {
+      "id": "r3-candidate",
+      "requestBytes": 14879,
+      "receipts": 2
+    }
+  ],
+  "scriptSha256": "ccdb1e075903db090fcf0a0ba96d53e361da715d1b00e0f867d6aa235464567e",
+  "scriptedAcceptancePassed": 6,
+  "scriptedAcceptanceProviderCalls": 0
+}

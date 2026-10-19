@@ -1,0 +1,79 @@
+{
+  "name": "Evidence residency fixed-trace provider measurement",
+  "mode": "controlled tool history plus one real provider completion; not autonomous agent solving",
+  "baselineTeaCommit": "f03052a5b41453c206f9375bd5c004842cab0dc4",
+  "candidateTeaCommit": "778a54ff1773e51d4f1ca1211fda4249a1eb848c",
+  "archivesSha256": {
+    "baseline": "af519b699f990567e108c2811c653825af3ce9f871afec61fbc62b13d8c11c05",
+    "candidate": "5a792c715e5e1c561568f9afa9e878e398d9c52de7c39f3e0308ff37a7add13f"
+  },
+  "profile": {
+    "model": "glm-5.3-flash",
+    "thinking": "enabled",
+    "effort": "low",
+    "stream": true,
+    "maxOutputTokens": 4096,
+    "contextWindowTokens": 216000,
+    "contextosTargetBytes": 32000,
+    "maxRequestWireBytes": 65536,
+    "requestTimeoutMs": 300000
+  },
+  "cases": [
+    {
+      "repeat": 1,
+      "factor": 7,
+      "offset": 5
+    },
+    {
+      "repeat": 2,
+      "factor": 11,
+      "offset": 17
+    },
+    {
+      "repeat": 3,
+      "factor": 13,
+      "offset": -9
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "arm": "baseline"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline"
+    },
+    {
+      "repeat": 3,
+      "arm": "baseline"
+    },
+    {
+      "repeat": 3,
+      "arm": "candidate"
+    }
+  ],
+  "fixedTrace": "Read version 1; exact patch to version 2; read version 2; assemble; repeat same full read twice, assembling each time. Then make one real streaming completion to implement inverseScale from current source.",
+  "acceptance": "Independent sandboxed numeric tests of returned inverseScale on current source transformation; no follow-up model repair. This is a tiny controlled coding question, not a DeepSWE score.",
+  "perAttemptMaxCostUsd": 1,
+  "totalControlAllocationUsd": 6,
+  "maxProviderCallsPerAttempt": 1,
+  "controlRatesPerMillion": {
+    "input": 0.8,
+    "output": 2.8
+  },
+  "unknownBilling": "Retain full 1 USD allocation for affected attempt; no retries or zero-valued missing totals; continue only other fixed attempts.",
+  "comparison": "Same source and tool history; assert the only request-content differences are the two repeated read result bodies. Compare actual provider input/output/cache usage and answer acceptance; report separately from autonomous DeepSWE.",
+  "runTiming": "After all eight main DeepSWE attempts, not concurrent. Previous and main-round reservations remain separate.",
+  "scope": "Intentionally activates a read-after-edit cache path. It does not estimate how frequently real agents hit this path or establish general coding quality.",
+  "scriptSha256": "ccdb1e075903db090fcf0a0ba96d53e361da715d1b00e0f867d6aa235464567e",
+  "script": "scripts/measure-evidence-fixed-trace.mjs"
+}
