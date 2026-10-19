@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "selfAuthoredFixture": true,
+  "providerCalls": 0,
+  "notDeepSweTaskAcceptance": true,
+  "arms": [
+    {
+      "arm": "baseline",
+      "status": "passed",
+      "providerCalls": 0,
+      "syntheticSseResponses": 10,
+      "realToolCalls": 9,
+      "residentRepeatReturnedReceipt": false,
+      "readOutputBytes": 19464,
+      "scriptedRequestBytes": 156099,
+      "independentPatchValidationPassed": true,
+      "patchSha256": "d7e068d199acdeb7b662c6874d4c3907380e018193cf493a519acbfcfd382998"
+    },
+    {
+      "arm": "candidate",
+      "status": "passed",
+      "providerCalls": 0,
+      "syntheticSseResponses": 10,
+      "realToolCalls": 9,
+      "residentRepeatReturnedReceipt": true,
+      "readOutputBytes": 13309,
+      "scriptedRequestBytes": 143386,
+      "independentPatchValidationPassed": true,
+      "patchSha256": "d7e068d199acdeb7b662c6874d4c3907380e018193cf493a519acbfcfd382998"
+    }
+  ]
+}
