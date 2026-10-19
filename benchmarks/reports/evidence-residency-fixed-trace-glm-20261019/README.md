@@ -25,7 +25,7 @@ One real streaming completion then implements `inverseScale` for the current sou
 
 ## Preflight
 
-Zero provider calls: request differences restricted to two read results, two candidate receipts per fixture, and six synthetic adapter completions accepted. Ten additional validation checks accept equivalent function formatting and reject wrong behavior, tool requests and nontermination. Synthetic usage is labeled non-provider and never enters real-token totals.
+Zero provider calls: request differences restricted to two read results, two candidate receipts per fixture, and six synthetic adapter completions accepted. Eleven additional validation checks accept equivalent function formatting and calls to the existing `scale()` function, and reject wrong behavior, tool requests and nontermination. Synthetic usage is labeled non-provider and never enters real-token totals. Final answer text is retained privately for offline review; thinking blocks are excluded.
 
 ## Reproduction layout
 
