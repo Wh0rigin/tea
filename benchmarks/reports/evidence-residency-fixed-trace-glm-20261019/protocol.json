@@ -74,7 +74,8 @@
   "comparison": "Same source and tool history; assert the only request-content differences are the two repeated read result bodies. Compare actual provider input/output/cache usage and answer acceptance; report separately from autonomous DeepSWE.",
   "runTiming": "After all eight main DeepSWE attempts, not concurrent. Previous and main-round reservations remain separate.",
   "scope": "Intentionally activates a read-after-edit cache path. It does not estimate how frequently real agents hit this path or establish general coding quality.",
-  "scriptSha256": "e9704369440508c1d61bb216100dbd7db3a0c6a8992929e47a043ddd66e75fec",
+  "scriptSha256": "616510672935f130c5945b772767d5c156c2062bc448d8c0ca8671da5aa21ae7",
   "script": "scripts/measure-evidence-fixed-trace.mjs",
-  "scriptHashEncoding": "UTF-8 source with LF line endings"
+  "scriptHashEncoding": "UTF-8 source with LF line endings",
+  "providerPackaging": "Actual ContextOS-projected observations are provided in a single user message; no fabricated model turns or thinking signatures. Tool definitions remain equal. This is a controlled context experiment, not a native autonomous conversation."
 }

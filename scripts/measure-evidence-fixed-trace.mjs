@@ -48,12 +48,17 @@ for(const item of protocol.order){
  const receipts=outputs.filter(b=>b.content.startsWith('Evidence unchanged;')).length;
  assert.equal(receipts,item.arm==='candidate'?2:0);assert(engine.validToolProtocol(plan.request.messages));
  assert.equal(plan.request.tools.length,definitions.length);
- items.push({...item,id,fixture,engine,config,workspace,request:plan.request,receipts,requestBytes:Buffer.byteLength(JSON.stringify(engine.buildMessagesRequest(config,plan.request)))});
+ // This experiment supplies observed setup results, not invented model turns or
+ // thinking signatures. Autonomous native histories are measured by DeepSWE.
+ const observed=plan.request.messages.map(message=>typeof message.content==='string'?message.content:message.content.map(block=>
+  block.type==='tool_use'?`Recorded tool ${block.name}: ${JSON.stringify(block.input)}`:block.type==='tool_result'?`Recorded result ${block.tool_use_id}:\n${block.content}`:block.text||'').join('\n')).join('\n\n');
+ const request={...plan.request,messages:[{role:'user',content:observed}]};
+ items.push({...item,id,fixture,engine,config,workspace,projection:plan.request,request,receipts,requestBytes:Buffer.byteLength(JSON.stringify(engine.buildMessagesRequest(config,request)))});
 }
 for(const fixture of protocol.cases){
  const b=items.find(i=>i.repeat===fixture.repeat&&i.arm==='baseline'),c=items.find(i=>i.repeat===fixture.repeat&&i.arm==='candidate');
  assert.equal(b.request.system,c.request.system);assert.deepEqual(b.request.tools,c.request.tools);
- const bm=structuredClone(b.request.messages),cm=structuredClone(c.request.messages),changed=[];
+ const bm=structuredClone(b.projection.messages),cm=structuredClone(c.projection.messages),changed=[];
  for(let n=0;n<bm.length;n++){
   if(JSON.stringify(bm[n])===JSON.stringify(cm[n]))continue;
   assert.equal(bm[n].role,'user');assert.equal(bm[n].content.length,1);assert.equal(cm[n].content.length,1);
@@ -64,7 +69,7 @@ for(const fixture of protocol.cases){
  assert.deepEqual(changed,['controlled-step-4','controlled-step-5']);assert.deepEqual(bm,cm);
 }
 if(!live&&!scripted){
- await writeFile(path.join(root,'preflight.json'),JSON.stringify({status:'passed',providerCalls:0,requestDifferencesRestrictedToTwoReadResults:true,
+ await writeFile(path.join(root,'preflight.json'),JSON.stringify({status:'passed',providerCalls:0,requestDifferencesRestrictedToTwoReadResults:true,providerPackaging:'recorded projected observations in one user message',
   cases:items.map(i=>({id:i.id,requestBytes:i.requestBytes,receipts:i.receipts}))},null,2)+'\n');
  console.log('fixed-trace preflight passed; zero provider calls');process.exit(0);
 }

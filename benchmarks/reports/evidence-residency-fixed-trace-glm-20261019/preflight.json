@@ -2,39 +2,40 @@
   "status": "passed",
   "providerCalls": 0,
   "requestDifferencesRestrictedToTwoReadResults": true,
+  "providerPackaging": "recorded projected observations in one user message",
   "cases": [
     {
       "id": "r1-baseline",
-      "requestBytes": 33787,
+      "requestBytes": 33115,
       "receipts": 0
     },
     {
       "id": "r1-candidate",
-      "requestBytes": 14875,
+      "requestBytes": 14203,
       "receipts": 2
     },
     {
       "id": "r2-candidate",
-      "requestBytes": 14879,
+      "requestBytes": 14207,
       "receipts": 2
     },
     {
       "id": "r2-baseline",
-      "requestBytes": 33795,
+      "requestBytes": 33123,
       "receipts": 0
     },
     {
       "id": "r3-baseline",
-      "requestBytes": 33795,
+      "requestBytes": 33123,
       "receipts": 0
     },
     {
       "id": "r3-candidate",
-      "requestBytes": 14879,
+      "requestBytes": 14207,
       "receipts": 2
     }
   ],
-  "scriptSha256": "e9704369440508c1d61bb216100dbd7db3a0c6a8992929e47a043ddd66e75fec",
+  "scriptSha256": "616510672935f130c5945b772767d5c156c2062bc448d8c0ca8671da5aa21ae7",
   "scriptedAcceptancePassed": 6,
   "scriptedAcceptanceProviderCalls": 0,
   "validationFixtureCases": 10
