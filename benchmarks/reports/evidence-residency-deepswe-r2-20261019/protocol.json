@@ -104,9 +104,9 @@
     "tea_adapter.py": "70d90645ca9332903041c682fe5152e2e2942003749afde7621ad32762fd0c34",
     "run-tea.mjs": "5063f992850aa2fd05e9d236257ec4d285aa6fd657538de039d04bf0e410587e",
     "run_pilot.py": "bb1f3c1a36b4a4c2cb8a1fcca7587afd9c8661a853de9e244b9064bbe38d6799",
-    "inference_relay.py": "33a4d0c72efa683cd172fb07a3ab494b657297b0b723c8b96a2d1b185df62e0a",
+    "inference_relay.py": "abaf965093bc267068c4bdebfaba19ba67628f973ec4699390ef96628496dbf3",
     "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1",
     "preflight.py": "0be6ee967b51695a2731f5e0955191254940acb8d246e0ddf81fb0a1f86c8319",
-    "transport-tests.py": "c66136f807dde1d824e215c889f996f095deebe5549e05c111d7f72b7eb48572"
+    "transport-tests.py": "83158e4eab406a20dd6235826e3da2476e8ae698095d2d035ad96ad05e178cf9"
   }
 }
