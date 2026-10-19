@@ -177,11 +177,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       }
       return outcome;
     } catch (error) {
-      const failure = runtimeError(error, { config, stage: 'compaction', budget: error.budget });
+      const failure = runtimeError(error, { config, stage: 'compaction', budget: error?.budget });
       emit({ type: 'compaction_end', reason, status: signal?.aborted ? 'cancelled' : 'failed', error: failure, detail: failure.message });
       await ledger.event({ type: 'compaction_failed', reason, cancelled: Boolean(signal?.aborted),
         error: failure,
-        errorSha256: createHash('sha256').update(String(error.message)).digest('hex') });
+        errorSha256: createHash('sha256').update(String(error?.message || error)).digest('hex') });
       throw error;
     } finally { requestPurpose = 'task'; }
   };
@@ -190,7 +190,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     let outcome;
     try { outcome = await summarize(session, 'manual', task); }
     catch (error) {
-      const failure = runtimeError(error, { config, stage: 'compaction', budget: error.budget });
+      const failure = runtimeError(error, { config, stage: 'compaction', budget: error?.budget });
       outcome = { status: signal?.aborted ? 'cancelled' : 'failed', detail: failure.message, error: failure };
     }
     const summary = await ledger.finish({ status: outcome.status, prompt: task, error: outcome.error });
@@ -255,22 +255,15 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     return { ...prepareContextRequest(activeMessages, config, requestTools), fullPayload };
   };
   let autoCompactionAttempts = 0;
-  let emergencyCompactionAttempts = 0;
   const attemptedContexts = new Set();
+  let autoCompactionFailedThisTurn = false;
   let terminalError, lastBudget;
   let failureStage = 'context';
   const pressure = prepared => {
     const budget = contextBudget(config, prepared.request, adapter.contextTokenScale);
     return { ...budget, requestBytes: requestBytes(config, prepared.request), maxWireBytes: config.maxRequestInputTokens,
       residentBytes: residentHistoryBytes(session), residentLimit: config.memoryGcMaxResidentBytes,
-      automaticCompactions: autoCompactionAttempts, emergencyCompactions: emergencyCompactionAttempts };
-  };
-  const hardLimit = budget => (budget.inputLimit !== undefined && budget.estimatedInputTokens > budget.inputLimit)
-    || budget.requestBytes > budget.maxWireBytes
-    || (config.memoryGc !== 'off' && budget.residentBytes >= budget.residentLimit);
-  const backoffAfter = (prepared, outcome) => {
-    session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request),
-      residentBytes: residentHistoryBytes(session), status: outcome.status, code: outcome.code || null };
+      automaticCompactions: autoCompactionAttempts, emergencyCompactions: 0 };
   };
   try {
     while (toolCalls <= config.maxToolCalls) {
@@ -284,7 +277,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const currentBytes = requestBytes(config, prepared.request), currentResidentBytes = residentHistoryBytes(session);
         const cooledDown = !backoff || currentBytes >= backoff.requestBytes + Math.max(4096, backoff.requestBytes * 0.25)
           || currentResidentBytes >= backoff.residentBytes + Math.max(4096, backoff.residentBytes * 0.25);
-        while (config.compaction === 'auto' && !session.budgetUnknown && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
+        while (config.compaction === 'auto' && !session.budgetUnknown && !autoCompactionFailedThisTurn && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
           && ((contextBudget(config, prepared.request, adapter.contextTokenScale)?.estimatedInputTokens ?? 0) >=
               (contextBudget(config, prepared.request, adapter.contextTokenScale)?.triggerTokens ?? Infinity)
             || requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.contextWindowTokens ? 0.95 : (config.compactionTriggerRatio ?? 0.8))
@@ -295,28 +288,15 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           autoCompactionAttempts += 1;
           failureStage = 'compaction';
           const outcome = await summarize(runtimeState(), 'threshold');
-          if (outcome.status !== 'compacted') {
-            backoffAfter(prepared, outcome);
+          if (outcome.status === 'unchanged') {
+            autoCompactionFailedThisTurn = true;
+            session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request), residentBytes: residentHistoryBytes(session) };
             await persistRuntimeState(session, runtimeState());
           }
           if (outcome.status !== 'compacted') break;
           prepared = await prepareRequest();
         }
-        // One independent rescue at an actual local hard limit. It uses a
-        // smaller complete prefix and never retries an unknown billed request.
         lastBudget = pressure(prepared);
-        if (config.compaction === 'auto' && !session.budgetUnknown && hardLimit(lastBudget) && emergencyCompactionAttempts < 1) {
-          emergencyCompactionAttempts++;
-          failureStage = 'compaction';
-          const outcome = await summarize(runtimeState(), 'emergency',
-            'The next coding request cannot fit. Preserve requirements and validation state; summarize a smaller complete prefix.');
-          prepared = await prepareRequest();
-          if (outcome.status !== 'compacted') {
-            backoffAfter(prepared, outcome);
-            await persistRuntimeState(session, runtimeState());
-          }
-          lastBudget = pressure(prepared);
-        }
         if (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes) {
           status = 'memory_limit_reached';
           onText('Resident history limit reached; compaction could not free enough protected content. Start a new conversation or raise the explicit memory limit.');
@@ -451,8 +431,8 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   } catch (error) {
     status = signal?.aborted ? 'cancelled' : 'failed';
     terminalError = runtimeError(error, { config, stage: failureStage,
-      budget: { ...lastBudget, ...error.budget, automaticCompactions: autoCompactionAttempts,
-        emergencyCompactions: emergencyCompactionAttempts } });
+      budget: { ...lastBudget, ...error?.budget, automaticCompactions: autoCompactionAttempts,
+        emergencyCompactions: 0 } });
     await ledger.event({ type: 'agent_error', error: terminalError });
     await session.journal?.append('runtime_error', terminalError);
     emit({ type: 'agent_error', error: terminalError });

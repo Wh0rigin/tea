@@ -122,6 +122,39 @@ test('failed turns preserve structured errors in results, events and ledger with
   });
 });
 
+test('throwing presentation callbacks cannot hide a failed request or its error record', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'tea-error-observer-'));
+  try {
+    const events = [];
+    const result = await runTask('Inspect source', loadConfig({ workspace: root, runId: 'observer', compaction: 'off' }, {}), {
+      onText: () => { throw new Error('UI failed'); },
+      onEvent: event => { events.push(event); },
+      adapterFactory: () => ({ complete: async () => { throw new ModelError('Local context limit', undefined,
+        { code: 'MODEL_CONTEXT_LIMIT', submitted: false }); } }),
+    });
+    assert.equal(result.status, 'failed');
+    assert.deepEqual(events.find(e => e.type === 'agent_error').error, result.error);
+    assert.deepEqual(events.at(-1).error, result.error);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('a failed request keeps unknown billing and structured diagnostics in a transient session', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'tea-error-billing-'));
+  try {
+    const { createAgentSession } = await import('../src/agent.mjs');
+    const config = loadConfig({ workspace: root, runId: 'unknown-error', compaction: 'off' }, {});
+    const session = createAgentSession(config); let calls = 0;
+    const result = await runTask('Inspect source', config, { session, adapterFactory: () => ({ complete: async function () {
+      calls++;
+      await this.onRequest({ requestId: 'unknown', payload: {}, usage: {}, usageStatus: 'unknown', error: 'transport lost' });
+      throw new ModelError('transport lost', undefined, { submitted: true });
+    } }) });
+    assert.equal(calls, 1); assert.equal(session.budgetUnknown, true);
+    assert.equal(result.error.requestSubmitted, true);
+    assert.equal(result.summary.unknownUsageRequests, 1);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test('live runtime still requires credentials', async () => {
   await assert.rejects(runTask('task', loadConfig({}, {})), /API_KEY/);
 });

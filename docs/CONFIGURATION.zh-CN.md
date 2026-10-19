@@ -43,9 +43,7 @@ tea config path   # 查看绝对路径
 
 字符串字段：`apiKey`、`baseUrl`、`model`、`apiVersion`、`thinkingMode`、`effort`、`memoryPolicy`、`historyStrategy`、`compaction`、`memoryGc`、`contextStrategy`。
 
-数值字段：`maxOutputTokens`、`maxRequestInputBytes`、`maxToolCalls`、`timeoutMs`、`contextosTargetBytes`、`historyKeepRecent`、`initialFileLimit`、`compactionTriggerRatio`、`compactionKeepRecentBytes`、`compactionMaxOutputTokens`、`compactionThinkingBudgetTokens`、`inputPriceUsdPerMillion`、`outputPriceUsdPerMillion`。输入保护按 UTF-8 字节计算。`stream`、`capabilityFeedback`、`enableFileCreation` 为布尔值。
-
-摘要默认输出上限是 `min(maxOutputTokens, 2048)`；启用思考时，独立思考预算默认 1,024 Token，为摘要正文留出空间。截断摘要最多修复一次，修复输出上限最多翻倍且不超过 `maxOutputTokens`；两次请求使用同一费用上限和计量账本。对应环境变量为 `TEA_COMPACTION_MAX_OUTPUT_TOKENS`、`TEA_COMPACTION_THINKING_BUDGET_TOKENS`。启用思考时，思考预算必须至少为 1,024，且小于摘要输出上限。
+数值字段：`maxOutputTokens`、`maxRequestInputBytes`、`maxToolCalls`、`timeoutMs`、`contextosTargetBytes`、`historyKeepRecent`、`initialFileLimit`、`compactionTriggerRatio`、`compactionKeepRecentBytes`、`inputPriceUsdPerMillion`、`outputPriceUsdPerMillion`。输入保护按 UTF-8 字节计算。`stream`、`capabilityFeedback`、`enableFileCreation` 为布尔值。
 
 `maxCostUsd` 为正数，或 `null` 表示无费用上限。显式设置费用上限仍要求两个价格，恢复会话保留原较严格上限。
 

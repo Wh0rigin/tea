@@ -108,20 +108,6 @@ test('manual thinking budget follows each request output cap and leaves final-re
   });
 });
 
-test('summary thinking overrides reserve text space without changing the coding budget', async () => {
-  const bodies = [];
-  await withFetch(async (_url, options) => { bodies.push(JSON.parse(options.body)); return jsonResponse({ input_tokens: 3, output_tokens: 2 }); }, async () => {
-    const adapter = new AnthropicMessagesAdapter(config({ thinkingMode: 'enabled', maxOutputTokens: 4096 }));
-    await adapter.complete({ ...request, maxTokens: 2048, thinkingBudgetTokens: 1024 });
-    await adapter.complete(request);
-    assert.deepEqual(bodies.map(b => [b.max_tokens, b.thinking.budget_tokens]), [[2048, 1024], [4096, 4095]]);
-    for (const thinkingBudgetTokens of [0, 1023, 2048, 1024.5, '1024']) {
-      await assert.rejects(adapter.complete({ ...request, maxTokens: 2048, thinkingBudgetTokens }), /thinking budget/);
-    }
-    assert.equal(bodies.length, 2);
-  });
-});
-
 test('invalid output overrides and unsupported thinking are blocked without a request or reservation', async () => {
   let calls = 0;
   await withFetch(async () => { calls += 1; throw new Error('must not call'); }, async () => {

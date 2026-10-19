@@ -5,11 +5,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { compactConversation, prepareCompaction, requestBytes, sessionContext } from '../src/compaction.mjs';
 import { compactAgentSession, createAgentSession, resetConversation, runTask } from '../src/agent.mjs';
-import { loadConfig, loadCliConfig } from '../src/config.mjs';
+import { loadConfig } from '../src/config.mjs';
 import { AnthropicMessagesAdapter, buildMessagesRequest } from '../src/model.mjs';
 import { TokenLedger } from '../src/ledger.mjs';
-import { contextBudget } from '../src/context-budget.mjs';
-import { ModelError } from '../src/model.mjs';
 
 const headings = ['Goal', 'Constraints', 'Progress', 'Decisions', 'Next steps', 'Critical context'];
 const summary = headings.map(h => `## ${h}\nKeep the API; read source and verify outstanding edits.`).join('\n');
@@ -173,43 +171,8 @@ const invalid = {
 for (const [name, response] of Object.entries(invalid)) test(`rejects ${name} summary without committing or clearing source evidence`, async () => {
   const s = session(); let called = 0;
   const { outcome, events } = await compact(s, cfg(), { adapter: { complete: async () => { called++; return response; } } });
-  assert.equal(called, name === 'truncated' ? 2 : 1); assert.equal(outcome.status, 'unchanged'); assert.equal(s.compaction, null);
+  assert.equal(called, 1); assert.equal(outcome.status, 'unchanged'); assert.equal(s.compaction, null);
   assert.equal(s.tools.readEvidence.size, 1); assert.equal(events[0].type, 'compaction_rejected');
-});
-
-test('CLI summary budget leaves text room and a truncated checkpoint has one bounded repair', async () => {
-  const defaults = loadCliConfig({}, { TEA_THINKING_MODE: 'enabled' });
-  assert.equal(defaults.compactionMaxOutputTokens, 2048);
-  assert.equal(defaults.compactionThinkingBudgetTokens, 1024);
-  const s = session(); let calls = 0; const requests = [];
-  const { outcome, events } = await compact(s, cfg({ thinkingMode: 'enabled', compactionMaxOutputTokens: 2048 }), {
-    adapter: { complete: async request => {
-      calls++; requests.push(request);
-      return calls === 1 ? { ...done('partial'), stop_reason: 'max_tokens' } : done();
-    } },
-  });
-  assert.equal(outcome.status, 'compacted'); assert.equal(calls, 2);
-  assert.deepEqual(requests.map(r => [r.maxTokens, r.thinkingBudgetTokens]), [[2048, 1024], [4096, 1024]]);
-  assert.equal(events.find(e => e.type === 'compaction_rejected').code, 'SUMMARY_TRUNCATED');
-  assert.equal(events.filter(e => e.type === 'compaction_repair').length, 1);
-});
-
-test('summary planning rejects invalid independent budgets', () => {
-  for (const env of [{ TEA_COMPACTION_MAX_OUTPUT_TOKENS: '0' },
-    { TEA_COMPACTION_MAX_OUTPUT_TOKENS: '4097', TEA_MAX_OUTPUT_TOKENS: '4096' },
-    { TEA_COMPACTION_THINKING_BUDGET_TOKENS: '1023' },
-    { TEA_THINKING_MODE: 'enabled', TEA_COMPACTION_MAX_OUTPUT_TOKENS: '1024' }]) {
-    assert.throws(() => loadConfig({}, env));
-  }
-});
-
-test('unknown summary transport does not enter the checkpoint repair path', async () => {
-  let calls = 0;
-  const s = session();
-  await assert.rejects(compact(s, cfg(), { adapter: { complete: async () => {
-    calls++; throw new Error('unknown billed request');
-  } } }), /unknown billed request/);
-  assert.equal(calls, 1); assert.equal(s.compaction, null);
 });
 test('rejects a checkpoint that enlarges the actual projected coding request', async () => {
   const s = session();
@@ -278,22 +241,6 @@ test('rejected provider summary is still billed through the shared adapter and l
     assert.equal(result.compactionRequests, 1); assert.equal(result.compactionOutputTokens, 20);
   });
 }));
-
-test('a provider truncation repair accounts for both requests through the same ledger and cap', async () => temporary(async root => {
-  const config = liveConfig({ compactionMaxOutputTokens: 2048 });
-  const ledger = new TokenLedger({ workspace: root, runId: 'repair-billed', model: 'test' }); await ledger.init();
-  let calls = 0;
-  await fakeFetch(async () => Response.json(++calls === 1
-    ? { ...done('partial'), stop_reason: 'max_tokens', usage: { input_tokens: 100, output_tokens: 2048 } }
-    : { ...done(), usage: { input_tokens: 100, output_tokens: 200 } }), async () => {
-    const adapter = new AnthropicMessagesAdapter(config); adapter.onRequest = e => ledger.request({ ...e, purpose: 'compaction' });
-    const { outcome } = await compact(session(), config, { adapter, ledger });
-    const result = await ledger.finish({ status: outcome.status });
-    assert.equal(outcome.status, 'compacted'); assert.equal(calls, 2);
-    assert.equal(result.compactionRequests, 2); assert.equal(result.totalActualTokens, 2448);
-    assert.equal(result.providerUsageComplete, true); assert.ok(adapter.spentUsd < config.maxCostUsd);
-  });
-}));
 test('summary and task share the hard budget; refused subsequent request has no network call', async () => {
   const config = liveConfig({ maxRequestInputTokens: 20000, maxCostUsd: 0.0415 }); let calls = 0;
   await fakeFetch(async () => { calls++; return Response.json({ ...done(), usage: { input_tokens: 1000, output_tokens: 1000 } }); }, async () => {
@@ -358,56 +305,6 @@ test('a nonreducing automatic summary is not retried after more tools in the sam
   } }) });
   assert.equal(result.status, 'completed'); assert.equal(summaries, 1);
   assert.equal(s.compactionCount, 0); assert.ok(s.autoCompactionBackoff.requestBytes > 0);
-}));
-
-test('failed automatic summary may recover after enough new history grows past cooldown', async () => temporary(async root => {
-  await writeFile(path.join(root, 'big.mjs'), `export const text = "${'x'.repeat(18000)}";\n`);
-  const config = cfg({ workspace: root, runId: 'cooldown-growth', compaction: 'auto', memoryGc: 'off',
-    compactionTriggerRatio: 0.01, compactionMaxPerTurn: 2 });
-  const s = createAgentSession(config); s.messages = history();
-  let summaries = 0, tasks = 0;
-  const result = await runTask('Inspect source', config, { session: s, adapterFactory: () => ({ complete: async request => {
-    if (!request.tools.length) return ++summaries === 1 ? done('missing headings') : done();
-    if (++tasks === 1) return { content: [{ type: 'tool_use', id: 'grow', name: 'read_file', input: { path: 'big.mjs' } }], stop_reason: 'tool_use' };
-    return done('Inspected.');
-  } }) });
-  assert.equal(result.status, 'completed'); assert.equal(summaries, 2);
-  assert.equal(s.compactionCount, 1);
-}));
-
-for (const recover of [true, false]) test(`hard context limit has one emergency attempt (${recover ? 'recovers' : 'stops with diagnostics'})`, async () => temporary(async root => {
-  const config = cfg({ workspace: root, runId: `emergency-${recover}`, compaction: 'auto', memoryGc: 'off',
-    contextWindowTokens: 12000, contextReserveTokens: 1024, compactionMaxPerTurn: 1 });
-  const s = createAgentSession(config); s.messages = history();
-  s.autoCompactionBackoff = { requestBytes: 1000000, residentBytes: 1000000 };
-  let summaries = 0; const events = [];
-  const result = await runTask('Inspect source', config, { session: s, onEvent: e => events.push(e),
-    adapterFactory: () => ({ complete: async request => {
-      if (!request.tools.length) { summaries++; return recover ? done() : done('invalid checkpoint'); }
-      const budget = contextBudget(config, request);
-      if (budget.estimatedInputTokens > budget.inputLimit) throw new ModelError('Local context limit', undefined,
-        { code: 'MODEL_CONTEXT_LIMIT', submitted: false });
-      return done('Inspected.');
-    } }) });
-  assert.equal(summaries, 1);
-  assert.equal(events.filter(e => e.type === 'compaction_start' && e.reason === 'emergency').length, 1);
-  assert.equal(result.status, recover ? 'completed' : 'failed');
-  if (!recover) {
-    assert.equal(result.error.code, 'MODEL_CONTEXT_LIMIT');
-    assert.equal(result.error.budget.emergencyCompactions, 1);
-  }
-}));
-
-test('unknown summary usage stops a transient session without emergency or silent retry', async () => temporary(async root => {
-  const config = cfg({ workspace: root, runId: 'unknown-recovery', compaction: 'auto', compactionTriggerRatio: 0.01 });
-  const s = createAgentSession(config); s.messages = history(); let calls = 0;
-  const result = await runTask('Inspect source', config, { session: s, adapterFactory: () => ({ complete: async function () {
-    calls++;
-    await this.onRequest({ requestId: 'unknown', payload: {}, usage: {}, usageStatus: 'unknown', error: 'transport lost' });
-    throw new ModelError('transport lost', undefined, { submitted: true });
-  } }) });
-  assert.equal(result.status, 'failed'); assert.equal(calls, 1); assert.equal(s.budgetUnknown, true);
-  assert.equal(result.summary.unknownUsageRequests, 1);
 }));
 test('fresh reads after compaction return real source and actual tests can discharge pending validation', async () => temporary(async root => {
   await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');

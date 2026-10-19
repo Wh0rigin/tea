@@ -14,13 +14,13 @@ export class ModelError extends Error {
 
 // Shared by the adapter and compaction preflight. This is the wire payload,
 // including controls; its UTF-8 byte length is not a tokenizer measurement.
-export function buildMessagesRequest(config, { system, messages, tools = [], maxTokens, thinkingBudgetTokens }) {
+export function buildMessagesRequest(config, { system, messages, tools = [], maxTokens }) {
   const outputLimit = maxTokens ?? config.maxOutputTokens;
   return {
     model: config.model, max_tokens: outputLimit, stream: config.stream,
     system, messages, tools,
     thinking: config.thinkingMode === 'adaptive' ? { type: 'adaptive' }
-      : { type: 'enabled', budget_tokens: thinkingBudgetTokens ?? Math.min(outputLimit - 1, 8000) },
+      : { type: 'enabled', budget_tokens: Math.min(outputLimit - 1, 8000) },
     output_config: { effort: config.effort },
   };
 }
@@ -153,7 +153,7 @@ async function readSseMessage(body, onTextDelta) {
 export class AnthropicMessagesAdapter {
   constructor(config) { this.config = config; this.costKnown = hasProviderPrices(config); }
 
-  async complete({ system, messages, tools, maxTokens, thinkingBudgetTokens, signal, onTextDelta }) {
+  async complete({ system, messages, tools, maxTokens, signal, onTextDelta }) {
     signal?.throwIfAborted();
     const config = this.config;
     const outputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
@@ -177,11 +177,7 @@ export class AnthropicMessagesAdapter {
     if (config.thinkingMode === 'enabled' && outputLimit <= 1024) {
       throw new ModelError('Enabled thinking requires max_tokens greater than 1024; choose a compatible output limit');
     }
-    if (thinkingBudgetTokens !== undefined && (config.thinkingMode !== 'enabled'
-      || !Number.isSafeInteger(thinkingBudgetTokens) || thinkingBudgetTokens < 1024 || thinkingBudgetTokens >= outputLimit)) {
-      throw new ModelError('Request thinking budget must be an integer of at least 1024 below max_tokens, with enabled thinking');
-    }
-    const body = buildMessagesRequest(config, { system, messages, tools, maxTokens: outputLimit, thinkingBudgetTokens });
+    const body = buildMessagesRequest(config, { system, messages, tools, maxTokens: outputLimit });
     const requestId = randomUUID();
     const url = `${config.baseUrl}/v1/messages`;
     const requestBytes = Buffer.byteLength(JSON.stringify(body), 'utf8');

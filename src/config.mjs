@@ -69,15 +69,6 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
   const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
   if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
-  const compactionMaxOutputTokens = positiveNumber(env.TEA_COMPACTION_MAX_OUTPUT_TOKENS,
-    Math.min(configuredOutput, 2048), 'Compaction output tokens');
-  const compactionThinkingBudgetTokens = positiveNumber(env.TEA_COMPACTION_THINKING_BUDGET_TOKENS,
-    1024, 'Compaction thinking tokens');
-  if (!Number.isSafeInteger(compactionMaxOutputTokens) || compactionMaxOutputTokens > configuredOutput
-    || !Number.isSafeInteger(compactionThinkingBudgetTokens) || compactionThinkingBudgetTokens < 1024
-    || (thinkingMode === 'enabled' && compactionThinkingBudgetTokens >= compactionMaxOutputTokens)) {
-    throw new ConfigError('Compaction output must fit the main output cap; enabled thinking needs at least 1024 tokens and room for the summary');
-  }
   const memoryGc = String(options.memoryGc || env.TEA_MEMORY_GC || 'auto').toLowerCase();
   if (!['auto', 'off'].includes(memoryGc)) throw new ConfigError('Memory GC must be auto or off');
   const memoryCacheBytes = positiveNumber(env.TEA_MEMORY_CACHE_BYTES, 262144, 'Memory cache bytes');
@@ -137,7 +128,6 @@ export function loadConfig(options = {}, env = process.env) {
     compactionTriggerRatio,
     compactionKeepRecentBytes,
     compactionMaxPerTurn,
-    compactionMaxOutputTokens, compactionThinkingBudgetTokens,
     memoryGc,
     memoryCacheBytes,
     memoryGcMaxResidentBytes,
