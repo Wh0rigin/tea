@@ -97,6 +97,52 @@ export class ContextMemory {
     }
     this.units = units;
   }
+  retainResidentEvidence(messages) {
+    // A read receipt is safe only while its exact source is in this request.
+    // Prune existing caches; never resurrect evidence cleared by compaction/GC.
+    const visible = new Map(), byCall = new Map([...this.units.values()].map(unit => [unit.callId, unit]));
+    for (const message of messages) {
+      if (message.role !== 'user' || !Array.isArray(message.content)) continue;
+      for (const block of message.content) {
+        if (block.type !== 'tool_result' || block.is_error) continue;
+        const unit = byCall.get(block.tool_use_id);
+        if (unit?.name !== 'read_file' || unit.validity !== 'valid' || block.content !== unit.output) continue;
+        const header = unit.output.match(/^\[evidence ref=(.+)#L(\d+)-L(\d+)@([a-f0-9]{16}) sha256=([a-f0-9]{64})\]\n/);
+        if (!header || header[1] !== unit.path || header[5] !== unit.sourceHash || !header[5].startsWith(header[4])) continue;
+        // A truncated final line is not complete evidence, even if numbered.
+        if (unit.output.includes('Only a prefix of the requested lines is shown.')) continue;
+        const start = Number(header[2]), end = Number(header[3]), rows = unit.output.slice(header[0].length).split('\n');
+        if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end < start || end - start >= rows.length) continue;
+        const lines = new Map();
+        for (let line = start; line <= end; line++) {
+          const prefix = `${line}: `, row = rows[line - start];
+          if (!row.startsWith(prefix)) break;
+          lines.set(line, row.slice(prefix.length));
+        }
+        if (lines.size !== end - start + 1) continue;
+        const resident = visible.get(unit.path) || { sourceHash: unit.sourceHash, lines: new Map() };
+        if (resident.sourceHash !== unit.sourceHash) continue;
+        for (const [line, text] of lines) resident.lines.set(line, text);
+        visible.set(unit.path, resident);
+      }
+    }
+    for (const [key, hash] of this.tools.readEvidence) {
+      const range = key.match(/^(.*):(\d+)-(\d+)$/), resident = range && visible.get(range[1]);
+      const start = Number(range?.[2]), end = Number(range?.[3]);
+      let complete = resident?.sourceHash === hash && Number.isSafeInteger(start) && Number.isSafeInteger(end)
+        && start > 0 && end >= start && end - start < resident.lines.size;
+      if (complete) for (let line = start; line <= end; line++) if (!resident.lines.has(line)) { complete = false; break; }
+      if (!complete) this.tools.readEvidence.delete(key);
+    }
+    for (const [filename, presented] of this.tools.presentedSource) {
+      const resident = visible.get(filename);
+      if (resident?.sourceHash !== presented.sourceHash) { this.tools.presentedSource.delete(filename); continue; }
+      for (const [line, text] of presented.lines) {
+        if (!resident.lines.has(line) || resident.lines.get(line) !== text) presented.lines.delete(line);
+      }
+      if (!presented.lines.size) this.tools.presentedSource.delete(filename);
+    }
+  }
   async freshness(unit, cache = new Map()) {
     if (unit.unversionedSearch) return unit.validity='stale';
     const dependencies=[...(unit.sourceDependencies || []),...(unit.sourceHash ? [{path:unit.path,sourceHash:unit.sourceHash}] : [])];
@@ -267,13 +313,9 @@ export class ContextMemory {
       if (active.has(decision.ref)) {
         decision.decision = 'reference'; decision.reason = stale.has(decision.ref) ? 'source-version-invalidated' : 'recoverable-older-output';
         if (commit) this.evicted.add(decision.ref);
-        const unit = this.units.get(decision.ref);
-        if (commit && unit.path) {
-          for (const key of this.tools.readEvidence.keys()) if (key.startsWith(unit.path.replaceAll('\\', '/') + ':')) this.tools.readEvidence.delete(key);
-          this.tools.presentedSource.delete(unit.path.replaceAll('\\', '/'));
-        }
       }
     }
+    if (commit) this.retainResidentEvidence(request.messages);
     return { request, diagnostics: { policy: 'contextos', fullWireBytes: before, sentWireBytes: after,
       fullEstimatedTokens: estimateTextTokens(JSON.stringify(base)), sentEstimatedTokens: estimateTextTokens(JSON.stringify(request)),
       evictedUnits: active.size, staleUnits: stale.size, recoveries: this.recalls, searches: this.searches,
