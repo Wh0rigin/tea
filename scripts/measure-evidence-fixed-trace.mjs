@@ -83,6 +83,7 @@ const resultsFile=path.join(root,scripted?`scripted-results${suffix}.json`:'resu
 try{await readFile(resultsFile);throw new Error('Refusing to overwrite fixed-trace results');}catch(e){if(e.code!=='ENOENT')throw e;}
 const report={mode:scripted?'scripted-acceptance-preflight':protocol.mode,protocolSha256:hash(await readFile(path.join(root,'protocol.json'))),status:'running',providerCalls:0,runs:[]};
 const save=()=>writeFile(resultsFile,JSON.stringify(report,null,2)+'\n');await save();
+const answers=path.join(root,scripted?`answers-scripted${suffix}`:'answers-live');await mkdir(answers);
 if(scripted){
  let index=0;
  globalThis.fetch=async(url,options)=>{
@@ -118,6 +119,8 @@ for(const item of items){
  const adapter=new item.engine.AnthropicMessagesAdapter(item.config);adapter.onRequest=row=>ledger.request(row);
  let response,error;
  try{response=await adapter.complete({...item.request,signal:AbortSignal.timeout(330000)});}catch(e){error=e;}
+ await writeFile(path.join(answers,item.id+'.json'),JSON.stringify({stopReason:response?.stop_reason||null,
+  content:(response?.content||[]).filter(block=>['text','tool_use'].includes(block.type)),usage:response?.usage||{},errorType:error?.name||null},null,2)+'\n',{flag:'wx'});
  const summary=await ledger.finish({status:error?'failed':'completed'});
  if(!scripted)report.providerCalls+=summary.requests;
  const accepted=Boolean(response&&accept(response,item.fixture));
