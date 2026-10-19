@@ -104,6 +104,7 @@ function accept(response,fixture){
  Object.defineProperty(sandbox,'__input',{value:0,writable:true,configurable:false});
  const context=vm.createContext(sandbox,{codeGeneration:{strings:false,wasm:false}});
  try{
+  vm.runInContext(`const scale = value => value * ${fixture.factor} + ${fixture.offset};`,context,{timeout:100});
   vm.runInContext(code,context,{timeout:500});
   for(const x of [-29,-3.5,-1,0,0.25,1,2,7,33,91,1024]){
    sandbox.__input=x*fixture.factor+fixture.offset;

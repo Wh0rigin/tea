@@ -62,7 +62,7 @@
     }
   ],
   "fixedTrace": "Read version 1; exact patch to version 2; read version 2; assemble; repeat same full read twice, assembling each time. Then make one real streaming completion to implement inverseScale from current source.",
-  "acceptance": "Independent sandboxed numeric tests of returned inverseScale on current source transformation; no follow-up model repair. This is a tiny controlled coding question, not a DeepSWE score.",
+  "acceptance": "Independent numeric checks of returned inverseScale in the current scale module context; no follow-up model repair. Equivalent exported function/arrow styles and calls to existing scale are allowed. This tiny coding question is not a DeepSWE score.",
   "perAttemptMaxCostUsd": 1,
   "totalControlAllocationUsd": 6,
   "maxProviderCallsPerAttempt": 1,
@@ -74,7 +74,7 @@
   "comparison": "Same source and tool history; assert the only request-content differences are the two repeated read result bodies. Compare actual provider input/output/cache usage and answer acceptance; report separately from autonomous DeepSWE.",
   "runTiming": "After all eight main DeepSWE attempts, not concurrent. Previous and main-round reservations remain separate.",
   "scope": "Intentionally activates a read-after-edit cache path. It does not estimate how frequently real agents hit this path or establish general coding quality.",
-  "scriptSha256": "6748f544b2d9e20af808b1692e8d1d86af9cad7d3714e4f12e25f926d9f6e8a4",
+  "scriptSha256": "5049a43b8b78b406bc99571032b2103272d3b54098435e340eea453bf4c3f0b1",
   "script": "scripts/measure-evidence-fixed-trace.mjs",
   "scriptHashEncoding": "UTF-8 source with LF line endings",
   "providerPackaging": "Actual ContextOS-projected observations are provided in a single user message; no fabricated model turns or thinking signatures. Tool definitions remain equal. This is a controlled context experiment, not a native autonomous conversation.",
