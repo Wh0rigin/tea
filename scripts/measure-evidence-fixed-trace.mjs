@@ -71,7 +71,7 @@ if(!live&&!scripted){
 if(live){
  assert.equal(protocol.scriptSha256,hash((await readFile(fileURLToPath(import.meta.url),'utf8')).replaceAll('\r\n','\n')));
  const main=JSON.parse(await readFile(path.join(root,'main-round-complete.json'),'utf8'));
- assert(main.status.startsWith('completed')&&main.completed.length===8);
+ assert(main.status.startsWith('completed')&&(main.completed||main.runs||[]).length===8);
 }
 assert.equal(JSON.parse(await readFile(path.join(root,'preflight.json'),'utf8')).status,'passed');
 const resultsFile=path.join(root,scripted?`scripted-results${suffix}.json`:'results.json');

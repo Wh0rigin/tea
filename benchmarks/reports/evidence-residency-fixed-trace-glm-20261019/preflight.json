@@ -34,7 +34,8 @@
       "receipts": 2
     }
   ],
-  "scriptSha256": "c3d11d0b96de2441737d97c1c545819e3fbd49657b1836eee1a338e19c1f1ee2",
+  "scriptSha256": "e9704369440508c1d61bb216100dbd7db3a0c6a8992929e47a043ddd66e75fec",
   "scriptedAcceptancePassed": 6,
-  "scriptedAcceptanceProviderCalls": 0
+  "scriptedAcceptanceProviderCalls": 0,
+  "validationFixtureCases": 10
 }
