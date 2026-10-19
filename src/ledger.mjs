@@ -113,7 +113,7 @@ export class TokenLedger {
     await this.event(row);
   }
 
-  async finish({ status, prompt = '', contextDiagnostics } = {}) {
+  async finish({ status, prompt = '', contextDiagnostics, error } = {}) {
     this.totals.estimatedInputTokens = Math.round(this.totals.estimatedInputTokens);
     this.totals.contextChars = String(prompt).length;
     const usageComplete = this.totals.requests > 0 && this.completeUsageRequests === this.totals.requests;
@@ -141,6 +141,7 @@ export class TokenLedger {
       totalActualTokens: providerUsageComplete ? this.totals.inputTokens + this.totals.outputTokens : null,
       status, completedAt: new Date().toISOString(),
       ...(contextDiagnostics ? { contextDiagnostics } : {}),
+      ...(error ? { error } : {}),
     };
     await this.event({ type: 'run_finished', ...summary });
     await writeFile(path.join(this.directory, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`, 'utf8');

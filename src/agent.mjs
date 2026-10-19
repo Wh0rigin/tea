@@ -13,6 +13,7 @@ import { memorySessionFields, attachSessionJournal, appendSessionMessage, restor
 import { ContextMemory } from './context-assembler.mjs';
 import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } from './memory-gc.mjs';
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
+import { runtimeError } from './runtime-error.mjs';
 
 const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -90,6 +91,8 @@ export async function compactAgentSession(config, options = {}) {
 async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () => {}, adapterFactory, session, signal, approveCommand, approveEdit, beforeToolUse, compactionOnly = false } = {}) {
   // Presentation observers must not change execution or accounting.
   const emit = (event) => { try { onEvent(event); } catch { /* UI is observational. */ } };
+  const textObserver = onText;
+  onText = text => { try { textObserver(text); } catch { /* UI is observational. */ } };
   // Injected adapters are for deterministic integration checks, never live usage evidence.
   const offline = adapterFactory !== undefined;
   if (offline && typeof adapterFactory !== 'function') throw new TypeError('adapterFactory must be a function');
@@ -138,8 +141,9 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let requestPurpose = 'task';
   adapter.onBeforeRequest = session.journal ? event => session.journal.append('request_intent', event) : undefined;
   adapter.onRequest = async (event) => {
+    // Unknown billing blocks recovery in transient sessions as well as journals.
+    session.budgetUnknown = Boolean(session.budgetUnknown || event.usageStatus !== 'complete');
     if (session.journal) {
-      session.budgetUnknown = Boolean(session.budgetUnknown || event.usageStatus !== 'complete');
       await session.journal.append('request_settled', { requestId: event.requestId, purpose: requestPurpose,
         usage: event.usage, usageStatus: event.usageStatus, costBasis: event.costBasis,
         requestSha256: createTaskHash(JSON.stringify(event.payload)), responseSha256: createTaskHash(JSON.stringify(event.response)),
@@ -173,8 +177,10 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       }
       return outcome;
     } catch (error) {
-      emit({ type: 'compaction_end', reason, status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message });
+      const failure = runtimeError(error, { config, stage: 'compaction', budget: error.budget });
+      emit({ type: 'compaction_end', reason, status: signal?.aborted ? 'cancelled' : 'failed', error: failure, detail: failure.message });
       await ledger.event({ type: 'compaction_failed', reason, cancelled: Boolean(signal?.aborted),
+        error: failure,
         errorSha256: createHash('sha256').update(String(error.message)).digest('hex') });
       throw error;
     } finally { requestPurpose = 'task'; }
@@ -184,13 +190,15 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     let outcome;
     try { outcome = await summarize(session, 'manual', task); }
     catch (error) {
-      outcome = { status: signal?.aborted ? 'cancelled' : 'failed', detail: error.message };
+      const failure = runtimeError(error, { config, stage: 'compaction', budget: error.budget });
+      outcome = { status: signal?.aborted ? 'cancelled' : 'failed', detail: failure.message, error: failure };
     }
-    const summary = await ledger.finish({ status: outcome.status, prompt: task });
+    const summary = await ledger.finish({ status: outcome.status, prompt: task, error: outcome.error });
     await persistRuntimeState(session);
     onText(`Conversation compaction: ${outcome.status}.${outcome.detail ? ` ${outcome.detail}` : ''}`);
     emit({ type: 'turn_end', status: outcome.status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd,
-      changedFiles: session.changedFiles, pendingValidation: session.pendingValidation, runDirectory: ledger.directory });
+      changedFiles: session.changedFiles, pendingValidation: session.pendingValidation, runDirectory: ledger.directory,
+      ...(outcome.error ? { error: outcome.error } : {}) });
     return { ...outcome, summary, toolCalls: 0, changedFiles: [...session.changedFiles],
       validationPassed: session.validationPassed, validationAttempts: session.validationAttempts,
       runType: offline ? 'offline-runtime' : 'live', wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
@@ -247,20 +255,36 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     return { ...prepareContextRequest(activeMessages, config, requestTools), fullPayload };
   };
   let autoCompactionAttempts = 0;
+  let emergencyCompactionAttempts = 0;
   const attemptedContexts = new Set();
-
-  let autoCompactionFailedThisTurn = false;
+  let terminalError, lastBudget;
+  let failureStage = 'context';
+  const pressure = prepared => {
+    const budget = contextBudget(config, prepared.request, adapter.contextTokenScale);
+    return { ...budget, requestBytes: requestBytes(config, prepared.request), maxWireBytes: config.maxRequestInputTokens,
+      residentBytes: residentHistoryBytes(session), residentLimit: config.memoryGcMaxResidentBytes,
+      automaticCompactions: autoCompactionAttempts, emergencyCompactions: emergencyCompactionAttempts };
+  };
+  const hardLimit = budget => (budget.inputLimit !== undefined && budget.estimatedInputTokens > budget.inputLimit)
+    || budget.requestBytes > budget.maxWireBytes
+    || (config.memoryGc !== 'off' && budget.residentBytes >= budget.residentLimit);
+  const backoffAfter = (prepared, outcome) => {
+    session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request),
+      residentBytes: residentHistoryBytes(session), status: outcome.status, code: outcome.code || null };
+  };
   try {
     while (toolCalls <= config.maxToolCalls) {
       if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
+        failureStage = 'context';
         let prepared = await prepareRequest();
+        lastBudget = pressure(prepared);
         const backoff = session.autoCompactionBackoff;
         const currentBytes = requestBytes(config, prepared.request), currentResidentBytes = residentHistoryBytes(session);
         const cooledDown = !backoff || currentBytes >= backoff.requestBytes + Math.max(4096, backoff.requestBytes * 0.25)
           || currentResidentBytes >= backoff.residentBytes + Math.max(4096, backoff.residentBytes * 0.25);
-        while (config.compaction === 'auto' && !autoCompactionFailedThisTurn && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
+        while (config.compaction === 'auto' && !session.budgetUnknown && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
           && ((contextBudget(config, prepared.request, adapter.contextTokenScale)?.estimatedInputTokens ?? 0) >=
               (contextBudget(config, prepared.request, adapter.contextTokenScale)?.triggerTokens ?? Infinity)
             || requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.contextWindowTokens ? 0.95 : (config.compactionTriggerRatio ?? 0.8))
@@ -269,14 +293,29 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           if (attemptedContexts.has(fingerprint)) break;
           attemptedContexts.add(fingerprint);
           autoCompactionAttempts += 1;
+          failureStage = 'compaction';
           const outcome = await summarize(runtimeState(), 'threshold');
-          if (outcome.status === 'unchanged') {
-            autoCompactionFailedThisTurn = true;
-            session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request), residentBytes: residentHistoryBytes(session) };
+          if (outcome.status !== 'compacted') {
+            backoffAfter(prepared, outcome);
             await persistRuntimeState(session, runtimeState());
           }
           if (outcome.status !== 'compacted') break;
           prepared = await prepareRequest();
+        }
+        // One independent rescue at an actual local hard limit. It uses a
+        // smaller complete prefix and never retries an unknown billed request.
+        lastBudget = pressure(prepared);
+        if (config.compaction === 'auto' && !session.budgetUnknown && hardLimit(lastBudget) && emergencyCompactionAttempts < 1) {
+          emergencyCompactionAttempts++;
+          failureStage = 'compaction';
+          const outcome = await summarize(runtimeState(), 'emergency',
+            'The next coding request cannot fit. Preserve requirements and validation state; summarize a smaller complete prefix.');
+          prepared = await prepareRequest();
+          if (outcome.status !== 'compacted') {
+            backoffAfter(prepared, outcome);
+            await persistRuntimeState(session, runtimeState());
+          }
+          lastBudget = pressure(prepared);
         }
         if (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes) {
           status = 'memory_limit_reached';
@@ -295,11 +334,13 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         contextDiagnostics.sentHeuristicTokens += estimateTextTokens(sentPayload);
         contextDiagnostics.compactedResultOccurrences += memory.diagnostics.compactedResults;
         await ledger.event({ type: 'context_request', requestIndex: contextDiagnostics.requestCount,
+          budget: lastBudget,
           historyStrategy: config.historyStrategy ?? 'full', fullPayloadBytes: fullBytes, sentPayloadBytes: sentBytes,
           conversationCompaction: config.compaction ?? 'off', checkpointId: session.compaction?.id || null,
           compactedResults: memory.diagnostics.compactedResults, payloadSha256: createHash('sha256').update(sentPayload).digest('hex'),
           metricSource: 'serialized adapter input (system/messages/tools), not provider tokens' });
-        emit({ type: 'model_start', requestIndex: contextDiagnostics.requestCount });
+        emit({ type: 'model_start', requestIndex: contextDiagnostics.requestCount, budget: lastBudget });
+        failureStage = 'model';
         let streamed = false;
         result = await adapter.complete({ ...request, signal, onTextDelta: onDelta ? (text) => {
           streamed = true;
@@ -309,11 +350,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         result = { ...result, displayedAsStream: streamed };
       } catch (error) {
         emit({ type: 'model_end', interrupted: true });
-        status = signal?.aborted ? 'cancelled' : 'failed';
-        if (signal?.aborted) break;
-        if (error instanceof ModelError) onText(`Agent stopped: ${error.message}`);
-        else throw error;
-        break;
+        throw error;
       }
       const content = Array.isArray(result.content) ? result.content : [];
       const assistantMessage = { role: 'assistant', content };
@@ -357,6 +394,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         let isError = false;
         let toolError;
         const effects = toolService.effects(call.name, call.input);
+        failureStage = 'tool';
         emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
         await session.journal?.append('tool_intent', { id: call.id, name: call.name, input: call.input });
         try {
@@ -412,16 +450,25 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     if (status === 'running') status = pendingValidation ? 'needs_validation' : 'tool_limit_reached';
   } catch (error) {
     status = signal?.aborted ? 'cancelled' : 'failed';
-    onText(`Agent error: ${error.message}`);
+    terminalError = runtimeError(error, { config, stage: failureStage,
+      budget: { ...lastBudget, ...error.budget, automaticCompactions: autoCompactionAttempts,
+        emergencyCompactions: emergencyCompactionAttempts } });
+    await ledger.event({ type: 'agent_error', error: terminalError });
+    await session.journal?.append('runtime_error', terminalError);
+    emit({ type: 'agent_error', error: terminalError });
+    onText(`${error instanceof ModelError ? 'Agent stopped' : 'Agent error'}: ${terminalError.message}`);
   }
 
   Object.assign(session, { pendingValidation, validationPassed, validationAttempts, changedFiles });
   if (session.taskState) { session.taskState.phase = status === 'completed' ? 'finish' : session.taskState.phase; session.taskState.validation = runtimeState(); }
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
-  const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics });
-  emit({ type: 'turn_end', status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory });
+  if (lastBudget) contextDiagnostics.finalBudget = lastBudget;
+  const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics, error: terminalError });
+  emit({ type: 'turn_end', status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory,
+    ...(terminalError ? { error: terminalError } : {}) });
   return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
+    ...(terminalError ? { error: terminalError } : {}),
     runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, sessionId: session.persistent ? session.sessionId : null,
     wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
 }

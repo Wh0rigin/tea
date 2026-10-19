@@ -108,6 +108,20 @@ test('stops on a truncated final response or provider error', async () => {
   await scenario([new ModelError('Provider stopped')], async (result) => assert.equal(result.status, 'failed'));
 });
 
+test('failed turns preserve structured errors in results, events and ledger without an onText observer', async () => {
+  await scenario([new ModelError('Context budget reached', undefined,
+    { code: 'MODEL_CONTEXT_LIMIT', submitted: false, budget: { estimatedInputTokens: 30091, inputLimit: 24576 } })], async result => {
+    assert.equal(result.status, 'failed');
+    assert.equal(result.error.code, 'MODEL_CONTEXT_LIMIT');
+    assert.equal(result.error.requestSubmitted, false);
+    assert.equal(result.error.budget.inputLimit, 24576);
+    assert.deepEqual(result.summary.error, result.error);
+    const rows = (await readFile(path.join(result.runDirectory, 'ledger.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+    assert.deepEqual(rows.find(r => r.type === 'agent_error').error, result.error);
+    assert.deepEqual(rows.at(-1).error, result.error);
+  });
+});
+
 test('live runtime still requires credentials', async () => {
   await assert.rejects(runTask('task', loadConfig({}, {})), /API_KEY/);
 });

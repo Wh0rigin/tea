@@ -130,7 +130,8 @@ function fileOperations(messages, end) {
   return { attemptedReadFiles: [...readFiles], attemptedModifiedFiles: [...modifiedFiles] };
 }
 
-export function prepareCompaction(session, config, { state = session, instructions = '' } = {}) {
+export function prepareCompaction(session, config, { state = session, instructions = '', maxTokens,
+  emergency = false } = {}) {
   const start = session.compaction?.firstKeptIndex || 0;
   const groups = groupsFor(session.messages, start);
   if (!groups) return { status: 'unavailable', detail: 'History has an unresolved or ambiguous tool batch.' };
@@ -144,13 +145,21 @@ export function prepareCompaction(session, config, { state = session, instructio
     keep -= 1; retainedBytes += groups[keep].bytes;
   }
   if (!keep) return { status: 'not_needed', detail: 'History fits within the configured recent-message retention.' };
-  const maxTokens = Math.min(config.maxOutputTokens, 1200);
+  maxTokens ??= Math.min(config.maxOutputTokens, config.compactionMaxOutputTokens ?? 2048);
+  const thinkingBudgetTokens = config.thinkingMode === 'enabled'
+    ? Math.min(config.compactionThinkingBudgetTokens ?? 1024, maxTokens - 1) : undefined;
   const prefix = `Previous checkpoint:\n${session.compaction?.summary || '(none)'}\nAuthoritative runtime state:\n${runtimeRecord(state)}`
     + `\nAdditional retention instructions:\n${instructions || '(none)'}\nHistorical transcript:\n`;
   let text = '', selected;
-  for (const group of groups.slice(0, keep)) {
+  const eligible = groups.slice(0, keep);
+  // Emergency recovery uses a smaller complete prefix, never fragments a tool
+  // batch or drops user requirements. This differs from a failed normal plan.
+  const candidates = emergency ? eligible.slice(0, Math.max(1, Math.ceil(eligible.length / 2))) : eligible;
+  for (const group of candidates) {
     text += `${group.text}\n\n`;
-    const request = { system: SUMMARY_PROMPT, tools: [], maxTokens, messages: [{ role: 'user', content: prefix + text }] };
+    const request = { system: SUMMARY_PROMPT, tools: [], maxTokens,
+      ...(thinkingBudgetTokens !== undefined ? { thinkingBudgetTokens } : {}),
+      messages: [{ role: 'user', content: prefix + text }] };
     if (requestBytes(config, request) > config.maxRequestInputTokens) break;
     const budget = contextBudget(config, request, session.adapter?.contextTokenScale);
     if (budget && budget.estimatedInputTokens > budget.inputLimit) break;
@@ -164,18 +173,19 @@ export function prepareCompaction(session, config, { state = session, instructio
   return { status: 'prepared', ...selected };
 }
 
-/** One bounded summary request, through the existing adapter and its budget.
+/** A summary and at most one truncation repair, through the shared budget.
  * The original transcript is never rewritten. Commit only a smaller projection
  * with a complete structured response, and only after its ledger event succeeds.
  */
 export async function compactConversation(session, config, { adapter, ledger, system, tools, state = session,
   instructions = '', reason = 'manual', signal, onEvent = () => {}, measureContext } = {}) {
-  const plan = prepareCompaction(session, config, { state, instructions });
+  const emergency = reason === 'emergency';
+  let plan = prepareCompaction(session, config, { state, instructions, emergency });
   if (plan.status !== 'prepared') return plan;
   const measure = measureContext || (messages => requestBytes(config, { system, tools, messages }));
   const before = await measure(sessionContext(session, state));
   const willCollect = config.memoryGc !== 'off' && Boolean(session.journal);
-  if (reason === 'threshold') {
+  if (reason === 'threshold' || emergency) {
     // Conservatively skip automatic summaries when a minimal-checkpoint preview is not smaller.
     const minimal = { id: 'p', summary: HEADINGS.map(heading => `## ${heading}\n.`).join('\n'),
       firstKeptIndex: plan.firstKeptIndex, ...fileOperations(session.messages, plan.firstKeptIndex) };
@@ -190,14 +200,33 @@ export async function compactConversation(session, config, { adapter, ledger, sy
     }
   }
   onEvent({ type: 'compaction_start', reason });
-  const result = await adapter.complete({ ...plan.request, signal });
-  signal?.throwIfAborted();
-  const content = Array.isArray(result.content) ? result.content : [];
-  const summary = content.filter(block => block.type === 'text').map(block => block.text || '').join('\n').trim();
-  if (result.stop_reason !== 'end_turn' || content.some(block => block.type === 'tool_use') || !summary
-    || !completeSummary(summary)) {
-    const unchanged = { status: 'unchanged', detail: 'The summary was incomplete or missing required sections; history remains intact.' };
-    await ledger.event({ type: 'compaction_rejected', reason, detail: unchanged.detail });
+  let summary;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    // A transport/usage error throws here and never enters the repair path.
+    const result = await adapter.complete({ ...plan.request, signal });
+    signal?.throwIfAborted();
+    const content = Array.isArray(result.content) ? result.content : [];
+    summary = content.filter(block => block.type === 'text').map(block => block.text || '').join('\n').trim();
+    const rejection = result.stop_reason === 'max_tokens' ? 'SUMMARY_TRUNCATED'
+      : content.some(block => block.type === 'tool_use') ? 'SUMMARY_TOOL_USE'
+      : result.stop_reason !== 'end_turn' || !summary || !completeSummary(summary) ? 'SUMMARY_FORMAT' : null;
+    if (!rejection) break;
+    const unchanged = { status: 'unchanged', code: rejection, stopReason: result.stop_reason || null,
+      outputLimit: plan.request.maxTokens, summaryBytes: bytes(summary),
+      detail: rejection === 'SUMMARY_TRUNCATED' ? 'Summary reached its output cap; history remains intact.'
+        : 'The summary was incomplete or missing required sections; history remains intact.' };
+    await ledger.event({ type: 'compaction_rejected', reason, attempt: attempt + 1, ...unchanged });
+    const repairTokens = Math.min(config.maxOutputTokens, plan.request.maxTokens * 2);
+    if (attempt === 0 && rejection === 'SUMMARY_TRUNCATED' && repairTokens > plan.request.maxTokens) {
+      const repair = prepareCompaction(session, config, { state, emergency, maxTokens: repairTokens,
+        instructions: `${instructions}\nThe previous summary hit its output cap. Be concise, include every required heading with nonempty content, and finish the checkpoint.` });
+      if (repair.status === 'prepared') {
+        await ledger.event({ type: 'compaction_repair', reason, fromOutputTokens: plan.request.maxTokens,
+          toOutputTokens: repairTokens, firstKeptIndex: repair.firstKeptIndex });
+        plan = repair;
+        continue;
+      }
+    }
     onEvent({ type: 'compaction_end', reason, ...unchanged });
     return unchanged;
   }

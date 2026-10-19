@@ -43,7 +43,9 @@ CLI options override environment variables, which override file settings, which 
 
 Supported string fields: `apiKey`, `baseUrl`, `model`, `apiVersion`, `thinkingMode`, `effort`, `memoryPolicy`, `historyStrategy`, `compaction`, `memoryGc`, `contextStrategy`.
 
-Supported numeric fields: `maxOutputTokens`, `maxRequestInputBytes`, `maxToolCalls`, `timeoutMs`, `contextosTargetBytes`, `historyKeepRecent`, `initialFileLimit`, `compactionTriggerRatio`, `compactionKeepRecentBytes`, `inputPriceUsdPerMillion`, `outputPriceUsdPerMillion`. The input-byte guard is measured in UTF-8 bytes, not provider tokens. `stream`, `capabilityFeedback` and `enableFileCreation` are booleans.
+Supported numeric fields: `maxOutputTokens`, `maxRequestInputBytes`, `maxToolCalls`, `timeoutMs`, `contextosTargetBytes`, `historyKeepRecent`, `initialFileLimit`, `compactionTriggerRatio`, `compactionKeepRecentBytes`, `compactionMaxOutputTokens`, `compactionThinkingBudgetTokens`, `inputPriceUsdPerMillion`, `outputPriceUsdPerMillion`. The input-byte guard is measured in UTF-8 bytes, not provider tokens. `stream`, `capabilityFeedback` and `enableFileCreation` are booleans.
+
+Summary requests default to `min(maxOutputTokens, 2048)` output tokens. With enabled thinking, they use a separate 1,024-token thinking budget, leaving room for the checkpoint. A truncated summary can receive one repair with up to twice its original output budget, capped by `maxOutputTokens`. Both requests use the same billing ledger and cost cap. Configure these with `compactionMaxOutputTokens` / `TEA_COMPACTION_MAX_OUTPUT_TOKENS` and `compactionThinkingBudgetTokens` / `TEA_COMPACTION_THINKING_BUDGET_TOKENS`. Enabled thinking requires at least 1,024 thinking tokens and an output cap above that budget.
 
 `maxCostUsd` accepts a positive number or `null` for no cap. An explicit monetary cap still requires both provider prices. Resume preserves the original stricter cap. For example:
 

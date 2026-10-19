@@ -25,6 +25,8 @@ const FIELDS = {
   historyKeepRecent: ['TEA_HISTORY_KEEP_RECENT', 'number'], initialFileLimit: ['TEA_INITIAL_FILE_LIMIT', 'number'],
   contextStrategy: ['TEA_CONTEXT_STRATEGY', 'string'], compactionTriggerRatio: ['TEA_COMPACTION_TRIGGER_RATIO', 'number'],
   compactionKeepRecentBytes: ['TEA_COMPACTION_KEEP_RECENT_BYTES', 'number'],
+  compactionMaxOutputTokens: ['TEA_COMPACTION_MAX_OUTPUT_TOKENS', 'number'],
+  compactionThinkingBudgetTokens: ['TEA_COMPACTION_THINKING_BUDGET_TOKENS', 'number'],
   inputPriceUsdPerMillion: ['TEA_INPUT_PRICE_USD_PER_MTOK', 'number'],
   outputPriceUsdPerMillion: ['TEA_OUTPUT_PRICE_USD_PER_MTOK', 'number'],
 };
