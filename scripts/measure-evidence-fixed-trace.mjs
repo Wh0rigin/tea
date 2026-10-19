@@ -9,6 +9,8 @@ const root=path.resolve('.tea/evidence-causal'),hash=value=>createHash('sha256')
 const protocol=JSON.parse(await readFile(path.join(root,'protocol.json'),'utf8'));
 const live=process.argv.includes('--live'),scripted=process.argv.includes('--scripted-provider');
 assert(!(live&&scripted));
+const tagIndex=process.argv.indexOf('--tag'),tag=tagIndex<0?'':process.argv[tagIndex+1];
+assert(!tag||scripted&&/^[a-zA-Z0-9-]+$/.test(tag));const suffix=tag?`-${tag}`:'';
 const engines={};
 for(const arm of ['baseline','candidate']){
  const src=path.join(root,arm,'src'),load=name=>import(pathToFileURL(path.join(src,name)).href);
@@ -67,12 +69,12 @@ if(!live&&!scripted){
  console.log('fixed-trace preflight passed; zero provider calls');process.exit(0);
 }
 if(live){
- assert.equal(protocol.scriptSha256,hash(await readFile(fileURLToPath(import.meta.url))));
+ assert.equal(protocol.scriptSha256,hash((await readFile(fileURLToPath(import.meta.url),'utf8')).replaceAll('\r\n','\n')));
  const main=JSON.parse(await readFile(path.join(root,'main-round-complete.json'),'utf8'));
  assert(main.status.startsWith('completed')&&main.completed.length===8);
 }
 assert.equal(JSON.parse(await readFile(path.join(root,'preflight.json'),'utf8')).status,'passed');
-const resultsFile=path.join(root,scripted?'scripted-results.json':'results.json');
+const resultsFile=path.join(root,scripted?`scripted-results${suffix}.json`:'results.json');
 try{await readFile(resultsFile);throw new Error('Refusing to overwrite fixed-trace results');}catch(e){if(e.code!=='ENOENT')throw e;}
 const report={mode:scripted?'scripted-acceptance-preflight':protocol.mode,protocolSha256:hash(await readFile(path.join(root,'protocol.json'))),status:'running',providerCalls:0,runs:[]};
 const save=()=>writeFile(resultsFile,JSON.stringify(report,null,2)+'\n');await save();
@@ -90,7 +92,8 @@ if(scripted){
 function accept(response,fixture){
  const blocks=response.content||[];if(blocks.some(b=>b.type==='tool_use'))return false;
  let code=blocks.filter(b=>b.type==='text').map(b=>b.text||'').join('\n').trim().replace(/^```(?:javascript|js)?\s*\n?/i,'').replace(/\n?```$/,'');
- if(!/^export\s+function\s+inverseScale\s*\(/.test(code))return false;
+ code=code.replace(/^(?:\s|\/\/[^\n]*(?:\n|$)|\/\*[\s\S]*?\*\/)*/,'');
+ if(!/^export\s+(?:function\s+inverseScale\s*\(|(?:const|let|var)\s+inverseScale\s*=)/.test(code))return false;
  code=code.replace(/^export\s+/,'');const sandbox=Object.create(null);
  Object.defineProperty(sandbox,'__input',{value:0,writable:true,configurable:false});
  const context=vm.createContext(sandbox,{codeGeneration:{strings:false,wasm:false}});
@@ -105,7 +108,7 @@ function accept(response,fixture){
  }catch{return false;}
 }
 for(const item of items){
- const ledger=new item.engine.TokenLedger({workspace:item.workspace,runId:scripted?'fixed-trace-scripted':'fixed-trace-provider',model:item.config.model});
+ const ledger=new item.engine.TokenLedger({workspace:item.workspace,runId:scripted?`fixed-trace-scripted${suffix}`:'fixed-trace-provider',model:item.config.model});
  await ledger.init({runType:scripted?'scripted-fixed-trace':'controlled-fixed-trace',usageSource:scripted?'scripted':'provider'});
  const adapter=new item.engine.AnthropicMessagesAdapter(item.config);adapter.onRequest=row=>ledger.request(row);
  let response,error;
