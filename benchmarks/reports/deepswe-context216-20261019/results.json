@@ -1,0 +1,412 @@
+{
+  "schemaVersion": 1,
+  "clientDate": "2026-10-19",
+  "benchmark": "DeepSWE v1.1",
+  "scope": "Two preselected official repository tasks, one paid attempt each, 30-minute agent cap; not the full 113-task leaderboard score. Trusted harness prepares branch/identity/commit export.",
+  "teaCommit": "cdc5397aef1741961c11a0c96b910546cd8f9d28",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "agentStatus": "tool_limit_reached",
+      "officialReward": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 3,
+        "p2p_total": 2,
+        "p2p_passed": 2,
+        "f2p": 0.6,
+        "p2p": 1.0,
+        "partial": 0.7142857142857143
+      },
+      "officialVerified": true,
+      "originalPipelineExceptionType": "RuntimeError",
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/get_manifest.go"
+      ],
+      "exportedPatch": [
+        {
+          "bytes": 7710,
+          "sha256": "6ac0399a2b1a5aece9f16394382effd69e6b4ec9d818e187d220957e44968afd"
+        }
+      ],
+      "requests": 61,
+      "relayRequests": 61,
+      "providerUsageComplete": true,
+      "inputTokensIncludingCache": 1512990,
+      "outputTokens": 12406,
+      "cacheReadTokens": 276416,
+      "cacheWriteTokens": 0,
+      "totalTokens": 1525396,
+      "controlCostEstimateUsd": 1.2451288000000003,
+      "toolCalls": 96,
+      "compactionRequests": 0,
+      "compactionInputTokens": 0,
+      "compactionOutputTokens": 0,
+      "elapsedMs": 717477,
+      "error": null,
+      "toolsByName": {
+        "read_file": 42,
+        "run_shell": 4,
+        "search_code": 28,
+        "run_tests": 2,
+        "recall_context": 12,
+        "list_files": 2,
+        "write_file": 1,
+        "apply_patch": 5
+      },
+      "toolErrorsByName": {
+        "run_shell": 3,
+        "run_tests": 2,
+        "read_file": 1,
+        "search_code": 2
+      },
+      "approvalDeniedTools": 2,
+      "operationPolicyDeniedTools": 3,
+      "repeatedIdenticalRetrievalCallsBeyondFirst": 18,
+      "peakLocalEstimatedInputTokens": 118096,
+      "finalBudget": {
+        "estimatedInputTokens": 60726,
+        "inputLimit": 207808,
+        "triggerTokens": 166246,
+        "contextWindowTokens": 216000,
+        "source": "local-estimate",
+        "requestBytes": 151092,
+        "maxWireBytes": 2097152,
+        "residentBytes": 407322,
+        "residentLimit": 4194304,
+        "automaticCompactions": 0,
+        "emergencyCompactions": 0
+      },
+      "artifactRecovery": {
+        "status": "passed",
+        "modelCalls": 0,
+        "matchedMutationOutputs": 6,
+        "fileSha256": {
+          "pkg/cmd/manifest_stream.go": "2cd89850b6ea9e6bb637aaf952669001e49192d7390dcab3f7dd5118477dd1d4",
+          "pkg/cmd/template.go": "086df03d43daef9b1f273305d3283bf6b0e961c28b770d7778cb3b2553f1f123",
+          "pkg/cmd/status.go": "04da61fc283be900801cbf1a7b851fe567fe01caf3411a9f4b7c8b8d26f96da3",
+          "pkg/cmd/get_manifest.go": "9bd874e8928c0772a469b9c0a0573797f780b59cd022c65b18bb99ac5f210d42"
+        },
+        "sourceEventsSha256": "11e3f0ae597c082697b814c131169f5a651dfb4a6b3f8fcb05e67a8a6891bc4e",
+        "sourceResultSha256": "92c095f0846cc6534c7651b96c158add1cda47b9984afb6f895ee88de6ef13ce",
+        "mutationSpecSha256": "bd0958f1fe500ecaa5020e9614dac64cec9926369664542840779e33ab37bd6e",
+        "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "sourceRunStatus": "tool_limit_reached"
+      },
+      "contextProjectionDiagnostics": {
+        "requestCount": 61,
+        "fullRequestPayloadBytes": 14367073,
+        "sentRequestPayloadBytes": 6402609,
+        "fullRequestPayloadChars": 14362687,
+        "sentRequestPayloadChars": 6399073,
+        "fullHeuristicTokens": 3590696,
+        "sentHeuristicTokens": 1599794,
+        "compactedResultOccurrences": 1942,
+        "finalBudget": {
+          "estimatedInputTokens": 60726,
+          "inputLimit": 207808,
+          "triggerTokens": 166246,
+          "contextWindowTokens": 216000,
+          "source": "local-estimate",
+          "requestBytes": 151092,
+          "maxWireBytes": 2097152,
+          "residentBytes": 407322,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "firstSuccessfulEditToolNumber": 80,
+      "validationPassedByAgent": false,
+      "validationAttemptsByAgent": 0,
+      "failedTestNamesFromVerifierReport": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ]
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "agentStatus": "completed",
+      "officialReward": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 47,
+        "p2p_total": 319,
+        "p2p_passed": 319,
+        "f2p": 0.9215686274509803,
+        "p2p": 1.0,
+        "partial": 0.9891891891891892
+      },
+      "officialVerified": true,
+      "originalPipelineExceptionType": "RuntimeError",
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py"
+      ],
+      "exportedPatch": [
+        {
+          "bytes": 23524,
+          "sha256": "7ff9dfb76b739bdebe1ad749ea65b5400c28ab4111289a6ea0d019d47d852ca8"
+        }
+      ],
+      "requests": 41,
+      "relayRequests": 41,
+      "providerUsageComplete": true,
+      "inputTokensIncludingCache": 611639,
+      "outputTokens": 13837,
+      "cacheReadTokens": 220224,
+      "cacheWriteTokens": 0,
+      "totalTokens": 625476,
+      "controlCostEstimateUsd": 0.5280548000000002,
+      "toolCalls": 55,
+      "compactionRequests": 0,
+      "compactionInputTokens": 0,
+      "compactionOutputTokens": 0,
+      "elapsedMs": 577811,
+      "error": null,
+      "toolsByName": {
+        "read_file": 20,
+        "run_shell": 5,
+        "run_tests": 8,
+        "list_files": 1,
+        "apply_patch": 9,
+        "write_file": 2,
+        "search_code": 10
+      },
+      "toolErrorsByName": {
+        "run_shell": 2,
+        "run_tests": 4
+      },
+      "approvalDeniedTools": 1,
+      "operationPolicyDeniedTools": 2,
+      "repeatedIdenticalRetrievalCallsBeyondFirst": 10,
+      "peakLocalEstimatedInputTokens": 42284,
+      "finalBudget": {
+        "estimatedInputTokens": 42284,
+        "inputLimit": 207808,
+        "triggerTokens": 166246,
+        "contextWindowTokens": 216000,
+        "source": "local-estimate",
+        "requestBytes": 104948,
+        "maxWireBytes": 2097152,
+        "residentBytes": 153675,
+        "residentLimit": 4194304,
+        "automaticCompactions": 0,
+        "emergencyCompactions": 0
+      },
+      "artifactRecovery": {
+        "status": "passed",
+        "modelCalls": 0,
+        "matchedMutationOutputs": 11,
+        "fileSha256": {
+          "mnamer/setting_store.py": "4a6cbaef870b7d2658aa65b0bead705dea46f6dd341ef21b246829ea4b8dfb16",
+          "mnamer/daemon.py": "7f002a0ecd4d37947077735855df721802740be68f82920a9fde169379a6d2ba",
+          "mnamer/__main__.py": "f0769b31685006c2a5dfc748204ef6cc1729b23e55766bde3460a2e1fcd5d134",
+          "tests/local/test_daemon.py": "43a98beb6b8f4cb3c153627fd1cb1b3169036084d4767d9b6b34a05747c4c51d"
+        },
+        "finalWorkspaceChangedFileHashesMatch": true,
+        "sourceEventsSha256": "c82a3e74850fc4d3da3b84d7ff9e653801c1ce88efc0c911be6e3b660eb67c80",
+        "sourceResultSha256": "2202e3a748083618da7c87f4265c3e1581e3ea6650c8cb2990e0e842280bc98c",
+        "mutationSpecSha256": "6e36653c86a9946afec1db448a173c47bf6eb6a030031fed86bb035c930a4ed1",
+        "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "sourceRunStatus": "completed"
+      },
+      "contextProjectionDiagnostics": {
+        "requestCount": 41,
+        "fullRequestPayloadBytes": 4188712,
+        "sentRequestPayloadBytes": 2868091,
+        "fullRequestPayloadChars": 4184296,
+        "sentRequestPayloadChars": 2863747,
+        "fullHeuristicTokens": 1046086,
+        "sentHeuristicTokens": 715951,
+        "compactedResultOccurrences": 622,
+        "finalBudget": {
+          "estimatedInputTokens": 42284,
+          "inputLimit": 207808,
+          "triggerTokens": 166246,
+          "contextWindowTokens": 216000,
+          "source": "local-estimate",
+          "requestBytes": 104948,
+          "maxWireBytes": 2097152,
+          "residentBytes": 153675,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "firstSuccessfulEditToolNumber": 9,
+      "validationPassedByAgent": true,
+      "validationAttemptsByAgent": 5,
+      "failedTestNamesFromVerifierReport": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_just_starts_when_not_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_stops_then_starts_when_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_processes_files_and_supports_status_and_stop"
+      ]
+    }
+  ],
+  "officialPassed": 0,
+  "officialEvaluated": 2,
+  "plannedTasks": 2,
+  "providerUsageComplete": true,
+  "totalTokens": 2150872,
+  "requests": 102,
+  "controlCostEstimateUsd": 1.7731836000000003,
+  "preInferenceSetupFailure": {
+    "revision": "v3",
+    "task": "helm-unified-manifest-stream",
+    "reason": "Pier returned None for empty stdout; wrapper string handling failed before inference",
+    "modelRequests": 0,
+    "costUsd": 0,
+    "recordPreserved": true,
+    "notAPaidRetry": true
+  },
+  "offlinePreflight": {
+    "status": "passed",
+    "capabilities": {
+      "status": "passed",
+      "selfAuthoredFixture": true,
+      "gitBranchCommitAndSignoff": true,
+      "blockedGitPolicyCases": 6,
+      "goDirectSucceeded": false,
+      "goExplicitCacheSucceeded": true,
+      "contextWindowTokens": 216000,
+      "memoryPolicy": "contextos",
+      "compaction": "auto",
+      "modelCalls": 0
+    },
+    "fakeSseBytesPreserved": true,
+    "modelCalls": 0,
+    "observed": {
+      "status": 200,
+      "sha256": "a3e462f6e67d20c76763bf589dd134402bcd173a5b85ae01eafb85ca471c64fe",
+      "length": 157,
+      "fakeUsageParsed": true
+    }
+  },
+  "limitations": [
+    "Window and benchmark Git approval/setup contract changed together. Earlier 32k runs are historical; no causal token-saving percentage is computed.",
+    "One attempt per task; this is a bounded two-task pilot, not an official full-suite score.",
+    "Pre-created branch meets task requirement, but frozen Git callback still rejects the common explicit-start syntax git checkout -b NAME main. No mid-run approval widening.",
+    "Production command guard can falsely block --format, compound shell operators are blocked, and direct Go test lacks HOME/cache. Explicit temporary Go cache prefix is permitted if the agent requests it; no shim or prompt rewrite.",
+    "Task completion reported by TEA is separate from the official hidden verifier result. Token usage includes all attempts and cache input; failures are not efficiency wins."
+  ],
+  "protocol": {
+    "name": "TEA DeepSWE 216k Git-capable pilot v3b",
+    "status": "frozen_before_model_calls",
+    "teaCommit": "cdc5397aef1741961c11a0c96b910546cd8f9d28",
+    "deepSweCommit": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "pierCommit": "4d3c14041d16443f3f9f460dcdf23629994a304e",
+    "selection": "first two IDs by ascending sha256(tea-deepswe-smoke-v1:seed=0:<id>), all tasks eligible",
+    "tasks": [
+      {
+        "id": "helm-unified-manifest-stream",
+        "language": "go",
+        "repository": "https://github.com/helm/helm",
+        "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+        "os": "linux",
+        "agentTimeoutSec": 10800.0,
+        "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+        "separateVerifier": true
+      },
+      {
+        "id": "mnamer-daemon-watch-lifecycle",
+        "language": "python",
+        "repository": "https://github.com/jkwill87/mnamer",
+        "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+        "os": "linux",
+        "agentTimeoutSec": 10800.0,
+        "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+        "separateVerifier": true
+      }
+    ],
+    "attemptsPerTask": 1,
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "stream": true,
+    "maxOutputTokens": 4096,
+    "maxToolCalls": 96,
+    "maxTransportCallsPerTask": 128,
+    "requestTimeoutSeconds": 90,
+    "agentWallSeconds": 1800,
+    "officialAgentTimeoutSeconds": 10800,
+    "agentScope": "budget-limited pilot, not a full official benchmark score",
+    "perTaskControlBudgetUsd": 5,
+    "suiteControlBudgetUsd": 10,
+    "controlRatesPerMillion": {
+      "input": 0.8,
+      "output": 2.8,
+      "note": "control estimates, not provider invoice"
+    },
+    "unknownBilling": "retain full 5 USD task reservation and stop the suite without retries",
+    "network": "official no-network container, dedicated Unix socket relays only fixed model Messages endpoint; API key remains host process memory",
+    "sourceChanges": "Retained structured operational errors only; ordinary current runTask and Anthropic adapter, Unix-socket transport shim.",
+    "commitExport": "Trusted setup verifies pristine frozen base, creates tea-deepswe-v3b from main and local identity, excludes .tea via local Git exclude. Trusted finalizer commits with DCO signoff; official collector exports committed diff.",
+    "hiddenTestsOrSolutionsRead": false,
+    "adapterSha256": {
+      "inference_relay.py": "fddaa93039149acd9b94e0786e45d9953d6d3dea8d1f1d63abb391b49bc5f0fe",
+      "run-tea.mjs": "25823ed057f7401c2b94ebd5aaeb4e69790ee1fb484f7d5c072378aa6668b32d",
+      "tea_adapter.py": "29fdb77c28d66747ad5f1fae3ece4d6da10353a2584123231c314507b9a69731",
+      "run_pilot.py": "a399f92c31677c6568709bee35a6c7f269f9b9b5bf9597d3e4d1188169f18207",
+      "approval-policy.mjs": "200041db207c64108a352db26dd1f3842449807d635e4bbb46f4d2cd43e3012f",
+      "preflight.py": "2d506809b48fc7c36fc78d8da2d6adba0b6613506fb413a486031bb0ce91c9d1",
+      "capability-probe.mjs": "e1b4f67143545b79f9f8b64123fdd1d6f545ad3ffd54e33223a77cbe14cca1d0"
+    },
+    "imageArtifacts": {
+      "kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1.manifest.json": {
+        "sourceManifestSha256": "ca9060c7f9c2b86afdf58ea464a5eb9598f87fc21d1c6a99631d6a6e0eb03bd2",
+        "configDigest": "sha256:ee0b417d9037636091bba913a609cf888b775b5f623faf3809ab862b0b7aa6d0",
+        "compressedLayerCount": 26,
+        "compressedLayerBytes": 768275124
+      },
+      "kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1.manifest.json": {
+        "sourceManifestSha256": "b6915c6766cbfd2a26301adcb79bcb49a0c84bbff4039920378c9ff854c48d2c",
+        "configDigest": "sha256:ea95b82423590ce2dd3b8ed38dd784968ddd8a5a6cffe2943aa4ae79dcec0939",
+        "compressedLayerCount": 27,
+        "compressedLayerBytes": 1099690693
+      },
+      "kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1.docker.tar.gz.sha256": {
+        "archiveSha256": "876ae2aad2112f2b8c34c31b4c4571d5efb2aeca2dfef6a410e2e0c38035ee5b"
+      },
+      "kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1.docker.tar.gz.sha256": {
+        "archiveSha256": "3f19ecc625fb6d134ac96c0007f33e38f3ed68af6d919f0db559b26686e7d096"
+      }
+    },
+    "candidateSourceArchiveSha256": "35e2442d4cd08ba7135bc2a13f8ad9bdb9481b6cc8fa6f40082fb900755301dd",
+    "contextWindowTokens": 216000,
+    "comparisonLimit": "Window and benchmark Git capability contract changed together. Earlier 32k restricted runs are historical, not a causal token-saving baseline.",
+    "benchmarkApprovals": "Existing build/test approvals plus scoped Git read/branch/add/commit. No global Git config, network Git, reset or destructive operation. Optional go test env GOCACHE=/tmp/tea-go-cache HOME=/tmp is allowed without changing production safeEnv.",
+    "productionCompatibility": "No execution shim, task prompt rewrite, hidden test inspection, source patch or Go cache injection. Direct Go may fail with stripped HOME; explicit cache prefix is available if the agent requests it.",
+    "setupRevision": "v3 setup failed before inference (zero relay calls, zero cost): Pier empty stdout is None. Preserve v3 record; normalize empty status output and exercise actual prepare_workspace in offline preflight before v3b."
+  },
+  "artifactExportFailureAndRecovery": {
+    "originalFailure": "Git add explicit exclusion of already ignored .tea returned exit 1; original paid attempt records and exceptions preserved. No verifier ran in those original trials.",
+    "recovery": "Replay only original successful write_file/apply_patch calls with the same pinned production WorkspaceTools on the same pristine task base, require exact tool outputs and changed-file list, then use ordinary git add and signed commit for official separate verification. No new model calls or source fixes. Python final source hashes checked against read-only final workspace snapshot.",
+    "modelCalls": 0,
+    "filesSha256": {
+      "artifact_recovery.py": "89ae2ad14248253c511234149075b87edc825fdb4985aae8cda66daf3a2e2d7d",
+      "replay-mutations.mjs": "c6d56d797c95bd410fb9f78765972903e7f1bcd8f46a35040fbfaccb6b6b8142"
+    }
+  },
+  "artifactExportOfflineCheck": {
+    "status": "passed",
+    "modelCalls": 0,
+    "selfAuthoredFixture": true,
+    "originalExportReproducedExitCode": 1,
+    "fixedExportExitCode": 0,
+    "privateStateExcluded": true,
+    "signedCommitExport": true,
+    "exportedFiles": [
+      "new.txt",
+      "source.txt"
+    ]
+  }
+}
