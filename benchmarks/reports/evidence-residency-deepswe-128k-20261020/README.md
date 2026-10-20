@@ -1,6 +1,6 @@
 # Evidence residency: 128K-output streaming reassessment
 
-Status: protocol frozen before paid calls; offline lifecycle preflight in progress. No new performance or coding-quality claim.
+Status: running. Protocol committed before paid calls; all offline gates and the single provider compatibility probe passed. No new performance or coding-quality claim.
 
 [Frozen protocol](protocol.json) · [Previous complete 4K round](../evidence-residency-deepswe-r2-20261019/README.md) · [Earlier interrupted round](../evidence-residency-deepswe-20261019/README.md)
 
@@ -32,3 +32,11 @@ This is a **new common execution profile**, not an isolated causal test of chang
 7. Two seen task types/four pairs, uncontrolled provider randomness and residual command-policy gaps do not establish a broad DeepSWE score or generalization.
 
 Results, all failures, unknown reservations and the retention assessment will be recorded after the fixed schedule ends or an infrastructure stop occurs. No runtime change or PR merge is part of this reassessment.
+
+## Completed preflight
+
+- Local full regression: **393 passed, one Go-unavailable skip, zero failures / 394**.
+- Real adapter lifecycle fixture: both arms passed, ten synthetic SSE responses and nine actual tools each, identical exported patch hashes and independent patch tests. Zero provider calls. These are self-authored infrastructure checks, not task acceptance.
+- Synthetic transport checks: **17 passed**, covering fragmented Unicode/LF/CRLF and incomplete/malformed SSE metadata; zero provider calls.
+- [Provider parameter probe](provider-probe.json): one real streaming call accepted **131,072 output / 8,000 thinking budget**, returned `READY` with normal termination and complete usage: **26 input + 9 output = 35 provider tokens**. No unknown reservation or retry. This confirms parameter acceptance, not full-length generation.
+- [Dual-arm offline lifecycle result](preflight.json). Eight autonomous attempts are now in progress under the separately frozen 80 USD allocation.
