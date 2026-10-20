@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "selfAuthoredControlFixture": true,
+  "providerCalls": 0,
+  "checks": 4,
+  "scope": "Queue failure isolation only; not source/runtime bug fix or benchmark acceptance"
+}

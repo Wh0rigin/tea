@@ -1,0 +1,11 @@
+{
+  "providerCalls": 38,
+  "ledgerAndWireHashesMatched": true,
+  "wireUsageMatched": true,
+  "inputTokensIncludingCache": 610913,
+  "outputTokens": 15222,
+  "totalTokens": 626135,
+  "terminalTeaSummaryMissing": true,
+  "originalReservationRetainedUsd": 10,
+  "failedAttemptNotRetried": true
+}

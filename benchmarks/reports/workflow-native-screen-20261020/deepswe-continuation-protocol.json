@@ -1,0 +1,42 @@
+{
+  "name": "Continuation of four unstarted DeepSWE slots; no failed attempt retry",
+  "status": "frozen_before_continuation_calls",
+  "parentProtocolSha256": "e71c84b4a5c2cda5f06add317005996303ecbd81eaf7ff3b419d5c1fb270b00d",
+  "baselineTeaCommit": "b400577185f0b224850540cc9289672f62450f33",
+  "candidateTeaCommit": "7bd236f4d548af1214ddf498ccaf7a5c3b928100",
+  "order": [
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "allocationUsdFromOriginal80": 40,
+  "additionalAllocationUsd": 0,
+  "failedOriginalAttemptNotRetried": true,
+  "parentRuntimeAdapterHashesUnchanged": true,
+  "allModelSourceInputsControlsAndVerifierUnchanged": true,
+  "driverSha256": "508b124662529e1356b3958e4189de1e2f8548b9d6a488a59a1a13f8fbc473cc",
+  "reason": "Original cohort stopped after an existing detached-child pipe deadlock prevented terminal report and patch export. Preserve the original failed record and full10 USD reservation; continue only the four already planned, never-started independent slots.",
+  "controlChange": "Native trial failure after inference does not cancel remaining independent slots once relay is drained. Retain unknown reservation and never retry affected slot. Pre-inference setup failure or undrained inference still stops continuation.",
+  "meteringRecovery": "Original failed slot has38 completed ledger/wire-matched requests,626135 recovered reported tokens; terminal TEA summary absent. Keep recovery separate from ordinary complete-run efficiency and retain original reservation.",
+  "notAnAgentFix": "No changes to process runner, model prompt, tools, source, timeout, budget per trial, task, image or grading; this only changes queue-level failure isolation.",
+  "originalStopSha256": "346492314f27adb31627a17c7b8e143f2e6543cb55a9ea5f8948be0a6fb5d0a4",
+  "originalStoppedProgressSha256": "c89aaf83685782ca1fc73302475e468b9ac26d7ce759dab6a23bb2486b514eee",
+  "controlPreflightSha256": "a5518af0af8ef1631270c377c24b2b1f377437e7280d008a50e9b5b5f8a53e46"
+}
