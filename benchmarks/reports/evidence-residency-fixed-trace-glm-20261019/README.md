@@ -1,6 +1,6 @@
 # Evidence reuse: controlled provider-token measurement
 
-Status: frozen and preflighted; paid measurements queued after the eight autonomous DeepSWE attempts.
+Status: completed after the eight autonomous DeepSWE attempts. Six real streaming completions, complete provider usage throughout, no retry.
 
 [Protocol](protocol.json) · [Offline checks](preflight.json) · [Runner](../../../scripts/measure-evidence-fixed-trace.mjs) · [Autonomous comparison](../evidence-residency-deepswe-r2-20261019/README.md)
 
@@ -33,4 +33,28 @@ Extract the protocol's two `git archive` source snapshots (`src`, `scripts`, `pa
 
 Run `node scripts/measure-evidence-fixed-trace.mjs` for offline context checks. Optional `--scripted-provider --tag NAME` exercises the fake streaming adapter without provider calls. **`--live` deliberately submits the six paid completions** using the local TEA API configuration. The runner verifies its frozen source hash, refuses to overwrite existing paid results and requires proof that all eight autonomous attempts have ended.
 
-Real results will be recorded after the queued measurements complete.
+## Actual provider results
+
+[Per-completion usage](results.json) · [Derived aggregates and all pairs](summary.json)
+
+- Baseline: 3/3 independently accepted answers; **25,695 input + 72 output = 25,767 total tokens**.
+- Candidate: 3/3 independently accepted answers; **11,028 input + 76 output = 11,104 total tokens**.
+- Input including cache: **−57.08%**; total provider tokens: **−56.91%**. Output increased 4 tokens (+5.56%); the saving comes from input.
+- Each arm made exactly three single completions. Cache reads/writes were zero; all six usage records are complete. No new reservation remains.
+- Candidate produced two read receipts per fixture, six in total; baseline produced none. Equal system/tools and all observations outside those two repeated read bodies were verified before calls.
+
+Every pair, baseline → candidate:
+
+1. Input **8,558 → 3,673**; total **8,584 → 3,698**; both accepted.
+2. Input **8,558 → 3,669**; total **8,583 → 3,695**; both accepted.
+3. Input **8,579 → 3,686**; total **8,600 → 3,711**; both accepted.
+
+The provider returned input and output usage; no additional reasoning figure is added to output. The percentages use provider tokens, not serialized bytes or synthetic SSE usage. Original final answers are retained privately for independent regrading without thinking blocks.
+
+## Interpretation
+
+**The repaired cache path demonstrably reduces real input tokens while retaining correctness on these three controlled questions.** The repeated current-version source was already resident, so the two later reads could use receipts instead of copying the source again. This does not add model summarization calls or discard the current source needed to compute the answer.
+
+This is a narrow mechanism result: three variants of one small scalar-function family, scripted setup, and observations supplied in one user message. It does not measure autonomous tool choice, how often real workflows exercise the path, native multi-turn behavior or general coding accuracy. The autonomous DeepSWE schedule produced no short read receipts and no both-accepted pairs; **do not advertise 56.91% as overall agent or DeepSWE savings**.
+
+Retain the correctness repair for review. Broader performance adoption remains unproven; no next optimization stage or merge is included.

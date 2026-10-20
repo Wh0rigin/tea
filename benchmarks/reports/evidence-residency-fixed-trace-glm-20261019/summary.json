@@ -1,0 +1,63 @@
+{
+  "scope": "Three deliberately activated read-after-edit contexts and six single provider completions; not autonomous agent accuracy or production savings.",
+  "aggregates": {
+    "baseline": {
+      "requests": 3,
+      "inputTokensIncludingCache": 25695,
+      "outputTokens": 72,
+      "totalTokens": 25767,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "readReceipts": 0,
+      "attempts": 3,
+      "accepted": 3
+    },
+    "candidate": {
+      "requests": 3,
+      "inputTokensIncludingCache": 11028,
+      "outputTokens": 76,
+      "totalTokens": 11104,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "readReceipts": 6,
+      "attempts": 3,
+      "accepted": 3
+    }
+  },
+  "pairs": [
+    {
+      "repeat": 1,
+      "baselineInput": 8558,
+      "candidateInput": 3673,
+      "baselineTotal": 8584,
+      "candidateTotal": 3698,
+      "inputTokenChangePercent": -57.081093713484464,
+      "totalTokenChangePercent": -56.91985088536813,
+      "bothAccepted": true
+    },
+    {
+      "repeat": 2,
+      "baselineInput": 8558,
+      "candidateInput": 3669,
+      "baselineTotal": 8583,
+      "candidateTotal": 3695,
+      "inputTokenChangePercent": -57.1278336059827,
+      "totalTokenChangePercent": -56.949784457648846,
+      "bothAccepted": true
+    },
+    {
+      "repeat": 3,
+      "baselineInput": 8579,
+      "candidateInput": 3686,
+      "baselineTotal": 8600,
+      "candidateTotal": 3711,
+      "inputTokenChangePercent": -57.034619419512765,
+      "totalTokenChangePercent": -56.848837209302324,
+      "bothAccepted": true
+    }
+  ],
+  "inputTokenChangePercent": -57.08114419147694,
+  "totalTokenChangePercent": -56.9061202313036,
+  "allUsageComplete": true,
+  "newUnknownReservationUsd": 0
+}
