@@ -160,7 +160,11 @@ export class TerminalView {
       this.write(this.paint(`  ${failed ? '!' : '+'} [${record.id}] ${event.name} · ${status} · ${timing} · /tools ${record.id}`, failed ? '31' : '2'), { raw: true });
       if (event.name === 'apply_patch' && !event.isError) {
         const lines = (text, prefix) => terminalText(text || '').split('\n').slice(0, 6).map(line => prefix + line.slice(0, 160)).join('\n');
-        this.write(this.paint(lines(event.input?.search, '- '), '31') + '\n' + this.paint(lines(event.input?.replace, '+ '), '32'), { raw: true });
+        const edits = event.input?.edits || [event.input || {}];
+        for (const edit of edits.slice(0, 3)) {
+          this.write(this.paint(lines(edit.search, '- '), '31') + '\n' + this.paint(lines(edit.replace, '+ '), '32'), { raw: true });
+        }
+        if (edits.length > 3) this.write(`  ... ${edits.length - 3} more replacements; /tools ${record.id}`);
       }
       if (failed) this.write(record.output.slice(0, 800));
     }
@@ -290,7 +294,8 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     if (controller?.signal.aborted || closed) { resolve(false); return; }
     view.approval = true;
     approval = allowed => { view.approval = false; resolve(allowed); };
-    const proposal=event.operation==='create'?event.change.content:`- ${event.change.search}\n+ ${event.change.replace}`;
+    const proposal=event.operation==='create'?event.change.content
+      :(event.change.edits || [event.change]).map(edit=>`- ${edit.search}\n+ ${edit.replace}`).join('\n');
     const preview=terminalText(redactText(proposal));
     view.write(`\nAllow this ${event.operation} in ${config.workspace}?\n${event.path}${event.resolvedPath===event.path?'':` -> ${event.resolvedPath}`}\n${preview.slice(0,4000)}${preview.length>4000?'\n[Preview truncated]':''}\nType yes to approve once; anything else denies it.`);
   });

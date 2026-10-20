@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { TokenLedger } from './ledger.mjs';
 import { AnthropicMessagesAdapter, ModelError } from './model.mjs';
-import { WorkspaceTools, isValidationCommand } from './tools.mjs';
+import { WorkspaceTools, isValidationCommand, redactText } from './tools.mjs';
 import { assertLiveConfig } from './config.mjs';
 import { compactToolHistory } from './memory.mjs';
 import { estimateTextTokens } from './benchmark.mjs';
@@ -14,17 +14,18 @@ import { ContextMemory } from './context-assembler.mjs';
 import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } from './memory-gc.mjs';
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 import { runtimeError } from './runtime-error.mjs';
+import { buildSystemPrompt } from './prompts.mjs';
+import { observeValidation, unresolvedValidationCommands } from './validation.mjs';
 
-const SYSTEM_PROMPT = `You are tea, an independent coding agent operating only inside the supplied workspace. Read applicable AGENTS.md instructions before editing. The initial file inventory may be partial and ranked by task terms; it is not proof that omitted files are irrelevant. Use list_files or search_code to discover more files when needed. Inspect before editing. Use exact, narrow patches. Never read secrets or environment files. Never claim success without verification. After any file edit, run the relevant tests and fix failures; preserve all user changes. Use run_shell only for commands that are not on the safe validation allowlist; the terminal may ask the user to approve them. Do not repeat whole files or prior tool output when a short evidence-backed summary is enough. When finished, state the changes and tests actually run.`;
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
 
-function prepareContextRequest(messages, config, requestTools) {
+function prepareContextRequest(messages, config, requestTools, system) {
   let memory = config.historyStrategy === 'compact-tools'
     ? compactToolHistory(messages, { keepRecentRounds: config.historyKeepRecent ?? 2 })
     : { messages, diagnostics: { compactedResults: 0 } };
-  const baseRequest = { system: SYSTEM_PROMPT, messages, tools: requestTools };
+  const baseRequest = { system, messages, tools: requestTools };
   const basePayload = JSON.stringify(baseRequest);
-  let request = { system: SYSTEM_PROMPT + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: requestTools };
+  let request = { system: system + (memory.diagnostics.compactedResults ? HISTORY_GUIDANCE : ''), messages: memory.messages, tools: requestTools };
   let sentPayload = JSON.stringify(request);
   if (memory.diagnostics.compactedResults && (Buffer.byteLength(sentPayload, 'utf8') >= Buffer.byteLength(basePayload, 'utf8')
     || sentPayload.length >= basePayload.length || estimateTextTokens(sentPayload) >= estimateTextTokens(basePayload))) {
@@ -35,14 +36,9 @@ function prepareContextRequest(messages, config, requestTools) {
   return { memory, request, sentPayload };
 }
 
-function validationSucceeded(output) {
-  const text = String(output);
-  return /^exit=0\b/.test(text) && !/(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+(?:tests|pass)\s+0\s*(?:\n|$)/.test(text);
-}
-
 export function createAgentSession(config) {
   return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
-    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, changedFiles: [],
+    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, validationFailures: [], changedFiles: [],
     compaction: null, compactionCount: 0, autoCompactionBackoff: null, ...memorySessionFields(config) };
 }
 
@@ -115,6 +111,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   session.tools = tools;
   restoreToolMemory(session, tools);
   const toolService = tools.toolService;
+  const systemPrompt = buildSystemPrompt(tools.modelToolDefinitions({ includeMemory: false }));
   toolService.context.bindSession(session);
   if (config.memoryPolicy === 'contextos') {
     session.contextMemory ||= new ContextMemory(tools);
@@ -158,11 +155,11 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     requestPurpose = 'compaction';
     try {
       const outcome = await compactConversation(session, config, { adapter, ledger, state, reason, instructions,
-        system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions(), signal, onEvent: emit,
+        system: systemPrompt, tools: tools.modelToolDefinitions(), signal, onEvent: emit,
         measureContext: async (context, { willArchive = false } = {}) => {
-          if (config.memoryPolicy !== 'contextos') return requestBytes(config, prepareContextRequest(context, config, tools.modelToolDefinitions()).request);
+          if (config.memoryPolicy !== 'contextos') return requestBytes(config, prepareContextRequest(context, config, tools.modelToolDefinitions(), systemPrompt).request);
           const plan = await session.contextMemory.assemble({ messages: context, canonical: session.messages,
-            system: SYSTEM_PROMPT, tools: tools.modelToolDefinitions({ includeMemory: false }), config, state, goal: task,
+            system: systemPrompt, tools: tools.modelToolDefinitions({ includeMemory: false }), config, state, goal: task,
             commit: false, additionalArchive: willArchive });
           return requestBytes(config, plan.request);
         } });
@@ -201,6 +198,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       ...(outcome.error ? { error: outcome.error } : {}) });
     return { ...outcome, summary, toolCalls: 0, changedFiles: [...session.changedFiles],
       validationPassed: session.validationPassed, validationAttempts: session.validationAttempts,
+      validationFailures: session.validationFailures || [],
       runType: offline ? 'offline-runtime' : 'live', wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
   }
   const firstTurn = session.messages.length === 0;
@@ -215,7 +213,8 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   const capabilities = config.capabilityFeedback ? runtimeCapabilities({ approveCommand, fileCreation: tools.enableFileCreation, editPermissions: tools.editPermissions }) : null;
   const capabilitiesChanged = Boolean(capabilities && session.capabilities?.version !== capabilities.version);
   const userMessage = (firstTurn ? `${task}\n\nWorkspace: ${config.workspace}\n${inventory.text}`
-    + (session.pendingValidation ? `\nOutstanding edits still require validation: ${session.changedFiles.join(', ')}.` : '') : task)
+    + (session.pendingValidation ? `\nOutstanding validation: ${session.changedFiles.join(', ') || 'workspace checks'}.`
+      + (session.validationFailures?.length ? ` Rerun unresolved commands: ${JSON.stringify(unresolvedValidationCommands(session))}.` : '') : '') : task)
     + (capabilities && (firstTurn || capabilitiesChanged) ? `\n\n${capabilityNotice(capabilities)}` : '');
   session.capabilities = capabilities;
   if (capabilities && (firstTurn || capabilitiesChanged)) await session.journal?.append('capabilities_declared', capabilities);
@@ -232,6 +231,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let pendingValidation = session.pendingValidation;
   let validationPassed = session.validationPassed;
   let validationAttempts = session.validationAttempts;
+  let validationFailures = [...(session.validationFailures || [])];
   let changedFiles = [...session.changedFiles];
   let status = 'running';
   let finalText = '';
@@ -239,20 +239,20 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let forcedValidationNudges = 0;
   const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
     fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
-  const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, changedFiles });
+  const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, validationFailures, changedFiles });
   const prepareRequest = async () => {
     const activeMessages = sessionContext(session, runtimeState());
     const requestTools = tools.modelToolDefinitions({ includeMemory: false });
-    const fullPayload = JSON.stringify({ system: SYSTEM_PROMPT, messages, tools: requestTools });
+    const fullPayload = JSON.stringify({ system: systemPrompt, messages, tools: requestTools });
     if (config.memoryPolicy === 'contextos') {
       const plan = await session.contextMemory.assemble({ messages: activeMessages, canonical: messages,
-        system: SYSTEM_PROMPT, tools: requestTools, config, state: runtimeState(), goal: task });
+        system: systemPrompt, tools: requestTools, config, state: runtimeState(), goal: task });
       session.memoryDiagnostics = plan.diagnostics;
       await session.journal?.append('memory_assembly', plan.diagnostics);
       return { memory: { diagnostics: { compactedResults: plan.diagnostics.evictedUnits } },
         request: plan.request, sentPayload: JSON.stringify(plan.request), fullPayload };
     }
-    return { ...prepareContextRequest(activeMessages, config, requestTools), fullPayload };
+    return { ...prepareContextRequest(activeMessages, config, requestTools, systemPrompt), fullPayload };
   };
   let autoCompactionAttempts = 0;
   const attemptedContexts = new Set();
@@ -349,7 +349,8 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         }
         if (pendingValidation && forcedValidationNudges < 2 && toolCalls < config.maxToolCalls) {
           forcedValidationNudges += 1;
-          await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace changed'}) but no relevant test command has passed after the latest edit or workspace change. Run the appropriate test now. If validation cannot be completed, explain that clearly and do not claim the task is complete.` });
+          const unresolved = unresolvedValidationCommands(runtimeState());
+          await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace checks'}). ${unresolved.length ? `Rerun unresolved commands: ${JSON.stringify(unresolved)}. A different passing command cannot clear them.` : 'No relevant check has passed after the latest edit or workspace change.'} If validation cannot be completed, report the outstanding checks; do not claim completion.` });
           continue;
         }
         status = pendingValidation ? 'needs_validation' : 'completed';
@@ -386,8 +387,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
             if (!changedFiles.includes(filename)) changedFiles.push(filename);
           } else if (effects.validatesSource) {
             validationAttempts += 1;
-            validationPassed = validationSucceeded(output);
-            if (changedFiles.length || pendingValidation) pendingValidation = !validationPassed;
+            ({ validationFailures, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output));
           }
         } catch (error) {
           isError = true;
@@ -395,12 +395,15 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           output = error.message;
           if (effects.validatesSource) {
             validationAttempts += 1;
-            validationPassed = false;
-            if (changedFiles.length) pendingValidation = true;
+            ({ validationFailures, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output, true));
           }
         }
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
         output = appendFailureFeedback(output, feedback);
+        if (effects.validatesSource && validationFailures.length) {
+          output += '\n[validation_pending] Rerun unresolved commands; a different pass does not clear them: '
+            + JSON.stringify(unresolvedValidationCommands(runtimeState()).map(redactText));
+        }
         if (feedback) isError = true;
         const commandTiming = effects.commandTiming && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, ...commandTiming, error: isError ? output : undefined });
@@ -439,7 +442,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     onText(`${error instanceof ModelError ? 'Agent stopped' : 'Agent error'}: ${terminalError.message}`);
   }
 
-  Object.assign(session, { pendingValidation, validationPassed, validationAttempts, changedFiles });
+  Object.assign(session, { pendingValidation, validationPassed, validationAttempts, validationFailures, changedFiles });
   if (session.taskState) { session.taskState.phase = status === 'completed' ? 'finish' : session.taskState.phase; session.taskState.validation = runtimeState(); }
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
@@ -447,7 +450,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics, error: terminalError });
   emit({ type: 'turn_end', status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory,
     ...(terminalError ? { error: terminalError } : {}) });
-  return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts,
+  return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts, validationFailures,
     ...(terminalError ? { error: terminalError } : {}),
     runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, sessionId: session.persistent ? session.sessionId : null,
     wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };

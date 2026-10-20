@@ -175,14 +175,19 @@ test('ordinary agent loop reuses resident edited source and still validates the 
     ['read_file', { path: 'module.mjs' }],
     ['run_tests', { command: 'node --test module.test.mjs' }],
   ];
-  const reads = []; let index = 0;
-  const result = await runTask('Update value0 and validate it', config, { session,
+  const reads = [], operations = []; let index = 0;
+  // This adapter scripts task calls only. Automatic summary requests are
+  // exercised separately; they must not consume the scripted validation call.
+  const result = await runTask('Update value0 and validate it', { ...config, compaction: 'off' }, { session,
     adapterFactory: () => ({ complete: async () => {
       const step = steps[index++];
       return step ? { content: [{ type: 'tool_use', id: `step-${index}`, name: step[0], input: step[1] }], stop_reason: 'tool_use' }
         : { content: [{ type: 'text', text: 'Validated.' }], stop_reason: 'end_turn' };
-    } }), onEvent: event => { if (event.type === 'tool_end' && event.name === 'read_file') reads.push(event.output); } });
-  assert.equal(result.status, 'completed');
+    } }), onEvent: event => { if (event.type === 'tool_end') {
+      operations.push({ name: event.name, isError: event.isError, output: event.output });
+      if (event.name === 'read_file') reads.push(event.output);
+    } } });
+  assert.equal(result.status, 'completed', JSON.stringify(operations.filter(event => event.name !== 'read_file')));
   assert.equal(result.validationPassed, true);
   assert.equal(reads.length, 4);
   assert.match(reads[1], /new-中文-0/);

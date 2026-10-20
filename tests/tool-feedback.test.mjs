@@ -4,7 +4,8 @@ import { mkdtemp, writeFile, readFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { runtimeCapabilities, capabilityNotice, ToolFeedbackError, toolFailureFeedback, appendFailureFeedback } from '../src/tool-feedback.mjs';
-import { WorkspaceTools } from '../src/tools.mjs';
+import { WorkspaceTools, TOOL_DEFINITIONS } from '../src/tools.mjs';
+import { buildSystemPrompt } from '../src/prompts.mjs';
 import { createAgentSession, runTask, resetConversation } from '../src/agent.mjs';
 import { loadConfig } from '../src/config.mjs';
 
@@ -42,20 +43,24 @@ test('S1 is explicitly opt-in and disabled by default', () => {
   assert.equal(loadConfig({}, { TEA_CAPABILITY_FEEDBACK: '1' }).capabilityFeedback, true);
 });
 
-test('disabled feedback preserves parent requests except the intentionally neutral legacy-handler denial', async () => {
+test('disabled feedback preserves inherited history with the explicitly updated prompt and patch schema', async () => {
   const { root, config } = await fixture();
   const requests = [];
   const steps = () => [calls([{ name: 'read_file', input: { path: 'value.mjs' } }, { name: 'run_shell', input: { command: 'node --version' } }]), done];
   const disabled = { ...config, capabilityFeedback: false, enableFileCreation: false };
   const current = await runTask('Inspect value', { ...disabled, runId: 'current' }, { approveCommand: () => false, adapterFactory: adapter(steps(), requests) });
   const payloads = list => list.map(({ system, messages, tools }) => ({ system, messages, tools }));
-  // Keep the historical fixture immutable. Only the newly corrected handler
-  // attribution is normalized; definitions, IDs and all other text must match.
+  // Keep the historical fixture immutable. Declare the intentional workflow
+  // prompt / patch-schema migration; all other definitions and history match.
   const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]').replaceAll('Command not approved by approval handler.','Command denied by user.')
     : Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,normalize(v)])) : value;
   const baseline = JSON.parse(await readFile(new URL('./fixtures/s1-default-parent-requests.json', import.meta.url), 'utf8'));
   assert.equal(baseline.parentCommit, 'c97b950797294f48e31752508af11a80814e66d8');
-  assert.deepEqual(normalize(payloads(requests)), baseline.requests);
+  const expected = baseline.requests.map(request => ({ ...request,
+    system: buildSystemPrompt(request.tools),
+    tools: request.tools.map(tool => tool.name === 'apply_patch' ? TOOL_DEFINITIONS.find(item => item.name === 'apply_patch') : tool),
+  }));
+  assert.deepEqual(normalize(payloads(requests)), expected);
   assert.equal(notices(requests[0]), 0); assert.equal(requests[1].messages.at(-1).content[1].is_error, false);
   assert.deepEqual([current.status, current.toolCalls, current.validationPassed], baseline.outcome);
 });

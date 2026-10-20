@@ -7,6 +7,7 @@ import { createInterface } from 'node:readline/promises';
 import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
 import { BoundedOutput } from './output.mjs';
 import { ToolFeedbackError } from './tool-feedback.mjs';
+import { patchEdits, applyExactEdits } from './patches.mjs';
 import { ToolContext, ToolSpec, ToolService } from './tools/core.mjs';
 import { parseCommand, assertCommandPolicy, isAllowedCommand, isValidationCommand, commandEnvironment, windowsNpmArguments } from './commands.mjs';
 export { isValidationCommand };
@@ -390,10 +391,9 @@ export class WorkspaceTools {
     return `Created ${normalized} (${data.length} UTF-8 bytes). Run relevant tests before claiming completion.`;
   }
 
-  async applyPatch({ path: relativePath, search, replace } = {}) {
-    if (typeof search !== 'string' || !search.length || typeof replace !== 'string') {
-      throw new ToolFeedbackError('INPUT_INVALID', 'apply_patch requires a non-empty search string and a replace string. To create a new file, use write_file with path and content');
-    }
+  async applyPatch(input = {}) {
+    const { path: relativePath } = input;
+    const edits = patchEdits(input);
     if (typeof relativePath === 'string' && (relativePath === '.git' || relativePath.startsWith('.git/') || relativePath === '.env' || relativePath.startsWith('.env.'))) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
@@ -406,12 +406,20 @@ export class WorkspaceTools {
     if (normalizedPath === '.git' || normalizedPath.startsWith('.git/') || normalizedPath === '.env' || normalizedPath.startsWith('.env.')) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
-    await this.authorizeEdit(relativePath, filename, 'edit', {search,replace});
     const source = await readFile(filename, 'utf8');
-    const first = source.indexOf(search);
-    if (first < 0) throw new ToolFeedbackError('PATCH_NOT_FOUND', 'Patch search text was not found');
-    if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('PATCH_AMBIGUOUS', 'Patch search text is ambiguous; include more surrounding lines');
-    await writeFile(filename, source.slice(0, first) + replace + source.slice(first + search.length), 'utf8');
+    const replacement = applyExactEdits(source, edits);
+    const data = Buffer.from(replacement, 'utf8');
+    if (data.length > MAX_READ_BYTES || data.toString('utf8') !== replacement || replacement.includes('\0')) {
+      throw new ToolFeedbackError('INPUT_INVALID', 'Patched file must be valid UTF-8 text without NUL bytes and at most 160 KB');
+    }
+    await this.authorizeEdit(relativePath, filename, 'edit', Object.hasOwn(input, 'edits')
+      ? { edits } : { search: edits[0].search, replace: edits[0].replace });
+    this.signal?.throwIfAborted();
+    if (await this.resolveFile(relativePath) !== filename || await readFile(filename, 'utf8') !== source) {
+      throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch target changed while preparing or approving edits; read current source and retry');
+    }
+    this.signal?.throwIfAborted();
+    await writeFile(filename, data);
     return `Updated ${normalizedPath}`;
   }
 
@@ -546,7 +554,7 @@ export const TOOL_DEFINITIONS = [
   { name: 'list_files', description: 'List workspace text paths fairly across directories. Default: 32 paths / about 2KB; set maxFiles for larger pages. Use nextOffset to continue the same scope. includeOmitted expands ordinary excluded folders; secrets and Git/agent storage remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
   { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
-  { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
+  { name: 'apply_patch', description: 'Edit one file. Use edits for multiple unique, non-overlapping replacements matched against the original text; all must match before writing. A single search/replace pair is also accepted. Never mix the two forms.', input_schema: { type: 'object', properties: { path: { type: 'string' }, edits: { type: 'array', minItems: 1, maxItems: 32, items: { type: 'object', properties: { search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['search', 'replace'], additionalProperties: false } }, search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['path'], oneOf: [{ required: ['edits'] }, { required: ['search', 'replace'] }], additionalProperties: false } },
   { name: 'write_file', description: 'Create a new UTF-8 text file within the workspace and create missing parent directories. Never overwrites an existing file: read it and use apply_patch instead. Do not use shell commands to create files. Run relevant tests after creation.', input_schema: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } }, required: ['path', 'content'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
   { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },

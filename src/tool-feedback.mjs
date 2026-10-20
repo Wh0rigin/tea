@@ -41,6 +41,7 @@ const actions = {
   FILE_EXISTS: ['edit-existing-file', 'Use apply_patch with current source evidence; read only if it is missing or stale. File existence alone does not invalidate a prior read.'],
   PATCH_NOT_FOUND: ['matching-search-text', 'Check the exact search text against current source; refresh the relevant range if needed. A missing match does not prove a version change.'],
   PATCH_AMBIGUOUS: ['unique-search-text', 'Use a unique search with more surrounding context from current evidence; read the relevant range only if needed.'],
+  PATCH_OVERLAP: ['disjoint-edits', 'Merge overlapping replacements into one edit matched against the original file. No edits from this call were applied.'],
   VALIDATION_FAILED: ['passing-validation', 'Inspect the test failure, fix supported source defects, then rerun relevant validation.'],
   EXECUTABLE_UNAVAILABLE: ['installed-executable', 'Check the available project validation entry; an unavailable executable is not a source-code failure.'],
   EXECUTION_FAILED: ['successful-execution', 'Inspect this command failure and its inputs; a failed diagnostic does not establish test failure or validation.'],

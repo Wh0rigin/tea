@@ -311,8 +311,11 @@ test('fresh reads after compaction return real source and actual tests can disch
   await writeFile(path.join(root, 'value.test.mjs'), "import test from 'node:test'; import assert from 'node:assert/strict'; import {value} from './value.mjs'; test('value',()=>assert.equal(value,2));\n");
   const config = cfg({ workspace: root, runId: 'fresh', compaction: 'auto', compactionTriggerRatio: 0.2 });
   const s = createAgentSession(config); s.messages = history(); let task = 0;
+  const operations = [];
   const calls = input => ({ content: input.map((call, i) => ({ type: 'tool_use', id: `call-${task}-${i}`, ...call })), stop_reason: 'tool_use' });
-  const result = await runTask('Repair value', config, { session: s, adapterFactory: () => ({ complete: async request => {
+  const result = await runTask('Repair value', config, { session: s,
+    onEvent: event => { if (event.type === 'tool_end' && event.name !== 'read_file') operations.push(event); },
+    adapterFactory: () => ({ complete: async request => {
     if (!request.tools.length) return done();
     task++;
     if (task === 1) return calls([{ name: 'read_file', input: { path: 'value.mjs' } }]);
@@ -323,6 +326,6 @@ test('fresh reads after compaction return real source and actual tests can disch
     }
     return done('Verified.');
   } }) });
-  assert.equal(result.status, 'completed'); assert.equal(result.validationPassed, true);
+  assert.equal(result.status, 'completed', JSON.stringify(operations)); assert.equal(result.validationPassed, true);
   assert.equal(s.compactionCount, 1); assert.match(await readFile(path.join(root, 'value.mjs'), 'utf8'), /value = 2/);
 }));

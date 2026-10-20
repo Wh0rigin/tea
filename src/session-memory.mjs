@@ -60,9 +60,10 @@ export async function attachSessionJournal(session, config) {
     }
     session.messages = messages;
     if (state) Object.assign(session, { pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
-      validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
+      validationAttempts: state.validationAttempts, validationFailures: state.validationFailures || [], changedFiles: state.changedFiles,
       compaction: state.compaction, compactionCount: state.compactionCount, autoCompactionBackoff: state.autoCompactionBackoff || null,
       restoredTools: state.tools, offline: state.offline });
+    if (session.validationFailures?.length) { session.pendingValidation = true; session.validationPassed = false; }
     session.taskState = state?.taskState || null;
     session.capabilities = state?.capabilities || null;
     session.memoryDiagnostics = state?.memoryDiagnostics || null;
@@ -124,7 +125,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
   const identity = await workspaceIdentity(session.workspace);
   await session.journal.append('runtime_state', {
     pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
-    validationAttempts: state.validationAttempts, changedFiles: state.changedFiles,
+    validationAttempts: state.validationAttempts, validationFailures: state.validationFailures || [], changedFiles: state.changedFiles,
     compaction: session.compaction, compactionCount: session.compactionCount, offline: session.offline,
     autoCompactionBackoff: session.autoCompactionBackoff || null,
     taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
@@ -183,6 +184,7 @@ export async function inspectSession(config, id) {
     }
     return { sessionId: id, schema: 1, events: journal.rows.length, messages,
       pendingValidation: state?.pendingValidation ?? null, changedFiles: state?.changedFiles || [],
+      validationFailures: state?.validationFailures || [],
       latestIdentity: state?.identity || null, memoryDiagnostics: state?.memoryDiagnostics || null,
       taskState: state?.taskState || null, gcDiagnostics: state?.gcDiagnostics || null,
       requests, unresolvedRequestIds: [...unresolved] };

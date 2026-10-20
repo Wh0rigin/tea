@@ -96,7 +96,8 @@ function latestUser(messages) {
 
 function runtimeRecord(state = {}) {
   return JSON.stringify({ changedFiles: state.changedFiles || [], pendingValidation: Boolean(state.pendingValidation),
-    validationPassed: Boolean(state.validationPassed), validationAttempts: state.validationAttempts || 0 });
+    validationPassed: Boolean(state.validationPassed), validationAttempts: state.validationAttempts || 0,
+    ...(state.validationFailures?.length ? { unresolvedValidationCommands: state.validationFailures.map(item => item.command) } : {}) });
 }
 
 export function sessionContext(session, state = session, checkpoint = session.compaction) {
