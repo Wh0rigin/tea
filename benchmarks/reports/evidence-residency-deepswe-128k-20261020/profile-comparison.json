@@ -1,0 +1,130 @@
+{
+  "scope": "Historical profile sensitivity; output cap, derived thinking budget, request deadline and control allocation changed together. Not an isolated output-cap effect.",
+  "oldProfileReport": "../evidence-residency-deepswe-r2-20261019/README.md",
+  "newProfileReport": "README.md",
+  "oldOutputCap": 4096,
+  "newOutputCap": 131072,
+  "arms": {
+    "baseline": {
+      "old": {
+        "attempts": 4,
+        "officialEvaluated": 4,
+        "officialPassed": 0,
+        "requests": 140,
+        "allUsageReconciled": true,
+        "totalTokens": 4440517,
+        "compactionRequests": 0,
+        "taskOutputLimitRequests": 0,
+        "compactionOutputLimitRequests": 0,
+        "toolJsonParsingFailures": 1,
+        "contextLimitStops": 0,
+        "costLimitStops": 1,
+        "toolLimitStops": 1,
+        "requestsAboveOldOutputCap": 0,
+        "shortReadReceipts": 0
+      },
+      "new": {
+        "attempts": 4,
+        "officialEvaluated": 4,
+        "officialPassed": 1,
+        "requests": 116,
+        "allUsageReconciled": true,
+        "totalTokens": 2080101,
+        "compactionRequests": 2,
+        "taskOutputLimitRequests": 0,
+        "compactionOutputLimitRequests": 2,
+        "toolJsonParsingFailures": 0,
+        "contextLimitStops": 2,
+        "costLimitStops": 0,
+        "toolLimitStops": 0,
+        "requestsAboveOldOutputCap": 1,
+        "shortReadReceipts": 0
+      },
+      "sameTaskPromptBaseAndSource": true,
+      "allAttemptConsumptionChangePercent": -53.15633292249529,
+      "completeTaskPassRateDeltaPercentagePoints": 25,
+      "isSameWorkEfficiency": false
+    },
+    "candidate": {
+      "old": {
+        "attempts": 4,
+        "officialEvaluated": 4,
+        "officialPassed": 1,
+        "requests": 138,
+        "allUsageReconciled": true,
+        "totalTokens": 2720007,
+        "compactionRequests": 0,
+        "taskOutputLimitRequests": 2,
+        "compactionOutputLimitRequests": 0,
+        "toolJsonParsingFailures": 0,
+        "contextLimitStops": 0,
+        "costLimitStops": 0,
+        "toolLimitStops": 0,
+        "requestsAboveOldOutputCap": 0,
+        "shortReadReceipts": 0
+      },
+      "new": {
+        "attempts": 4,
+        "officialEvaluated": 4,
+        "officialPassed": 0,
+        "requests": 160,
+        "allUsageReconciled": true,
+        "totalTokens": 2839108,
+        "compactionRequests": 3,
+        "taskOutputLimitRequests": 0,
+        "compactionOutputLimitRequests": 2,
+        "toolJsonParsingFailures": 0,
+        "contextLimitStops": 2,
+        "costLimitStops": 0,
+        "toolLimitStops": 0,
+        "requestsAboveOldOutputCap": 3,
+        "shortReadReceipts": 0
+      },
+      "sameTaskPromptBaseAndSource": true,
+      "allAttemptConsumptionChangePercent": 4.378701966575815,
+      "completeTaskPassRateDeltaPercentagePoints": -25,
+      "isSameWorkEfficiency": false
+    }
+  },
+  "contextScheduling": {
+    "source": "Frozen src/context-budget.mjs and config defaults; local scheduling estimates, not provider context-limit measurements.",
+    "contextWindowTokens": 216000,
+    "safetyReserveTokens": 4096,
+    "oldInputAllowance": 207808,
+    "newInputAllowance": 80832,
+    "oldCompactionTriggerEstimatedInputTokens": 166246,
+    "newCompactionTriggerEstimatedInputTokens": 64665,
+    "inputAllowanceChangePercent": -61.10255620572836,
+    "summaryOutputCapUnchanged": 1200
+  },
+  "initialWireComparisons": [
+    {
+      "repeat": 1,
+      "taskId": "helm-unified-manifest-stream",
+      "sameFirstRequest": true,
+      "sameFirstResponseEnvelopeHash": false,
+      "sameFirstToolActions": true
+    },
+    {
+      "repeat": 1,
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "sameFirstRequest": true,
+      "sameFirstResponseEnvelopeHash": false,
+      "sameFirstToolActions": false
+    },
+    {
+      "repeat": 2,
+      "taskId": "helm-unified-manifest-stream",
+      "sameFirstRequest": true,
+      "sameFirstResponseEnvelopeHash": false,
+      "sameFirstToolActions": false
+    },
+    {
+      "repeat": 2,
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "sameFirstRequest": true,
+      "sameFirstResponseEnvelopeHash": false,
+      "sameFirstToolActions": true
+    }
+  ]
+}
