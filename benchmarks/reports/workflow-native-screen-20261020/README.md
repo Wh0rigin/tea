@@ -1,6 +1,6 @@
 # Current TEA workflow: native benchmark screen
 
-Status: preparation; no new paid calls submitted at protocol creation.
+Status: live fixed schedules dispatched. Protocols were committed before their respective model calls. Final outcomes are pending.
 
 Compare direct-parent `b400577185f0b224850540cc9289672f62450f33` with current workflow package `7bd236f4d548af1214ddf498ccaf7a5c3b928100`.
 
@@ -25,4 +25,4 @@ Control allocations: 10 USD per attempt; at most 80 USD for DeepSWE and 160 USD 
 - Full regression: 411 passed, one Go-unavailable skip, zero failures / 412.
 - Native DeepSWE lifecycle preflight: both source snapshots passed, ten synthetic SSE responses / nine actual tools each; identical independently validated exported patches. Zero provider calls; these are infrastructure fixtures, not DeepSWE task successes or Token measurements.
 
-[Frozen DeepSWE protocol](deepswe-protocol.json). WorkBuddy setup and per-cohort final evidence will be appended after native preflight and the fixed runs.
+[Frozen DeepSWE protocol](deepswe-protocol.json), [frozen WorkBuddy protocol](workbuddy-protocol.json), [Chinese methodology and environment adaptations](METHODS.zh-CN.md). WorkBuddy uses a fixed dependency compatibility layer and native grading with a verifier-user compatibility override; it is not an unmodified official leaderboard environment. Per-cohort final evidence will be appended after the fixed runs.
