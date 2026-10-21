@@ -1,28 +1,40 @@
-# Current TEA workflow: native benchmark screen
+# TEA workflow: DeepSWE and WB-Bench-Code results
 
-Status: live fixed schedules dispatched. Protocols were committed before their respective model calls. Final outcomes are pending.
+Status: **all 24 fixed attempts finished; the general performance gate did not pass**. Report finalized on 2026-10-21.
 
-Compare direct-parent `b400577185f0b224850540cc9289672f62450f33` with current workflow package `7bd236f4d548af1214ddf498ccaf7a5c3b928100`.
+Compare direct-parent `b400577185f0b224850540cc9289672f62450f33` with candidate `7bd236f4d548af1214ddf498ccaf7a5c3b928100`: workflow guidance, same-file batch edits and durable unresolved-validation commands together. This is a package comparison, not a batch-only ablation.
 
-The candidate changes workflow guidance, same-file batch edits and persistent unresolved validation commands together. This is a package comparison, not a batch-only ablation. The later improvement plan has not been implemented in these snapshots.
+## Findings
 
-## Planned cohorts
+- **DeepSWE v1.1:** two seen tasks, two repeats per arm, eight attempts. Baseline completed and fully passed **1/4**; candidate **0/4**. One baseline runtime failure has no original official grade. All-attempt provider tokens: **2,970,434 → 3,725,034 (+25.40%)**. There are **no both-complete/full-pass pairs**, so same-work efficiency is unavailable.
+- **WB-Bench-Code:** four categories, two repeats per arm, sixteen attempts. Official mean `reward`: **0.7611 → 0.7043**; full-pass rate: **4/8 → 3/8 (−12.5 percentage points)**. All-attempt tokens: **2,441,127 → 1,777,033 (−27.20%)**, with worse acceptance; this is consumption, not a general efficiency win.
+- **Both-passed subset:** only the Black repair task qualifies, twice. Combined tokens **1,081,718 → 583,671 (−46.04%)**; each arm passed 6/6 checks in both repeats. One task repeated twice does not establish a general improvement.
+- **Local checks:** existing specialist suite **176 passed**; full suite **411 passed, one Go-unavailable skip**. Additional adversarial process checks expose **12 behavior failures across both versions**. Existing suite passes do not cover this defect.
 
-- DeepSWE v1.1: two previously seen cached tasks, two repeats per arm, eight attempts. Use native Pier execution and independent official verification. This is a small regression subset, not a full leaderboard score.
-- WB-Bench-Code: four tasks selected by a frozen task-ID hash order with distinct categories, two repeats per arm, sixteen attempts. Official dataset and Harbor verifier remain unchanged. This is a subset, not the full 80-task Code track or the other WorkBuddy tracks.
+![Acceptance and same-work efficiency](outcomes.png)
 
-Each benchmark retains separate acceptance, usage and failure records. Same-work efficiency requires both arms to pass the task with complete metering. Unknown usage is never zero. All-attempt consumption includes failures and is not automatically an efficiency comparison.
+The Token panel contains only matched completed, fully passed workflows. Failed or unmatched attempts do not enter its bars. Acceptance panels count all planned attempts; DeepSWE's ungraded execution failure is explicitly retained.
 
-## Common model profile
+## Evidence
 
-GLM-5.3-flash, enabled thinking / low effort, streaming, maximum output 131,072, derived thinking budget 8,000, local context window 216,000, ContextOS target 32,000 bytes, automatic compaction/GC, maximum 96 tools / 128 transport requests, 900-second request deadline, 30-minute task wall. Both arms use the same profile; this is not a measurement of the ordinary CLI's 90-second deadline.
+- [完整中文对照分析与下一步建议](RESULTS.zh-CN.md)
+- [方法、参数、环境适配与边界](METHODS.zh-CN.md)
+- [DeepSWE every attempt and audited usage](deepswe-results.json)
+- [WB-Bench-Code every attempt and audited usage](workbuddy-results.json)
+- [Baseline official metrics and report](workbuddy-baseline/report.md) · [candidate official metrics and report](workbuddy-candidate/report.md)
+- [Visible operation diagnostics](visible-operation-diagnostics.json) · [actual patch metadata before verifier injection](workbuddy-patch-metadata.json) · [post-run failure signatures](failure-signatures.json)
+- [Local check summary](local-checks.json) · [process defect reproduction](pipe-repro.json)
+- [Recovered failed-attempt metering](deepswe-failed-attempt-accounting.json) · [separate zero-model postmortem diagnostic](deepswe-postmortem-diagnostic.json)
+- Frozen protocols: [DeepSWE](deepswe-protocol.json), [unstarted-slot continuation](deepswe-continuation-protocol.json), [WB-Bench-Code](workbuddy-protocol.json).
 
-Control allocations: 10 USD per attempt; at most 80 USD for DeepSWE and 160 USD for WB-Bench-Code, 240 USD combined. These are finite accounting bounds, not invoice or expected-spend claims. No new parameter probe; prior unknown reservations stay separate. Never retry an unknown paid attempt automatically.
+## Controls and limits
 
-## Completed local checks
+Both arms: GLM-5.3-flash, thinking enabled / low effort, streaming, maximum output 131,072, derived thinking budget 8,000, local context window 216,000, ContextOS target 32,000 **bytes**, automatic compaction/GC, 96 tools / 128 transport requests, 900-second request deadline, 30-minute Agent wall limit. The fixed output reservation leaves an estimated input allowance of 80,832 tokens. This is not the ordinary CLI deadline profile.
 
-- Specialist regression: 176/176 passed.
-- Full regression: 411 passed, one Go-unavailable skip, zero failures / 412.
-- Native DeepSWE lifecycle preflight: both source snapshots passed, ten synthetic SSE responses / nine actual tools each; identical independently validated exported patches. Zero provider calls; these are infrastructure fixtures, not DeepSWE task successes or Token measurements.
+All **794** model requests reconcile with independent transport counts, request hashes, usage and controls. One failed attempt's terminal TEA summary is missing; its 38 complete request records recover **626,135** actual tokens, with the original failure and 10 USD reservation retained. No failed paid attempt was retried. Continuation executed only four previously unstarted slots from the original schedule and allocation.
 
-[Frozen DeepSWE protocol](deepswe-protocol.json), [frozen WorkBuddy protocol](workbuddy-protocol.json), [Chinese methodology and environment adaptations](METHODS.zh-CN.md). WorkBuddy uses a fixed dependency compatibility layer and native grading with a verifier-user compatibility override; it is not an unmodified official leaderboard environment. Per-cohort final evidence will be appended after the fixed runs.
+Input includes cache reads/writes once. Provider output is not increased by counting thinking again. Monetary allocations (80 USD DeepSWE + 160 USD WB-Bench-Code) are limits, not invoices. Raw transcripts, credentials and workspaces are not published.
+
+This is a **seen two-task DeepSWE regression subset and a four-task subset of the 80-task WB-Bench-Code track**, not a full leaderboard score. WorkBuddy uses native Harbor trials and the official verifier/scorer with documented environment adaptations and custom serial orchestration. No reference solution or hidden verifier source was used for model execution; failure outputs were analyzed afterward.
+
+Recreate the figure with Python and Matplotlib: `python benchmarks/reports/workflow-native-screen-20261020/plot_results.py`. [SVG](outcomes.svg) is also available.

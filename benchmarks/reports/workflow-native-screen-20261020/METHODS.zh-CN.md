@@ -66,3 +66,15 @@ GLM-5.3-flash、流式、enabled thinking、low effort，最大输出 131,072，
 - [WorkBuddy 判定器环境预检](workbuddy-verifier-preflight.json)，不计入 Agent 成绩。
 
 官方来源：[WorkBuddy Bench](https://github.com/Tencent/workbuddy-bench)、[官方数据集](https://huggingface.co/datasets/tencent/workbuddy-bench)。准确源码与数据版本以冻结协议为准。
+
+## 完成状态与事后分析
+
+2026-10-21 整理完成：原计划 8 次 DeepSWE、16 次 WB-Bench-Code 均已执行，真实失败没有追加重试。DeepSWE 续跑只填补原计划尚未开始的四项，没有重复失败项。完整结果见 [RESULTS.zh-CN.md](RESULTS.zh-CN.md)。
+
+最终汇总属于分析阶段派生物，不修改冻结适配器或原始判分。DeepSWE 合并原始进度与续跑进度，保留缺失终态的失败行；其 38 次完整请求从账本副本恢复并与独立传输核对。因此当前全部 794 次请求的用量已对账；汇总中的 `stop` / `unknownReservations` 是原调度停止及保留预留的历史记录，不表示继续运行或把该预留计作发票支出。原失败的官方成绩仍缺失。
+
+另一个零模型调用诊断仅在原始固定源码上重放八项已记录成功的编辑，随后用原生官方判定器检查。它不是完整终态文件系统恢复，结果单独保存在 [deepswe-postmortem-diagnostic.json](deepswe-postmortem-diagnostic.json)，不补入原始成绩、成功率或效率分母。
+
+WB-Bench-Code 两个版本分别调用官方 `workbuddy_bench.scorer.metrics --manifest ... --json`。服务器原始输出保留，发布副本只替换绝对 `run_dir` 并附原输出哈希；两个版本的 `metrics.json` 与独立 `report.md` 分别放在对应目录。跨版本报告另外展示全部尝试与符合完整工作量条件的配对。
+
+实际补丁统计来自隐藏验证注入前保存的 `pre_injected_agent.patch`，包含真实生成物/字节码，不等同于 Agent 主动修改的源码列表。故障解释基于公开可见工具操作、补丁及运行后的验证输出；不读取隐藏测试实现或参考解答，不分析或发布模型的隐藏推理。原始对话、账本和工作区不进入公开仓库。

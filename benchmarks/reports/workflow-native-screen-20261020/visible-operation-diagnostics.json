@@ -1,0 +1,967 @@
+{
+  "scope": "Visible tool events only; no hidden reasoning or grader solution source",
+  "runs": [
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "errorCodes": {
+        "INPUT_INVALID": 3,
+        "CAPABILITY_DENIED": 3,
+        "FILE_EXISTS": 2,
+        "TOOL_FAILED": 1,
+        "VALIDATION_FAILED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_fstring_lines.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/ -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests/ -q --ignore=tests/test_blackd.py",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 15,
+      "successfulEditTools": 4,
+      "fileScopeSearchErrors": 2
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "errorCodes": {
+        "INPUT_INVALID": 2,
+        "COMMAND_POLICY_DENIED": 2,
+        "FILE_EXISTS": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_fstring_rows.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 20,
+      "successfulEditTools": 2,
+      "fileScopeSearchErrors": 2
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "python_port-medium-blog_tags",
+      "errorCodes": {},
+      "validationSequence": [
+        {
+          "command": "python3 -m unittest discover -s target_python -v",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python3 -m unittest discover -s target_python -v",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 4,
+      "successfulEditTools": 3,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "python_port-medium-blog_tags",
+      "errorCodes": {
+        "FILE_EXISTS": 1,
+        "EXECUTION_FAILED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m unittest discover -s target_python/tests -p \"test_*.py\" -t target_python/tests",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m unittest discover -s target_python/tests -p \"test_*.py\" -t target_python/tests",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 6,
+      "successfulEditTools": 9,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "errorCodes": {
+        "INPUT_INVALID": 3,
+        "CAPABILITY_DENIED": 2,
+        "COMMAND_POLICY_DENIED": 1,
+        "TOOL_FAILED": 3,
+        "FILE_EXISTS": 1,
+        "VALIDATION_FAILED": 4
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests -q -k websocket",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests -q -k websocket --continue-on-collection-errors",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests -q -k websocket --continue-on-collection-errors",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 27,
+      "successfulEditTools": 10,
+      "fileScopeSearchErrors": 3
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "errorCodes": {
+        "INPUT_INVALID": 8,
+        "TOOL_FAILED": 2,
+        "COMMAND_POLICY_DENIED": 1,
+        "FILE_EXISTS": 1,
+        "VALIDATION_FAILED": 2
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 32,
+      "successfulEditTools": 6,
+      "fileScopeSearchErrors": 8
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "errorCodes": {
+        "FILE_EXISTS": 1,
+        "VALIDATION_FAILED": 3,
+        "COMMAND_POLICY_DENIED": 1,
+        "CAPABILITY_DENIED": 2,
+        "EXECUTION_FAILED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 6,
+      "successfulEditTools": 4,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "errorCodes": {
+        "COMMAND_POLICY_DENIED": 2,
+        "CAPABILITY_DENIED": 1,
+        "FILE_EXISTS": 2,
+        "VALIDATION_FAILED": 6
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests -q",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest discover -s tests -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=5"
+        },
+        {
+          "command": "python -m unittest discover -s tests -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=5"
+        },
+        {
+          "command": "python -m unittest tests.test_report -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=5"
+        },
+        {
+          "command": "python -m unittest tests.test_report -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest tests.test_report -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest tests.test_report -v",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 10,
+      "successfulEditTools": 7,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "errorCodes": {
+        "FILE_EXISTS": 2,
+        "VALIDATION_FAILED": 2,
+        "COMMAND_POLICY_DENIED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_report.py -q",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest discover -s tests -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/test_report.py -q",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 7,
+      "successfulEditTools": 3,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "errorCodes": {
+        "CAPABILITY_DENIED": 3,
+        "FILE_EXISTS": 2,
+        "VALIDATION_FAILED": 5
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest -q",
+          "isError": true,
+          "missingPytest": true,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest discover -s tests -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=5"
+        },
+        {
+          "command": "python -m unittest tests.test_report -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=5"
+        },
+        {
+          "command": "python -m unittest discover -s tests -t . -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest discover -s tests -t . -v",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=5"
+        },
+        {
+          "command": "python -m unittest discover -s tests -t . -v",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 8,
+      "successfulEditTools": 6,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "errorCodes": {
+        "INPUT_INVALID": 6,
+        "FILE_EXISTS": 1,
+        "PATCH_NOT_FOUND": 1,
+        "VALIDATION_FAILED": 3,
+        "CAPABILITY_DENIED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py tests/test_ws_dependencies.py tests/test_router_prefix_with_template.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests -q -k websocket",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests -q -k websocket --continue-on-collection-errors",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_websocket_dependencies.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 12,
+      "successfulEditTools": 9,
+      "fileScopeSearchErrors": 6
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "errorCodes": {
+        "INPUT_INVALID": 4,
+        "CAPABILITY_DENIED": 1,
+        "FILE_EXISTS": 1,
+        "PATCH_NOT_FOUND": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_ws_router.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 20,
+      "successfulEditTools": 3,
+      "fileScopeSearchErrors": 4
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "python_port-medium-blog_tags",
+      "errorCodes": {
+        "CAPABILITY_DENIED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m unittest discover -s target_python/tests -v",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 4,
+      "successfulEditTools": 7,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "python_port-medium-blog_tags",
+      "errorCodes": {
+        "FILE_EXISTS": 1,
+        "VALIDATION_FAILED": 2,
+        "EXECUTION_FAILED": 1,
+        "COMMAND_POLICY_DENIED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m unittest target_python/test_build.py",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest target_python/test_build.py",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m unittest target_python/test_build.py",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m unittest target_python/test_build.py",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 7,
+      "successfulEditTools": 10,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "errorCodes": {
+        "INPUT_INVALID": 5,
+        "CAPABILITY_DENIED": 2,
+        "COMMAND_POLICY_DENIED": 1,
+        "FILE_EXISTS": 1,
+        "VALIDATION_FAILED": 2
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_fstring_rows.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_fstring_rows.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests -q --co -q | tail -5",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "python -m pytest tests -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests -q --ignore=tests/test_blackd.py",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 24,
+      "successfulEditTools": 7,
+      "fileScopeSearchErrors": 4
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "errorCodes": {
+        "INPUT_INVALID": 5,
+        "CAPABILITY_DENIED": 1,
+        "FILE_EXISTS": 1,
+        "VALIDATION_FAILED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/test_fstring_multiline_rows.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/test_fstring_multiline_rows.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 14,
+      "successfulEditTools": 5,
+      "fileScopeSearchErrors": 3
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "helm-unified-manifest-stream",
+      "errorCodes": {
+        "CAPABILITY_DENIED": 2,
+        "INPUT_INVALID": 2,
+        "TOOL_FAILED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "git -C /app status --short && git -C /app branch --show-current",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "Shell operators and multiline commands are blocked"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 80,
+      "successfulEditTools": 6,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "helm-unified-manifest-stream",
+      "errorCodes": {
+        "INPUT_INVALID": 4,
+        "COMMAND_POLICY_DENIED": 1,
+        "TOOL_FAILED": 4
+      },
+      "validationSequence": [],
+      "firstSuccessfulEditCompletedToolNumber": 76,
+      "successfulEditTools": 1,
+      "fileScopeSearchErrors": 2
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "errorCodes": {
+        "PATCH_NOT_FOUND": 1,
+        "INPUT_INVALID": 2,
+        "CAPABILITY_DENIED": 2,
+        "VALIDATION_FAILED": 7,
+        "EXECUTION_FAILED": 2
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=2"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 10,
+      "successfulEditTools": 13,
+      "fileScopeSearchErrors": 2
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "errorCodes": {
+        "COMMAND_POLICY_DENIED": 3,
+        "PATCH_NOT_FOUND": 2,
+        "VALIDATION_FAILED": 2,
+        "EXECUTION_FAILED": 2
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 34,
+      "successfulEditTools": 8,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "helm-unified-manifest-stream",
+      "errorCodes": {
+        "CAPABILITY_DENIED": 1,
+        "INPUT_INVALID": 4
+      },
+      "validationSequence": [],
+      "firstSuccessfulEditCompletedToolNumber": null,
+      "successfulEditTools": 0,
+      "fileScopeSearchErrors": 2
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "helm-unified-manifest-stream",
+      "errorCodes": {
+        "CAPABILITY_DENIED": 1,
+        "TOOL_FAILED": 2
+      },
+      "validationSequence": [],
+      "firstSuccessfulEditCompletedToolNumber": null,
+      "successfulEditTools": 0,
+      "fileScopeSearchErrors": 0
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "errorCodes": {
+        "COMMAND_POLICY_DENIED": 2,
+        "INPUT_INVALID": 2,
+        "VALIDATION_FAILED": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python3 -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python3 -m pytest tests/local/test_daemon.py -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python3 -m pytest tests/local -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 11,
+      "successfulEditTools": 12,
+      "fileScopeSearchErrors": 1
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "errorCodes": {
+        "CAPABILITY_DENIED": 1,
+        "INPUT_INVALID": 5,
+        "TOOL_FAILED": 1,
+        "COMMAND_POLICY_DENIED": 1,
+        "VALIDATION_FAILED": 3,
+        "EXECUTION_TRANSIENT": 1
+      },
+      "validationSequence": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "Command timed out after 120000 ms"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": true,
+          "missingPytest": false,
+          "hasUnresolvedReminder": true,
+          "firstLine": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "isError": false,
+          "missingPytest": false,
+          "hasUnresolvedReminder": false,
+          "firstLine": "exit=0"
+        }
+      ],
+      "firstSuccessfulEditCompletedToolNumber": 13,
+      "successfulEditTools": 11,
+      "fileScopeSearchErrors": 5
+    }
+  ]
+}

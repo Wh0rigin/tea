@@ -1,0 +1,299 @@
+{
+  "scope": "Actual agent patch captured before hidden verifier injection; metadata only",
+  "runs": [
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "510cb15b844688cd3b69a76eb4b603b150ca3dfebf3ba0de9587767f8e47c042",
+      "changedPaths": [
+        "src/blib2to3/pgen2/tokenize.py",
+        "repro_fstring.py",
+        "tests/test_fstring_lines.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 92,
+      "deletedLines": 1
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "9982a14e4788d9f637abd96fc7e63c1715928343c1f27d1891af8fda450af93b",
+      "changedPaths": [
+        "src/blib2to3/pgen2/tokenize.py",
+        "tests/test_fstring_rows.py"
+      ],
+      "fileCount": 2,
+      "binaryDiffCount": 0,
+      "addedLines": 59,
+      "deletedLines": 1
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "python_port-medium-blog_tags",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "c52f022476a349484ea33c945438dbd31d29015cf93431bbb62b6d124f7dfe52",
+      "changedPaths": [
+        "target_python/main.py",
+        "target_python/__pycache__/builder.cpython-312.pyc",
+        "target_python/__pycache__/test_builder.cpython-312.pyc",
+        "target_python/builder.py",
+        "target_python/test_builder.py"
+      ],
+      "fileCount": 5,
+      "binaryDiffCount": 2,
+      "addedLines": 336,
+      "deletedLines": 6
+    },
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "python_port-medium-blog_tags",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "75317aae0c13ad9f8e10208529ae639b2fda3424705edc8236835068909006a3",
+      "changedPaths": [
+        "target_python/main.py",
+        "target_python/__pycache__/main.cpython-312.pyc",
+        "target_python/tests/__pycache__/test_build.cpython-312.pyc",
+        "target_python/tests/fixtures/blog/config.toml",
+        "target_python/tests/fixtures/blog/content/posts/hello-world.md",
+        "target_python/tests/fixtures/blog/content/posts/second.md",
+        "target_python/tests/fixtures/blog/templates/index.html",
+        "target_python/tests/fixtures/blog/templates/post.html",
+        "target_python/tests/fixtures/blog/templates/tag.html",
+        "target_python/tests/test_build.py"
+      ],
+      "fileCount": 10,
+      "binaryDiffCount": 2,
+      "addedLines": 177,
+      "deletedLines": 6
+    },
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "f0fac70ea78ed65a0912a98d25f1433c7adad2a245f3a03d7f1f5171115816c1",
+      "changedPaths": [
+        "fastapi/applications.py",
+        "fastapi/routing.py",
+        "tests/test_websocket_dependencies.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 128,
+      "deletedLines": 8
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "d9ac9b3561713168ca947b04bc8c6df1e3099df16782b1a3dde715a385abe49a",
+      "changedPaths": [
+        "fastapi/applications.py",
+        "fastapi/routing.py",
+        "tests/test_websocket_dependencies.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 113,
+      "deletedLines": 9
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "8c2d6cd21124ffc5903cfd09c0f680cefeec3660640a5faecf8316afd9674c63",
+      "changedPaths": [
+        "app/report.py",
+        "report.json",
+        "tests/test_report.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 126,
+      "deletedLines": 2
+    },
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "3fb2c04c5830e867524e490b0245dd7b3a702961b6eb79dd5afb3f006b993b8d",
+      "changedPaths": [
+        "app/report.py",
+        "app/__pycache__/report.cpython-312.pyc",
+        "report.json",
+        "tests/__init__.py",
+        "tests/__pycache__/__init__.cpython-312.pyc",
+        "tests/__pycache__/test_report.cpython-312.pyc",
+        "tests/test_report.py"
+      ],
+      "fileCount": 7,
+      "binaryDiffCount": 3,
+      "addedLines": 155,
+      "deletedLines": 2
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "2963553ff97f7adce7d3dd44129ca113a2a2cc3e80d3cfb7b09792c2990b3cca",
+      "changedPaths": [
+        "app/report.py",
+        "report.json",
+        "tests/__pycache__/test_report.cpython-312.pyc",
+        "tests/test_report.py"
+      ],
+      "fileCount": 4,
+      "binaryDiffCount": 1,
+      "addedLines": 151,
+      "deletedLines": 2
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "7cb99cd5abaa7ac31d2246353e9edfa65742a562303e4c9367277ab0c1a645d2",
+      "changedPaths": [
+        "app/report.py",
+        "report.json",
+        "tests/__init__.py",
+        "tests/__pycache__/__init__.cpython-312.pyc",
+        "tests/__pycache__/test_report.cpython-312.pyc",
+        "tests/test_report.py"
+      ],
+      "fileCount": 6,
+      "binaryDiffCount": 2,
+      "addedLines": 159,
+      "deletedLines": 2
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "70e5d4d997113d69ac30fd6109d3620ced20d7872df3a2acdb2a56cbef1f8df8",
+      "changedPaths": [
+        "fastapi/applications.py",
+        "fastapi/routing.py",
+        "tests/test_websocket_dependencies.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 133,
+      "deletedLines": 8
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "41f28a5fd76a27fcbd7dac6a0d763d106da43c03d5a75f00655ac0a32d7c7659",
+      "changedPaths": [
+        "fastapi/applications.py",
+        "fastapi/routing.py",
+        "tests/test_ws_router.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 134,
+      "deletedLines": 6
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "python_port-medium-blog_tags",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "b7a789ee25a1fd17a3a75bf853d6c37d9370d16abca227bda494c8ca87543c5f",
+      "changedPaths": [
+        "target_python/main.py",
+        "target_python/__pycache__/builder.cpython-312.pyc",
+        "target_python/builder.py",
+        "target_python/tests/__pycache__/test_build.cpython-312.pyc",
+        "target_python/tests/fixtures/blog/config.toml",
+        "target_python/tests/fixtures/blog/content/posts/hello-world.md",
+        "target_python/tests/fixtures/blog/content/posts/second.md",
+        "target_python/tests/test_build.py",
+        "target_python/tests/tmp_public/index.html",
+        "target_python/tests/tmp_public/posts/hello-world/index.html",
+        "target_python/tests/tmp_public/posts/second/index.html",
+        "target_python/tests/tmp_public/tags/intro/index.html",
+        "target_python/tests/tmp_public/tags/python/index.html"
+      ],
+      "fileCount": 13,
+      "binaryDiffCount": 2,
+      "addedLines": 216,
+      "deletedLines": 4
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "python_port-medium-blog_tags",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "5712cfbc66a0629d31c4668585be3d89548e1b46b65c130ec3e0dc865bd690ae",
+      "changedPaths": [
+        "target_python/main.py",
+        "target_python/__pycache__/main.cpython-312.pyc",
+        "target_python/__pycache__/test_build.cpython-312.pyc",
+        "target_python/fixtures/blog/config.toml",
+        "target_python/fixtures/blog/content/posts/hello.md",
+        "target_python/fixtures/blog/content/posts/second.md",
+        "target_python/fixtures/blog/templates/index.html",
+        "target_python/fixtures/blog/templates/post.html",
+        "target_python/fixtures/blog/templates/tag.html",
+        "target_python/fixtures/public/index.html",
+        "target_python/fixtures/public/posts/hello/index.html",
+        "target_python/fixtures/public/posts/second/index.html",
+        "target_python/fixtures/public/tags/meta/index.html",
+        "target_python/fixtures/public/tags/python/index.html",
+        "target_python/test_build.py"
+      ],
+      "fileCount": 15,
+      "binaryDiffCount": 2,
+      "addedLines": 374,
+      "deletedLines": 4
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "af892ab901b1e8b6f69c0f3c2d99a25e2ddfabfe5931428e605405076cc38cff",
+      "changedPaths": [
+        "src/blib2to3/pgen2/tokenize.py",
+        "repro_fstring_row.py",
+        "tests/test_fstring_rows.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 102,
+      "deletedLines": 1
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "preInjectionPatchAvailable": true,
+      "patchSha256": "a40bc03fd40a066004c47f1e2eb083508505d0f48e948f2d90798755650e2b78",
+      "changedPaths": [
+        "src/blib2to3/pgen2/tokenize.py",
+        "repro_fstring_rows.py",
+        "tests/test_fstring_multiline_rows.py"
+      ],
+      "fileCount": 3,
+      "binaryDiffCount": 0,
+      "addedLines": 83,
+      "deletedLines": 1
+    }
+  ]
+}

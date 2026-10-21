@@ -1,0 +1,21 @@
+{
+  "providerCalls": 0,
+  "postHocDiagnostic": true,
+  "notSuccessfulWorkflow": true,
+  "notEfficiencyEligible": true,
+  "notFullFilesystemRecovery": true,
+  "source": "Eight observed successful tool edits replayed on pinned original base; runtime-generated files unavailable after native cleanup",
+  "exceptionType": null,
+  "officialVerifierDiagnosticReward": {
+    "reward": 0,
+    "f2p_total": 51,
+    "f2p_passed": 47,
+    "p2p_total": 319,
+    "p2p_passed": 319,
+    "f2p": 0.9215686274509803,
+    "p2p": 1.0,
+    "partial": 0.9891891891891892
+  },
+  "reconstructedFromSuccessfulEditRecords": 8,
+  "notActualTerminalWorkspaceSnapshot": true
+}

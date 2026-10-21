@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "7bd236f4d548af1214ddf498ccaf7a5c3b928100",
+  "node": "v24.14.0",
+  "platform": "win32",
+  "providerCalls": 0,
+  "existingSuites": [
+    {
+      "suite": "specialist",
+      "passed": 176,
+      "failed": 0,
+      "skipped": 0,
+      "logSha256": "c125e1acfdfc2755444ce3b02ae9a0d308f91a6547b4465fe754ac597a08e8db"
+    },
+    {
+      "suite": "full",
+      "passed": 411,
+      "failed": 0,
+      "skipped": 1,
+      "logSha256": "73695f8a8f155d9cd4fd76e6da53f854497e35029da2448d320e9da799b3a03a"
+    }
+  ],
+  "skipReason": "Go unavailable in the local test environment",
+  "additionalAdversarialProcessChecks": {
+    "cases": 12,
+    "behaviorFailures": 12,
+    "existingInBothSourceSnapshots": true,
+    "evidence": "pipe-repro.json"
+  },
+  "allSpecialistChecksPassed": false
+}
