@@ -304,7 +304,8 @@ export class ContextMemory {
     const requestTools = recoverable ? [...tools, ...MEMORY_TOOLS] : tools;
     const projectedSystem = recoverable ? system + CONTEXT_GUIDANCE
       + ` Runtime validation: pending=${Boolean(state.pendingValidation)}; passed=${Boolean(state.validationPassed)}; changed=${JSON.stringify(state.changedFiles || [])}.`
-      + (state.validationFailures?.length ? ` Unresolved validation commands: ${JSON.stringify(state.validationFailures.map(item => item.command))}.` : '') : system;
+      + (state.validationFailures?.length ? ` Unresolved validation commands: ${JSON.stringify(state.validationFailures.map(item => item.command))}.` : '')
+      + (state.validationUnavailable?.length ? ` Unavailable checks (not verified by an alternative): ${JSON.stringify(state.validationUnavailable)}.` : '') : system;
     let request = { messages: finalMessages, system: projectedSystem, tools: requestTools }, after = requestBytes(config, request);
     let fallback = null;
     if (selected.length && after >= before && !stale.size) {

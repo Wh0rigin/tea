@@ -15,7 +15,7 @@ import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } f
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 import { runtimeError } from './runtime-error.mjs';
 import { buildSystemPrompt } from './prompts.mjs';
-import { observeValidation, unresolvedValidationCommands } from './validation.mjs';
+import { observeValidation, unresolvedValidationCommands, unavailableValidationNotice, validationRunnerUnavailable, invalidateUnavailableValidation } from './validation.mjs';
 
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
 
@@ -38,7 +38,7 @@ function prepareContextRequest(messages, config, requestTools, system) {
 
 export function createAgentSession(config) {
   return { workspace: path.resolve(config.workspace), model: config.model, messages: [], adapter: null, tools: null,
-    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, validationFailures: [], changedFiles: [],
+    running: false, pendingValidation: false, validationPassed: false, validationAttempts: 0, validationFailures: [], validationUnavailable: [], changedFiles: [],
     compaction: null, compactionCount: 0, autoCompactionBackoff: null, ...memorySessionFields(config) };
 }
 
@@ -198,7 +198,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       ...(outcome.error ? { error: outcome.error } : {}) });
     return { ...outcome, summary, toolCalls: 0, changedFiles: [...session.changedFiles],
       validationPassed: session.validationPassed, validationAttempts: session.validationAttempts,
-      validationFailures: session.validationFailures || [],
+      validationFailures: session.validationFailures || [], validationUnavailable: session.validationUnavailable || [],
       runType: offline ? 'offline-runtime' : 'live', wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };
   }
   const firstTurn = session.messages.length === 0;
@@ -216,6 +216,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     + (session.pendingValidation ? `\nOutstanding validation: ${session.changedFiles.join(', ') || 'workspace checks'}.`
       + (session.validationFailures?.length ? ` Rerun unresolved commands: ${JSON.stringify(unresolvedValidationCommands(session))}.` : '') : '') : task)
     + (capabilities && (firstTurn || capabilitiesChanged) ? `\n\n${capabilityNotice(capabilities)}` : '');
+  if (session.validationUnavailable?.length) await appendSessionMessage(session, { role: 'user', content: unavailableValidationNotice(session) });
   session.capabilities = capabilities;
   if (capabilities && (firstTurn || capabilitiesChanged)) await session.journal?.append('capabilities_declared', capabilities);
   const messages = session.messages;
@@ -232,6 +233,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let validationPassed = session.validationPassed;
   let validationAttempts = session.validationAttempts;
   let validationFailures = [...(session.validationFailures || [])];
+  let validationUnavailable = [...(session.validationUnavailable || [])];
   let changedFiles = [...session.changedFiles];
   let status = 'running';
   let finalText = '';
@@ -239,7 +241,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let forcedValidationNudges = 0;
   const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
     fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
-  const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, validationFailures, changedFiles });
+  const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, validationFailures, validationUnavailable, changedFiles });
   const prepareRequest = async () => {
     const activeMessages = sessionContext(session, runtimeState());
     const requestTools = tools.modelToolDefinitions({ includeMemory: false });
@@ -350,7 +352,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         if (pendingValidation && forcedValidationNudges < 2 && toolCalls < config.maxToolCalls) {
           forcedValidationNudges += 1;
           const unresolved = unresolvedValidationCommands(runtimeState());
-          await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace checks'}). ${unresolved.length ? `Rerun unresolved commands: ${JSON.stringify(unresolved)}. A different passing command cannot clear them.` : 'No relevant check has passed after the latest edit or workspace change.'} If validation cannot be completed, report the outstanding checks; do not claim completion.` });
+          await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace checks'}). ${unresolved.length ? `Rerun unresolved commands: ${JSON.stringify(unresolved)}. A different passing command cannot clear them.` : 'No relevant check has passed after the latest edit or workspace change.'} ${unavailableValidationNotice(runtimeState())} If validation cannot be completed, report the outstanding checks; do not claim completion.` });
           continue;
         }
         status = pendingValidation ? 'needs_validation' : 'completed';
@@ -383,11 +385,12 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           if (effects.mutatesWorkspace) {
             pendingValidation = true;
             validationPassed = false;
+            validationUnavailable = invalidateUnavailableValidation(runtimeState());
             const filename = call.input?.path || '(unknown file)';
             if (!changedFiles.includes(filename)) changedFiles.push(filename);
           } else if (effects.validatesSource) {
             validationAttempts += 1;
-            ({ validationFailures, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output));
+            ({ validationFailures, validationUnavailable, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output));
           }
         } catch (error) {
           isError = true;
@@ -395,15 +398,16 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           output = error.message;
           if (effects.validatesSource) {
             validationAttempts += 1;
-            ({ validationFailures, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output, true));
+            ({ validationFailures, validationUnavailable, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output, true, error));
           }
         }
-        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command) }) : null;
+        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command), runnerUnavailable: effects.validatesSource && validationRunnerUnavailable(call.input?.command, output, toolError) }) : null;
         output = appendFailureFeedback(output, feedback);
         if (effects.validatesSource && validationFailures.length) {
           output += '\n[validation_pending] Rerun unresolved commands; a different pass does not clear them: '
             + JSON.stringify(unresolvedValidationCommands(runtimeState()).map(redactText));
         }
+        if (effects.validatesSource && validationUnavailable.length) output += '\n[validation_unavailable] ' + unavailableValidationNotice(runtimeState());
         if (feedback) isError = true;
         const commandTiming = effects.commandTiming && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, ...commandTiming, error: isError ? output : undefined });
@@ -442,15 +446,19 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     onText(`${error instanceof ModelError ? 'Agent stopped' : 'Agent error'}: ${terminalError.message}`);
   }
 
-  Object.assign(session, { pendingValidation, validationPassed, validationAttempts, validationFailures, changedFiles });
+  Object.assign(session, { pendingValidation, validationPassed, validationAttempts, validationFailures, validationUnavailable, changedFiles });
   if (session.taskState) { session.taskState.phase = status === 'completed' ? 'finish' : session.taskState.phase; session.taskState.validation = runtimeState(); }
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
   if (lastBudget) contextDiagnostics.finalBudget = lastBudget;
+  if (validationUnavailable.length) {
+    const limitation = `\nValidation limitation: ${redactText(unavailableValidationNotice(runtimeState()))}`;
+    finalText += limitation; onText(limitation);
+  }
   const summary = await ledger.finish({ status, prompt: userMessage, contextDiagnostics, error: terminalError });
   emit({ type: 'turn_end', status, summary, spentUsd: adapter.costKnown === false ? null : adapter.spentUsd, changedFiles, pendingValidation, runDirectory: ledger.directory,
     ...(terminalError ? { error: terminalError } : {}) });
-  return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts, validationFailures,
+  return { status, text: finalText, summary, toolCalls, changedFiles, validationPassed, validationAttempts, validationFailures, validationUnavailable,
     ...(terminalError ? { error: terminalError } : {}),
     runType: offline ? 'offline-runtime' : 'live', contextDiagnostics, sessionId: session.persistent ? session.sessionId : null,
     wallElapsedMs: Date.now() - wallStarted, runDirectory: ledger.directory };

@@ -58,7 +58,8 @@ test('disabled feedback preserves inherited history with the explicitly updated 
   assert.equal(baseline.parentCommit, 'c97b950797294f48e31752508af11a80814e66d8');
   const expected = baseline.requests.map(request => ({ ...request,
     system: buildSystemPrompt(request.tools),
-    tools: request.tools.map(tool => tool.name === 'apply_patch' ? TOOL_DEFINITIONS.find(item => item.name === 'apply_patch') : tool),
+    tools: request.tools.map(tool => tool.name === 'apply_patch' ? TOOL_DEFINITIONS.find(item => item.name === 'apply_patch')
+      : tool.name === 'search_code' ? { ...tool, description: tool.description.replace('Use path to search another directory after bounded scans;', 'Use path for a single file or a directory;') } : tool),
   }));
   assert.deepEqual(normalize(payloads(requests)), expected);
   assert.equal(notices(requests[0]), 0); assert.equal(requests[1].messages.at(-1).content[1].is_error, false);

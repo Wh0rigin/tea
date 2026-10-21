@@ -102,12 +102,19 @@ export class WorkspaceTools {
 
   // Rotate directories and visit child directories before their sibling files.
   // A single large directory cannot consume the whole discovery budget.
-  async *#walkFiles(scope, includeOmitted) {
+  async *#walkFiles(scope, includeOmitted, allowFile = false) {
     const root = await this.resolveFile(scope);
-    if (!(await stat(root)).isDirectory() || isSensitivePath(path.relative(this.workspace, root))
-      || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part))) {
+    const rootInfo = await stat(root), relativeRoot = path.relative(this.workspace, root);
+    const requestedRoot = path.relative(this.workspace, path.resolve(this.workspace, scope));
+    if ([relativeRoot, requestedRoot].some(relative => isSensitivePath(relative)
+      || relative.split(path.sep).some(part => ['.git', '.tea'].includes(part.toLowerCase())))) {
       throw new ToolFeedbackError('INPUT_INVALID', 'Listing/search scope must be a non-sensitive workspace directory');
     }
+    if (allowFile && rootInfo.isFile()) {
+      yield relativeRoot.replaceAll(path.sep, '/');
+      return;
+    }
+    if (!rootInfo.isDirectory()) throw new ToolFeedbackError('INPUT_INVALID', 'Listing scope must be a workspace directory; search_code also accepts a file');
     const frame = async (directory, depth) => ({ directory, depth, index: 0,
       entries: (await readdir(directory, { withFileTypes: true })).sort((a, b) =>
         Number(b.isDirectory()) - Number(a.isDirectory()) || a.name.localeCompare(b.name)) });
@@ -279,7 +286,7 @@ export class WorkspaceTools {
     }
     const results = [], dependencies = new Map(), limit = Math.max(1, Math.min(Number(maxResults) || 30, 80));
     let filesScanned = 0, bytesScanned = 0, fileIndex = 0, nextOffset = null, nextLine = 1;
-    for await (const relative of this.#walkFiles(scope, includeOmitted)) {
+    for await (const relative of this.#walkFiles(scope, includeOmitted, true)) {
       const index = fileIndex++; if (index < offset) continue;
       const full = await this.resolveFile(relative), info = await stat(full);
       if (info.size > MAX_READ_BYTES) continue;
@@ -483,6 +490,7 @@ export class WorkspaceTools {
         env: safeEnv,
         shell: false,
         windowsHide: true,
+        detached: process.platform !== 'win32',
         stdio: ['ignore', 'pipe', 'pipe'],
       });
       const stdout = new BoundedOutput();
@@ -491,20 +499,50 @@ export class WorkspaceTools {
       let timedOut = false;
       let cancelled = false;
       let terminating = false;
+      let exited = false;
+      let drainTimer;
+      let stopTimer;
       let timeoutCleanup = Promise.resolve();
+      const captured = () => redactText(`stdout:\n${stdout.render({ maxChars: 2000 })}\nstderr:\n${stderr.render({ maxChars: 2000 })}`);
+      const finish = async (error, code, processSignal) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer); clearTimeout(drainTimer); clearTimeout(stopTimer);
+        signal?.removeEventListener('abort', cancel);
+        child.stdout.destroy(); child.stderr.destroy();
+        if (timedOut || cancelled) {
+          await timeoutCleanup;
+          const reason = cancelled ? 'Command cancelled; completed edits remain in the workspace' : `Command timed out after ${timeoutMs} ms`;
+          reject(new ToolFeedbackError(cancelled ? 'EXECUTION_CANCELLED' : 'EXECUTION_TRANSIENT', `${reason}\n${captured()}`));
+        } else if (error) reject(error);
+        else {
+          const maxChars = code === 0 ? 2_000 : 6_500;
+          const sanitized = redactText(`exit=${code ?? processSignal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
+          const finalOutput = new BoundedOutput({ maxChars: MAX_TOOL_OUTPUT });
+          finalOutput.append(sanitized); resolve(finalOutput.render());
+        }
+      };
       const terminate = () => {
         if (terminating) return;
         terminating = true;
-        if (process.platform === 'win32' && child.pid) {
+        // An exited PID may be reused. Do not send delayed signals to it.
+        if (!exited && process.platform === 'win32' && child.pid) {
           // Node's Windows kill only ends the parent; test workers can retain the workspace.
           timeoutCleanup = new Promise((done) => {
             const terminator = spawn(path.join(safeEnv.SYSTEMROOT || 'C:\\Windows', 'System32', 'taskkill.exe'), ['/PID', String(child.pid), '/T', '/F'], {
               env: safeEnv, shell: false, windowsHide: true, stdio: 'ignore',
             });
-            terminator.once('error', () => { child.kill(); done(); });
-            terminator.once('close', done);
+            const bound = setTimeout(() => { terminator.kill(); if (!exited) child.kill(); done(); }, 1500);
+            terminator.once('error', () => { clearTimeout(bound); if (!exited) child.kill(); done(); });
+            terminator.once('close', () => { clearTimeout(bound); done(); });
           });
-        } else child.kill();
+        } else if (!exited && child.pid) {
+          try { process.kill(-child.pid, 'SIGKILL'); }
+          catch { if (!exited) child.kill('SIGKILL'); }
+        }
+        // A detached descendant can escape the process group or retain pipes
+        // after its parent exits. Tool settlement must not depend on its close.
+        stopTimer = setTimeout(() => { child.unref(); void finish(); }, process.platform === 'win32' && !exited ? 1750 : 250);
       };
       const timer = setTimeout(() => { timedOut = true; terminate(); }, timeoutMs);
       const cancel = () => { cancelled = true; terminate(); };
@@ -517,33 +555,18 @@ export class WorkspaceTools {
         });
       }
       child.once('error', (error) => {
-        clearTimeout(timer); signal?.removeEventListener('abort', cancel);
-        if (!settled) {
-          settled = true;
           if (error.code === 'ENOENT') {
             const hint = process.platform === 'win32' ? ' Windows CMD built-ins are not standalone executables.' : '';
             const failure = new ToolFeedbackError('EXECUTABLE_UNAVAILABLE', `Executable unavailable (ENOENT).${hint} Use write_file to create files and parents, read_file to read source, or an installed executable for validation.`);
-            failure.code = error.code; reject(failure);
-          } else reject(error);
-        }
+            failure.code = error.code; void finish(failure);
+          } else void finish(error);
       });
-      child.once('close', async (code, processSignal) => {
-        clearTimeout(timer);
-        signal?.removeEventListener('abort', cancel);
-        if (settled) return;
-        settled = true;
-        if (timedOut || cancelled) {
-          await timeoutCleanup;
-          reject(new Error(cancelled ? 'Command cancelled; completed edits remain in the workspace' : `Command timed out after ${timeoutMs} ms`));
-          return;
-        }
-        const maxChars = code === 0 ? 2_000 : 6_500;
-        const sanitized = redactText(`exit=${code ?? processSignal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
-        // Redaction can expand short assignments, so bound the sanitized result too.
-        const finalOutput = new BoundedOutput({ maxChars: MAX_TOOL_OUTPUT });
-        finalOutput.append(sanitized);
-        resolve(finalOutput.render());
+      child.once('exit', () => {
+        exited = true;
+        if (!settled) drainTimer = setTimeout(() => void finish(new ToolFeedbackError('EXECUTION_INCOMPLETE',
+          `Command exited but inherited output pipes did not close. Output may be incomplete and background processes may remain; validation was not established.\n${captured()}`)), 500);
       });
+      child.once('close', (code, processSignal) => void finish(null, code, processSignal));
     });
     return output;
     } finally { this.lastCommandTiming = { ...this.lastCommandTiming, executionMs: Date.now() - executionStarted }; }
@@ -552,7 +575,7 @@ export class WorkspaceTools {
 
 export const TOOL_DEFINITIONS = [
   { name: 'list_files', description: 'List workspace text paths fairly across directories. Default: 32 paths / about 2KB; set maxFiles for larger pages. Use nextOffset to continue the same scope. includeOmitted expands ordinary excluded folders; secrets and Git/agent storage remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
-  { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
+  { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path for a single file or a directory; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
   { name: 'apply_patch', description: 'Edit one file. Use edits for multiple unique, non-overlapping replacements matched against the original text; all must match before writing. A single search/replace pair is also accepted. Never mix the two forms.', input_schema: { type: 'object', properties: { path: { type: 'string' }, edits: { type: 'array', minItems: 1, maxItems: 32, items: { type: 'object', properties: { search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['search', 'replace'], additionalProperties: false } }, search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['path'], oneOf: [{ required: ['edits'] }, { required: ['search', 'replace'] }], additionalProperties: false } },
   { name: 'write_file', description: 'Create a new UTF-8 text file within the workspace and create missing parent directories. Never overwrites an existing file: read it and use apply_patch instead. Do not use shell commands to create files. Run relevant tests after creation.', input_schema: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } }, required: ['path', 'content'], additionalProperties: false } },
@@ -566,7 +589,7 @@ const SMALL_DISCOVERY_DEFINITIONS = TOOL_DEFINITIONS.map(tool => {
   if (tool.name === 'list_files') return { ...tool, description: 'List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.' };
   if (tool.name !== 'search_code') return tool;
   const properties = { ...tool.input_schema.properties }; delete properties.offset; delete properties.startLine;
-  return { ...tool, description: 'Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.',
+  return { ...tool, description: 'Search literal text and learned session names. Use path for a single file or a directory; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.',
     input_schema: { ...tool.input_schema, properties } };
 });
 

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { SessionJournal, workspaceIdentity, digest } from './session-journal.mjs';
 import { validateRunId } from './run-id.mjs';
+import { invalidateUnavailableValidation } from './validation.mjs';
 
 export function memorySessionFields(config) {
   return { sessionId: validateRunId(config.resume || config.sessionId || randomUUID()), journal: null,
@@ -60,10 +61,10 @@ export async function attachSessionJournal(session, config) {
     }
     session.messages = messages;
     if (state) Object.assign(session, { pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
-      validationAttempts: state.validationAttempts, validationFailures: state.validationFailures || [], changedFiles: state.changedFiles,
+      validationAttempts: state.validationAttempts, validationFailures: state.validationFailures || [], validationUnavailable: state.validationUnavailable || [], changedFiles: state.changedFiles,
       compaction: state.compaction, compactionCount: state.compactionCount, autoCompactionBackoff: state.autoCompactionBackoff || null,
       restoredTools: state.tools, offline: state.offline });
-    if (session.validationFailures?.length) { session.pendingValidation = true; session.validationPassed = false; }
+    if (session.validationFailures?.length || session.validationUnavailable?.some(item => !item.alternativeCommand)) { session.pendingValidation = true; session.validationPassed = false; }
     session.taskState = state?.taskState || null;
     session.capabilities = state?.capabilities || null;
     session.memoryDiagnostics = state?.memoryDiagnostics || null;
@@ -125,7 +126,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
   const identity = await workspaceIdentity(session.workspace);
   await session.journal.append('runtime_state', {
     pendingValidation: state.pendingValidation, validationPassed: state.validationPassed,
-    validationAttempts: state.validationAttempts, validationFailures: state.validationFailures || [], changedFiles: state.changedFiles,
+    validationAttempts: state.validationAttempts, validationFailures: state.validationFailures || [], validationUnavailable: state.validationUnavailable || [], changedFiles: state.changedFiles,
     compaction: session.compaction, compactionCount: session.compactionCount, offline: session.offline,
     autoCompactionBackoff: session.autoCompactionBackoff || null,
     taskState: session.taskState || null, memoryDiagnostics: session.memoryDiagnostics || null,
@@ -141,6 +142,7 @@ export async function persistRuntimeState(session, state = session, extra = {}) 
 
 function invalidateSession(session) {
   session.validationPassed = false; session.pendingValidation = true; session.compaction = null;
+  session.validationUnavailable = invalidateUnavailableValidation(session);
   session.restoredTools = null; session.tools?.readEvidence.clear(); session.tools?.presentedSource.clear();
   session.resumeNotice = 'Runtime notice: workspace content or Git HEAD changed since this checkpoint. Old source, decisions and tests are historical, not current evidence. Read current source and validate before claiming completion.';
 }
@@ -184,7 +186,7 @@ export async function inspectSession(config, id) {
     }
     return { sessionId: id, schema: 1, events: journal.rows.length, messages,
       pendingValidation: state?.pendingValidation ?? null, changedFiles: state?.changedFiles || [],
-      validationFailures: state?.validationFailures || [],
+      validationFailures: state?.validationFailures || [], validationUnavailable: state?.validationUnavailable || [],
       latestIdentity: state?.identity || null, memoryDiagnostics: state?.memoryDiagnostics || null,
       taskState: state?.taskState || null, gcDiagnostics: state?.gcDiagnostics || null,
       requests, unresolvedRequestIds: [...unresolved] };

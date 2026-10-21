@@ -127,7 +127,7 @@ test('command identity follows parsed argv without conflating different scopes o
   state = observeValidation(state, 'node --test a.test.mjs', 'exit=0\n# pass 1');
   assert.equal(state.validationPassed, false); assert.equal(state.validationFailures.length, 1);
   state = observeValidation(state, 'node  --test', 'exit=0\n# pass 2');
-  assert.deepEqual(state, { validationPassed: true, pendingValidation: false, validationFailures: [] });
+  assert.deepEqual(state, { validationPassed: true, pendingValidation: false, validationFailures: [], validationUnavailable: [] });
 });
 
 test('each failing command remains outstanding independently, including zero-test results', () => {

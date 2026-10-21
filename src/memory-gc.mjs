@@ -50,7 +50,7 @@ export async function collectCompactedHistory(session, config, state = session) 
     pinnedRequirements: requirements, coveredArtifacts, suffixArtifacts, archivedMessageCount: compacted.archivedMessageCount,
     protectedRuleRefs: [...ruleRefs], compactionCount: session.compactionCount || 0, runtimeState: { pendingValidation: state.pendingValidation,
       validationPassed: state.validationPassed, validationAttempts: state.validationAttempts,
-      validationFailures: state.validationFailures || [], changedFiles: state.changedFiles,
+      validationFailures: state.validationFailures || [], validationUnavailable: state.validationUnavailable || [], changedFiles: state.changedFiles,
       autoCompactionBackoff: session.autoCompactionBackoff || null }, outcome });
   session.messages.splice(0, cut);
   session.pinnedRequirements = requirements; session.compaction = compacted;

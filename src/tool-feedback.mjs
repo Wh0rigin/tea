@@ -43,9 +43,11 @@ const actions = {
   PATCH_AMBIGUOUS: ['unique-search-text', 'Use a unique search with more surrounding context from current evidence; read the relevant range only if needed.'],
   PATCH_OVERLAP: ['disjoint-edits', 'Merge overlapping replacements into one edit matched against the original file. No edits from this call were applied.'],
   VALIDATION_FAILED: ['passing-validation', 'Inspect the test failure, fix supported source defects, then rerun relevant validation.'],
+  VALIDATION_UNAVAILABLE: ['installed-test-runner', 'The runner did not start; this is not a test assertion failure. Use an installed relevant runner with nonzero tests. Keep the original check explicitly unverified; an alternative does not prove equivalent coverage.'],
   EXECUTABLE_UNAVAILABLE: ['installed-executable', 'Check the available project validation entry; an unavailable executable is not a source-code failure.'],
   EXECUTION_FAILED: ['successful-execution', 'Inspect this command failure and its inputs; a failed diagnostic does not establish test failure or validation.'],
   EXECUTION_TRANSIENT: ['completed-execution', 'Inspect the execution failure before retrying; successful edits remain and this attempt proves no validation.'],
+  EXECUTION_INCOMPLETE: ['complete-command-output', 'The direct process exited but inherited output remained open. Inspect background work and partial output; do not claim validation or blindly restart the command.'],
   EXECUTION_CANCELLED: ['completed-execution', 'The command was interrupted. Inspect effects and follow the next user instruction.'],
   TOOL_FAILED: ['successful-tool-result', 'Inspect the reported failure and obtain new evidence before another attempt.'],
 };
@@ -54,8 +56,9 @@ export class ToolFeedbackError extends Error {
   constructor(code, message) { super(message); this.name = 'ToolFeedbackError'; this.feedbackCode = code; }
 }
 
-export function toolFailureFeedback({ error, output, toolName, validation = false }) {
+export function toolFailureFeedback({ error, output, toolName, validation = false, runnerUnavailable = false }) {
   let code = error?.feedbackCode;
+  if (runnerUnavailable) code = 'VALIDATION_UNAVAILABLE';
   const text = String(output ?? error?.message ?? '');
   if (!code && /^Command denied by user\./.test(text)) code = 'APPROVAL_DENIED';
   if (!code && /^Command not approved by approval handler\./.test(text)) code = 'APPROVAL_DENIED';
