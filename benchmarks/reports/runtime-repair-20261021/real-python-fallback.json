@@ -1,0 +1,46 @@
+{
+  "productionBaselineCommit": "7bd236f4d548af1214ddf498ccaf7a5c3b928100",
+  "providerCalls": 0,
+  "scope": "Self-authored actual Python/tool execution with scripted model choices; not autonomous coding performance or provider-token evidence",
+  "runs": [
+    {
+      "arm": "baseline",
+      "selfAuthoredFixture": true,
+      "scriptedModelChoices": true,
+      "realPythonCommands": true,
+      "providerCalls": 0,
+      "providerTokenSavings": null,
+      "modelSolvingImprovement": null,
+      "requests": 4,
+      "status": "needs_validation",
+      "validationPassed": false,
+      "sourceFailures": 1,
+      "unavailableChecks": [],
+      "actualAlternativeTests": 2,
+      "limitationReported": false
+    },
+    {
+      "arm": "candidate",
+      "selfAuthoredFixture": true,
+      "scriptedModelChoices": true,
+      "realPythonCommands": true,
+      "providerCalls": 0,
+      "providerTokenSavings": null,
+      "modelSolvingImprovement": null,
+      "requests": 2,
+      "status": "completed",
+      "validationPassed": true,
+      "sourceFailures": 0,
+      "unavailableChecks": [
+        {
+          "key": "{\"executable\":\"python\",\"args\":[\"-m\",\"pytest\",\"-q\"]}",
+          "command": "python -m pytest -q",
+          "family": "python",
+          "alternativeCommand": "python -m unittest discover -s . -q"
+        }
+      ],
+      "actualAlternativeTests": 2,
+      "limitationReported": true
+    }
+  ]
+}

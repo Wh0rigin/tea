@@ -11,6 +11,7 @@ import { loadConfig } from '../src/config.mjs';
 import { attachSessionJournal, closeSessionJournal, inspectSession } from '../src/session-memory.mjs';
 import { collectCompactedHistory } from '../src/memory-gc.mjs';
 import { sessionContext } from '../src/compaction.mjs';
+import { buildSystemPrompt } from '../src/prompts.mjs';
 import { toolFailureFeedback } from '../src/tool-feedback.mjs';
 
 async function fixture(fn) {
@@ -145,6 +146,12 @@ test('a runner startup failure alone cannot complete or lose its pending state a
   try { assert.equal(restored.pendingValidation, true); assert.equal(restored.validationUnavailable.length, 1); }
   finally { await closeSessionJournal(restored); }
 }));
+
+test('real-entry coverage guidance is generic and does not require hidden benchmark names', () => {
+  const prompt = buildSystemPrompt([{ name: 'run_tests' }]);
+  assert.match(prompt, /real entry point and requirement edge cases/);
+  assert.doesNotMatch(prompt, /mnamer|Helm|tags|signup|fstring/);
+});
 
 test('file-scoped searches retain line cursors and evidence for exact source ranges', async () => fixture(async root => {
   await writeFile(path.join(root, 'a.txt'), 'needle one\nneedle two\n');

@@ -1,0 +1,93 @@
+{
+  "providerCalls": 0,
+  "selfAuthoredFixture": true,
+  "priorEvidence": "../workflow-native-screen-20261020/pipe-repro.json",
+  "fixtureSha256": "2bd9e7347f919a870a92e96802a5b31a30671608b83e175d6032b66e06cb1247",
+  "sameScript": true,
+  "runs": [
+    {
+      "arm": "repaired",
+      "node": "v24.14.0",
+      "platform": "win32",
+      "providerCalls": 0,
+      "fixture": "Self-authored detached child retains stdout/stderr after parent exit",
+      "status": "not_reproduced",
+      "cases": [
+        {
+          "mode": "timeout",
+          "configuredBoundMs": 300,
+          "watchdogMs": 1200,
+          "pendingAfterWatchdog": false,
+          "settledOnlyAfterExplicitDescendantCleanup": false,
+          "elapsedMs": 1209,
+          "result": "rejected"
+        },
+        {
+          "mode": "abort",
+          "configuredBoundMs": 300,
+          "watchdogMs": 1200,
+          "pendingAfterWatchdog": false,
+          "settledOnlyAfterExplicitDescendantCleanup": false,
+          "elapsedMs": 1209,
+          "result": "rejected"
+        }
+      ]
+    },
+    {
+      "arm": "repaired",
+      "node": "v20.18.1",
+      "platform": "linux",
+      "providerCalls": 0,
+      "fixture": "Self-authored detached child retains stdout/stderr after parent exit",
+      "status": "not_reproduced",
+      "cases": [
+        {
+          "mode": "timeout",
+          "configuredBoundMs": 300,
+          "watchdogMs": 1200,
+          "pendingAfterWatchdog": false,
+          "settledOnlyAfterExplicitDescendantCleanup": false,
+          "elapsedMs": 1203,
+          "result": "rejected"
+        },
+        {
+          "mode": "abort",
+          "configuredBoundMs": 300,
+          "watchdogMs": 1200,
+          "pendingAfterWatchdog": false,
+          "settledOnlyAfterExplicitDescendantCleanup": false,
+          "elapsedMs": 1202,
+          "result": "rejected"
+        }
+      ]
+    },
+    {
+      "arm": "repaired",
+      "node": "v24.12.0",
+      "platform": "linux",
+      "providerCalls": 0,
+      "fixture": "Self-authored detached child retains stdout/stderr after parent exit",
+      "status": "not_reproduced",
+      "cases": [
+        {
+          "mode": "timeout",
+          "configuredBoundMs": 300,
+          "watchdogMs": 1200,
+          "pendingAfterWatchdog": false,
+          "settledOnlyAfterExplicitDescendantCleanup": false,
+          "elapsedMs": 1202,
+          "result": "rejected"
+        },
+        {
+          "mode": "abort",
+          "configuredBoundMs": 300,
+          "watchdogMs": 1200,
+          "pendingAfterWatchdog": false,
+          "settledOnlyAfterExplicitDescendantCleanup": false,
+          "elapsedMs": 1201,
+          "result": "rejected"
+        }
+      ]
+    }
+  ]
+}
