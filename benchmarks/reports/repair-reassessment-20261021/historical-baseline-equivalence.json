@@ -1,0 +1,21 @@
+{
+  "scope": "Only the first Helm/Black request, repeat 1; not a general determinism claim",
+  "comparisons": [
+    {
+      "benchmark": "repair-deepswe-20261021",
+      "oldCandidateVersusFreshBaselineFirstRequestSha256Equal": true,
+      "oldRequestSha256": "b52cedb674995dd5e6c0bc2244ae6ab56a43ee79de67dccc1736dc5dd702698c",
+      "freshRequestSha256": "b52cedb674995dd5e6c0bc2244ae6ab56a43ee79de67dccc1736dc5dd702698c",
+      "wireControlsEqual": true,
+      "notNewModelCalls": true
+    },
+    {
+      "benchmark": "repair-wb-20261021",
+      "oldCandidateVersusFreshBaselineFirstRequestSha256Equal": true,
+      "oldRequestSha256": "ab8b83a5d08681c2de6de88311c4aa24d7d972f513cc43f5a684be7ecadad6fa",
+      "freshRequestSha256": "ab8b83a5d08681c2de6de88311c4aa24d7d972f513cc43f5a684be7ecadad6fa",
+      "wireControlsEqual": true,
+      "notNewModelCalls": true
+    }
+  ]
+}

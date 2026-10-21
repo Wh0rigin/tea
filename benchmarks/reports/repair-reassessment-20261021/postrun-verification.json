@@ -1,0 +1,21 @@
+{
+  "scope": "Post-run result arithmetic, provenance consistency, privacy literals, local report links and deterministic figure regeneration; no model calls or production tests added",
+  "attempts": 24,
+  "reconciledRequests": 825,
+  "unknownUsageAttempts": 0,
+  "paidRetries": 0,
+  "officialScoreRecords": 24,
+  "officialBuildErrorFallbackRecords": 1,
+  "allProviderTotalsMatchInputPlusOutput": true,
+  "perArmTotalsRecomputed": true,
+  "allPairsMeteredAndSameInitialConditions": true,
+  "capturedPreInjectionWbPatches": 16,
+  "officialMetricsAgreeOnFullPass": true,
+  "localReportLinksResolve": true,
+  "publicationPrivateLiteralCheckPassed": true,
+  "deterministicFigures": {
+    "outcomes.png": "1c71ffe9f8e61147c7de1aa84f9436ffe7a6b7c32021240bdb031c4151adf7c3",
+    "outcomes.svg": "765deb82664620adcb6996ec22b9f67286db176928c9c03a9c77129a199f8c7e"
+  },
+  "runtimeSourceChangedDuringPaidRun": false
+}

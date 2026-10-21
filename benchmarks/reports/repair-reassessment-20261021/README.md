@@ -1,6 +1,20 @@
 # Repair package: fresh DeepSWE and WB-Bench-Code reassessment
 
-Status: **both fixed real-model schedules are running; no performance conclusion yet**. Offline native preflights and protocol/source validation passed. Protocol snapshot committed before calls in `0b2a8a9`.
+Status: **completed: 24/24 attempts, all 825 provider requests reconciled, zero unknown usage and zero paid retries**. Protocol snapshot committed before calls in `0b2a8a9`. Both native schedule processes exited successfully; that does not mean every task passed.
+
+## Results: the package did not preserve task correctness
+
+- DeepSWE subset: official whole-task acceptance **1/4 (25%) → 0/4 (0%)**, down **25 percentage points**. All-attempt consumption **3,359,152 → 2,609,223 tokens (−22.32%)**; no mutually completed, full-pass pair, so same-work efficiency is not established.
+- WB-Bench-Code subset: official whole-task acceptance **5/8 (62.5%) → 3/8 (37.5%)**, down **25 percentage points**. Official mean reward **0.7875 → 0.7048**. All-attempt consumption **3,220,424 → 2,048,101 tokens (−36.40%)**; lower correctness prevents calling this an overall efficiency win. Completed + full-pass is **3/8 in both arms**, a separate metric.
+- Black repair only: two mutually completed, full-pass pairs consume **1,465,967 → 1,249,870 tokens (−14.74%)**; individual changes **−1.30% / −31.42%**. This is a small, selected, single-task observation, not general savings.
+
+![Official task acceptance and matched successful-work Token use](outcomes.png)
+
+Bars on the left show official whole-task acceptance; diamonds show completed + full-pass. Token bars include only eligible successful pairs. Failures remain in every per-attempt report, not as zero-token successful work.
+
+[Chinese analysis and next steps](RESULTS.zh-CN.md) · [Methods](METHODS.zh-CN.md) · [DeepSWE results](deepswe-results.json) · [WB results](workbuddy-results.json) · [SVG](outcomes.svg)
+
+## Frozen comparison
 
 - Baseline: `5cb519899cccf5a0f91ab2ff74c215dd948f4448`, pre-repair production source (same runtime as `7bd236f`). Fresh attempts, not historical baseline reuse.
 - Candidate: `d0b566b36c6babe287fb96e4b2f63c31af5a752c`, full repair package: runner-unavailability handling, bounded command settlement, safe file-scoped search and generic real-entry guidance.
