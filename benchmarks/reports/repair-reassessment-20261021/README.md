@@ -1,6 +1,6 @@
 # Repair package: fresh DeepSWE and WB-Bench-Code reassessment
 
-Status: offline native preflights and protocol/source validation passed; **no performance result yet**. This protocol snapshot is committed before either paid schedule starts.
+Status: **both fixed real-model schedules are running; no performance conclusion yet**. Offline native preflights and protocol/source validation passed. Protocol snapshot committed before calls in `0b2a8a9`.
 
 - Baseline: `5cb519899cccf5a0f91ab2ff74c215dd948f4448`, pre-repair production source (same runtime as `7bd236f`). Fresh attempts, not historical baseline reuse.
 - Candidate: `d0b566b36c6babe287fb96e4b2f63c31af5a752c`, full repair package: runner-unavailability handling, bounded command settlement, safe file-scoped search and generic real-entry guidance.
