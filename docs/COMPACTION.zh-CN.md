@@ -32,7 +32,7 @@ tea "修复重试预算" --compaction auto --max-cost-usd 0.10
 - 始终保留最新完整消息组，即使它超出近期字节目标；更旧的完整组只有放得下才加入，避免一个过大的旧批次长期占住近期上下文。如果最新用户请求落在被摘要的部分，后续请求也会附上其原文。
 - 再次压缩时，输入包含已有摘要，以及上次保留边界之后的旧消息，避免重复发送已经摘要过的原文。
 - 摘要包含目标、约束、进度、决定、下一步和关键上下文。待验证修改和验证状态由运行时单独附上，摘要不能把未验证任务改成完成。
-- 摘要请求中的历史工具结果保留约 2,000 UTF-8 字节的头尾，以及省略说明和哈希；大段补丁参数也有边界。普通用户文本不会为了塞进摘要请求而截断。
+- 默认 Pi 风格预算保留历史工具结果与补丁参数，由完整消息组和输入容量校验控制；旧版 reserved-output 配置仍使用有界首尾摘录。普通用户文本不会为了塞进摘要请求而截断。
 - 压缩成功后清理源码读取引用缓存，下一次读取会重新返回源码，避免引用已经从模型输入省略的旧行。已学习会话词表和待验证状态保留。
 - `/new` 清除摘要和会话词表，适配器费用及待验证修改继续保留。
 
@@ -46,11 +46,11 @@ Pi 按模型上下文 Token 容量触发；TEA 尚无原生 tokenizer 和服务�
 
 - `--compaction off|auto` / `TEA_COMPACTION`：默认 `auto`。
 - `--compaction-keep-recent-bytes N` / `TEA_COMPACTION_KEEP_RECENT_BYTES`：默认请求字节上限的 30%，须为正安全整数。
-- `TEA_COMPACTION_TRIGGER_RATIO`：默认 `0.8`，严格大于 0 且小于 1。
+- `TEA_COMPACTION_TRIGGER_RATIO`：CLI 默认 `1`，在窗口减预留额度处触发；旧版策略默认 `0.8`。
 - `TEA_COMPACTION_MAX_PER_TURN`：默认 `2`，范围 1–8，限制一次提交任务中的全部自动尝试，包括未成功尝试。手动命令最多发送一次摘要请求。
 - 原有 `TEA_MAX_REQUEST_INPUT_TOKENS` 是序列化输入字节保护配置；其名称不能当作精确 tokenizer 上限。
 
-摘要复用同一个适配器、模型和思考等级。输出上限为 `min(TEA_MAX_OUTPUT_TOKENS, 1200)`，enabled 思考预算按该上限计算，与普通请求遵循相同公式。摘要过程中不执行工具。
+摘要复用同一个适配器、模型和思考等级。输出上限为 `min(TEA_MAX_OUTPUT_TOKENS, floor(0.8 * TEA_COMPACTION_RESERVE_TOKENS))`，enabled 思考预算按该上限计算，与普通请求遵循相同公式。摘要过程中不执行工具。
 
 如果计划摘要的部分无法全部放入请求，先摘要能放入的最长完整前缀，并标记为部分压缩；剩余自动尝试可以继续推进边界。过大的最早用户消息可能导致摘要不可用。最近的完整消息组仍可能超过请求保护上限，此时编程请求会由原有保护停止。
 
@@ -66,3 +66,5 @@ Pi 按模型上下文 Token 容量触发；TEA 尚无原生 tokenizer 和服务�
 
 
 常驻历史达到 4 MiB 也会触发自动压缩；这是序列化历史阈值，不是进程堆的硬上限。
+
+Current CLI budgeting and compatibility: [Pi-style context budget](CONTEXT_BUDGET.md). This policy update has offline regression coverage only; previous live measurements are not measurements of this new policy.

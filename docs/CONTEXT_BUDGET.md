@@ -1,33 +1,47 @@
 # Token context budget / Token 上下文预算
 
-Daily CLI compaction now separates model context capacity from serialized request bytes. Unknown models use a conservative **32,768-token scheduling window**, not an assertion of the provider's actual capacity. Set the window to your endpoint's documented limit in `~/.tea/config.json`:
+## Current CLI policy: Pi-style budgeting
+
+The daily CLI defaults to `contextBudgetPolicy: "pi"`, following the reserve-based scheduling policy in Pi 0.87.1. TEA retains its own estimator, ContextOS, validation obligations and encrypted history.
 
 ```json
 {
+  "contextBudgetPolicy": "pi",
   "contextWindowTokens": 216000,
-  "contextReserveTokens": 4096,
-  "maxOutputTokens": 4096,
-  "compactionTriggerRatio": 0.8,
+  "contextReserveTokens": 16384,
+  "maxOutputTokens": 131072,
+  "compactionTriggerRatio": 1,
+  "compactionKeepRecentTokens": 20000,
+  "compactionReserveTokens": 16384,
   "maxRequestInputBytes": 2097152
 }
 ```
 
-216,000 is only an example, not a verified GLM-5.3-flash limit. Environment equivalents: `TEA_CONTEXT_WINDOW_TOKENS`, `TEA_CONTEXT_RESERVE_TOKENS`, `TEA_MAX_OUTPUT_TOKENS`, `TEA_COMPACTION_TRIGGER_RATIO`, `TEA_MAX_REQUEST_INPUT_BYTES`. The old `TEA_MAX_REQUEST_INPUT_TOKENS` remains a byte-limit alias; the new name takes precedence when both are explicitly set.
+This window and output ceiling are examples; use your provider's documented capacities. The unknown-model fallback remains 32,768 context / 4,096 output tokens. Existing explicit user settings override new defaults; a saved reserve of 4,096 or trigger ratio of 0.8 is not silently rewritten. Restart TEA to reload configuration.
 
-Automatic trigger: `floor((contextWindowTokens - maxOutputTokens - contextReserveTokens) × compactionTriggerRatio)`. Defaults produce **19,660 estimated input tokens**. The example produces **166,246**. The full request includes system, tools and projected conversation. ContextOS still has its separate 32,000-byte projection target; history memory pressure can also trigger compaction at 4 MiB.
+- Scheduling input limit: `contextWindowTokens - contextReserveTokens`.
+- Automatic trigger: `floor(inputLimit * compactionTriggerRatio)`. With the example this is **199,616 estimated input tokens**, rather than reserving the entire 131,072 output ceiling before applying an additional 80% trigger.
+- Each request's output allowance is `min(configured output ceiling, context window - estimated input)`. Short requests retain their ceiling; long inputs get a smaller allowance. Estimated input and allowance fit the configured window; this is not a guarantee of exact provider tokenization. A post-response calibration factor can only increase the estimate. No count-token API call is added.
+- Summary ceiling: `min(configured output ceiling, floor(0.8 * compactionReserveTokens))`; default reserve 16,384 gives 13,107, or 4,096 under the default CLI output ceiling. Thinking follows the existing output-based rule.
+- Recent history: approximately 20,000 estimated tokens, keeping complete tool batches and the newest group. Small windows clamp retention to half the input scheduling limit so there is space to summarize and continue. An explicit `compactionKeepRecentBytes` preserves byte-based retention unless a token setting is also supplied.
+- The CLI has no default task-wide tool-call cap or task-wide count of successful automatic compactions. Explicit `TEA_MAX_TOOL_CALLS` and `TEA_COMPACTION_MAX_PER_TURN` remain enforced. Repeated identical context fingerprints cannot retrigger compaction; an unchanged summary pauses attempts until context/resident size grows by the existing cooldown. Unknown billing prevents silent retries.
+- Pi-style summary input keeps historical tool text and patch parameters instead of applying the old 2,000/1,000-byte excerpts. Complete historical groups must still fit summary input and wire guards. Ordinary user requirements are never cut to fit.
 
-The local estimator handles ASCII and Unicode separately and adds structural and safety overhead. Provider-reported input usage, including cache reads/writes, increases a persisted calibration factor when the estimate was too low. It never reduces that factor from a cheaper response. These are scheduling estimates, not exact tokenizer counts or billing measurements; no extra count-token API request is made. A configurable window cannot enlarge a provider's actual context capacity, and estimates cannot guarantee against every overflow.
+Environment variables: `TEA_CONTEXT_BUDGET_POLICY`, `TEA_CONTEXT_WINDOW_TOKENS`, `TEA_CONTEXT_RESERVE_TOKENS`, `TEA_MAX_OUTPUT_TOKENS`, `TEA_COMPACTION_TRIGGER_RATIO`, `TEA_COMPACTION_KEEP_RECENT_TOKENS`, `TEA_COMPACTION_RESERVE_TOKENS`. The old `TEA_MAX_REQUEST_INPUT_TOKENS` is a **byte-limit alias**; `TEA_MAX_REQUEST_INPUT_BYTES` takes precedence.
 
-Both task and summary requests check their estimated input budget before submission. Summary planning selects only complete historical groups that fit. Automatic summaries still require a smaller projected request before adoption and retain the existing nonreducing-summary backoff. Recent-history retention defaults to 16,000 bytes independently of the 2 MiB wire guard. Wire pressure at 95% also attempts compaction; the wire guard is enforced independently. Explicit monetary caps retain conservative reservations and may need adjustment for a larger wire guard.
+## Compatibility and differences from Pi
 
-Legacy SDK/experiment configurations without a Token window keep their old byte-trigger behavior, preserving explicit historical experiment controls. Setting `contextWindowTokens` enables the new budget there too. Restart TEA to load changed settings.
+`loadConfig` keeps `reserved-output` by default for existing SDK and frozen-experiment callers; `loadCliConfig` chooses `pi`. Select `TEA_CONTEXT_BUDGET_POLICY=reserved-output` to restore the old scheduling formula and defaults. Old experiment engines and published results are not rewritten.
 
-Failed turns expose a structured `error` in the return value, ledger summary and `agent_error` / `turn_end` events. Local context and wire rejections identify the stage, estimates, limits and whether a request was submitted. Error records omit request bodies, headers and stacks and redact configured credentials. Callers should save the returned result even without an `onText` observer.
+This is budget-policy alignment, not an identical agent or tokenizer. TEA still uses its calibrated ASCII/Unicode estimator, its six-heading summary validation and smaller-projection adoption guard. No new provider-error compact-and-retry path is introduced. Pi's tool implementation, 50 KiB/2,000-line output limits and large-file reading behavior are not copied by this change. ContextOS's 32,000-byte target, recall page bounds, tool capture limits and protected validation state remain separate policies. The independent CLI wire guard is 2 MiB; resident memory pressure can also trigger compaction at 4 MiB. Explicit monetary caps retain conservative reservations.
 
 ## 中文说明
 
-现在分别管理：模型能容纳多少 Token、为输出与安全空间预留多少 Token、请求体允许多少字节。未知模型暂按 32,768 Token 保守调度；这不是声称 GLM 只有这个容量。确认服务商容量后设置 `contextWindowTokens`，例如上面的 216k 仅为示例。
+本轮对齐的是上下文预算：默认预留 16,384 Token，在接近窗口容量时压缩，保留约 20k Token 近期原文；不再默认限制每任务只能调用 24 次工具或压缩两次。摘要输入不再固定截成 2 KB 首尾，仍保留截断摘要拒收、原始需求和未解决验证状态保护。
 
-默认估算输入达到 19,660 Token 时尝试压缩；设置 216k 窗口后为 166,246。达到阈值仍要经过收益预检查和退避规则。API 返回的实际用量用于向上校准估算，缓存输入也计入；本地估算不冒充实际用量，也不能保证所有模型均不会超窗。独立请求体保护默认 2 MiB，ContextOS 目标仍为 32,000 字节，内存历史保护仍为 4 MiB。旧的显式字节限制依然有效。
+这不是声称估算器、工具、错误恢复和 Pi 完全一致。未知模型仍用 32k 窗口；小窗口会缩小近期保留量。已有显式配置优先，不自动修改用户文件。此次没有付费对照，不能沿用上一版本的 17.16% 数字作为新策略收益。
 
-失败返回值、账本和结束事件会保存结构化 `error`，包含停止阶段、估算值、限制及是否已提交请求；不保存请求正文、认证头或堆栈，并脱敏配置中的凭据。即使未提供 `onText` 回调，也可从返回结果查看错误。独立摘要预算与紧急压缩的试验结果见 [恢复机制实验记录](COMPACTION_RECOVERY_REVIEW.zh-CN.md)；这两项未作为默认行为保留。
+
+## Verification for this policy change
+
+Deterministic regression: 457 passed, 1 skipped, 0 failed. Targeted budget/model/compaction/file-creation checks: 83 passed. New scripted integration fixtures execute 26 tools in one task and at least three successful compactions in one task. Adapter loopback checks verify the fitted wire output allowance, invalid overrides and local capacity rejection before fetch. Summary input retains a middle-of-result marker that legacy excerpts omit. These are self-authored offline checks, not provider Token savings or real coding acceptance. No paid requests were made for this policy change.

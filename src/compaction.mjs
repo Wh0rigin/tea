@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { buildMessagesRequest } from './model.mjs';
 import { collectUserRequirements } from './memory-gc.mjs';
-import { contextBudget } from './context-budget.mjs';
+import { contextBudget, estimateContextTokens } from './context-budget.mjs';
 
 const bytes = (value) => Buffer.byteLength(typeof value === 'string' ? value : JSON.stringify(value), 'utf8');
 const hash = (value) => createHash('sha256').update(value).digest('hex');
@@ -35,18 +35,18 @@ function boundedToolText(text, limit = 2000) {
   return `${head}\n[historical tool details omitted; original_bytes=${buffer.length}; sha256=${hash(value)}]\n${tail}`;
 }
 
-function serializeMessage(message) {
+function serializeMessage(message, preserveDetails = false) {
   if (typeof message.content === 'string') return `[${message.role}]\n${message.content}`;
   return (message.content || []).map((block) => {
     if (block.type === 'text') return `[${message.role}]\n${block.text || ''}`;
     if (block.type === 'tool_use') {
       const parameters = { ...block.input };
       for (const key of ['search', 'replace', 'content']) {
-        if (typeof parameters[key] === 'string') parameters[key] = boundedToolText(parameters[key], 1000);
+        if (!preserveDetails && typeof parameters[key] === 'string') parameters[key] = boundedToolText(parameters[key], 1000);
       }
       return `[tool call ${block.name}; id=${block.id}] ${JSON.stringify(parameters)}`;
     }
-    if (block.type === 'tool_result') return `[tool result ${block.tool_use_id}${block.is_error ? '; FAILED' : ''}]\n${boundedToolText(block.content)}`;
+    if (block.type === 'tool_result') return `[tool result ${block.tool_use_id}${block.is_error ? '; FAILED' : ''}]\n${(preserveDetails ? block.content : boundedToolText(block.content))}`;
     // Provider thinking/signature blocks stay verbatim in retained messages.
     // They are not replayed as assistant messages in the summary request.
     return '';
@@ -60,7 +60,7 @@ function isToolResult(message) {
 
 // A tool-use batch and all of its results are one indivisible group. Refuse
 // ambiguous/orphaned histories instead of guessing a safe cut point.
-function groupsFor(messages, start) {
+function groupsFor(messages, start, preserveDetails = false) {
   const groups = [];
   const ids = new Set();
   for (let index = start; index < messages.length; index += 1) {
@@ -82,7 +82,7 @@ function groupsFor(messages, start) {
         || calls.some(call => !resultIds.has(call.id))) return null;
     }
     groups.push({ start: groupStart, end: index + 1, bytes: bytes(messages.slice(groupStart, index + 1)),
-      text: messages.slice(groupStart, index + 1).map(serializeMessage).join('\n') });
+      text: messages.slice(groupStart, index + 1).map(message => serializeMessage(message, preserveDetails)).join('\n') });
   }
   return groups;
 }
@@ -134,16 +134,21 @@ function fileOperations(messages, end) {
 
 export function prepareCompaction(session, config, { state = session, instructions = '' } = {}) {
   const start = session.compaction?.firstKeptIndex || 0;
-  const groups = groupsFor(session.messages, start);
+  const groups = groupsFor(session.messages, start, config.contextBudgetPolicy === 'pi');
   if (!groups) return { status: 'unavailable', detail: 'History has an unresolved or ambiguous tool batch.' };
   if (groups.length < 2) return { status: 'not_needed', detail: 'There is no older complete history to summarize.' };
   // Always retain the newest complete group, even when it exceeds the target.
   // Older groups must fit: adding one huge historical batch to reach a minimum
   // can otherwise keep that batch indefinitely after a new user turn.
-  let keep = groups.length - 1, retainedBytes = groups[keep].bytes;
-  const target = config.compactionKeepRecentBytes ?? 3600;
-  while (keep > 0 && retainedBytes + groups[keep - 1].bytes <= target) {
-    keep -= 1; retainedBytes += groups[keep].bytes;
+  let keep = groups.length - 1;
+  const tokenRetention = config.compactionKeepRecentTokens !== undefined;
+  const target = tokenRetention ? config.compactionKeepRecentTokens : (config.compactionKeepRecentBytes ?? 3600);
+  const weight = group => tokenRetention
+    ? Math.max(1, estimateContextTokens({ messages: session.messages.slice(group.start, group.end) }) - Math.ceil(256 * 1.2))
+    : group.bytes;
+  let retainedWeight = weight(groups[keep]);
+  while (keep > 0 && retainedWeight < target && (tokenRetention || retainedWeight + weight(groups[keep - 1]) <= target)) {
+    keep -= 1; retainedWeight += weight(groups[keep]);
   }
   if (!keep) return { status: 'not_needed', detail: 'History fits within the configured recent-message retention.' };
   // Pi-style summary budget: reserve 20% headroom, bounded by the configured
