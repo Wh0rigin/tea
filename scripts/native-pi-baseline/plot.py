@@ -17,13 +17,16 @@ for i,r in enumerate(reports):
  ax.set_ylim(0,115);ax.set_yticks([0,25,50,75,100]);ax.set_ylabel('Official full-task acceptance (%)');ax.set_title('DeepSWE: 2 seen tasks' if i==0 else 'WorkBuddy: 4 seen tasks');ax.set_xticks([0,1],['TEA','Pi 0.87.1']);ax.grid(axis='y',alpha=.15);ax.set_axisbelow(True)
 pairs=[p for r in reports for p in r['pairs'] if p['eligibleBothPassed']];ax=axes[2]
 if pairs:
- labels=[p['taskId'].replace('bug_fix-medium-','').replace('feature-medium-','').replace('product_analytics-hard-','').replace('python_port-medium-','')+f" r{p['repeat']}" for p in pairs];x=np.arange(len(pairs));w=.35
+ display={'helm-unified-manifest-stream':'Helm','bug_fix-medium-incorrect_linenos_on_fstring':'Black','feature-medium-add_support_for_dependencies':'FastAPI','python_port-medium-blog_tags':'Blog Tags','product_analytics-hard-signup_funnel':'Analytics','mnamer-daemon-watch-lifecycle':'Mnamer'}
+ labels=[display.get(p['taskId'],p['taskId'])+f"\nr{p['repeat']}" for p in pairs];x=np.arange(len(pairs));w=.35
  for arm,offset in [('tea',-w/2),('pi',w/2)]:ax.bar(x+offset,[p[arm+'Tokens']/1000 for p in pairs],w,label='TEA' if arm=='tea' else 'Pi',color=colors[arm])
- ax.set_xticks(x,labels,rotation=35,ha='right');ax.set_ylabel('Provider tokens (thousands)');ax.legend(frameon=False);ax.grid(axis='y',alpha=.15);ax.set_axisbelow(True)
+ ax.set_xticks(x,labels);ax.set_ylabel('Provider tokens (thousands)');ax.legend(frameon=False);ax.grid(axis='y',alpha=.15);ax.set_axisbelow(True)
 else:ax.text(.5,.5,'No eligible both-passed pairs\nNo token-efficiency claim',ha='center',va='center',transform=ax.transAxes);ax.set_xticks([]);ax.set_yticks([])
-ax.set_title(f'Matched both-passed work: {len(pairs)}/12 pairs')
+ax.set_title(f'Officially both-passed: {len(pairs)}/12 pairs')
 fig.suptitle('TEA vs native Pi — frozen S0 baseline',fontsize=17,y=1.02)
-fig.text(.5,-.12,'Same GLM-5.3-flash / low effort. Two repeats per agent. Seen-task diagnostic; not a full benchmark score.\nTokens include cache input and thinking output. Failed/unknown trials remain in acceptance; excluded from efficiency bars.',ha='center',fontsize=10)
+fig.text(.5,-.12,'Same GLM-5.3-flash / low effort. Two repeats per agent. Seen-task diagnostic; not a full benchmark score.\nTokens include cache input and thinking output. Official failures and unknown usage excluded from token bars; native completion is reported separately.',ha='center',fontsize=10)
 fig.tight_layout()
 for ext in ['png','svg']:fig.savefig(root/f'native-pi-s0.{ext}',dpi=180,bbox_inches='tight')
+svg=root/'native-pi-s0.svg'
+svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf-8').splitlines())+'\n',encoding='utf-8')
 plt.close(fig)
