@@ -20,3 +20,17 @@ test('isolated output fitting preserves the old compression schedule and remains
  assert.equal(candidate.contextReserveTokens, 4096);
  assert.equal(buildMessagesRequest(baseline, request).max_tokens, 131072);
 });
+
+test('all representative legacy-admissible task and summary requests are byte-identical', () => {
+ const baseline = loadCliConfig({}, env), candidate = loadCliConfig({}, { ...env, TEA_FIT_OUTPUT_BUDGET: '1' });
+ let checked = 0;
+ for (const maxTokens of [131072, 13107]) for (const size of [0, 1000, 10000, 80000, 180000, 200000, 300000, 450000]) {
+  const request = { system: 'system', tools: [], messages: [{ role: 'user', content: 'x'.repeat(size) }], maxTokens };
+  const old = contextBudget(baseline, request);
+  if (old.estimatedInputTokens <= old.inputLimit) {
+   assert.equal(JSON.stringify(buildMessagesRequest(baseline, request)), JSON.stringify(buildMessagesRequest(candidate, request)));
+   checked++;
+  }
+ }
+ assert.ok(checked >= 10);
+});
