@@ -1,0 +1,22 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { loadCliConfig } from '../src/config.mjs';
+import { contextBudget, fitOutputLimit, estimateContextTokens } from '../src/context-budget.mjs';
+import { buildMessagesRequest } from '../src/model.mjs';
+const env = { TEA_CONTEXT_WINDOW_TOKENS: '216000', TEA_MAX_OUTPUT_TOKENS: '131072' };
+test('isolated output fitting preserves the old compression schedule and remains opt-in', () => {
+ const baseline = loadCliConfig({}, env), candidate = loadCliConfig({}, { ...env, TEA_FIT_OUTPUT_BUDGET: '1' });
+ const request = { messages: [{ role: 'user', content: 'x'.repeat(300000) }] };
+ assert.equal(baseline.fitOutputBudget, false);
+ assert.equal(contextBudget(baseline, request).triggerTokens, 64665);
+ assert.equal(contextBudget(candidate, request).triggerTokens, 64665);
+ assert.equal(contextBudget(candidate, request).inputLimit, 211904);
+ const output = fitOutputLimit(candidate, request);
+ assert.ok(output < 131072);
+ assert.ok(output + estimateContextTokens(request) + candidate.contextReserveTokens <= 216000);
+ assert.equal(buildMessagesRequest(candidate, request).max_tokens, output);
+ assert.equal(candidate.compactionMaxPerTurn, 2);
+ assert.equal(candidate.compactionKeepRecentBytes, 16000);
+ assert.equal(candidate.contextReserveTokens, 4096);
+ assert.equal(buildMessagesRequest(baseline, request).max_tokens, 131072);
+});

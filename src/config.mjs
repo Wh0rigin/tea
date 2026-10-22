@@ -114,6 +114,7 @@ export function loadConfig(options = {}, env = process.env) {
     maxRequestInputTokens,
     maxRequestInputBytes: maxRequestInputTokens,
     contextWindowTokens, contextReserveTokens,
+    fitOutputBudget: options.fitOutputBudget ?? env.TEA_FIT_OUTPUT_BUDGET === '1',
     maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
