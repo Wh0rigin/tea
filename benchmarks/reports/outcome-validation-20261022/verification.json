@@ -8,7 +8,7 @@
     "src/prompts.mjs": "4c29b0e4fa9957b646f34381347d64b012bf867c44b34f64f67bbe8b8c9a37d6",
     "src/tools.mjs": "8434c1d86758e54c56d50b54f9beab53c98edeed050f1a56c243626bb3e519fd",
     "src/memory-handoff.mjs": "cdd1893573135c5f2b629de6dfb80fb7e8e676075577f34502d873ada2413c46",
-    "tests/entry-validation.test.mjs": "94c20c89a6fa9949acddf25576b3fcebb65981550aea93f2458a852e22aafb54",
+    "tests/entry-validation.test.mjs": "1ecd4bdab2fec472044d9d27bf11400b0f6033d08c5e6da27bda79f1b68c33e3",
     "tests/tool-feedback.test.mjs": "816dd613a8a9490d5131d39b86e9f6f956ff654824cb1997026da169b5fe3687",
     "scripts/check-entry-closure.mjs": "3443506234956a2fb526f1ef7d96621c6017e242ead8797e0c3314143146f5d5"
   },
@@ -39,7 +39,10 @@
     "entry-closure-full.log": "37dc932286ab9848542c556a0cc0313d0d355348302139dbb652a2d8af87a339",
     "entry-closure-full-final.log": "08d58913db892ab179d00d5235fab9f602eccc88a3d6904e4764fec8c5487552",
     "entry-closure-replay.log": "00fd475a69665b5d4c5604ccace086e8d239bf4e87a81fad3bc5c98fd153bbbb",
-    "entry-closure-runtime.log": "c0d4bad0d0d5044fb5d6baad641eafc7c26dfa9b868f46a0e30573319ad921c8"
+    "entry-closure-runtime.log": "c0d4bad0d0d5044fb5d6baad641eafc7c26dfa9b868f46a0e30573319ad921c8",
+    "entry-closure-targeted-final.log": "69a304185e62280cf922e22b2e3bae22cb4339f94b814a1c96f56cd15a3d65f4",
+    "entry-closure-full-r2.log": "f6c8a619228f55e895b7ff71c14baa93da16f045402486fd14dec1d781c50b01",
+    "entry-closure-ci-win22.log": "ee12ed00d8cb33debc75f27f85bbcd436a707ba494a2ec33719d4abfba834b26"
   },
   "staticPayloadBytes": [
     {
@@ -52,5 +55,12 @@
       "systemBytes": 1722,
       "toolDefinitionBytes": 3571
     }
-  ]
+  ],
+  "ciInitialFailure": {
+    "head": "27f8670d2943faba3b13efccbb832220a0c1e1f0",
+    "passedJobs": 5,
+    "failedJob": "Windows Node22",
+    "reason": "Lifecycle fixture temporary-directory cleanup EBUSY after worker wrote result; background worker inherited workspace cwd.",
+    "fix": "Finite worker uses system temp cwd with absolute input/output paths; checked temporary-root cleanup has bounded retries; lifecycle assertions retained."
+  }
 }

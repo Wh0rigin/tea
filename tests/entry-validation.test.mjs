@@ -78,7 +78,7 @@ async function temporary(fn) {
   finally {
     assert.equal(path.dirname(root), path.resolve(os.tmpdir()));
     assert(path.basename(root).startsWith('tea-entry-'));
-    await rm(root, { recursive: true, force: true });
+    await rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   }
 }
 let serial = 0;
@@ -179,7 +179,7 @@ test('real Python lifecycle fixture: exit zero and running flag do not prove con
   await temporary(async root => {
     await writeFile(path.join(root, 'worker.py'), "import time,pathlib,sys\ntime.sleep(.2)\npathlib.Path(sys.argv[1]).write_text('processed')\n");
     await writeFile(path.join(root, 'bad.py'), "import threading,time,pathlib,json\ndef work():\n    time.sleep(.2)\n    pathlib.Path('bad-result').write_text('processed')\npathlib.Path('bad-state').write_text(json.dumps({'running': True}))\nthreading.Thread(target=work, daemon=True).start()\n");
-    await writeFile(path.join(root, 'good.py'), "import subprocess,sys,pathlib,json\nsubprocess.Popen([sys.executable,'worker.py','good-result'],start_new_session=True,stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)\npathlib.Path('good-state').write_text(json.dumps({'running': True}))\n");
+    await writeFile(path.join(root, 'good.py'), "import subprocess,sys,pathlib,json,tempfile\nroot=pathlib.Path.cwd()\nsubprocess.Popen([sys.executable,str(root/'worker.py'),str(root/'good-result')],cwd=tempfile.gettempdir(),start_new_session=True,stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)\n(root/'good-state').write_text(json.dumps({'running': True}))\n");
     for (const name of ['bad', 'good']) {
       const started = spawnSync(python, [`${name}.py`], { cwd: root, timeout: 5000, windowsHide: true });
       assert.equal(started.status, 0, String(started.stderr));
