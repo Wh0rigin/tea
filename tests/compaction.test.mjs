@@ -81,7 +81,7 @@ test('commits a smaller checkpoint without rewriting messages or retained thinki
   assert.deepEqual(s.changedFiles, ['value.mjs']);
   assert.match(requests[0].messages[0].content, /historical tool details omitted/);
   assert.doesNotMatch(requests[0].messages[0].content, /private thought|signed/);
-  assert.equal(requests[0].maxTokens, 1200); assert.deepEqual(requests[0].tools, []);
+  assert.equal(requests[0].maxTokens, 4096); assert.deepEqual(requests[0].tools, []);
   assert.equal(events[0].type, 'conversation_compaction'); assert.equal(events[0].summary, undefined);
   assert.deepEqual(s.compaction.attemptedReadFiles, ['value.mjs']);
 });
@@ -242,7 +242,7 @@ test('rejected provider summary is still billed through the shared adapter and l
   });
 }));
 test('summary and task share the hard budget; refused subsequent request has no network call', async () => {
-  const config = liveConfig({ maxRequestInputTokens: 20000, maxCostUsd: 0.0415 }); let calls = 0;
+  const config = liveConfig({ maxRequestInputTokens: 20000, maxCostUsd: 0.045 }); let calls = 0;
   await fakeFetch(async () => { calls++; return Response.json({ ...done(), usage: { input_tokens: 1000, output_tokens: 1000 } }); }, async () => {
     const adapter = new AnthropicMessagesAdapter(config); await compact(session(), config, { adapter });
     await assert.rejects(adapter.complete({ system: 'coding', tools: [], messages: history() }), /hard cost budget/);
@@ -311,8 +311,11 @@ test('fresh reads after compaction return real source and actual tests can disch
   await writeFile(path.join(root, 'value.test.mjs'), "import test from 'node:test'; import assert from 'node:assert/strict'; import {value} from './value.mjs'; test('value',()=>assert.equal(value,2));\n");
   const config = cfg({ workspace: root, runId: 'fresh', compaction: 'auto', compactionTriggerRatio: 0.2 });
   const s = createAgentSession(config); s.messages = history(); let task = 0;
+  const operations = [];
   const calls = input => ({ content: input.map((call, i) => ({ type: 'tool_use', id: `call-${task}-${i}`, ...call })), stop_reason: 'tool_use' });
-  const result = await runTask('Repair value', config, { session: s, adapterFactory: () => ({ complete: async request => {
+  const result = await runTask('Repair value', config, { session: s,
+    onEvent: event => { if (event.type === 'tool_end' && event.name !== 'read_file') operations.push(event); },
+    adapterFactory: () => ({ complete: async request => {
     if (!request.tools.length) return done();
     task++;
     if (task === 1) return calls([{ name: 'read_file', input: { path: 'value.mjs' } }]);
@@ -323,6 +326,27 @@ test('fresh reads after compaction return real source and actual tests can disch
     }
     return done('Verified.');
   } }) });
-  assert.equal(result.status, 'completed'); assert.equal(result.validationPassed, true);
+  assert.equal(result.status, 'completed', JSON.stringify(operations)); assert.equal(result.validationPassed, true);
   assert.equal(s.compactionCount, 1); assert.match(await readFile(path.join(root, 'value.mjs'), 'utf8'), /value = 2/);
 }));
+
+
+test('summary budget follows Pi reserve ratio and model output ceiling', () => {
+  for (const [overrides, expected] of [
+    [{ maxOutputTokens: 131072 }, 13107],
+    [{ maxOutputTokens: 4096 }, 4096],
+    [{ maxOutputTokens: 131072, compactionReserveTokens: 20000 }, 16000],
+    [{ maxOutputTokens: 1000 }, 1000],
+  ]) {
+    const plan = prepareCompaction(session(), cfg(overrides));
+    assert.equal(plan.request.maxTokens, expected);
+  }
+});
+
+test('summary reserve configuration rejects invalid integers', () => {
+  assert.equal(loadConfig({}, {}).compactionReserveTokens, 16384);
+  assert.equal(loadConfig({}, { TEA_COMPACTION_RESERVE_TOKENS: '20000' }).compactionReserveTokens, 20000);
+  for (const value of ['0', '1', '1.5', 'NaN']) {
+    assert.throws(() => loadConfig({}, { TEA_COMPACTION_RESERVE_TOKENS: value }));
+  }
+});

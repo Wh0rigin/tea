@@ -1,0 +1,140 @@
+{
+  "run_dir": "native-run:baseline",
+  "reward": 0.7875,
+  "pass_rate": 0.625,
+  "n_tasks": 4,
+  "n_trials": 8,
+  "missing_tasks": [],
+  "attempts_per_task": [
+    2
+  ],
+  "score_sources": {
+    "reward": 7,
+    "missing_or_build_error": 1
+  },
+  "per_attempt": [
+    {
+      "attempt": 1,
+      "n_tasks": 4,
+      "reward": 0.925,
+      "pass_rate": 0.75
+    },
+    {
+      "attempt": 2,
+      "n_tasks": 4,
+      "reward": 0.65,
+      "pass_rate": 0.5
+    }
+  ],
+  "per_task": {
+    "bug_fix-medium-incorrect_linenos_on_fstring": {
+      "n_attempts": 2,
+      "reward": 1.0,
+      "pass_rate": 1.0,
+      "attempts": [
+        {
+          "trial": "bug_fix-medium-incorrect_linenos_on_fstring__r1-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 6,
+          "tests_total": 6,
+          "reward": 1.0,
+          "full_pass": true,
+          "build_error": false
+        },
+        {
+          "trial": "bug_fix-medium-incorrect_linenos_on_fstring__r2-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 6,
+          "tests_total": 6,
+          "reward": 1.0,
+          "full_pass": true,
+          "build_error": false
+        }
+      ]
+    },
+    "feature-medium-add_support_for_dependencies": {
+      "n_attempts": 2,
+      "reward": 1.0,
+      "pass_rate": 1.0,
+      "attempts": [
+        {
+          "trial": "feature-medium-add_support_for_dependencies__r1-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 4,
+          "tests_total": 4,
+          "reward": 1.0,
+          "full_pass": true,
+          "build_error": false
+        },
+        {
+          "trial": "feature-medium-add_support_for_dependencies__r2-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 4,
+          "tests_total": 4,
+          "reward": 1.0,
+          "full_pass": true,
+          "build_error": false
+        }
+      ]
+    },
+    "product_analytics-hard-signup_funnel": {
+      "n_attempts": 2,
+      "reward": 0.5,
+      "pass_rate": 0.5,
+      "attempts": [
+        {
+          "trial": "product_analytics-hard-signup_funnel__r1-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 13,
+          "tests_total": 13,
+          "reward": 1.0,
+          "full_pass": true,
+          "build_error": false
+        },
+        {
+          "trial": "product_analytics-hard-signup_funnel__r2-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 0,
+          "tests_total": 1,
+          "reward": 0.0,
+          "full_pass": false,
+          "build_error": true
+        }
+      ]
+    },
+    "python_port-medium-blog_tags": {
+      "n_attempts": 2,
+      "reward": 0.65,
+      "pass_rate": 0.0,
+      "attempts": [
+        {
+          "trial": "python_port-medium-blog_tags__r1-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 14,
+          "tests_total": 20,
+          "reward": 0.7,
+          "full_pass": false,
+          "build_error": false
+        },
+        {
+          "trial": "python_port-medium-blog_tags__r2-baseline-repair21",
+          "score_source": "reward",
+          "tests_passed": 12,
+          "tests_total": 20,
+          "reward": 0.6,
+          "full_pass": false,
+          "build_error": false
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "reward": "mean of verifier-reported per-trial score; build_error -> 0",
+    "pass_rate": "fraction of trials with verifier score >= 1.0",
+    "score_source": "score.json reward > overall > test_pass_rate > tests_passed/tests_total fallback",
+    "aggregation": "mean over attempts within each task, then mean over tasks",
+    "denominator_rebasing": "pure test-count attempts are re-scored as tests_passed/max(tests_total) across a task's attempts so a shrunken suite cannot inflate the ratio; composite LLM+rule scores are exempt"
+  },
+  "sourceMetricsSha256": "40ae427f3eb69d49b8c319cb8a8b112f6fdffd7ee91ad1735f4fa8575329b231",
+  "pathRedactedForPublication": true
+}

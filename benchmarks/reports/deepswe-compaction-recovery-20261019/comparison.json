@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "clientDate": "2026-10-19",
+  "benchmark": "DeepSWE v1.1",
+  "scope": "two preselected tasks, one attempt each; restricted approval diagnostic pilot, not a full or standard leaderboard score",
+  "baseline": {
+    "commit": "2e793e17001216cfef0df8de9ae92571786c7e85",
+    "tasks": [
+      {
+        "id": "helm-unified-manifest-stream",
+        "agentStatus": "failed",
+        "changedFiles": [],
+        "reward": {
+          "reward": 0,
+          "f2p_total": 5,
+          "f2p_passed": 0,
+          "p2p_total": 2,
+          "p2p_passed": 2,
+          "f2p": 0.0,
+          "p2p": 1.0,
+          "partial": 0.2857142857142857
+        },
+        "requests": 13,
+        "inputTokensIncludingCache": 81056,
+        "outputTokens": 2696,
+        "cacheReadTokens": 26752,
+        "cacheWriteTokens": 0,
+        "totalTokens": 83752,
+        "providerUsageComplete": true,
+        "compactionRequests": 2,
+        "compactionTokens": 11509,
+        "error": null,
+        "controlCostEstimateUsd": 0.0723936
+      },
+      {
+        "id": "mnamer-daemon-watch-lifecycle",
+        "agentStatus": "failed",
+        "changedFiles": [],
+        "reward": {
+          "reward": 0,
+          "f2p_total": 51,
+          "f2p_passed": 0,
+          "p2p_total": 319,
+          "p2p_passed": 319,
+          "f2p": 0.0,
+          "p2p": 1.0,
+          "partial": 0.8621621621621621
+        },
+        "requests": 8,
+        "inputTokensIncludingCache": 54350,
+        "outputTokens": 3546,
+        "cacheReadTokens": 18368,
+        "cacheWriteTokens": 0,
+        "totalTokens": 57896,
+        "providerUsageComplete": true,
+        "compactionRequests": 1,
+        "compactionTokens": 7390,
+        "error": null,
+        "controlCostEstimateUsd": 0.05340879999999999
+      }
+    ],
+    "passed": 0,
+    "evaluated": 2,
+    "totalTokens": 141648,
+    "requests": 21,
+    "allUsageComplete": true
+  },
+  "candidate": {
+    "commit": "fb4fa1120ab4dd4deaf73f78263901475ee1de4f",
+    "tasks": [
+      {
+        "id": "helm-unified-manifest-stream",
+        "agentStatus": "failed",
+        "changedFiles": [],
+        "reward": {
+          "reward": 0,
+          "f2p_total": 5,
+          "f2p_passed": 0,
+          "p2p_total": 2,
+          "p2p_passed": 2,
+          "f2p": 0.0,
+          "p2p": 1.0,
+          "partial": 0.2857142857142857
+        },
+        "requests": 20,
+        "inputTokensIncludingCache": 177192,
+        "outputTokens": 6510,
+        "cacheReadTokens": 33088,
+        "cacheWriteTokens": 0,
+        "totalTokens": 183702,
+        "providerUsageComplete": true,
+        "compactionRequests": 3,
+        "compactionTokens": 20838,
+        "error": {
+          "code": "MODEL_CONTEXT_LIMIT",
+          "name": "ModelError",
+          "message": "Request blocked by model context budget: estimated input 35957 tokens exceeds 24576; compact or start a new conversation",
+          "stage": "model",
+          "requestSubmitted": false,
+          "budget": {
+            "estimatedInputTokens": 35957,
+            "inputLimit": 24576,
+            "triggerTokens": 19660,
+            "contextWindowTokens": 32768,
+            "requestBytes": 89236,
+            "maxWireBytes": 2097152,
+            "outputLimit": 4096,
+            "residentBytes": 87136,
+            "residentLimit": 4194304,
+            "automaticCompactions": 2,
+            "emergencyCompactions": 1
+          }
+        },
+        "controlCostEstimateUsd": 0.1599816
+      },
+      {
+        "id": "mnamer-daemon-watch-lifecycle",
+        "agentStatus": "failed",
+        "changedFiles": [],
+        "reward": {
+          "reward": 0,
+          "f2p_total": 51,
+          "f2p_passed": 0,
+          "p2p_total": 319,
+          "p2p_passed": 319,
+          "f2p": 0.0,
+          "p2p": 1.0,
+          "partial": 0.8621621621621621
+        },
+        "requests": 21,
+        "inputTokensIncludingCache": 176633,
+        "outputTokens": 10968,
+        "cacheReadTokens": 37440,
+        "cacheWriteTokens": 0,
+        "totalTokens": 187601,
+        "providerUsageComplete": true,
+        "compactionRequests": 3,
+        "compactionTokens": 18845,
+        "error": {
+          "code": "MODEL_CONTEXT_LIMIT",
+          "name": "ModelError",
+          "message": "Request blocked by model context budget: estimated input 29340 tokens exceeds 24576; compact or start a new conversation",
+          "stage": "model",
+          "requestSubmitted": false,
+          "budget": {
+            "estimatedInputTokens": 29340,
+            "inputLimit": 24576,
+            "triggerTokens": 19660,
+            "contextWindowTokens": 32768,
+            "requestBytes": 72586,
+            "maxWireBytes": 2097152,
+            "outputLimit": 4096,
+            "residentBytes": 70153,
+            "residentLimit": 4194304,
+            "automaticCompactions": 2,
+            "emergencyCompactions": 1
+          }
+        },
+        "controlCostEstimateUsd": 0.17201680000000003
+      }
+    ],
+    "passed": 0,
+    "evaluated": 2,
+    "totalTokens": 371303,
+    "requests": 41,
+    "allUsageComplete": true
+  },
+  "tokenChangePercent": 162.13077487857223,
+  "taskTokenChangePercent": {
+    "helm-unified-manifest-stream": 119.34043366128569,
+    "mnamer-daemon-watch-lifecycle": 224.03102114135694
+  },
+  "protocolLimitations": [
+    "Both task instructions require creating a branch; the frozen approval policy permits only a narrow set of build/test commands outside built-in safe operations. It can deny required Git operations.",
+    "The same restricted policy was retained in both rounds; results cannot establish unconstrained coding ability or a universal causal token effect.",
+    "One attempt per task, different stochastic trajectories; the bundle does not isolate the three changes.",
+    "Thirty-minute agent cap versus official three-hour cap; neither attempt hit the wall, tool or cost cap.",
+    "No task completed and no code edits occurred; lower usage from an early failure is not an efficiency win."
+  ],
+  "decision": "Retain structured runtime diagnostics; revert summary-budget and recovery behavior from defaults because this pilot showed higher usage without acceptance gains. Repair the benchmark approval contract before future effectiveness claims.",
+  "offlineChecks": {
+    "candidateWindowsFull": "373/373",
+    "candidateLinuxFocused": "83/83",
+    "candidateRuntimeSmoke": "12/12 scripted; no provider savings claim",
+    "fakeSseTransport": "passed; no provider calls"
+  },
+  "protocol": {
+    "teaCommit": "fb4fa1120ab4dd4deaf73f78263901475ee1de4f",
+    "baselineTeaCommit": "2e793e17001216cfef0df8de9ae92571786c7e85",
+    "deepSweCommit": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "pierCommit": "4d3c14041d16443f3f9f460dcdf23629994a304e",
+    "selection": "first two IDs by ascending sha256(tea-deepswe-smoke-v1:seed=0:<id>), all tasks eligible",
+    "tasks": [
+      {
+        "id": "helm-unified-manifest-stream",
+        "language": "go",
+        "repository": "https://github.com/helm/helm",
+        "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+        "os": "linux",
+        "agentTimeoutSec": 10800.0,
+        "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+        "separateVerifier": true
+      },
+      {
+        "id": "mnamer-daemon-watch-lifecycle",
+        "language": "python",
+        "repository": "https://github.com/jkwill87/mnamer",
+        "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+        "os": "linux",
+        "agentTimeoutSec": 10800.0,
+        "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+        "separateVerifier": true
+      }
+    ],
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "stream": true,
+    "maxOutputTokens": 4096,
+    "maxToolCalls": 96,
+    "maxTransportCallsPerTask": 128,
+    "requestTimeoutSeconds": 90,
+    "agentWallSeconds": 1800,
+    "officialAgentTimeoutSeconds": 10800,
+    "perTaskControlBudgetUsd": 5,
+    "suiteControlBudgetUsd": 10,
+    "controlRatesPerMillion": {
+      "input": 0.8,
+      "output": 2.8,
+      "note": "control estimates, not provider invoice"
+    },
+    "unknownBilling": "retain full 5 USD task reservation and stop the suite without retries",
+    "candidateChanges": {
+      "structuredErrors": true,
+      "summaryInitialOutputTokens": 2048,
+      "summaryThinkingBudgetTokens": 1024,
+      "summaryTruncationRepairs": 1,
+      "normalCompactionAttemptsPerTurn": 2,
+      "emergencyCompactionAttemptsPerTurn": 1,
+      "wrapperObservationOnly": [
+        "save onText",
+        "copy private ledger after run"
+      ]
+    },
+    "candidateSourceArchiveSha256": "895a3af45a24c90040a578e976230d000cf116541b93ec78cf7d416951f78163",
+    "adapterSha256": {
+      "inference_relay.py": "6c763a0f324346d9b8cfd29da33de61a6b15b2effe9e57936c4b2035a9b7f49f",
+      "run-tea.mjs": "e3a96b6d671ff96a12fe18d8ebade038ab7a8f693e5bfe51d780b89b20a5d4ab",
+      "tea_adapter.py": "6891dd7e0d93dfb61f1c8f6be37f6c1df1473874bc7e6e120869d2ea916e3a37",
+      "run_pilot.py": "84677d30f5657e66f38866ef8104ccd41f252f8914b67127970e2781afb6d21f"
+    }
+  }
+}

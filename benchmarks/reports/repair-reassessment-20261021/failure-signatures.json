@@ -1,0 +1,279 @@
+{
+  "scope": "Post-run verifier outputs only; no reference solutions or hidden verifier source",
+  "runs": [
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "python_port-medium-blog_tags",
+      "failedCheckNames": [
+        "post template receives tags"
+      ],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "python_port-medium-blog_tags",
+      "failedCheckNames": [
+        "post template receives markdown content",
+        "post template receives tags",
+        "markdown content renders heading for another post",
+        "post template placeholders are replaced",
+        "index uses site title",
+        "index template placeholders are replaced"
+      ],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "failedCheckNames": [
+        "tests.test_ws_dependencies::test_index - TypeError: FastAPI.websock...",
+        "tests.test_ws_dependencies::test_routerindex - TypeError: FastAPI.w...",
+        "tests.test_ws_dependencies::test_routerprefixindex - TypeError: Fas..."
+      ],
+      "exceptionSignatures": [
+        "TypeError: FastAPI.websocket() got an unexpected keyword argument 'dependencies'",
+        "TypeError: FastAPI.websock...",
+        "TypeError: FastAPI.w...",
+        "TypeError: Fas..."
+      ]
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "failedCheckNames": [
+        "signup count all users",
+        "verify count respects step order",
+        "create project requires prior verify in order",
+        "invite count one user",
+        "ads activation only u1 qualifies because u2 out of order",
+        "organic delayed create still counts if ordered"
+      ],
+      "exceptionSignatures": [
+        "TypeError: list indices must be integers or slices, not str\"",
+        "TypeError: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "product_analytics-hard-signup_funnel",
+      "failedCheckNames": [],
+      "exceptionSignatures": [
+        "TypeError: string indices must be integers, not 'str'"
+      ]
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "feature-medium-add_support_for_dependencies",
+      "failedCheckNames": [
+        "tests.test_ws_dependencies::test_index - TypeError: FastAPI.websock...",
+        "tests.test_ws_dependencies::test_routerindex - TypeError: FastAPI.w...",
+        "tests.test_ws_dependencies::test_routerprefixindex - TypeError: Fas..."
+      ],
+      "exceptionSignatures": [
+        "TypeError: FastAPI.websocket() got an unexpected keyword argument 'dependencies'",
+        "TypeError: FastAPI.websock...",
+        "TypeError: FastAPI.w...",
+        "TypeError: Fas..."
+      ]
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "python_port-medium-blog_tags",
+      "failedCheckNames": [
+        "post template receives title",
+        "post template receives markdown content",
+        "post template receives tags",
+        "post template receives date",
+        "markdown content renders heading for another post",
+        "index links to post pages",
+        "tag page links to post pages"
+      ],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "python_port-medium-blog_tags",
+      "failedCheckNames": [
+        "post template receives tags",
+        "index includes all posts",
+        "index lists posts newest first",
+        "index links to post pages",
+        "home tag groups matching posts",
+        "drink tag only includes tea",
+        "food tag includes food posts",
+        "tag page links to post pages"
+      ],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "WB-Bench-Code",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "helm-unified-manifest-stream",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "helm-unified-manifest-stream",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "candidate",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "failedCheckNames": [
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_debounces_partial_download_and_processes_complete",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_requires_no_network_or_prompts",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_state_file_is_valid_json_after_run_once",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_writes_log_entries",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_persists_state_and_can_resume",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_uses_default_state_path_when_omitted",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_state_content_updates_between_run_once_invocations",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_logs_respects_state_path_with_subdirectory",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_notification_webhook_failure_does_not_crash",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_start_processes_files_and_supports_status_and_stop",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_only_processes_toplevel_files",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_batch_size_carries_across_runs",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_only_skips_part_suffix",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_moves_various_extensions",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_config_combined_with_cli_watch",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_preserves_filename_exactly",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_skips_directories_inside_watch_folder",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_run_once_destination_exists_no_overwrite"
+      ],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 1,
+      "arm": "baseline",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "helm-unified-manifest-stream",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "helm-unified-manifest-stream",
+      "failedCheckNames": [],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "baseline",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "failedCheckNames": [
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_logs_respects_state_path_with_subdirectory",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_start_processes_files_and_supports_status_and_stop",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_restart_stops_then_starts_when_running",
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_restart_just_starts_when_not_running"
+      ],
+      "exceptionSignatures": []
+    },
+    {
+      "benchmark": "DeepSWE v1.1",
+      "repeat": 2,
+      "arm": "candidate",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "failedCheckNames": [
+        "tests.e2e.test_watch_folder_daemon_mode::test_daemon_start_processes_files_and_supports_status_and_stop"
+      ],
+      "exceptionSignatures": []
+    }
+  ]
+}

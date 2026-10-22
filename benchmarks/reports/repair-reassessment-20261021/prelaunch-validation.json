@@ -1,0 +1,16 @@
+{
+  "deepswe": {
+    "status": "passed",
+    "providerCalls": 0,
+    "protocolSha256": "affc1fb0bfeffc2494f78f4a16c3bc3e14b2144cabec093f41c2e4360474c98f",
+    "sourceBytesMatchedFrozenArchives": true,
+    "nativeLifecyclePassed": true
+  },
+  "workbuddy": {
+    "status": "passed",
+    "providerCalls": 0,
+    "protocolSha256": "a2e2935d65067a4da921186a2a03e5f7029aa638b4bb25142da76e9bbce3aab3",
+    "sourceBytesMatchedFrozenArchives": true,
+    "nativeLifecyclePassed": true
+  }
+}

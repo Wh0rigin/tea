@@ -1,3 +1,4 @@
+import { normalizeEditPermissions } from './edit-permissions.mjs';
 import path from 'node:path';
 import { validateRunId } from './run-id.mjs';
 
@@ -66,6 +67,11 @@ export function loadConfig(options = {}, env = process.env) {
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
     options.defaultCompactionKeepRecentBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
+  const compactionReserveTokens = positiveNumber(options.compactionReserveTokens ?? env.TEA_COMPACTION_RESERVE_TOKENS,
+    16384, 'Compaction reserve tokens');
+  if (!Number.isSafeInteger(compactionReserveTokens) || compactionReserveTokens < 2) {
+    throw new ConfigError('Compaction reserve tokens must be a safe integer of at least 2');
+  }
   const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
   if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
   const memoryGc = String(options.memoryGc || env.TEA_MEMORY_GC || 'auto').toLowerCase();
@@ -92,7 +98,11 @@ export function loadConfig(options = {}, env = process.env) {
     throw new ConfigError('TEA_OUTPUT_PRICE_USD_PER_MTOK must be a non-negative number');
   }
 
+  let editPermissions;
+  try { editPermissions=normalizeEditPermissions((options.editPermissions !== undefined ? options.editPermissions : (env.TEA_EDIT_PERMISSIONS === undefined ? {} : JSON.parse(env.TEA_EDIT_PERMISSIONS)))); }
+  catch { throw new ConfigError('Invalid editPermissions / TEA_EDIT_PERMISSIONS; use workspace-relative allow, ask and deny arrays'); }
   return {
+    editPermissions,
     apiKey,
     baseUrl: String(env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, ''),
     model: String(env.ANTHROPIC_MODEL || 'claude-sonnet-4-5'),
@@ -123,6 +133,7 @@ export function loadConfig(options = {}, env = process.env) {
     compactionTriggerRatio,
     compactionKeepRecentBytes,
     compactionMaxPerTurn,
+    compactionReserveTokens,
     memoryGc,
     memoryCacheBytes,
     memoryGcMaxResidentBytes,

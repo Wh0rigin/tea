@@ -1,0 +1,84 @@
+{
+  "name": "TEA evidence residency stage 2 diagnostic pilot",
+  "status": "frozen_before_model_calls",
+  "baselineTeaCommit": "f03052a5b41453c206f9375bd5c004842cab0dc4",
+  "candidateTeaCommit": "778a54ff1773e51d4f1ca1211fda4249a1eb848c",
+  "variable": "Version/range-aware read-cache retention based on actual assembled source visibility; production delta only src/context-assembler.mjs.",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true
+    }
+  ],
+  "order": [
+    {
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "attemptsPerTaskPerArm": 1,
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 4096,
+  "contextWindowTokens": 216000,
+  "contextosTargetBytes": 32000,
+  "compaction": "auto",
+  "maxToolCalls": 96,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 90,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 5,
+  "suiteControlBudgetUsd": 20,
+  "controlRatesPerMillion": {
+    "input": 0.8,
+    "output": 2.8
+  },
+  "unknownBilling": "Retain full task reservation; stop suite without retry. Known infrastructure failures also stop.",
+  "acceptance": "Official independent verifier; complete-task acceptance primary, partial items diagnostic. Existing tasks are seen regressions, not unseen generalization.",
+  "adoption": "No regression in complete-task acceptance or existing behavior. Token benefit only separately for both-complete pairs; no failed-run efficiency claim. Quality improvements with higher tokens require explicit review.",
+  "limits": "Two tasks, one attempt per arm; stochastic diagnostic pilot, not a robust causal/general benchmark. No unseen expansion unless initial evidence supports it. No hidden tests/reference solutions read or supplied during coding.",
+  "archivesSha256": {
+    "baseline": "af519b699f990567e108c2811c653825af3ce9f871afec61fbc62b13d8c11c05",
+    "candidate": "5a792c715e5e1c561568f9afa9e878e398d9c52de7c39f3e0308ff37a7add13f"
+  },
+  "adapterSha256": {
+    "tea_adapter.py": "0d178d081585a01646d6e2f197b13d7d369e35fb2bd743cc4205e6e7e4bacfe8",
+    "run-tea.mjs": "8f6b3dbba2d2cf49fb3bba0c0d6d8c3cc9ab9132104d67bc25efcb1e54fd9506",
+    "run_pilot.py": "86b28425d2c5fbde28a9b26f1908871266082e5e7f1f07dfc0bd793b3b3e2969",
+    "inference_relay.py": "30af5c727db66f2d0089acd3a72afe75163a6d8d10d97d74a1fd14dd5b2ff5fa",
+    "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1",
+    "preflight.py": "f870fa5eafd6d198b1a36a65420a539b5cd1a920e1e403e6da91ecb7e57df640"
+  }
+}

@@ -52,3 +52,7 @@ tea config path   # 查看绝对路径
 ## 实验与程序接口
 
 真实基准和对比脚本继续使用显式环境配置及有限预算，不自动继承用户配置。`loadConfig()` 保持纯选项/环境加载；程序需要用户配置时，可调用 `resolveUserEnvironment()`，将结果传给 `loadConfig()`。
+
+## 编辑权限
+
+`editPermissions` 支持相对工作区的 deny、ask、allow 路径列表，可配置受保护的既有测试、需审批文件及可选写入范围。详见[编辑权限与工具策略](EDIT_PERMISSIONS.zh-CN.md)，包括匹配规则、SDK 拦截和子进程限制。

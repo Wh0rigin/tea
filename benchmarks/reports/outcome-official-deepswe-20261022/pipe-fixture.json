@@ -1,0 +1,29 @@
+{
+  "selfAuthoredFixture": true,
+  "notOfficialTaskAcceptance": true,
+  "providerCalls": 0,
+  "finiteSelfTerminatingWorkers": true,
+  "cases": [
+    {
+      "case": "fork_inherits_pipes",
+      "captureCompletedWithinHalfSecond": false,
+      "parentExitedWhilePipesOpen": true,
+      "returncode": 0,
+      "elapsedMs": 2015
+    },
+    {
+      "case": "new_session_inherits_pipes",
+      "captureCompletedWithinHalfSecond": false,
+      "parentExitedWhilePipesOpen": true,
+      "returncode": 0,
+      "elapsedMs": 2037
+    },
+    {
+      "case": "new_session_redirects_pipes",
+      "captureCompletedWithinHalfSecond": true,
+      "parentExitedWhilePipesOpen": null,
+      "returncode": 0,
+      "elapsedMs": 28
+    }
+  ]
+}

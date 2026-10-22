@@ -1,0 +1,62 @@
+{
+  "mode": "offline-scripted",
+  "providerCalls": 0,
+  "results": [
+    {
+      "name": "crash_then_unrelated_pass",
+      "status": "needs_validation",
+      "validationPassed": false,
+      "unresolved": 1,
+      "modelRequests": 4,
+      "toolCalls": 2
+    },
+    {
+      "name": "fix_without_entry_retest",
+      "status": "needs_validation",
+      "validationPassed": false,
+      "unresolved": 1,
+      "modelRequests": 5,
+      "toolCalls": 3
+    },
+    {
+      "name": "fix_and_entry_retest",
+      "status": "completed",
+      "validationPassed": true,
+      "unresolved": 0,
+      "modelRequests": 3,
+      "toolCalls": 4
+    },
+    {
+      "name": "normal_success",
+      "status": "completed",
+      "validationPassed": true,
+      "unresolved": 0,
+      "modelRequests": 2,
+      "toolCalls": 1
+    },
+    {
+      "name": "handled_negative",
+      "status": "completed",
+      "validationPassed": true,
+      "unresolved": 0,
+      "modelRequests": 2,
+      "toolCalls": 2
+    },
+    {
+      "name": "declared_exception_probe",
+      "status": "completed",
+      "validationPassed": true,
+      "unresolved": 0,
+      "modelRequests": 2,
+      "toolCalls": 2
+    },
+    {
+      "name": "cannot_relabel_observed_crash",
+      "status": "needs_validation",
+      "validationPassed": false,
+      "unresolved": 1,
+      "modelRequests": 5,
+      "toolCalls": 3
+    }
+  ]
+}

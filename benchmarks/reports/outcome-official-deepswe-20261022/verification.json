@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "candidateRuntimeCommit": "819bd728039a59ac7e9bb5ed1a0080c9f14ecbd8",
+  "protocolFrozenCommit": "3b0215a965c34bfec7e6971f7329a3fdb85863a1",
+  "plannedAttempts": 4,
+  "completedAttempts": 4,
+  "officialPasses": 1,
+  "nativeCompletedAndOfficialPassed": 0,
+  "submittedTaskRequests": 213,
+  "independentlyReconciledRequests": 213,
+  "knownUsageAttempts": 4,
+  "unknownUsageAttempts": 0,
+  "paidRetries": 0,
+  "taskProviderTokens": 4593245,
+  "probeRequestsSeparate": 1,
+  "probeTokensSeparate": 19,
+  "piRetested": false,
+  "sameEndpointAsHistoricalPi": false,
+  "codeOnlyBenefitIdentifiable": false,
+  "checks": {
+    "initialSourceAndInstructionIdentity": true,
+    "requestHashesAndAllUsageComponents": true,
+    "commonRequestControls": true,
+    "candidateRuntimeUnchangedDuringRun": true,
+    "allAttemptTokenSum": true,
+    "historicalPairArithmetic": true,
+    "svgXml": true,
+    "artifactSecretPatternScan": true,
+    "reportLinks": true,
+    "pngVisualReview": true
+  },
+  "privateEvidenceSha256": {
+    "aggregate-final.json": "7eb2866e9d321ccdb438ee67694814f43143207b121061d34941efe80757ec12",
+    "progress-final.json": "a920a0cfbebcd1862f185d4104b28998e766c64a12580054404bcbafaff06528",
+    "diagnostics-current.json": "274d865db050fdad50cade134bc44534139ee6156beb64de9bc080fb159eb67d"
+  },
+  "renderScriptSha256": "06fc565bbe948fde8b8987797eedc0b34a6dd2f427635cdb6b41e619414fcb0a",
+  "postRunDiagnosticScriptSha256": "73b9701345ff139a0640083a94a4a74bd66b58092f1928a4b0e8c4819c2651e9",
+  "artifactSha256": {
+    "context-policy-inspection.json": "067d2933cf034d430478adca6ccb96fca11043579040490af9a89c005c4c4fa8",
+    "diagnostics.json": "b9bcd5aa74b73354a7257845e80f0a3f43046381e0011ff1d16b43d4cb38a540",
+    "official-deepswe-history.png": "4a7aaa1a40672396a3f4f61f343a4e7f8f0038529be7087c881791ae13f5cb6f",
+    "official-deepswe-history.svg": "0ebf797ee5484e72a2212f982cdd19c5a12ec4685ecabd72d8ddaec34c342c04",
+    "pipe-fixture.json": "78a2cf4284a6c63276a96a049540a61cee038c9e8165296aa0a31cb5b8aa2e8f",
+    "preflight.json": "a4fb62f3dd11e8081ecdd32530fc2bb2ef4b46fd7f540538993e89e8176571d4",
+    "protocol.json": "8b01a297078f39871fc5ba5270000d3cf1aceda5331eb01bce0fb7eafbffc939",
+    "results.json": "8bac547472fb676a38bb8ba1f6961aa068da1e8007485059784ed3ed04d083e8",
+    "RESULTS.zh-CN.md": "403afbaf441547a5c0df735848c40783630b5a3ad329783e5feeb9faabb1c9cc"
+  },
+  "selfAuthoredPipeFixture": {
+    "providerCalls": 0,
+    "cases": 3,
+    "allExpectedOutcomesObserved": true,
+    "notOfficialTaskAcceptance": true
+  },
+  "publicationCorrection": {
+    "initialCommit": "abd5db8b722a466115e112877a98ea8e5cce03b4",
+    "issue": "Matplotlib SVG trailing whitespace detected by git diff --check",
+    "fix": "Strip trailing whitespace, preserve normalized path geometry; update render cleanup and artifact hashes",
+    "pathGeometryUnchanged": true,
+    "pngUnchanged": true,
+    "experimentDataUnchanged": true
+  }
+}

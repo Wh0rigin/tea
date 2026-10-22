@@ -160,7 +160,11 @@ export class TerminalView {
       this.write(this.paint(`  ${failed ? '!' : '+'} [${record.id}] ${event.name} · ${status} · ${timing} · /tools ${record.id}`, failed ? '31' : '2'), { raw: true });
       if (event.name === 'apply_patch' && !event.isError) {
         const lines = (text, prefix) => terminalText(text || '').split('\n').slice(0, 6).map(line => prefix + line.slice(0, 160)).join('\n');
-        this.write(this.paint(lines(event.input?.search, '- '), '31') + '\n' + this.paint(lines(event.input?.replace, '+ '), '32'), { raw: true });
+        const edits = event.input?.edits || [event.input || {}];
+        for (const edit of edits.slice(0, 3)) {
+          this.write(this.paint(lines(edit.search, '- '), '31') + '\n' + this.paint(lines(edit.replace, '+ '), '32'), { raw: true });
+        }
+        if (edits.length > 3) this.write(`  ... ${edits.length - 3} more replacements; /tools ${record.id}`);
       }
       if (failed) this.write(record.output.slice(0, 800));
     }
@@ -282,8 +286,18 @@ export async function runInteractive(config, { demo = false, initialTask, input 
   const approveCommand = (command) => new Promise(resolve => {
     if (controller?.signal.aborted || closed) { resolve(false); return; }
     view.approval = true;
-    approval = (allowed) => { view.approval = false; resolve(allowed); };
+    approval = (allowed) => { view.approval = false; resolve({ decision: allowed ? 'allow' : 'deny', source: 'user', reason: 'Command denied by user.' }); };
     view.write(`\nAllow this command in ${config.workspace}?\n${command}\nType yes to approve; anything else denies it.`);
+  });
+
+  const approveEdit = (event) => new Promise(resolve => {
+    if (controller?.signal.aborted || closed) { resolve(false); return; }
+    view.approval = true;
+    approval = allowed => { view.approval = false; resolve(allowed); };
+    const proposal=event.operation==='create'?event.change.content
+      :(event.change.edits || [event.change]).map(edit=>`- ${edit.search}\n+ ${edit.replace}`).join('\n');
+    const preview=terminalText(redactText(proposal));
+    view.write(`\nAllow this ${event.operation} in ${config.workspace}?\n${event.path}${event.resolvedPath===event.path?'':` -> ${event.resolvedPath}`}\n${preview.slice(0,4000)}${preview.length>4000?'\n[Preview truncated]':''}\nType yes to approve once; anything else denies it.`);
   });
 
   const submit = async (line) => {
@@ -295,7 +309,7 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     if (!task) { view.prompt(); return; }
     if (task.startsWith('/') && !composed.length) {
       if (task === '/help') view.write(HELP);
-      else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${view.costCap == null ? 'unlimited' : view.spent === null ? 'unknown' : dollars(Math.max(0, view.costCap - view.spent))}\nMemory policy: ${config.memoryPolicy}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') : 'none'}\nResident history messages: ${session.messages.length}\nArchived history messages: ${session.archivedMessageCount || 0}\nActive context messages: ${sessionContext(session).length}\nConversation compactions: ${session.compactionCount}\nAuto compaction: ${config.compaction}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
+      else if (task === '/status') view.write(`Model: ${config.model}\nWorkspace: ${config.workspace}\nProvider input: ${tokens(view.usage.complete && !demo ? view.usage.input : null)}\nProvider output: ${tokens(view.usage.complete && !demo ? view.usage.output : null)}\nCached input (part of input): ${tokens(view.usage.complete && !demo ? view.usage.cached : null)}\nConservative accounted spend: ${dollars(view.spent)}\nRemaining budget: ${view.costCap == null ? 'unlimited' : view.spent === null ? 'unknown' : dollars(Math.max(0, view.costCap - view.spent))}\nMemory policy: ${config.memoryPolicy}\nOutstanding validation: ${session.pendingValidation ? session.changedFiles.join(', ') || 'workspace checks' : 'none'}\nUnavailable checks (still unverified): ${redactText(JSON.stringify((session.validationUnavailable || []).map(({ command, alternativeCommand }) => ({ command, ...(alternativeCommand ? { alternativeCommand } : {}) }))))}\nResident history messages: ${session.messages.length}\nArchived history messages: ${session.archivedMessageCount || 0}\nActive context messages: ${sessionContext(session).length}\nConversation compactions: ${session.compactionCount}\nAuto compaction: ${config.compaction}\nSession mappings: ${session.tools?.sessionTerms.size || 0}`);
       else if (/^\/tools(?:\s+\d+)?$/.test(task)) view.showTools(task.split(/\s+/)[1]);
       else if (task === '/new') { await resetConversation(session, config); composed = []; view.multiline = false; view.mode = 'Ready'; view.write('New conversation. Spending and outstanding edits are retained.'); }
       else if (task === '/memory') view.write(JSON.stringify({ sessionId: session.persistent ? session.sessionId : null,
@@ -344,7 +358,7 @@ export async function runInteractive(config, { demo = false, initialTask, input 
     view.prompt();
     try {
       await runTask(prompt, { ...config, runId: `${config.runId}-${randomUUID().slice(0, 8)}` }, {
-        session, signal: controller.signal, adapterFactory, approveCommand,
+        session, signal: controller.signal, adapterFactory, approveCommand, approveEdit,
         onText: text => view.write(`\nTEA\n${text}\n`), onDelta: text => view.delta(text), onEvent: event => view.event(event),
       });
     } catch (error) { view.endStream(); view.write(`Turn error: ${error.message}`); view.mode = 'Failed'; }

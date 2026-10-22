@@ -6,6 +6,7 @@ node_modules/
 benchmarks/results/**
 !benchmarks/results/.gitkeep
 coverage/
+scripts/native-pi-baseline/__pycache__/
 *.log
 *.tmp
 Thumbs.db

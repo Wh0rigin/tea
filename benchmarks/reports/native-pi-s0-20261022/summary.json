@@ -1,0 +1,78 @@
+{
+  "plannedAttempts": 24,
+  "attempted": 24,
+  "scope": "Six previously seen tasks; two repeats per agent; diagnostic only",
+  "aggregates": {
+    "tea": {
+      "planned": 12,
+      "attempted": 12,
+      "officialEvaluated": 12,
+      "officialFullPassed": 7,
+      "meteredAttempts": 10,
+      "allAttemptTokens": null
+    },
+    "pi": {
+      "planned": 12,
+      "attempted": 12,
+      "officialEvaluated": 12,
+      "officialFullPassed": 7,
+      "meteredAttempts": 11,
+      "allAttemptTokens": null
+    }
+  },
+  "officialPassRateGapPercentagePoints": 0.0,
+  "bothPassedEfficiency": {
+    "pairs": 4,
+    "plannedPairs": 12,
+    "teaTokens": 2878108,
+    "piTokens": 2621222,
+    "teaTokenReductionPercent": -9.800238209506862
+  },
+  "unknownReservations": [
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "helm-unified-manifest-stream",
+      "reservationUsd": 10,
+      "notRetried": true
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "reservationUsd": 10,
+      "notRetried": true
+    },
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "python_port-medium-blog_tags",
+      "reservationUsd": 10,
+      "notRetried": true
+    }
+  ],
+  "unstarted": [],
+  "bothNativeCompletedEfficiency": {
+    "pairs": 3,
+    "teaTokens": 941241,
+    "piTokens": 1309572,
+    "teaTokenReductionPercent": 28.126059506464706
+  },
+  "providerSubmittedRequests": 871,
+  "independentlyMeteredAttempts": 21,
+  "unknownAllocationRetainedUsd": 30,
+  "workbuddyOfficialMetrics": {
+    "tea": {
+      "reward": 0.9375,
+      "pass_rate": 0.75,
+      "n_tasks": 4,
+      "n_trials": 8
+    },
+    "pi": {
+      "reward": 0.6511,
+      "pass_rate": 0.375,
+      "n_tasks": 4,
+      "n_trials": 8
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "scope": "fixed scripted model actions; no provider calls or token measurement",
+  "sourceCommits": {
+    "baseline": "6641694312a8aba8a97afcf91d07d3963f03c267",
+    "candidate": "ee77c29d1c0b08663d9e6933ebdfe70776753d11"
+  },
+  "modelRequests": {
+    "baseline": 4,
+    "candidate": 2
+  },
+  "deliveredSourceEqual": true
+}

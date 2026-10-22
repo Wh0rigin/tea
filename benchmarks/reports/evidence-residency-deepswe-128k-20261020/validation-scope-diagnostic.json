@@ -1,0 +1,39 @@
+{
+  "scope": "Actual model-visible local test results from final candidate attempt; no hidden test source or expected solution used.",
+  "repeat": 2,
+  "arm": "candidate",
+  "taskId": "mnamer-daemon-watch-lifecycle",
+  "checks": [
+    {
+      "toolNumber": 42,
+      "command": "python -m pytest tests/local -q",
+      "isError": true,
+      "failed": 7,
+      "passed": 320
+    },
+    {
+      "toolNumber": 53,
+      "command": "python -m pytest tests/local -q",
+      "isError": true,
+      "failed": 7,
+      "passed": 320
+    },
+    {
+      "toolNumber": 55,
+      "command": "python -m pytest tests/local/test_daemon.py -q",
+      "isError": false,
+      "failed": 0,
+      "passed": 17
+    }
+  ],
+  "agentStatus": "completed",
+  "validationPassedByAgent": true,
+  "officialWholeTaskPassed": false,
+  "officialF2pPassed": 50,
+  "officialF2pTotal": 51,
+  "officialP2pPassed": 312,
+  "officialP2pTotal": 319,
+  "finding": "A passing narrow test run replaced the global validation flag while a broader observed failure remained unresolved.",
+  "sharedRuntimeCode": "src/agent.mjs:389; runtime completion gate reads pendingValidation, not unresolved failure scopes.",
+  "notCausedByCandidateCodeDeltaAlone": "The validation controller is shared by the frozen baseline and candidate; this trace exposes the pre-existing gap."
+}

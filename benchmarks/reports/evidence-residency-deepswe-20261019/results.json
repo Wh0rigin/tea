@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "DeepSWE v1.1",
+  "scope": "Seen two-task diagnostic pilot, one attempt per task per arm; not full benchmark score or generalization.",
+  "status": "stopped",
+  "protocolSha256": "df36f0a23bd2b28380e24e3402880bc999eb1ee5284c22d0cda8b7287f101f23",
+  "plannedAttempts": 4,
+  "unstarted": [
+    {
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "runs": [
+    {
+      "arm": "baseline",
+      "taskId": "helm-unified-manifest-stream",
+      "teaCommit": "f03052a5b41453c206f9375bd5c004842cab0dc4",
+      "agentStatus": "failed",
+      "officialReward": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2,
+        "f2p": 0.0,
+        "p2p": 1.0,
+        "partial": 0.2857142857142857
+      },
+      "officialCompleteTaskPassed": false,
+      "providerUsageComplete": false,
+      "billingReconciled": false,
+      "relayRequestCountMatched": true,
+      "requests": 20,
+      "relayRequests": 20,
+      "inputTokensIncludingCache": null,
+      "outputTokens": null,
+      "cacheReadTokens": null,
+      "totalTokens": null,
+      "reportedTokenLowerBound": 398005,
+      "reportedCacheReadTokenLowerBound": 33472,
+      "controlCostEstimateUsd": null,
+      "reportedLedgerCostEstimateIncludingReservationsUsd": 3.69206,
+      "completeUsageRequests": 19,
+      "partialUsageRequests": 1,
+      "unknownUsageRequests": 0,
+      "toolCalls": 36,
+      "toolsByName": {
+        "read_file": 29,
+        "search_code": 4,
+        "run_shell": 1,
+        "list_files": 2
+      },
+      "toolErrorsByName": {
+        "run_shell": 1
+      },
+      "firstSuccessfulEditToolNumber": null,
+      "successfulEdits": 0,
+      "validationPassedByAgent": false,
+      "validationAttemptsByAgent": 0,
+      "completeReadOutputs": 21,
+      "unchangedReadReceipts": 0,
+      "duplicateCompleteSameRangeVersionReads": 10,
+      "duplicateCompleteReadOutputBytes": 74902,
+      "readOutputBytes": 256808,
+      "compactionRequests": 0,
+      "changedFiles": [],
+      "exportedPatchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifactMetadataSource": "captured-finalizer-stdout",
+      "errorCode": "RUNTIME_ERROR",
+      "errorStage": "model"
+    }
+  ],
+  "aggregates": {
+    "baseline": {
+      "attempted": 1,
+      "officialEvaluated": 1,
+      "officialPassed": 0,
+      "usageComplete": false,
+      "totalTokens": null,
+      "requests": 20,
+      "readOutputBytes": 256808
+    },
+    "candidate": {
+      "attempted": 0,
+      "officialEvaluated": 0,
+      "officialPassed": 0,
+      "usageComplete": false,
+      "totalTokens": null,
+      "requests": 0,
+      "readOutputBytes": 0
+    }
+  },
+  "allAttemptTokenChangePercent": null,
+  "bothCompleteTaskIds": [],
+  "bothCompleteTokenChangePercent": null,
+  "notAnEfficiencyWinFromFailedOrUnequalWork": true,
+  "limitations": [
+    "Tiny sample; independent stochastic trajectories.",
+    "Failed attempts remain in all-attempt consumption; savings requires comparable complete work.",
+    "Cache reads included once in input; control costs are estimates, not invoice."
+  ],
+  "stop": {
+    "reason": "unknown_or_unreconciled_billing",
+    "billingComplete": false,
+    "reservationUsd": 5,
+    "noAutomaticRetry": true
+  }
+}

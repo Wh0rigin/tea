@@ -4,7 +4,12 @@ import { hasProviderPrices } from './config.mjs';
 import { contextBudget, estimateContextTokens } from './context-budget.mjs';
 
 export class ModelError extends Error {
-  constructor(message, status) { super(message); this.name = 'ModelError'; this.status = status; }
+  constructor(message, status, { code, submitted, budget } = {}) {
+    super(message); this.name = 'ModelError'; this.status = status;
+    if (code) this.code = code;
+    if (submitted !== undefined) this.submitted = submitted;
+    if (budget) this.budget = budget;
+  }
 }
 
 // Shared by the adapter and compaction preflight. This is the wire payload,
@@ -179,10 +184,14 @@ export class AnthropicMessagesAdapter {
     const conservativeInputBound = requestBytes;
     const tokenBudget = contextBudget(config, { system, messages, tools, maxTokens: outputLimit }, this.contextTokenScale);
     if (tokenBudget && tokenBudget.estimatedInputTokens > tokenBudget.inputLimit) {
-      throw new ModelError(`Request blocked by model context budget: estimated input ${tokenBudget.estimatedInputTokens} tokens exceeds ${tokenBudget.inputLimit}; compact or start a new conversation`);
+      throw new ModelError(`Request blocked by model context budget: estimated input ${tokenBudget.estimatedInputTokens} tokens exceeds ${tokenBudget.inputLimit}; compact or start a new conversation`, undefined,
+        { code: 'MODEL_CONTEXT_LIMIT', submitted: false, budget: { ...tokenBudget,
+          requestBytes, maxWireBytes: config.maxRequestInputTokens, outputLimit } });
     }
     if (conservativeInputBound > config.maxRequestInputTokens) {
-      throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`);
+      throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`, undefined,
+        { code: 'MODEL_WIRE_LIMIT', submitted: false, budget: { requestBytes,
+          maxWireBytes: config.maxRequestInputTokens, outputLimit } });
     }
     // Cache reads are charged without their discount; unknown write TTL uses
     // the standard Anthropic 1-hour (2x input) rate as a conservative default.
@@ -195,7 +204,8 @@ export class AnthropicMessagesAdapter {
     const reportedCost = (counts) => priced ? ((counts.uncachedInputTokens + counts.cachedInputTokens) * config.inputRateUsdPerMillion
       + counts.cacheCreationInputTokens * cacheCreationRate + counts.outputTokens * config.outputRateUsdPerMillion) / 1_000_000 : null;
     if (capped && this.spentUsd + reserveUsd > config.maxCostUsd + Number.EPSILON) {
-      throw new ModelError(`Request blocked by hard cost budget: estimated upper bound $${reserveUsd.toFixed(6)} would exceed remaining $${Math.max(0, config.maxCostUsd - this.spentUsd).toFixed(6)}`);
+      throw new ModelError(`Request blocked by hard cost budget: estimated upper bound $${reserveUsd.toFixed(6)} would exceed remaining $${Math.max(0, config.maxCostUsd - this.spentUsd).toFixed(6)}`, undefined,
+        { code: 'MODEL_COST_LIMIT', submitted: false });
     }
     if (config.maxInputTokens !== undefined && this.spentInputBound + conservativeInputBound > config.maxInputTokens) {
       throw new ModelError(`Request blocked by --max-input-tokens using conservative UTF-8 byte accounting (${this.spentInputBound + conservativeInputBound} > ${config.maxInputTokens})`);
@@ -261,6 +271,8 @@ export class AnthropicMessagesAdapter {
       return result;
     } catch (error) {
       if (!submitted) throw error;
+      if (!(error instanceof Error)) error = new ModelError(String(error));
+      error.submitted = true;
       if (!recorded) {
         // Keep the full preflight reservation after a transport error: the provider may have processed the request.
         const usage = error.usage || {};
@@ -279,7 +291,8 @@ export class AnthropicMessagesAdapter {
           elapsedMs: Date.now() - started, error: safeProviderError(error.message) });
       }
       if (error instanceof ModelError) throw error;
-      throw new ModelError(`Model request failed: ${safeProviderError(error.message)}`);
+      throw new ModelError(`Model request failed: ${safeProviderError(error.message)}`, undefined,
+        { code: 'MODEL_REQUEST_FAILED', submitted: true });
     } finally { clearTimeout(timer); signal?.removeEventListener('abort', cancel); this.requestInFlight = false; }
   }
 

@@ -1,0 +1,50 @@
+[
+  {
+    "task": "bug_fix-medium-incorrect_linenos_on_fstring",
+    "providerCalls": 0,
+    "exceptionType": null,
+    "scorePresent": true,
+    "scoreSummary": {
+      "reward": 0.1667,
+      "test_status": "partial_pass",
+      "tests_passed": 1,
+      "tests_total": 6
+    }
+  },
+  {
+    "task": "python_port-medium-blog_tags",
+    "providerCalls": 0,
+    "exceptionType": null,
+    "scorePresent": true,
+    "scoreSummary": {
+      "reward": 0.15,
+      "test_status": "partial_pass",
+      "tests_passed": 3,
+      "tests_total": 20
+    }
+  },
+  {
+    "task": "feature-medium-add_support_for_dependencies",
+    "providerCalls": 0,
+    "exceptionType": null,
+    "scorePresent": true,
+    "scoreSummary": {
+      "reward": 0.0,
+      "test_status": "no_pass",
+      "tests_passed": 0,
+      "tests_total": 4
+    }
+  },
+  {
+    "task": "product_analytics-hard-signup_funnel",
+    "providerCalls": 0,
+    "exceptionType": null,
+    "scorePresent": true,
+    "scoreSummary": {
+      "reward": 0.0769,
+      "test_status": "partial_pass",
+      "tests_passed": 1,
+      "tests_total": 13
+    }
+  }
+]

@@ -4,7 +4,8 @@ import { mkdtemp, writeFile, readFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { runtimeCapabilities, capabilityNotice, ToolFeedbackError, toolFailureFeedback, appendFailureFeedback } from '../src/tool-feedback.mjs';
-import { WorkspaceTools } from '../src/tools.mjs';
+import { WorkspaceTools, TOOL_DEFINITIONS } from '../src/tools.mjs';
+import { buildSystemPrompt } from '../src/prompts.mjs';
 import { createAgentSession, runTask, resetConversation } from '../src/agent.mjs';
 import { loadConfig } from '../src/config.mjs';
 
@@ -42,18 +43,25 @@ test('S1 is explicitly opt-in and disabled by default', () => {
   assert.equal(loadConfig({}, { TEA_CAPABILITY_FEEDBACK: '1' }).capabilityFeedback, true);
 });
 
-test('disabled S1 preserves exact parent model requests, denial flags, tool IDs and outcomes', async () => {
+test('disabled feedback preserves inherited history with explicit prompt, patch and negative-probe schema migrations', async () => {
   const { root, config } = await fixture();
   const requests = [];
   const steps = () => [calls([{ name: 'read_file', input: { path: 'value.mjs' } }, { name: 'run_shell', input: { command: 'node --version' } }]), done];
   const disabled = { ...config, capabilityFeedback: false, enableFileCreation: false };
   const current = await runTask('Inspect value', { ...disabled, runId: 'current' }, { approveCommand: () => false, adapterFactory: adapter(steps(), requests) });
   const payloads = list => list.map(({ system, messages, tools }) => ({ system, messages, tools }));
-  const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]')
+  // Keep the historical fixture immutable. Declare the intentional workflow
+  // prompt / patch / negative-probe schema migrations; all other definitions and history match.
+  const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]').replaceAll('Command not approved by approval handler.','Command denied by user.')
     : Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,normalize(v)])) : value;
   const baseline = JSON.parse(await readFile(new URL('./fixtures/s1-default-parent-requests.json', import.meta.url), 'utf8'));
   assert.equal(baseline.parentCommit, 'c97b950797294f48e31752508af11a80814e66d8');
-  assert.deepEqual(normalize(payloads(requests)), baseline.requests);
+  const expected = baseline.requests.map(request => ({ ...request,
+    system: buildSystemPrompt(request.tools),
+    tools: request.tools.map(tool => ['apply_patch', 'run_shell'].includes(tool.name) ? TOOL_DEFINITIONS.find(item => item.name === tool.name)
+      : tool.name === 'search_code' ? { ...tool, description: tool.description.replace('Use path to search another directory after bounded scans;', 'Use path for a single file or a directory;') } : tool),
+  }));
+  assert.deepEqual(normalize(payloads(requests)), expected);
   assert.equal(notices(requests[0]), 0); assert.equal(requests[1].messages.at(-1).content[1].is_error, false);
   assert.deepEqual([current.status, current.toolCalls, current.validationPassed], baseline.outcome);
 });
@@ -61,14 +69,14 @@ test('disabled S1 preserves exact parent model requests, denial flags, tool IDs 
 test('capability notices describe headless/interactive Windows and other platforms without granting runners', () => {
   const windows = capabilityNotice(runtimeCapabilities(unavailable));
   assert.match(windows, /cannot obtain approval/); assert.match(windows, /including quoted JavaScript/);
-  assert.match(windows, /Windows allowlisted commands/); assert.match(windows, /Installed runners depend on the project/);
+  assert.match(windows, /Windows npm allowlisted commands/); assert.match(windows, /Installed runners depend on the project/);
   const interactive = capabilityNotice(runtimeCapabilities({ ...unavailable, stdinIsTTY: true, stdoutIsTTY: true }));
   assert.match(interactive, /needs explicit approval/); assert.doesNotMatch(interactive, /cannot obtain approval/);
   assert.doesNotMatch(capabilityNotice(runtimeCapabilities({ ...unavailable, platform: 'linux' })), /Windows allowlisted/);
 });
 
 test('failure categories distinguish policy, approval, input, source, tests and transient execution', () => {
-  for (const code of ['CAPABILITY_DENIED', 'APPROVAL_UNAVAILABLE', 'INPUT_INVALID', 'SOURCE_MISMATCH']) {
+  for (const code of ['CAPABILITY_DENIED', 'APPROVAL_UNAVAILABLE', 'INPUT_INVALID', 'SOURCE_MISMATCH','COMMAND_POLICY_DENIED','USER_APPROVAL_DENIED','APPROVAL_INVALID','APPROVAL_HANDLER_FAILED']) {
     const result = toolFailureFeedback({ error: new ToolFeedbackError(code, 'failure') });
     assert.equal(result.code, code); assert.equal(result.retryable, false); assert.ok(result.missingCapability && result.next);
   }
@@ -83,6 +91,19 @@ test('failure categories distinguish policy, approval, input, source, tests and 
   assert.equal(appendFailureFeedback('unchanged', null), 'unchanged');
 });
 
+test('structured host policy and user refusals reach the agent as distinct failed results', async () => {
+  for(const source of ['policy','user']) {
+    const {config}=await fixture(),captured=[];
+    const result=await runTask('Inspect',config,{approveCommand:()=>({decision:'deny',source,reason:'Refused by '+source}),adapterFactory:adapter([
+      calls([{name:'run_shell',input:{command:'node --version'}}]),done,
+    ],captured)});
+    const response=captured[1].messages.at(-1).content[0];assert.equal(response.is_error,true);
+    assert.match(response.content,new RegExp(source==='policy'?'COMMAND_POLICY_DENIED':'USER_APPROVAL_DENIED'));
+    if(source==='policy')assert.doesNotMatch(response.content,/user refused/i);
+    assert.equal(result.validationAttempts,0);assert.equal(result.validationPassed,false);
+  }
+});
+
 test('policy still blocks before approval and approved unlisted commands retain explicit authorization', async () => {
   const { root } = await fixture(), tools = new WorkspaceTools({ workspace: root }); await tools.init();
   let approvals = 0; tools.approveCommand = () => { approvals++; return true; };
@@ -92,7 +113,7 @@ test('policy still blocks before approval and approved unlisted commands retain 
   assert.equal(approvals, 0);
   assert.match(await tools.runShell({ command: 'node --version' }), /^exit=0\b/); assert.equal(approvals, 1);
   tools.approveCommand = () => false;
-  assert.equal(await tools.runShell({ command: 'node --version' }), 'Command denied by user.');
+  assert.equal(await tools.runShell({ command: 'node --version' }), 'Command not approved by approval handler.');
 });
 
 test('input/source categories retain path, secret and unique patch restrictions', async () => {
@@ -102,7 +123,7 @@ test('input/source categories retain path, secret and unique patch restrictions'
   await assert.rejects(tools.resolveFile('../outside', { mustExist: false }), e => e.feedbackCode === 'CAPABILITY_DENIED');
   await assert.rejects(tools.readFile({ path: '.env' }), e => e.feedbackCode === 'CAPABILITY_DENIED');
   await assert.rejects(tools.runTests({ command: 42 }), e => e.feedbackCode === 'INPUT_INVALID');
-  await assert.rejects(tools.applyPatch({ path: 'value.mjs', search: 'absent', replace: 'different' }), e => e.feedbackCode === 'SOURCE_MISMATCH');
+  await assert.rejects(tools.applyPatch({ path: 'value.mjs', search: 'absent', replace: 'different' }), e => e.feedbackCode === 'PATCH_NOT_FOUND');
 });
 
 test('unchanged capabilities are announced once per conversation and never mutate tool definitions', async () => {
@@ -161,7 +182,7 @@ test('approval denial is failed feedback and never proves validation or changes 
     calls([{ name: 'run_shell', input: { command: 'node --version' } }]), done,
   ], captured) });
   const response = captured[1].messages.at(-1).content[0];
-  assert.equal(response.is_error, true); assert.match(response.content, /^Command denied by user\./); assert.match(response.content, /APPROVAL_DENIED/);
+  assert.equal(response.is_error, true); assert.match(response.content, /^Command not approved by approval handler\./); assert.match(response.content, /APPROVAL_DENIED/);
   assert.equal(result.validationPassed, false); assert.equal(result.validationAttempts, 0);
   assert.equal(await readFile(path.join(root, 'value.mjs'), 'utf8'), 'export const value = 1;\n');
 });

@@ -1,0 +1,123 @@
+{
+  "name": "Current TEA workflow package: native DeepSWE paired screen",
+  "status": "frozen_before_model_calls",
+  "baselineTeaCommit": "b400577185f0b224850540cc9289672f62450f33",
+  "candidateTeaCommit": "7bd236f4d548af1214ddf498ccaf7a5c3b928100",
+  "variable": "Workflow system guidance, same-file multi-edit patch support, and durable unresolved-validation obligations. Whole package comparison; not a single-feature ablation.",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799"
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "attemptsPerTaskPerArm": 2,
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "contextosTargetBytes": 32000,
+  "compaction": "auto",
+  "maxToolCalls": 96,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 10,
+  "suiteControlBudgetUsd": 80,
+  "controlRatesPerMillion": {
+    "input": 0.8,
+    "output": 2.8
+  },
+  "unknownBilling": "Stop affected agent attempt and retain its full10 USD allocation; continue only remaining predeclared independent trials within80 USD. Infrastructure exceptions stop suite. No ad hoc retry or missing-usage zeros.",
+  "acceptance": "Official independent verifier; complete-task acceptance primary, partial items diagnostic. Existing tasks are seen regressions, not unseen generalization.",
+  "adoption": "Report official whole-task acceptance and all-attempt tokens. Same-work efficiency only on both-accepted, fully metered pairs. Retain all failures and unknown usage. Stop after this screen for review.",
+  "limits": "Two previously seen DeepSWE tasks,2 repeats per arm; diagnostic regression subset, not full benchmark or unseen-generalization score.",
+  "archivesSha256": {
+    "baseline": "e5d00dfdd27a96ec058043413ff1a370b279af006fcd3fca013c72773add19a1",
+    "candidate": "778afafce469db5f23e75b727ff50855a8707230635e654e73666019fb937f89"
+  },
+  "priorStoppedReport": null,
+  "commonHarnessChanges": "Shared execution profile identical to the completed 128K cohort: GLM-5.3-flash enabled/low, 131072 maximum output, 8000 derived thinking budget,216000 local window,32KB ContextOS target,900s request deadline,30min task wall. Current output reservation and summary limits are retained. Not a pure batch-only ablation.",
+  "allocation": "Eight independent trials at10 USD allocation each:80 USD maximum for DeepSWE; no new paid parameter probe. WorkBuddy Code has a separate16-trial/160 USD allocation. Combined maximum240 USD. Prior unknown reservations remain separate.",
+  "adapterSha256": {
+    "tea_adapter.py": "1b1ce36077c07238eb915b6c06244f99e25a7e912ccadaccf90b2e71485c2524",
+    "run-tea.mjs": "fd40382cf320211dac0b0b5d6dd5f35667e05fc4d9e32ce30b08ca379edd0218",
+    "run_pilot.py": "ffb18cd5b50cf1fa584dc41960c917bfee3e83fa958bf3e98576a2374979ccd5",
+    "inference_relay.py": "a44798c649358002e6b7efc1e9fb6021c936a15039a3fa4a54c3aa14ddeab470",
+    "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1",
+    "preflight.py": "13ae0d831fb45374e8c7de09b9bd4b5dbee39c863f0c024fbd155af9de0f168b",
+    "transport-tests.py": "83158e4eab406a20dd6235826e3da2476e8ae698095d2d035ad96ad05e178cf9"
+  },
+  "derivedThinkingBudgetTokens": 8000,
+  "probeMaxCostUsd": 0,
+  "totalNewAllocationUsd": 80,
+  "priorCompleteReport": "evidence-residency-deepswe-128k-20261020",
+  "providerPrecheck": "No new probe: same model and output controls already accepted. Verify current endpoint fingerprint and offline native lifecycle; an unknown request retains this trial allocation and has no automatic retry.",
+  "baselineDescription": "Direct parent with resident evidence repair; no batch edits or unresolved-command ledger",
+  "candidateDescription": "Workflow guidance + batch edits + unresolved validation commands, package-level comparison",
+  "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+  "datasetSourceCommit": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea"
+}

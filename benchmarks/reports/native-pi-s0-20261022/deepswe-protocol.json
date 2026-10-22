@@ -1,0 +1,122 @@
+{
+  "name": "native-pi-s0-deepswe-20261022",
+  "status": "frozen_before_model_calls",
+  "teaCommit": "d0b566b36c6babe287fb96e4b2f63c31af5a752c",
+  "piVersion": "0.87.1",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799"
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "pi",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "pi",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+  "archivesSha256": {
+    "helpers": "b7433cf78d1d4f7d734fdcf5acf33c96096009ae5ba2b1959825a7fd894f6b5e",
+    "tea": "a85f4217ade6dd7be866e9bb5fe0f6134e0982e8db90b313a3bb56e99276e221"
+  },
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "maxToolCalls": 4096,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 10,
+  "suiteControlBudgetUsd": 80,
+  "attemptsPerTaskPerArm": 2,
+  "nativeAssets": {
+    "nodeVersion": "24.12.0",
+    "nodeSha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+    "piArchiveSha256": "549868f43568a6c8a102e706a711a2f3a67343fd51c7d766b5929067f9ca9620",
+    "piPackageFiles": 14114
+  },
+  "adapterSha256": {
+    "inference_relay.py": "73cd9e763f654729896ff81ce75577fa523b7c4df2b3396d7cda418e9af093de",
+    "preflight.py": "c6f1c937d216cd2c964cde6b95140ea6fec2c4402bc06a62cba0c240e81c5fc2",
+    "run-pi.mjs": "e93b3758c03b1e70972d804a679916c418f905d368d6fab2989b02676bf47d4e",
+    "run-tea.mjs": "4723b7d63d3a951490b1f92ce45a1aa4602ad85e0338973d51a3c3052781981a",
+    "run_suite.py": "f6ef884d10423d7327864e89ec73190dd26b9add38cd4dbecc56eccf12fb2e85",
+    "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1",
+    "tea_adapter.py": "bdefe8e888a81ef1b6d85e68ea8b4654f3888e9925849254dd863e27567a785d",
+    "test_relay.py": "ed1bc73ec2c0e8fbac330d21b52bc68c05632c67c718f88dde726b7b1b32e431"
+  },
+  "thinkingBudgetTokens": 8000,
+  "frameworkPins": {
+    "deepSweDataset": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "workbuddyFramework": "625b2233093ae4f23e76be28c1f341d41cc70373",
+    "harbor": "527d50deb63a5d279e8c20593c18a2cbc7f61f9e"
+  },
+  "analysisPolicy": {
+    "primary": "official full-task acceptance; partial reward separately",
+    "tokenUnit": "provider input + output + cache read + cache creation; thinking included in output",
+    "savingsSubset": "same task and repeat; both arms fully accepted; known independently reconciled usage",
+    "missingUsage": "null; retain full 10 USD allocation; no automatic retry",
+    "scope": "six previously seen tasks, two repetitions per agent; no unseen qualification claim",
+    "stopAfter": "S0 report for user review; no S1 product changes"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "name": "Repair package reassessment: native DeepSWE",
+  "status": "frozen_before_model_calls",
+  "baselineTeaCommit": "5cb519899cccf5a0f91ab2ff74c215dd948f4448",
+  "candidateTeaCommit": "d0b566b36c6babe287fb96e4b2f63c31af5a752c",
+  "variable": "Unavailable-validation recovery, bounded subprocess settlement, safe file-scoped search, and generic real-entry guidance as a package; not individual-feature causality.",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799"
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "attemptsPerTaskPerArm": 2,
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "contextosTargetBytes": 32000,
+  "compaction": "auto",
+  "maxToolCalls": 96,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 10,
+  "suiteControlBudgetUsd": 80,
+  "controlRatesPerMillion": {
+    "input": 0.8,
+    "output": 2.8
+  },
+  "unknownBilling": "Keep full 10 USD reservation for unknown billing; no retry. Continue only predeclared independent trials after relay drains. Stop on undrained relay or pre-inference infrastructure failure.",
+  "acceptance": "Official independent verifier; complete-task acceptance primary, partial items diagnostic. Existing tasks are seen regressions, not unseen generalization.",
+  "adoption": "Report complete-task quality first, all-attempt consumption separately. Same-work efficiency requires both completed/full-pass with reconciled usage, identical snapshot/instruction. No automatic retry or merge.",
+  "limits": "Two previously seen DeepSWE tasks,2 repeats per arm; diagnostic regression subset, not full benchmark or unseen-generalization score.",
+  "archivesSha256": {
+    "baseline": "f77d5240c59593ff0839e507a6e21cca72bba1c889999f08dc341665361319cf",
+    "candidate": "a96a042cd175e98b590c4452b78284fafb2152f5420d5507b7501f6b82df4ca5"
+  },
+  "commonHarnessChanges": "Same native framework/command policy/limits/verifier as previous cohort. Both adapters capture already-written ledgers before native cleanup if terminal summary is absent. Post-inference native task failures are retained and isolated; no grade is fabricated.",
+  "allocation": "Eight independent trials at10 USD allocation each:80 USD maximum for DeepSWE; no new paid parameter probe. WorkBuddy Code has a separate16-trial/160 USD allocation. Combined maximum240 USD. Prior unknown reservations remain separate.",
+  "adapterSha256": {
+    "tea_adapter.py": "1921e8d0ae3a3fa9b6c238c52c0a0f1261c09b137757cbbd9897ca8d3ae1c578",
+    "run-tea.mjs": "fd40382cf320211dac0b0b5d6dd5f35667e05fc4d9e32ce30b08ca379edd0218",
+    "inference_relay.py": "6f399b083b0d0a67dd28f878ea8e2fe3f9c04519d00b6e303a2062a924795a73",
+    "preflight.py": "5db177c296f7ccbc11b614074b1d0fba8b02fe2d23f5ff30673b8d8585f0195b",
+    "run_pilot.py": "260f3cdf9c08dffce6fbe8c42e8055765890ec2f2cfbf2bcccc1e49c6d5713a8",
+    "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1",
+    "transport-tests.py": "83158e4eab406a20dd6235826e3da2476e8ae698095d2d035ad96ad05e178cf9"
+  },
+  "derivedThinkingBudgetTokens": 8000,
+  "probeMaxCostUsd": 0,
+  "totalNewAllocationUsd": 80,
+  "providerPrecheck": "No new probe: same model and output controls already accepted. Verify current endpoint fingerprint and offline native lifecycle; an unknown request retains this trial allocation and has no automatic retry.",
+  "baselineDescription": "Frozen pre-repair workflow; fresh baseline attempts, not reused historical runs",
+  "candidateDescription": "Full repair package d0b566b; no task-specific answers",
+  "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+  "datasetSourceCommit": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "analysisFeedback": "These six task types have been seen and their past failures analyzed. Original task instructions and checks are unchanged; no per-task hints are added. Diagnostic regression subset, not unseen generalization.",
+  "installationScope": "Same minimal runtime + required benchmark helpers in both arms; no TEA reports, docs, tests or reference answers installed.",
+  "previousReport": "../workflow-native-screen-20261020/README.md",
+  "freshAllocation": "New fixed reassessment: 8 DeepSWE attempts at 10 USD (80 total), 16 WB attempts at 10 USD (160 total); combined maximum 240 USD, not an expected invoice. No paid retry."
+}

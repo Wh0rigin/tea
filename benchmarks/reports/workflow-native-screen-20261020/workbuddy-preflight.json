@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "selfAuthoredFixture": true,
+  "providerCalls": 0,
+  "notWorkBuddyTaskAcceptance": true,
+  "arms": [
+    {
+      "arm": "baseline",
+      "status": "passed",
+      "providerCalls": 0,
+      "syntheticSseResponses": 10,
+      "realToolCalls": 9,
+      "residentRepeatReturnedReceipt": true,
+      "readOutputBytes": 12610,
+      "scriptedRequestBytes": 138756,
+      "actualNodeValidationPassed": true
+    },
+    {
+      "arm": "candidate",
+      "status": "passed",
+      "providerCalls": 0,
+      "syntheticSseResponses": 10,
+      "realToolCalls": 9,
+      "residentRepeatReturnedReceipt": true,
+      "readOutputBytes": 12610,
+      "scriptedRequestBytes": 143586,
+      "actualNodeValidationPassed": true
+    }
+  ]
+}

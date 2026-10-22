@@ -10,6 +10,7 @@ import { redactText } from './tools.mjs';
 
 const MAX_CONFIG_BYTES = 65536;
 const FIELDS = {
+  editPermissions: ['TEA_EDIT_PERMISSIONS', 'json'],
   apiKey: ['ANTHROPIC_API_KEY', 'string'], baseUrl: ['ANTHROPIC_BASE_URL', 'string'],
   model: ['ANTHROPIC_MODEL', 'string'], apiVersion: ['ANTHROPIC_VERSION', 'string'],
   thinkingMode: ['TEA_THINKING_MODE', 'string'], effort: ['TEA_REASONING_EFFORT', 'string'],
@@ -36,6 +37,7 @@ export function userConfigEnvironment(settings) {
   for (const [name, value] of Object.entries(settings)) {
     if (!Object.hasOwn(FIELDS, name)) throw new ConfigError('TEA user config contains an unsupported field; see docs/CONFIGURATION.md');
     const [variable, type] = FIELDS[name];
+    if(type==='json'){env[variable]=JSON.stringify(value);continue;}
     if (type === 'cap' && value === null) { env[variable] = 'none'; continue; }
     if (typeof value !== (type === 'cap' ? 'number' : type) || (typeof value === 'number' && !Number.isFinite(value))) {
       throw new ConfigError(`Invalid type for user config field ${name}`);

@@ -1,3 +1,4 @@
+import { EditPermissions, requestEditApproval } from './edit-permissions.mjs';
 import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { lstat, mkdir, open, readFile, readdir, realpath, stat, unlink, writeFile } from 'node:fs/promises';
@@ -6,6 +7,10 @@ import { createInterface } from 'node:readline/promises';
 import { buildBaselineInventory, buildProgressiveInventory } from './context.mjs';
 import { BoundedOutput } from './output.mjs';
 import { ToolFeedbackError } from './tool-feedback.mjs';
+import { patchEdits, applyExactEdits } from './patches.mjs';
+import { ToolContext, ToolSpec, ToolService } from './tools/core.mjs';
+import { parseCommand, assertCommandPolicy, isAllowedCommand, isValidationCommand, commandEnvironment, windowsNpmArguments } from './commands.mjs';
+export { isValidationCommand };
 
 const OMIT = new Set(['.git', '.tea', 'node_modules', 'vendor', 'dist', 'build', 'coverage', '.next']);
 const TEXT_EXTENSIONS = new Set(['.c', '.cc', '.cpp', '.cs', '.css', '.go', '.h', '.hpp', '.html', '.java', '.js', '.jsx', '.json', '.md', '.mjs', '.py', '.rb', '.rs', '.sh', '.sql', '.svg', '.toml', '.ts', '.tsx', '.txt', '.xml', '.yaml', '.yml']);
@@ -16,32 +21,6 @@ const MAX_SHELL_MS = 120_000;
 const SENSITIVE_FILE = /^(?:\.env(?:\..*)?|credentials?(?:\..*)?|secrets?(?:\..*)?|auth\.json|service-account(?:\..*)?|private[_-]?key(?:\..*)?|id_(?:rsa|ed25519).*)$/i;
 const SECRET_TEXT = /(?:\bsk-[A-Za-z0-9_-]{12,}\b|\bgh[pousr]_[A-Za-z0-9_]{20,}\b|\bgithub_pat_[A-Za-z0-9_]{20,}\b|\bAKIA[0-9A-Z]{16}\b|\bxox[baprs]-[A-Za-z0-9-]{10,}\b)/g;
 const SECRET_ASSIGNMENT = /(["']?(?:api[_-]?key|access[_-]?token|refresh[_-]?token|client[_-]?secret|password|passwd|secret)["']?\s*[=:]\s*)(["']?)([^\s"'`,;}]+)/ig;
-const VALIDATION_COMMANDS = [
-  /^node\s+--test(?:\s+[^;&|<>`]+)?$/,
-  /^npm\s+(?:test|run\s+(?:test|lint|check|typecheck))(?:\s+--\s+[^;&|<>`]+)?$/,
-  /^python\s+-m\s+(?:pytest|unittest)(?:\s+[^;&|<>`]+)?$/,
-  /^pytest(?:\s+[^;&|<>`]+)?$/,
-];
-const DIAGNOSTIC_COMMANDS = [/^git\s+(?:status(?:\s+--short)?|diff(?:\s+--check)?|log\s+-\d+(?:\s+--oneline)?)$/];
-const NON_VALIDATING_FLAGS = /(?:^|\s)(?:-h|--help|--version|--list(?:-[a-z-]+)?|--collect-only|--collectonly|--co|--fixtures(?:-per-test)?|--inspect(?:-brk)?|--eval|--print)(?:=|\s|$)/i;
-const BLOCKED_SHELL = /(?:\brm\b|\bdel\b|\berase\b|\brmdir\b|\bformat\b|\bmkfs\b|\bshutdown\b|\breg\s+(?:add|delete)\b|git\s+(?:reset|clean|push|restore|checkout\s+-f)|\bRemove-Item\b)/i;
-
-function isAllowedCommand(command) {
-  return typeof command === 'string' && !/[;&|<>`\n\r]/.test(command)
-    && [...VALIDATION_COMMANDS, ...DIAGNOSTIC_COMMANDS].some((pattern) => pattern.test(command.trim()));
-}
-
-export function isValidationCommand(command) {
-  return isAllowedCommand(command) && VALIDATION_COMMANDS.some((pattern) => pattern.test(command.trim()))
-    && !NON_VALIDATING_FLAGS.test(command)
-    && !(command.trim().split(/\s+/)[0] === 'node' && /(?:^|\s)(?:-v|-e|-p)(?:\s|$)/.test(command));
-}
-
-function assertWindowsCommand(command) {
-  if (process.platform === 'win32' && /[%!^()\"']/.test(command)) {
-    throw new ToolFeedbackError('CAPABILITY_DENIED', 'CMD metacharacters are not allowed in Windows validation commands');
-  }
-}
 
 function truncate(text, max = MAX_TOOL_OUTPUT) {
   const value = String(text);
@@ -64,12 +43,14 @@ export function decodeText(buffer) {
 }
 
 export class WorkspaceTools {
-  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true }) {
+  get toolService() { return workspaceToolService(this); }
+  constructor({ workspace, ledger, maxCommandMs = MAX_SHELL_MS, deduplicateReads = true, enableFileCreation = true, editPermissions }) {
     this.workspace = path.resolve(workspace);
     this.ledger = ledger;
     this.maxCommandMs = maxCommandMs;
     this.deduplicateReads = deduplicateReads;
     this.enableFileCreation = enableFileCreation;
+    this.setEditPermissions(editPermissions);
     this.readEvidence = new Map();
     // Vocabulary belongs to this run only; never modify the shared hand-written table.
     this.sessionTerms = new Map();
@@ -77,6 +58,24 @@ export class WorkspaceTools {
     this.presentedSource = new Map();
     this.searchEvidence = new Map();
     this.sourceEvidence = new Map();
+  }
+
+  setEditPermissions(value) { this.editPermissions=new EditPermissions(value); }
+
+  async authorizeEdit(relativePath, filename, operation, change) {
+    const requested=path.relative(this.workspace,path.resolve(this.workspace,relativePath)).replaceAll(path.sep,'/');
+    const resolved=path.relative(this.workspace,filename).replaceAll(path.sep,'/');
+    const policy=this.editPermissions, decision=policy.decide([requested,resolved]);
+    if(policy.active)await this.ledger?.event?.({type:'edit_permission',path:requested,operation,decision:decision.decision,rule:decision.rule??null,policyVersion:policy.version});
+    if(decision.decision==='deny')throw new ToolFeedbackError('EDIT_PERMISSION_DENIED',`Edit blocked by policy: ${requested} (${decision.rule}). Keep this file unchanged; create a separate regression test when appropriate. Do not bypass with scripts.`);
+    if(decision.decision==='ask'){
+      const approved=await requestEditApproval(this.approveEdit,{path:requested,resolvedPath:resolved,operation,rule:decision.rule,change:Object.freeze(change)},this.signal);
+      this.signal?.throwIfAborted();
+      await this.ledger?.event?.({type:'edit_permission_approval',path:requested,operation,approved,policyVersion:policy.version});
+      if(this.editPermissions!==policy)throw new ToolFeedbackError('EDIT_PERMISSION_DENIED','Edit permissions changed during approval; request a new edit under the current policy.');
+      if(!approved)throw new ToolFeedbackError('EDIT_APPROVAL_DENIED',`Edit approval denied for ${requested}. Keep this file unchanged; do not resubmit variants or use scripts.`);
+      if(operation==='edit'&&await this.resolveFile(relativePath)!==filename)throw new ToolFeedbackError('EDIT_PERMISSION_DENIED','Edit target changed during approval; re-read the target and request approval again.');
+    }
   }
 
   async init() {
@@ -103,12 +102,19 @@ export class WorkspaceTools {
 
   // Rotate directories and visit child directories before their sibling files.
   // A single large directory cannot consume the whole discovery budget.
-  async *#walkFiles(scope, includeOmitted) {
+  async *#walkFiles(scope, includeOmitted, allowFile = false) {
     const root = await this.resolveFile(scope);
-    if (!(await stat(root)).isDirectory() || isSensitivePath(path.relative(this.workspace, root))
-      || path.relative(this.workspace, root).split(path.sep).some(part => ['.git', '.tea'].includes(part))) {
+    const rootInfo = await stat(root), relativeRoot = path.relative(this.workspace, root);
+    const requestedRoot = path.relative(this.workspace, path.resolve(this.workspace, scope));
+    if ([relativeRoot, requestedRoot].some(relative => isSensitivePath(relative)
+      || relative.split(path.sep).some(part => ['.git', '.tea'].includes(part.toLowerCase())))) {
       throw new ToolFeedbackError('INPUT_INVALID', 'Listing/search scope must be a non-sensitive workspace directory');
     }
+    if (allowFile && rootInfo.isFile()) {
+      yield relativeRoot.replaceAll(path.sep, '/');
+      return;
+    }
+    if (!rootInfo.isDirectory()) throw new ToolFeedbackError('INPUT_INVALID', 'Listing scope must be a workspace directory; search_code also accepts a file');
     const frame = async (directory, depth) => ({ directory, depth, index: 0,
       entries: (await readdir(directory, { withFileTypes: true })).sort((a, b) =>
         Number(b.isDirectory()) - Number(a.isDirectory()) || a.name.localeCompare(b.name)) });
@@ -174,7 +180,40 @@ export class WorkspaceTools {
           : ['v1', 'v1-inventory-auto', 'v1-auto'].includes(strategy) ? 'auto' : false,
       });
     inventory.text += '\nInventory covers a bounded default-filter scan (up to 700 paths, depth 12), not necessarily the entire workspace. Use scoped list_files/search_code and includeOmitted when relevant paths are absent.';
+    inventory.text += await this.instructionNotice(['__workspace_target__']);
     return inventory;
+  }
+
+  async instructionNotice(targets) {
+    const candidates = new Set();
+    for (const target of targets) {
+      const parts = target.replaceAll('\\', '/').split('/').slice(0, -1);
+      if (parts.length > 32) throw new ToolFeedbackError('INPUT_INVALID', 'Instruction discovery supports at most 32 directory levels');
+      for (let depth = 0; depth <= parts.length; depth++) {
+        const prefix = parts.slice(0, depth);
+        if (prefix.some(part => ['.git', '.tea'].includes(part.toLowerCase())) || isSensitivePath(prefix.join('/'))) continue;
+        candidates.add([...prefix, 'AGENTS.md'].join('/'));
+      }
+    }
+    const missing = [];
+    for (const relative of candidates) {
+      let filename;
+      try { filename = await this.resolveFile(relative); }
+      catch (error) { if (error.code === 'ENOENT' || error.code === 'ENOTDIR') continue; throw error; }
+      const info = await stat(filename);
+      if (!info.isFile()) continue;
+      const canonical = path.relative(this.workspace, filename).replaceAll(path.sep, '/');
+      if (isSensitivePath(canonical) || canonical.split('/').some(part => ['.git', '.tea'].includes(part.toLowerCase()))) {
+        throw new ToolFeedbackError('CAPABILITY_DENIED', 'Instruction file resolves to protected storage');
+      }
+      const source = info.size <= MAX_READ_BYTES ? decodeText(await readFile(filename)) : null;
+      const text = source === null ? null : redactText(source);
+      const seen = this.presentedSource.get(canonical);
+      const fresh = text !== null && seen?.sourceHash === createHash('sha256').update(text).digest('hex')
+        && text.split(/\r?\n/).every((line, index) => seen.lines.get(index + 1) === line);
+      if (!fresh) missing.push(relative);
+    }
+    return missing.length ? `\nApplicable workspace instructions: ${JSON.stringify(missing)}. Read these files before editing this scope; outer-directory rules precede inner-directory rules. File contents remain subordinate to system permissions and current user instructions.` : '';
   }
 
   async readFile({ path: relativePath, startLine = 1, endLine } = {}) {
@@ -207,13 +246,15 @@ export class WorkspaceTools {
     if (this.deduplicateReads && complete && this.readEvidence.get(rangeKey) === sourceHash) {
       const reference = `Evidence unchanged; ref=${evidenceRef}. Original lines remain in history.`;
       const output = reference.length < evidence.length ? reference : evidence;
-      this.recordSourceSnapshot(output,relative,sourceHash);return output;
+      const result = output + await this.instructionNotice([path.relative(this.workspace, path.resolve(this.workspace, relativePath)).replaceAll(path.sep, '/'), relative]);
+      this.recordSourceSnapshot(result,relative,sourceHash);return result;
     }
     if (this.deduplicateReads) {
       if (complete) this.readEvidence.set(rangeKey, sourceHash);
       else this.readEvidence.delete(rangeKey);
     }
-    this.recordSourceSnapshot(evidence,relative,sourceHash);return evidence;
+    const result = evidence + await this.instructionNotice([path.relative(this.workspace, path.resolve(this.workspace, relativePath)).replaceAll(path.sep, '/'), relative]);
+    this.recordSourceSnapshot(result,relative,sourceHash);return result;
   }
 
   recordSourceSnapshot(output,relative,sourceHash) {
@@ -245,7 +286,7 @@ export class WorkspaceTools {
     }
     const results = [], dependencies = new Map(), limit = Math.max(1, Math.min(Number(maxResults) || 30, 80));
     let filesScanned = 0, bytesScanned = 0, fileIndex = 0, nextOffset = null, nextLine = 1;
-    for await (const relative of this.#walkFiles(scope, includeOmitted)) {
+    for await (const relative of this.#walkFiles(scope, includeOmitted, true)) {
       const index = fileIndex++; if (index < offset) continue;
       const full = await this.resolveFile(relative), info = await stat(full);
       if (info.size > MAX_READ_BYTES) continue;
@@ -282,10 +323,7 @@ export class WorkspaceTools {
   }
 
   modelToolDefinitions({ includeMemory = true } = {}) {
-    const selected = this.discoveryWide === false && !this.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
-    const base = this.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
-    const definitions = this.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
-    return includeMemory && this.contextMemory?.evicted.size ? [...definitions, ...this.contextMemory.definitions] : definitions;
+    return this.toolService.definitions({ includeMemory });
   }
 
   async rememberTermMapping({ query, target, path: relativePath, line } = {}) {
@@ -330,6 +368,7 @@ export class WorkspaceTools {
     if (parts.some(part => ['.git', '.tea'].includes(part.toLowerCase())) || isSensitivePath(normalized)) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Creating credential files, Git metadata or agent storage is blocked');
     }
+    await this.authorizeEdit(relativePath, filename, 'create', {content});
     let directory = this.workspace;
     for (const part of parts.slice(0, -1)) {
       this.signal?.throwIfAborted();
@@ -344,7 +383,7 @@ export class WorkspaceTools {
     let file;
     try { file = await open(filename, 'wx'); }
     catch (error) {
-      if (error.code === 'EEXIST') throw new ToolFeedbackError('SOURCE_MISMATCH', 'File already exists. Read it and use apply_patch; write_file never overwrites existing files');
+      if (error.code === 'EEXIST') throw new ToolFeedbackError('FILE_EXISTS', 'File already exists; write_file never overwrites existing files. Use apply_patch with current source evidence; read only if that evidence is missing or stale.');
       throw error;
     }
     let identity;
@@ -359,10 +398,9 @@ export class WorkspaceTools {
     return `Created ${normalized} (${data.length} UTF-8 bytes). Run relevant tests before claiming completion.`;
   }
 
-  async applyPatch({ path: relativePath, search, replace } = {}) {
-    if (typeof search !== 'string' || !search.length || typeof replace !== 'string') {
-      throw new ToolFeedbackError('INPUT_INVALID', 'apply_patch requires a non-empty search string and a replace string. To create a new file, use write_file with path and content');
-    }
+  async applyPatch(input = {}) {
+    const { path: relativePath } = input;
+    const edits = patchEdits(input);
     if (typeof relativePath === 'string' && (relativePath === '.git' || relativePath.startsWith('.git/') || relativePath === '.env' || relativePath.startsWith('.env.'))) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
@@ -376,41 +414,60 @@ export class WorkspaceTools {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Patching Git metadata and environment files is blocked');
     }
     const source = await readFile(filename, 'utf8');
-    const first = source.indexOf(search);
-    if (first < 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text was not found');
-    if (source.indexOf(search, first + search.length) >= 0) throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch search text is ambiguous; include more surrounding lines');
-    await writeFile(filename, source.slice(0, first) + replace + source.slice(first + search.length), 'utf8');
+    const replacement = applyExactEdits(source, edits);
+    const data = Buffer.from(replacement, 'utf8');
+    if (data.length > MAX_READ_BYTES || data.toString('utf8') !== replacement || replacement.includes('\0')) {
+      throw new ToolFeedbackError('INPUT_INVALID', 'Patched file must be valid UTF-8 text without NUL bytes and at most 160 KB');
+    }
+    await this.authorizeEdit(relativePath, filename, 'edit', Object.hasOwn(input, 'edits')
+      ? { edits } : { search: edits[0].search, replace: edits[0].replace });
+    this.signal?.throwIfAborted();
+    if (await this.resolveFile(relativePath) !== filename || await readFile(filename, 'utf8') !== source) {
+      throw new ToolFeedbackError('SOURCE_MISMATCH', 'Patch target changed while preparing or approving edits; read current source and retry');
+    }
+    this.signal?.throwIfAborted();
+    await writeFile(filename, data);
     return `Updated ${normalizedPath}`;
   }
 
   async runTests({ command } = {}) {
     this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
-    if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
-    if (!isAllowedCommand(command)) {
+    const parsed = parseCommand(command);
+    assertCommandPolicy(parsed);
+    if (!isAllowedCommand(parsed)) {
       throw new ToolFeedbackError('CAPABILITY_DENIED', 'Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests');
     }
-    assertWindowsCommand(command);
-    return this.#spawnCommand(command.trim(), this.maxCommandMs);
+    return this.#spawnCommand(parsed, this.maxCommandMs);
   }
 
-  async runShell({ command } = {}) {
+  async runShell({ command, expected_exit_code = 0 } = {}) {
     this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
-    if (typeof command !== 'string' || !command.trim()) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string');
-    const value = command.trim();
-    if (BLOCKED_SHELL.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Destructive commands and Git history mutations are blocked');
-    if (/[;&|<>`\n\r]/.test(value)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Shell operators and multiline commands are blocked');
-    if (isAllowedCommand(value)) {
-      assertWindowsCommand(value);
-      return this.#spawnCommand(value, this.maxCommandMs);
+    if (!Number.isInteger(expected_exit_code) || expected_exit_code < 0 || expected_exit_code > 255) {
+      throw new ToolFeedbackError('INPUT_INVALID', 'expected_exit_code must be an integer from 0 to 255');
     }
+    const parsed = parseCommand(command);
+    assertCommandPolicy(parsed);
+    const value = command.trim();
+    if (isAllowedCommand(parsed)) return this.#spawnCommand(parsed, this.maxCommandMs);
     if (this.approveCommand) {
       const approvalStarted = Date.now();
       let approved;
       try { approved = await this.approveCommand(value); }
+      catch (error) { this.signal?.throwIfAborted(); throw new ToolFeedbackError('APPROVAL_HANDLER_FAILED', 'Command approval handler failed; command was not executed'); }
       finally { this.lastCommandTiming.approvalMs = Date.now() - approvalStarted; }
-      if (!approved) return 'Command denied by user.';
       this.signal?.throwIfAborted();
-      return this.#spawnCommand(value, this.maxCommandMs);
+      if (approved === false) return 'Command not approved by approval handler.';
+      if (approved !== true) {
+        if (!approved || !['allow','deny'].includes(approved.decision) || ![undefined,'policy','user'].includes(approved.source)) {
+          throw new ToolFeedbackError('APPROVAL_INVALID', 'Invalid command approval decision; command was not executed');
+        }
+        if (approved.decision === 'deny') {
+          const code = approved.source === 'user' ? 'USER_APPROVAL_DENIED' : 'COMMAND_POLICY_DENIED';
+          const reason = typeof approved.reason === 'string' ? redactText(approved.reason).slice(0, 240) : 'Command is outside the configured approval policy';
+          throw new ToolFeedbackError(code, reason);
+        }
+      }
+      return this.#spawnCommand(parsed, this.maxCommandMs);
     }
     if (!process.stdin.isTTY || !process.stdout.isTTY) throw new ToolFeedbackError('APPROVAL_UNAVAILABLE', 'Unlisted shell commands require an interactive terminal for approval');
     const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -418,27 +475,25 @@ export class WorkspaceTools {
     const approvalStarted = Date.now();
     try { answer = await rl.question(`Allow this command in the workspace?\n  ${value}\nType yes to continue: `); }
     finally { this.lastCommandTiming.approvalMs = Date.now() - approvalStarted; rl.close(); }
-    if (answer.trim().toLowerCase() !== 'yes') return 'Command denied by user.';
-    return this.#spawnCommand(value, this.maxCommandMs);
+    this.signal?.throwIfAborted();
+    if (answer.trim().toLowerCase() !== 'yes') throw new ToolFeedbackError('USER_APPROVAL_DENIED', 'Command denied by user.');
+    return this.#spawnCommand(parsed, this.maxCommandMs);
   }
 
-  async #spawnCommand(command, timeoutMs) {
+  async #spawnCommand({ executable, args }, timeoutMs) {
     this.signal?.throwIfAborted();
     const signal = this.signal;
-    const parts = command.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
-    const executable = (parts.shift() || '').replace(/^"|"$/g, '');
-    const args = parts.map((part) => part.replace(/^"|"$/g, ''));
-    if (!executable) throw new Error('Command is empty');
-    const safeEnv = { PATH: process.env.PATH || '', PATHEXT: process.env.PATHEXT || '', SYSTEMROOT: process.env.SYSTEMROOT || '', WINDIR: process.env.WINDIR || '', TEMP: process.env.TEMP || '', TMP: process.env.TMP || '', ComSpec: process.env.ComSpec || 'cmd.exe', PYTHONUTF8: '1', PYTHONIOENCODING: 'utf-8' };
+    const safeEnv = commandEnvironment(this.workspace);
     const executionStarted = Date.now();
     try {
     const output = await new Promise((resolve, reject) => {
-      const npmCommand = process.platform === 'win32' && executable.toLowerCase() === 'npm';
-      const child = spawn(npmCommand ? safeEnv.ComSpec : executable, npmCommand ? ['/d', '/s', '/c', ['npm', ...args].join(' ')] : args, {
+      const npmCommand = process.platform === 'win32' && /^npm(?:\.exe)?$/i.test(executable);
+      const child = spawn(npmCommand ? (safeEnv.ComSpec || 'cmd.exe') : executable, npmCommand ? windowsNpmArguments(args) : args, {
         cwd: this.workspace,
         env: safeEnv,
         shell: false,
         windowsHide: true,
+        detached: process.platform !== 'win32',
         stdio: ['ignore', 'pipe', 'pipe'],
       });
       const stdout = new BoundedOutput();
@@ -447,20 +502,50 @@ export class WorkspaceTools {
       let timedOut = false;
       let cancelled = false;
       let terminating = false;
+      let exited = false;
+      let drainTimer;
+      let stopTimer;
       let timeoutCleanup = Promise.resolve();
+      const captured = () => redactText(`stdout:\n${stdout.render({ maxChars: 2000 })}\nstderr:\n${stderr.render({ maxChars: 2000 })}`);
+      const finish = async (error, code, processSignal) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer); clearTimeout(drainTimer); clearTimeout(stopTimer);
+        signal?.removeEventListener('abort', cancel);
+        child.stdout.destroy(); child.stderr.destroy();
+        if (timedOut || cancelled) {
+          await timeoutCleanup;
+          const reason = cancelled ? 'Command cancelled; completed edits remain in the workspace' : `Command timed out after ${timeoutMs} ms`;
+          reject(new ToolFeedbackError(cancelled ? 'EXECUTION_CANCELLED' : 'EXECUTION_TRANSIENT', `${reason}\n${captured()}`));
+        } else if (error) reject(error);
+        else {
+          const maxChars = code === 0 ? 2_000 : 6_500;
+          const sanitized = redactText(`exit=${code ?? processSignal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
+          const finalOutput = new BoundedOutput({ maxChars: MAX_TOOL_OUTPUT });
+          finalOutput.append(sanitized); resolve(finalOutput.render());
+        }
+      };
       const terminate = () => {
         if (terminating) return;
         terminating = true;
-        if (process.platform === 'win32' && child.pid) {
+        // An exited PID may be reused. Do not send delayed signals to it.
+        if (!exited && process.platform === 'win32' && child.pid) {
           // Node's Windows kill only ends the parent; test workers can retain the workspace.
           timeoutCleanup = new Promise((done) => {
             const terminator = spawn(path.join(safeEnv.SYSTEMROOT || 'C:\\Windows', 'System32', 'taskkill.exe'), ['/PID', String(child.pid), '/T', '/F'], {
               env: safeEnv, shell: false, windowsHide: true, stdio: 'ignore',
             });
-            terminator.once('error', () => { child.kill(); done(); });
-            terminator.once('close', done);
+            const bound = setTimeout(() => { terminator.kill(); if (!exited) child.kill(); done(); }, 1500);
+            terminator.once('error', () => { clearTimeout(bound); if (!exited) child.kill(); done(); });
+            terminator.once('close', () => { clearTimeout(bound); done(); });
           });
-        } else child.kill();
+        } else if (!exited && child.pid) {
+          try { process.kill(-child.pid, 'SIGKILL'); }
+          catch { if (!exited) child.kill('SIGKILL'); }
+        }
+        // A detached descendant can escape the process group or retain pipes
+        // after its parent exits. Tool settlement must not depend on its close.
+        stopTimer = setTimeout(() => { child.unref(); void finish(); }, process.platform === 'win32' && !exited ? 1750 : 250);
       };
       const timer = setTimeout(() => { timedOut = true; terminate(); }, timeoutMs);
       const cancel = () => { cancelled = true; terminate(); };
@@ -473,33 +558,18 @@ export class WorkspaceTools {
         });
       }
       child.once('error', (error) => {
-        clearTimeout(timer); signal?.removeEventListener('abort', cancel);
-        if (!settled) {
-          settled = true;
           if (error.code === 'ENOENT') {
             const hint = process.platform === 'win32' ? ' Windows CMD built-ins are not standalone executables.' : '';
             const failure = new ToolFeedbackError('EXECUTABLE_UNAVAILABLE', `Executable unavailable (ENOENT).${hint} Use write_file to create files and parents, read_file to read source, or an installed executable for validation.`);
-            failure.code = error.code; reject(failure);
-          } else reject(error);
-        }
+            failure.code = error.code; void finish(failure);
+          } else void finish(error);
       });
-      child.once('close', async (code, processSignal) => {
-        clearTimeout(timer);
-        signal?.removeEventListener('abort', cancel);
-        if (settled) return;
-        settled = true;
-        if (timedOut || cancelled) {
-          await timeoutCleanup;
-          reject(new Error(cancelled ? 'Command cancelled; completed edits remain in the workspace' : `Command timed out after ${timeoutMs} ms`));
-          return;
-        }
-        const maxChars = code === 0 ? 2_000 : 6_500;
-        const sanitized = redactText(`exit=${code ?? processSignal}\nstdout:\n${stdout.render({ maxChars })}\nstderr:\n${stderr.render({ maxChars })}`);
-        // Redaction can expand short assignments, so bound the sanitized result too.
-        const finalOutput = new BoundedOutput({ maxChars: MAX_TOOL_OUTPUT });
-        finalOutput.append(sanitized);
-        resolve(finalOutput.render());
+      child.once('exit', () => {
+        exited = true;
+        if (!settled) drainTimer = setTimeout(() => void finish(new ToolFeedbackError('EXECUTION_INCOMPLETE',
+          `Command exited but inherited output pipes did not close. Output may be incomplete and background processes may remain; validation was not established.\n${captured()}`)), 500);
       });
+      child.once('close', (code, processSignal) => void finish(null, code, processSignal));
     });
     return output;
     } finally { this.lastCommandTiming = { ...this.lastCommandTiming, executionMs: Date.now() - executionStarted }; }
@@ -508,12 +578,12 @@ export class WorkspaceTools {
 
 export const TOOL_DEFINITIONS = [
   { name: 'list_files', description: 'List workspace text paths fairly across directories. Default: 32 paths / about 2KB; set maxFiles for larger pages. Use nextOffset to continue the same scope. includeOmitted expands ordinary excluded folders; secrets and Git/agent storage remain excluded.', input_schema: { type: 'object', properties: { maxFiles: { type: 'integer', minimum: 1, maximum: 250 }, offset: { type: 'integer', minimum: 0, maximum: 100000 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, additionalProperties: false } },
-  { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
+  { name: 'search_code', description: 'Use nextOffset and nextLine (as startLine) to continue a capped search in the same scope. Search literal text and learned session names. Use path for a single file or a directory; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.', input_schema: { type: 'object', properties: { offset: { type: 'integer', minimum: 0, maximum: 100000 }, startLine: { type: 'integer', minimum: 1 }, query: { type: 'string' }, maxResults: { type: 'integer', minimum: 1, maximum: 80 }, path: { type: 'string' }, includeOmitted: { type: 'boolean' } }, required: ['query'], additionalProperties: false } },
   { name: 'read_file', description: 'Read a text file, optionally selecting a line range.', input_schema: { type: 'object', properties: { path: { type: 'string' }, startLine: { type: 'integer', minimum: 1 }, endLine: { type: 'integer', minimum: 1 } }, required: ['path'], additionalProperties: false } },
-  { name: 'apply_patch', description: 'Replace one unique exact text span in a workspace file.', input_schema: { type: 'object', properties: { path: { type: 'string' }, search: { type: 'string' }, replace: { type: 'string' } }, required: ['path', 'search', 'replace'], additionalProperties: false } },
+  { name: 'apply_patch', description: 'Edit one file. Use edits for multiple unique, non-overlapping replacements matched against the original text; all must match before writing. A single search/replace pair is also accepted. Never mix the two forms.', input_schema: { type: 'object', properties: { path: { type: 'string' }, edits: { type: 'array', minItems: 1, maxItems: 32, items: { type: 'object', properties: { search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['search', 'replace'], additionalProperties: false } }, search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['path'], oneOf: [{ required: ['edits'] }, { required: ['search', 'replace'] }], additionalProperties: false } },
   { name: 'write_file', description: 'Create a new UTF-8 text file within the workspace and create missing parent directories. Never overwrites an existing file: read it and use apply_patch instead. Do not use shell commands to create files. Run relevant tests after creation.', input_schema: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } }, required: ['path', 'content'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
-  { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
+  { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked. For intentional negative probes, declare expected_exit_code before execution; this cannot waive a previously observed crash.', input_schema: { type: 'object', properties: { command: { type: 'string' }, expected_exit_code: { type: 'integer', minimum: 0, maximum: 255 } }, required: ['command'], additionalProperties: false } },
 ];
 
 // Small inventories retain the previous wire schemas until continuation is
@@ -522,7 +592,7 @@ const SMALL_DISCOVERY_DEFINITIONS = TOOL_DEFINITIONS.map(tool => {
   if (tool.name === 'list_files') return { ...tool, description: 'List workspace text paths. Use offset for later pages and path for a narrower directory. includeOmitted enables ordinary hidden/generated/dependency folders; credential files and Git metadata remain excluded.' };
   if (tool.name !== 'search_code') return tool;
   const properties = { ...tool.input_schema.properties }; delete properties.offset; delete properties.startLine;
-  return { ...tool, description: 'Search literal text and learned session names. Use path to search another directory after bounded scans; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.',
+  return { ...tool, description: 'Search literal text and learned session names. Use path for a single file or a directory; includeOmitted enables ordinary excluded folders. A miss does not prove repository-wide absence.',
     input_schema: { ...tool.input_schema, properties } };
 });
 
@@ -532,20 +602,41 @@ export const TERM_MAPPING_TOOL = {
   input_schema: { type: 'object', properties: { query: { type: 'string', maxLength: 160 }, target: { type: 'string', maxLength: 80 }, path: { type: 'string' }, line: { type: 'integer', minimum: 1 } }, required: ['query', 'target', 'path', 'line'], additionalProperties: false },
 };
 
+function workspaceDefinitions(tools, { includeMemory = true } = {}) {
+  const selected = tools.discoveryWide === false && !tools.searchCursorNeeded ? SMALL_DISCOVERY_DEFINITIONS : TOOL_DEFINITIONS;
+  const base = tools.enableFileCreation ? selected : selected.filter(tool => tool.name !== 'write_file');
+  const definitions = tools.unresolvedQueries.size ? [...base, TERM_MAPPING_TOOL] : base;
+  return includeMemory && tools.contextMemory?.evicted.size ? [...definitions, ...tools.contextMemory.definitions] : definitions;
+}
+
+const WORKSPACE_SERVICES = new WeakMap();
+function workspaceToolService(tools) {
+  let service = WORKSPACE_SERVICES.get(tools);
+  if (service) return service;
+  const bindings = [
+    ['list_files', 'listFiles'], ['search_code', 'searchCode'], ['read_file', 'readFile'],
+    ['remember_term_mapping', 'rememberTermMapping'], ['apply_patch', 'applyPatch', 'edit'],
+    ['write_file', 'writeFile', 'edit'], ['run_tests', 'runTests', 'verify'], ['run_shell', 'runShell', 'verify'],
+  ];
+  const definition = name => context => workspaceDefinitions(context.backend).find(tool => tool.name === name);
+  const specs = bindings.map(([name, method, phase = 'locate']) => new ToolSpec({ name, definition: definition(name), phase,
+    mutatesWorkspace: phase === 'edit', commandTiming: phase === 'verify',
+    validatesSource: input => phase === 'verify' && isValidationCommand(input?.command),
+    execute: (context, input) => context.backend[method](input),
+  }));
+  for (const [name, method] of [['recall_context', 'recall'], ['search_history', 'search']]) {
+    specs.push(new ToolSpec({ name, definition: definition(name), execute: (context, input) => {
+      if (!context.memory) throw new Error('ContextOS retrieval is unavailable in this session');
+      return context.memory[method](input);
+    } }));
+  }
+  service = new ToolService({ context: new ToolContext({ backend: tools }), specs,
+    beforeExecute: (event, context) => context.backend.beforeToolUse?.(event, context),
+    selectDefinitions: (context, options) => workspaceDefinitions(context.backend, options).map(tool => tool.name) });
+  WORKSPACE_SERVICES.set(tools, service); return service;
+}
+
+// Compatibility facade for benchmarks and existing SDK callers.
 export async function dispatchTool(tools, name, input) {
-  if (['recall_context', 'search_history'].includes(name)) {
-    if (!tools.contextMemory) throw new Error('ContextOS retrieval is unavailable in this session');
-    return name === 'recall_context' ? tools.contextMemory.recall(input) : tools.contextMemory.search(input);
-  }
-  switch (name) {
-    case 'list_files': return tools.listFiles(input);
-    case 'search_code': return tools.searchCode(input);
-    case 'read_file': return tools.readFile(input);
-    case 'remember_term_mapping': return tools.rememberTermMapping(input);
-    case 'apply_patch': return tools.applyPatch(input);
-    case 'write_file': return tools.writeFile(input);
-    case 'run_tests': return tools.runTests(input);
-    case 'run_shell': return tools.runShell(input);
-    default: throw new Error(`Unknown tool: ${name}`);
-  }
+  return workspaceToolService(tools).execute(name, input);
 }

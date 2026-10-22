@@ -1,0 +1,1262 @@
+{
+  "runId": "python-code-first-screen-glm-20261017-v2",
+  "scope": "Three previously used self-authored Node tasks, two repeats per arm; code-first mode versus normal tools; whole-mode screening including declarations/routing; not unseen or production evidence",
+  "sourceCommits": {
+    "baseline": "b6f9395dde461a00bf80ef8aaeafc6f21cd1a8af",
+    "candidate": "b08e3b7324de1d9b2bbfe441eb058593e3789ce0"
+  },
+  "harnessSha256": "5603a0c5893ef5bac3287d7f749cf8205359ad19b6ec8bf953639789aadbc11c",
+  "manifestSha256": "3deb03bde5fa92561c18e55780e81f517cba1950e81ea6f9ffbe0af8e847b6c8",
+  "dependencySha256": "9dc440f40ba5ad229958cf5eb14521a4eaf42e2e5877411cf4810ba953d7eacb",
+  "dependenciesUnchanged": true,
+  "observerSha256": "9765cd69b08d3278ec65c31089c2131f5c4da2c221a919d4acecae0fd00b1d9a",
+  "python": {
+    "version": "3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]",
+    "binarySha256": "08a64dc73ac3e3776b49f0097c6306bdb9c8f7990a037065213324d328467bf5",
+    "restrictedPythonVersion": "8.5"
+  },
+  "priorInterruptedRun": {
+    "runId": "python-code-first-screen-glm-20261017-v1",
+    "knownTokens": 9647,
+    "knownControlSpendUsd": 0.0097456,
+    "reason": "GBK/UTF-8 offline probe; stopped after settled baseline; no candidate started"
+  },
+  "prefixAudit": {
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 2,
+        "multiAtomicRetrievalMessages": 1
+      },
+      {
+        "id": "l1-narcissistic-r1-candidate",
+        "programs": 1,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 1,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 1,
+        "evidencePages": 2,
+        "multiToolAssistantMessages": 2,
+        "multiAtomicRetrievalMessages": 0
+      },
+      {
+        "id": "retrieval-retry-r1-candidate",
+        "programs": 3,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 3,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 3,
+        "evidencePages": 3,
+        "multiToolAssistantMessages": 1,
+        "multiAtomicRetrievalMessages": 0
+      },
+      {
+        "id": "retrieval-retry-r1-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 1,
+        "multiAtomicRetrievalMessages": 1
+      },
+      {
+        "id": "l3-pagination-r1-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 2,
+        "multiAtomicRetrievalMessages": 2
+      },
+      {
+        "id": "l3-pagination-r1-candidate",
+        "programs": 5,
+        "errors": 2,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 3,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 3,
+        "evidencePages": 6,
+        "multiToolAssistantMessages": 4,
+        "multiAtomicRetrievalMessages": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-candidate",
+        "programs": 1,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 1,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 1,
+        "evidencePages": 2,
+        "multiToolAssistantMessages": 2,
+        "multiAtomicRetrievalMessages": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 3,
+        "multiAtomicRetrievalMessages": 1
+      },
+      {
+        "id": "retrieval-retry-r2-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 4,
+        "multiAtomicRetrievalMessages": 3
+      },
+      {
+        "id": "retrieval-retry-r2-candidate",
+        "programs": 4,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 4,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 4,
+        "evidencePages": 5,
+        "multiToolAssistantMessages": 1,
+        "multiAtomicRetrievalMessages": 0
+      },
+      {
+        "id": "l3-pagination-r2-candidate",
+        "programs": 5,
+        "errors": 1,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 4,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 4,
+        "evidencePages": 8,
+        "multiToolAssistantMessages": 1,
+        "multiAtomicRetrievalMessages": 0
+      },
+      {
+        "id": "l3-pagination-r2-baseline",
+        "programs": 0,
+        "errors": 0,
+        "partialPrefixes": 0,
+        "returnedWithoutError": 0,
+        "partialEvidenceHeaders": 0,
+        "emptyObjectOutputs": 0,
+        "evidencePrograms": 0,
+        "evidencePages": 0,
+        "multiToolAssistantMessages": 1,
+        "multiAtomicRetrievalMessages": 1
+      }
+    ]
+  },
+  "config": {
+    "stream": true,
+    "model": "glm-5.3-flash",
+    "thinkingMode": "enabled",
+    "effort": "low",
+    "maxOutputTokens": 4096,
+    "contextWindowTokens": 32768,
+    "contextReserveTokens": 4096,
+    "maxRequestInputBytes": 256000,
+    "memoryPolicy": "contextos",
+    "historyStrategy": "full",
+    "contextStrategy": "v1",
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "commandTimeoutMs": 120000,
+    "contextosTargetBytes": 32000,
+    "compaction": "auto",
+    "maxToolCalls": 24,
+    "requestTimeoutMs": 90000,
+    "taskTimeoutMs": 600000,
+    "taskCapUsd": 1,
+    "suiteCapUsd": 3.99,
+    "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8
+  },
+  "sourceUnchanged": true,
+  "harnessUnchanged": true,
+  "complete": true,
+  "planned": 12,
+  "stopReason": null,
+  "changePercent": 29.749543142893575,
+  "qualityGate": false,
+  "gatePassed": false,
+  "mechanismExercised": true,
+  "successfulProgramEvidence": true,
+  "totals": {
+    "baseline": {
+      "attempted": 6,
+      "accepted": 6,
+      "codePassed": 6,
+      "unknown": 0,
+      "knownTokenSubtotal": 141182,
+      "requests": 44,
+      "adoptingAttempts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0
+    },
+    "candidate": {
+      "attempted": 6,
+      "accepted": 5,
+      "codePassed": 6,
+      "unknown": 0,
+      "knownTokenSubtotal": 183183,
+      "requests": 54,
+      "adoptingAttempts": 6,
+      "retrievalCalls": 19,
+      "retrievalErrors": 3,
+      "retrievalSuboperations": 27,
+      "retrievalSuccessfulOps": 27,
+      "codeFirstRouteDenials": 1,
+      "multiOperationPrograms": 7,
+      "successfulMultiOperationPrograms": 7
+    }
+  },
+  "perTask": {
+    "l1-narcissistic": {
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 20465,
+        "requests": 8,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 22725,
+        "requests": 9,
+        "adoptingAttempts": 2,
+        "retrievalCalls": 2,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 4,
+        "retrievalSuccessfulOps": 4,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 2,
+        "successfulMultiOperationPrograms": 2
+      }
+    },
+    "retrieval-retry": {
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 40654,
+        "requests": 16,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 45236,
+        "requests": 17,
+        "adoptingAttempts": 2,
+        "retrievalCalls": 7,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 9,
+        "retrievalSuccessfulOps": 9,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 2,
+        "successfulMultiOperationPrograms": 2
+      }
+    },
+    "l3-pagination": {
+      "baseline": {
+        "attempted": 2,
+        "accepted": 2,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 80063,
+        "requests": 20,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 2,
+        "accepted": 1,
+        "codePassed": 2,
+        "unknown": 0,
+        "knownTokenSubtotal": 115222,
+        "requests": 28,
+        "adoptingAttempts": 2,
+        "retrievalCalls": 10,
+        "retrievalErrors": 3,
+        "retrievalSuboperations": 14,
+        "retrievalSuccessfulOps": 14,
+        "codeFirstRouteDenials": 1,
+        "multiOperationPrograms": 3,
+        "successfulMultiOperationPrograms": 3
+      }
+    }
+  },
+  "perRepeat": {
+    "1": {
+      "baseline": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 74503,
+        "requests": 23,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 100118,
+        "requests": 28,
+        "adoptingAttempts": 3,
+        "retrievalCalls": 9,
+        "retrievalErrors": 2,
+        "retrievalSuboperations": 11,
+        "retrievalSuccessfulOps": 11,
+        "codeFirstRouteDenials": 1,
+        "multiOperationPrograms": 2,
+        "successfulMultiOperationPrograms": 2
+      }
+    },
+    "2": {
+      "baseline": {
+        "attempted": 3,
+        "accepted": 3,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 66679,
+        "requests": 21,
+        "adoptingAttempts": 0,
+        "retrievalCalls": 0,
+        "retrievalErrors": 0,
+        "retrievalSuboperations": 0,
+        "retrievalSuccessfulOps": 0,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 0,
+        "successfulMultiOperationPrograms": 0
+      },
+      "candidate": {
+        "attempted": 3,
+        "accepted": 2,
+        "codePassed": 3,
+        "unknown": 0,
+        "knownTokenSubtotal": 83065,
+        "requests": 26,
+        "adoptingAttempts": 3,
+        "retrievalCalls": 10,
+        "retrievalErrors": 1,
+        "retrievalSuboperations": 16,
+        "retrievalSuccessfulOps": 16,
+        "codeFirstRouteDenials": 0,
+        "multiOperationPrograms": 5,
+        "successfulMultiOperationPrograms": 5
+      }
+    }
+  },
+  "firstInputDeltas": [
+    36,
+    -44,
+    41,
+    39,
+    -39,
+    37
+  ],
+  "rows": [
+    {
+      "id": "l1-narcissistic-r1-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 9230,
+        "outputTokens": 1354,
+        "totalTokens": 10584,
+        "cachedInputTokens": 2816,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "outerToolCalls": 6,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l1-narcissistic-r1-candidate",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 1,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 11826,
+        "outputTokens": 1204,
+        "totalTokens": 13030,
+        "cachedInputTokens": 8704,
+        "cacheCreationInputTokens": 0,
+        "requests": 5,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 7,
+      "outerToolCalls": 6,
+      "toolErrors": 0,
+      "successfulEdits": 3,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 1,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 2,
+      "retrievalSuccessfulOps": 2,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r1-candidate",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 1,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 14898,
+        "outputTokens": 893,
+        "totalTokens": 15791,
+        "cachedInputTokens": 11072,
+        "cacheCreationInputTokens": 0,
+        "requests": 7,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 7,
+      "outerToolCalls": 7,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 3,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 3,
+      "retrievalSuccessfulOps": 3,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/runtime/dispatch/recovery.mjs",
+        "tests/recovery.test.mjs"
+      ],
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r1-baseline",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 17673,
+        "outputTokens": 884,
+        "totalTokens": 18557,
+        "cachedInputTokens": 14336,
+        "cacheCreationInputTokens": 0,
+        "requests": 8,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 8,
+      "outerToolCalls": 8,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/runtime/dispatch/recovery.mjs",
+        "tests/retries.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l3-pagination-r1-baseline",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 1,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 42616,
+        "outputTokens": 2746,
+        "totalTokens": 45362,
+        "cachedInputTokens": 28864,
+        "cacheCreationInputTokens": 0,
+        "requests": 11,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 14,
+      "outerToolCalls": 14,
+      "toolErrors": 3,
+      "successfulEdits": 4,
+      "validationToolResults": 3,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/pagination.mjs",
+        "tests/regression.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l3-pagination-r1-candidate",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 1,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 68448,
+        "outputTokens": 2849,
+        "totalTokens": 71297,
+        "cachedInputTokens": 59968,
+        "cacheCreationInputTokens": 0,
+        "requests": 16,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 24,
+      "outerToolCalls": 21,
+      "toolErrors": 7,
+      "successfulEdits": 9,
+      "validationToolResults": 3,
+      "commandTimeouts": 0,
+      "retrievalCalls": 5,
+      "retrievalErrors": 2,
+      "retrievalSuboperations": 6,
+      "retrievalSuccessfulOps": 6,
+      "codeFirstRouteDenials": 1,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/api.mjs",
+        "src/pagination.mjs",
+        "tests/regression.test.mjs"
+      ],
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read",
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {
+        "import-denied": 1,
+        "filesystem-api-denied": 1
+      }
+    },
+    {
+      "id": "l1-narcissistic-r2-candidate",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 2,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 8710,
+        "outputTokens": 985,
+        "totalTokens": 9695,
+        "cachedInputTokens": 6720,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 6,
+      "outerToolCalls": 5,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 1,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 2,
+      "retrievalSuccessfulOps": 2,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 1,
+      "successfulMultiOperationPrograms": 1,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l1-narcissistic-r2-baseline",
+      "taskId": "l1-narcissistic",
+      "title": "新建水仙花数模块",
+      "repeat": 2,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 8805,
+        "outputTokens": 1076,
+        "totalTokens": 9881,
+        "cachedInputTokens": 3520,
+        "cacheCreationInputTokens": 0,
+        "requests": 4,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 7,
+      "outerToolCalls": 7,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 2,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/numbers.mjs",
+        "tests/numbers.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r2-baseline",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 2,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 20938,
+        "outputTokens": 1159,
+        "totalTokens": 22097,
+        "cachedInputTokens": 15936,
+        "cacheCreationInputTokens": 0,
+        "requests": 8,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 11,
+      "outerToolCalls": 11,
+      "toolErrors": 0,
+      "successfulEdits": 2,
+      "validationToolResults": 2,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/runtime/dispatch/recovery.mjs",
+        "tests/retries.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "retrieval-retry-r2-candidate",
+      "taskId": "retrieval-retry",
+      "title": "多步检索重试策略",
+      "repeat": 2,
+      "arm": "candidate",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 27962,
+        "outputTokens": 1483,
+        "totalTokens": 29445,
+        "cachedInputTokens": 22784,
+        "cacheCreationInputTokens": 0,
+        "requests": 10,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 12,
+      "outerToolCalls": 10,
+      "toolErrors": 1,
+      "successfulEdits": 3,
+      "validationToolResults": 2,
+      "commandTimeouts": 0,
+      "retrievalCalls": 4,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 6,
+      "retrievalSuccessfulOps": 6,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/runtime/dispatch/recovery.mjs",
+        "tests/recovery.test.mjs"
+      ],
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "search"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 2,
+      "successfulMultiOperationPrograms": 2,
+      "retrievalErrorCategories": {}
+    },
+    {
+      "id": "l3-pagination-r2-candidate",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 2,
+      "arm": "candidate",
+      "accepted": false,
+      "functionalPass": false,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 40959,
+        "outputTokens": 2966,
+        "totalTokens": 43925,
+        "cachedInputTokens": 32512,
+        "cacheCreationInputTokens": 0,
+        "requests": 12,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 16,
+      "outerToolCalls": 12,
+      "toolErrors": 2,
+      "successfulEdits": 4,
+      "validationToolResults": 1,
+      "commandTimeouts": 0,
+      "retrievalCalls": 5,
+      "retrievalErrors": 1,
+      "retrievalSuboperations": 8,
+      "retrievalSuccessfulOps": 8,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": false,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/pagination.mjs",
+        "tests/public.test.mjs"
+      ],
+      "retrievalOperationGroups": [
+        {
+          "operations": [
+            "read",
+            "read",
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [],
+          "successful": false
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read",
+            "read"
+          ],
+          "successful": true
+        },
+        {
+          "operations": [
+            "read"
+          ],
+          "successful": true
+        }
+      ],
+      "multiOperationPrograms": 2,
+      "successfulMultiOperationPrograms": 2,
+      "retrievalErrorCategories": {
+        "api-contract": 1
+      }
+    },
+    {
+      "id": "l3-pagination-r2-baseline",
+      "taskId": "l3-pagination",
+      "title": "多层 API 游标分页",
+      "repeat": 2,
+      "arm": "baseline",
+      "accepted": true,
+      "functionalPass": true,
+      "codeBehaviorPass": true,
+      "status": "completed",
+      "usage": {
+        "inputTokens": 32090,
+        "outputTokens": 2611,
+        "totalTokens": 34701,
+        "cachedInputTokens": 23104,
+        "cacheCreationInputTokens": 0,
+        "requests": 9,
+        "compactionRequests": 0
+      },
+      "usageComplete": true,
+      "toolCalls": 11,
+      "outerToolCalls": 11,
+      "toolErrors": 2,
+      "successfulEdits": 3,
+      "validationToolResults": 2,
+      "commandTimeouts": 0,
+      "retrievalCalls": 0,
+      "retrievalErrors": 0,
+      "retrievalSuboperations": 0,
+      "retrievalSuccessfulOps": 0,
+      "codeFirstRouteDenials": 0,
+      "protectedFilesUnchanged": true,
+      "allowedChanges": true,
+      "publicPassed": true,
+      "addedTestsPassed": true,
+      "hiddenPassed": true,
+      "hiddenCompleted": true,
+      "validationPassed": true,
+      "changedFiles": [
+        "src/api.mjs",
+        "tests/regression.test.mjs"
+      ],
+      "retrievalOperationGroups": [],
+      "multiOperationPrograms": 0,
+      "successfulMultiOperationPrograms": 0,
+      "retrievalErrorCategories": {}
+    }
+  ],
+  "audit": {
+    "auditedAttempts": 12,
+    "totals": {
+      "baseline": {
+        "successfulEdits": 15,
+        "validationToolResults": 11,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      "candidate": {
+        "successfulEdits": 23,
+        "validationToolResults": 9,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "l1-narcissistic-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 3,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r1-baseline",
+        "arm": "baseline",
+        "successfulEdits": 4,
+        "validationToolResults": 3,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r1-candidate",
+        "arm": "candidate",
+        "successfulEdits": 9,
+        "validationToolResults": 3,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-candidate",
+        "arm": "candidate",
+        "successfulEdits": 2,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l1-narcissistic-r2-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r2-baseline",
+        "arm": "baseline",
+        "successfulEdits": 2,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "retrieval-retry-r2-candidate",
+        "arm": "candidate",
+        "successfulEdits": 3,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r2-candidate",
+        "arm": "candidate",
+        "successfulEdits": 4,
+        "validationToolResults": 1,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      },
+      {
+        "id": "l3-pagination-r2-baseline",
+        "arm": "baseline",
+        "successfulEdits": 3,
+        "validationToolResults": 2,
+        "commandTimeouts": 0,
+        "unknownUsageRequests": 0,
+        "incompleteStreamRequests": 0
+      }
+    ]
+  }
+}

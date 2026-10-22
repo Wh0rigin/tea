@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "5cb519899cccf5a0f91ab2ff74c215dd948f4448",
+  "coreFixCommit": "da5faebdef425e603de9e0e68723cec590b64fe2",
+  "guidanceIsSeparateFollowup": true,
+  "providerCalls": 0,
+  "realTokenImprovement": null,
+  "codingBenchmarkImprovement": null,
+  "testedArchiveSha256": "a10a0d198ef0dbc155c6b7ab74f7bd346bce1cdb568c562ad3a9020016680f64",
+  "sourceManifestSha256": "34779b4dc370d921ee228604912e51ce6a7540525fb8f6e827258ae7dc4aad60",
+  "newCases": 23,
+  "checks": [
+    {
+      "suite": "windows-core-full",
+      "passed": 433,
+      "failed": 0,
+      "skipped": 1,
+      "logSha256": "3aaa8226e091219e125db0e3da7d35dcc0ca5604627ab8b463a648e0fa8fc99b"
+    },
+    {
+      "suite": "windows-full",
+      "passed": 434,
+      "failed": 0,
+      "skipped": 1,
+      "logSha256": "9a8da8ea1a188e23693cc833e0d7bbdb8659fb8794cc9915674582a5e544f492"
+    },
+    {
+      "suite": "windows-targeted",
+      "passed": 81,
+      "failed": 0,
+      "skipped": 1,
+      "logSha256": "c2e749121b63503dfd963f1e0d798df7720e150021597975d6b84c783833c2d8"
+    },
+    {
+      "suite": "linux-node24-full",
+      "passed": 435,
+      "failed": 0,
+      "skipped": 0,
+      "logSha256": "76ccb81b030514f1c688a109ca567f9531b781a290c992144cd4c9408744c372"
+    },
+    {
+      "suite": "linux-node20-targeted",
+      "passed": 81,
+      "failed": 0,
+      "skipped": 1,
+      "logSha256": "075ab73a92dd1bb99ced75169c586705becb83241ed03d30222a28cae4a3f5f9"
+    }
+  ],
+  "fixedPipeChecks": 6,
+  "scriptedRuntimeAcceptance": {
+    "accepted": 12,
+    "attempted": 12,
+    "providerCalls": 0
+  },
+  "preservedInitialFailures": [
+    {
+      "suite": "windows-targeted-first",
+      "passed": 74,
+      "failed": 5,
+      "skipped": 1,
+      "logSha256": "f4da09e7154c22dbce8c4205b899c864ddc3692515488498b1793231d3f9cf96",
+      "causes": [
+        "Windows process/fixture cleanup timing",
+        "Explicit search-description fixture migration"
+      ]
+    },
+    {
+      "suite": "linux-node24-first",
+      "passed": 432,
+      "failed": 1,
+      "skipped": 0,
+      "cause": "Test-only checkout lacked Git metadata; corrected before rerun"
+    }
+  ],
+  "staticOverhead": {
+    "unit": "UTF-8 bytes; excludes task/history/error-state notices; not provider tokens",
+    "smallBefore": 5246,
+    "smallAfter": 5420,
+    "wideBefore": 5482,
+    "wideAfter": 5656,
+    "systemGuidanceAdded": 189,
+    "schemaDescriptionRemoved": 15
+  },
+  "limitations": [
+    "Alternative runner evidence is not proof of equivalent test coverage; original command remains explicitly unverified.",
+    "Escaped/background descendants may remain; bounded settlement is not OS-level job isolation.",
+    "Prompt guidance and file-level search do not prove that autonomous retrieval converges or that requirements are fully covered.",
+    "No new paid benchmark attempts; old real failures/grades remain immutable."
+  ]
+}

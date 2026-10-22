@@ -1,0 +1,207 @@
+{
+  "name": "native-pi-s0-wb-20261022",
+  "status": "frozen_before_model_calls",
+  "teaCommit": "d0b566b36c6babe287fb96e4b2f63c31af5a752c",
+  "piVersion": "0.87.1",
+  "tasks": [
+    {
+      "id": "bug_fix-medium-incorrect_linenos_on_fstring",
+      "imageId": "sha256:4a2473126b4385b769d20b115f1048d9b960992d1257ab9f4635104a63c17b28",
+      "initialState": "c82ff3d3e3eb2879b1fc8bac0051cda17bd148b7\n26c8edb00f512d36fc82a555ef29e73bc2a4726a\nv20.18.1\nPython 3.12.15\n",
+      "inputSha256": {
+        "task.toml": "5afa677b661901eb1db458503c7ea8ce53cd1d5d502ae414c7a49fd85a1bb236",
+        "instruction.md": "8f462d3386b1eb420823ba86ba994da8b730bb364f6b186c453535a344b1f659",
+        "environment/Dockerfile": "d5dc39bcc6d137afb22ec97646690beebdb7b69e458afc0ad136b5a8fe650a4a",
+        "environment/workspace.tar.gz": "a65bd1e4a6f3b10fefe785e9ec9988632675aef2975d2108633f319fa44dc89a",
+        "environment/docker-compose.yaml": "d42dd2c3efba18c5f883182600cd96efb819cc84ea17c163a2cd0e1fb57c0b75"
+      },
+      "category": "bug-fix",
+      "difficulty": "medium",
+      "complexity": "L2"
+    },
+    {
+      "id": "python_port-medium-blog_tags",
+      "imageId": "sha256:5fdccbe82d9629a4e32361e17ac899ed27cca31fee1545ddd8c1b19adf85b9e5",
+      "initialState": "618a4f2e64ec2c7349e36317279c1a287ffaa70d\nc032d3de27f3e3eb8a5c69a25d3e9584652d8386\nv20.18.1\nPython 3.12.15\n",
+      "inputSha256": {
+        "task.toml": "3b84725a47b87844556e61b268d797f45fd8675226f84cbc0a7bbd2a9f1aef84",
+        "instruction.md": "8ab286e96f45a63edc15215664d216cfc76b9bb517273bcfccfd894fb48e6ac9",
+        "environment/Dockerfile": "05281e8747f567af0e04f5b702c5b8eaa6b22d41ab5726342f709ca7c72dbfca",
+        "environment/workspace.tar.gz": "76dbc2583b2aa610d63d8d514e4161805aa585fc255edc0f353ca061d19f2ec5",
+        "environment/docker-compose.yaml": "d42dd2c3efba18c5f883182600cd96efb819cc84ea17c163a2cd0e1fb57c0b75"
+      },
+      "category": "python-port",
+      "difficulty": "medium",
+      "complexity": "L3"
+    },
+    {
+      "id": "feature-medium-add_support_for_dependencies",
+      "imageId": "sha256:bceac1aecebb994fe5b7b9829dbc6179a2950843d89c3e7c448ddae07d725d64",
+      "initialState": "9b6e65885a5d45d3ffe1e0a378cd554f3610a15c\n7778a1a5cbc2901a28bc005a63babce3097c67ed\nv20.18.1\nPython 3.12.15\n",
+      "inputSha256": {
+        "task.toml": "3a4557b3a55ab65f90a7bc4e4fb7173433a39655a770cd5833f434e7eda2ad5b",
+        "instruction.md": "8416325c1271fa34271c05c18306fd2c259f81072f8532a08133524baaaa0b53",
+        "environment/Dockerfile": "b8687a1576549fb16293826954bd7ae4e38525bdc76d8b6243ec89eeb664cfe8",
+        "environment/workspace.tar.gz": "d55dba85ceb0e9c66db3e12bfe351029318724e87569ee9b87cc3ffbc52291ac",
+        "environment/docker-compose.yaml": "d42dd2c3efba18c5f883182600cd96efb819cc84ea17c163a2cd0e1fb57c0b75"
+      },
+      "category": "feature",
+      "difficulty": "medium",
+      "complexity": "L5",
+      "upstreamBuiltImageId": "sha256:deac8ec851f5c0a657db1ee811834e1227545a42b9ac4b4938bcfd8c316c65cb",
+      "compatibilityPackages": {
+        "pytest": "7.4.4",
+        "anyio": "3.7.1",
+        "trio": "0.23.2"
+      }
+    },
+    {
+      "id": "product_analytics-hard-signup_funnel",
+      "imageId": "sha256:6eed8c8f99d86a68c47a611650e0896f5f6bd34ca6635a8a7b12f4844a6d177b",
+      "initialState": "690fe17b31ee5c908e485083f7bc1d9b4cae3d5f\nbcde4a520af3ea1b956d904ec0db44d51d0a19f9\nv20.18.1\nPython 3.12.15\n",
+      "inputSha256": {
+        "task.toml": "f588b504714b1c3476aaa619a2a2982930096af3392ddf58754c20af19ee1eff",
+        "instruction.md": "db587cca0fd3a59f076c4d05158f4952afb5e4fe0d5218027cf8f9170233142a",
+        "environment/Dockerfile": "4afb95757f78cd2fb49a0c90039d9513e4e0c661c4988a700c033f1d617b420d",
+        "environment/workspace.tar.gz": "ec50b05c9970d3a2d17d5e00d5cacf62e5ba3511ddc0aa4fe033306e5c36bcc0",
+        "environment/docker-compose.yaml": "d42dd2c3efba18c5f883182600cd96efb819cc84ea17c163a2cd0e1fb57c0b75"
+      },
+      "category": "product-analytics",
+      "difficulty": "hard",
+      "complexity": "L4"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "bug_fix-medium-incorrect_linenos_on_fstring"
+    },
+    {
+      "repeat": 1,
+      "arm": "pi",
+      "task": "bug_fix-medium-incorrect_linenos_on_fstring"
+    },
+    {
+      "repeat": 1,
+      "arm": "pi",
+      "task": "python_port-medium-blog_tags"
+    },
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "python_port-medium-blog_tags"
+    },
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "feature-medium-add_support_for_dependencies"
+    },
+    {
+      "repeat": 1,
+      "arm": "pi",
+      "task": "feature-medium-add_support_for_dependencies"
+    },
+    {
+      "repeat": 1,
+      "arm": "pi",
+      "task": "product_analytics-hard-signup_funnel"
+    },
+    {
+      "repeat": 1,
+      "arm": "tea",
+      "task": "product_analytics-hard-signup_funnel"
+    },
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "product_analytics-hard-signup_funnel"
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "product_analytics-hard-signup_funnel"
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "feature-medium-add_support_for_dependencies"
+    },
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "feature-medium-add_support_for_dependencies"
+    },
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "python_port-medium-blog_tags"
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "python_port-medium-blog_tags"
+    },
+    {
+      "repeat": 2,
+      "arm": "tea",
+      "task": "bug_fix-medium-incorrect_linenos_on_fstring"
+    },
+    {
+      "repeat": 2,
+      "arm": "pi",
+      "task": "bug_fix-medium-incorrect_linenos_on_fstring"
+    }
+  ],
+  "endpointSha256": "42058f415011726c0515bbd733646610be11252aff9a5ef728c9c6c2bf44232b",
+  "archivesSha256": {
+    "helpers": "d85826b4c58b9135eb933878e1dc74dba03fe55fd245ec9d61303c5dadc7df3d",
+    "tea": "a85f4217ade6dd7be866e9bb5fe0f6134e0982e8db90b313a3bb56e99276e221"
+  },
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "maxToolCalls": 4096,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 10,
+  "suiteControlBudgetUsd": 160,
+  "attemptsPerTaskPerArm": 2,
+  "nativeAssets": {
+    "nodeVersion": "24.12.0",
+    "nodeSha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+    "piArchiveSha256": "549868f43568a6c8a102e706a711a2f3a67343fd51c7d766b5929067f9ca9620",
+    "piPackageFiles": 14114
+  },
+  "adapterSha256": {
+    "capture_patch.py": "1135ae16e94e65d2d4a8dd1a13ec11cead6025f6c1fbc45c1cfe2bf5e72f8f27",
+    "command-policy.mjs": "5354bcf07ee54942dbe858e082248783ed723f3700e273cdbe75f6672f40dfff",
+    "docker-compat.yaml": "4a078e2a759e3859cee441d3e3efe14ecff201dd9c49b9b83f9df6d984c4889f",
+    "images.json": "7d561632e68adfd5c1ebc8bfaecc7f8133ee130e44ab542c3b326fe341e874a5",
+    "inference_relay.py": "73cd9e763f654729896ff81ce75577fa523b7c4df2b3396d7cda418e9af093de",
+    "preflight.py": "c6f1c937d216cd2c964cde6b95140ea6fec2c4402bc06a62cba0c240e81c5fc2",
+    "run-pi.mjs": "e93b3758c03b1e70972d804a679916c418f905d368d6fab2989b02676bf47d4e",
+    "run-tea.mjs": "1104e4e0af2fa5554a7b3cce81f7bd16cd6b81ea1cbaf1fddcd6783a6c094718",
+    "run_suite.py": "f6ef884d10423d7327864e89ec73190dd26b9add38cd4dbecc56eccf12fb2e85",
+    "tea_adapter.py": "6f08b9b471960659b76715400f852106a3dfb5d0691495bfa11060eeded0ec18",
+    "test_relay.py": "ed1bc73ec2c0e8fbac330d21b52bc68c05632c67c718f88dde726b7b1b32e431"
+  },
+  "thinkingBudgetTokens": 8000,
+  "frameworkPins": {
+    "deepSweDataset": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "workbuddyFramework": "625b2233093ae4f23e76be28c1f341d41cc70373",
+    "harbor": "527d50deb63a5d279e8c20593c18a2cbc7f61f9e"
+  },
+  "analysisPolicy": {
+    "primary": "official full-task acceptance; partial reward separately",
+    "tokenUnit": "provider input + output + cache read + cache creation; thinking included in output",
+    "savingsSubset": "same task and repeat; both arms fully accepted; known independently reconciled usage",
+    "missingUsage": "null; retain full 10 USD allocation; no automatic retry",
+    "scope": "six previously seen tasks, two repetitions per agent; no unseen qualification claim",
+    "stopAfter": "S0 report for user review; no S1 product changes"
+  }
+}

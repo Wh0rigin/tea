@@ -1,0 +1,112 @@
+{
+  "name": "TEA evidence residency stage 2 repeated streaming comparison",
+  "status": "frozen_before_model_calls",
+  "baselineTeaCommit": "f03052a5b41453c206f9375bd5c004842cab0dc4",
+  "candidateTeaCommit": "778a54ff1773e51d4f1ca1211fda4249a1eb848c",
+  "variable": "Version/range-aware read-cache retention based on actual assembled source visibility; production delta only src/context-assembler.mjs.",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 1,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 1,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "helm-unified-manifest-stream"
+    },
+    {
+      "repeat": 2,
+      "arm": "baseline",
+      "task": "mnamer-daemon-watch-lifecycle"
+    },
+    {
+      "repeat": 2,
+      "arm": "candidate",
+      "task": "mnamer-daemon-watch-lifecycle"
+    }
+  ],
+  "attemptsPerTaskPerArm": 2,
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 4096,
+  "contextWindowTokens": 216000,
+  "contextosTargetBytes": 32000,
+  "compaction": "auto",
+  "maxToolCalls": 96,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 300,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 5,
+  "suiteControlBudgetUsd": 40,
+  "controlRatesPerMillion": {
+    "input": 0.8,
+    "output": 2.8
+  },
+  "unknownBilling": "Stop the affected agent attempt; retain its full 5 USD allocation. Continue only remaining predeclared independent trials within 40 USD; no added retries or zero-valued missing usage. Stop suite on infrastructure exceptions.",
+  "acceptance": "Official independent verifier; complete-task acceptance primary, partial items diagnostic. Existing tasks are seen regressions, not unseen generalization.",
+  "adoption": "Compare complete-task acceptance and preserved existing behavior first. Report all-attempt token movement even on failures, but claim efficiency only for comparable both-complete work. Same acceptance with higher tokens does not pass performance gate. No general superiority claim from four paired observations.",
+  "limits": "Two seen regression tasks, two repeats per arm. Bounded diagnostic comparison, not full DeepSWE score or unseen generalization. All attempts retained; no automatic retry. No provider seed control available.",
+  "archivesSha256": {
+    "baseline": "af519b699f990567e108c2811c653825af3ce9f871afec61fbc62b13d8c11c05",
+    "candidate": "5a792c715e5e1c561568f9afa9e878e398d9c52de7c39f3e0308ff37a7add13f"
+  },
+  "priorStoppedReport": "evidence-residency-deepswe-20261019",
+  "commonHarnessChanges": "Both arms: request timeout 90s to 300s; relay socket timeout 315s; export artifacts in tea-export subdirectory to avoid Pier manifest collision. No production source changes. Previous incomplete run retained separately, not pooled.",
+  "allocation": "Eight fixed independent trials, 5 USD allocated to each, at most 40 USD including full reservations for any unknown attempt. Prior-round 5 USD reservation remains separate.",
+  "adapterSha256": {
+    "tea_adapter.py": "70d90645ca9332903041c682fe5152e2e2942003749afde7621ad32762fd0c34",
+    "run-tea.mjs": "5063f992850aa2fd05e9d236257ec4d285aa6fd657538de039d04bf0e410587e",
+    "run_pilot.py": "bb1f3c1a36b4a4c2cb8a1fcca7587afd9c8661a853de9e244b9064bbe38d6799",
+    "inference_relay.py": "abaf965093bc267068c4bdebfaba19ba67628f973ec4699390ef96628496dbf3",
+    "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1",
+    "preflight.py": "0be6ee967b51695a2731f5e0955191254940acb8d246e0ddf81fb0a1f86c8319",
+    "transport-tests.py": "83158e4eab406a20dd6235826e3da2476e8ae698095d2d035ad96ad05e178cf9"
+  }
+}

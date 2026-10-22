@@ -1,0 +1,281 @@
+{
+  "tea": {
+    "run_dir": "native-run:tea",
+    "reward": 0.9375,
+    "pass_rate": 0.75,
+    "n_tasks": 4,
+    "n_trials": 8,
+    "missing_tasks": [],
+    "attempts_per_task": [
+      2
+    ],
+    "score_sources": {
+      "reward": 8
+    },
+    "per_attempt": [
+      {
+        "attempt": 1,
+        "n_tasks": 4,
+        "reward": 0.9,
+        "pass_rate": 0.75
+      },
+      {
+        "attempt": 2,
+        "n_tasks": 4,
+        "reward": 0.975,
+        "pass_rate": 0.75
+      }
+    ],
+    "per_task": {
+      "bug_fix-medium-incorrect_linenos_on_fstring": {
+        "n_attempts": 2,
+        "reward": 1.0,
+        "pass_rate": 1.0,
+        "attempts": [
+          {
+            "trial": "bug_fix-medium-incorrect_linenos_on_fstring__r1-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 6,
+            "tests_total": 6,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          },
+          {
+            "trial": "bug_fix-medium-incorrect_linenos_on_fstring__r2-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 6,
+            "tests_total": 6,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          }
+        ]
+      },
+      "feature-medium-add_support_for_dependencies": {
+        "n_attempts": 2,
+        "reward": 1.0,
+        "pass_rate": 1.0,
+        "attempts": [
+          {
+            "trial": "feature-medium-add_support_for_dependencies__r1-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 4,
+            "tests_total": 4,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          },
+          {
+            "trial": "feature-medium-add_support_for_dependencies__r2-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 4,
+            "tests_total": 4,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          }
+        ]
+      },
+      "product_analytics-hard-signup_funnel": {
+        "n_attempts": 2,
+        "reward": 1.0,
+        "pass_rate": 1.0,
+        "attempts": [
+          {
+            "trial": "product_analytics-hard-signup_funnel__r1-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 13,
+            "tests_total": 13,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          },
+          {
+            "trial": "product_analytics-hard-signup_funnel__r2-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 13,
+            "tests_total": 13,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          }
+        ]
+      },
+      "python_port-medium-blog_tags": {
+        "n_attempts": 2,
+        "reward": 0.75,
+        "pass_rate": 0.0,
+        "attempts": [
+          {
+            "trial": "python_port-medium-blog_tags__r1-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 12,
+            "tests_total": 20,
+            "reward": 0.6,
+            "full_pass": false,
+            "build_error": false
+          },
+          {
+            "trial": "python_port-medium-blog_tags__r2-tea-pis0",
+            "score_source": "reward",
+            "tests_passed": 18,
+            "tests_total": 20,
+            "reward": 0.9,
+            "full_pass": false,
+            "build_error": false
+          }
+        ]
+      }
+    },
+    "definitions": {
+      "reward": "mean of verifier-reported per-trial score; build_error -> 0",
+      "pass_rate": "fraction of trials with verifier score >= 1.0",
+      "score_source": "score.json reward > overall > test_pass_rate > tests_passed/tests_total fallback",
+      "aggregation": "mean over attempts within each task, then mean over tasks",
+      "denominator_rebasing": "pure test-count attempts are re-scored as tests_passed/max(tests_total) across a task's attempts so a shrunken suite cannot inflate the ratio; composite LLM+rule scores are exempt"
+    },
+    "sourceMetricsSha256": "6e9cc265d501d32a2c6f9ce17960bad06c015259fa988bae9dceaf24abff169b",
+    "pathRedactedForPublication": true
+  },
+  "pi": {
+    "run_dir": "native-run:pi",
+    "reward": 0.6511,
+    "pass_rate": 0.375,
+    "n_tasks": 4,
+    "n_trials": 8,
+    "missing_tasks": [],
+    "attempts_per_task": [
+      2
+    ],
+    "score_sources": {
+      "reward": 5,
+      "tests_passed_over_max_tests_total": 3
+    },
+    "per_attempt": [
+      {
+        "attempt": 1,
+        "n_tasks": 4,
+        "reward": 0.7471,
+        "pass_rate": 0.5
+      },
+      {
+        "attempt": 2,
+        "n_tasks": 4,
+        "reward": 0.5551,
+        "pass_rate": 0.25
+      }
+    ],
+    "per_task": {
+      "bug_fix-medium-incorrect_linenos_on_fstring": {
+        "n_attempts": 2,
+        "reward": 0.5833,
+        "pass_rate": 0.5,
+        "attempts": [
+          {
+            "trial": "bug_fix-medium-incorrect_linenos_on_fstring__r1-pi-pis0",
+            "score_source": "reward",
+            "tests_passed": 6,
+            "tests_total": 6,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          },
+          {
+            "trial": "bug_fix-medium-incorrect_linenos_on_fstring__r2-pi-pis0",
+            "score_source": "tests_passed_over_max_tests_total",
+            "tests_passed": 1,
+            "tests_total": 6,
+            "reward": 0.1667,
+            "full_pass": false,
+            "build_error": false
+          }
+        ]
+      },
+      "feature-medium-add_support_for_dependencies": {
+        "n_attempts": 2,
+        "reward": 1.0,
+        "pass_rate": 1.0,
+        "attempts": [
+          {
+            "trial": "feature-medium-add_support_for_dependencies__r1-pi-pis0",
+            "score_source": "reward",
+            "tests_passed": 4,
+            "tests_total": 4,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          },
+          {
+            "trial": "feature-medium-add_support_for_dependencies__r2-pi-pis0",
+            "score_source": "reward",
+            "tests_passed": 4,
+            "tests_total": 4,
+            "reward": 1.0,
+            "full_pass": true,
+            "build_error": false
+          }
+        ]
+      },
+      "product_analytics-hard-signup_funnel": {
+        "n_attempts": 2,
+        "reward": 0.3462,
+        "pass_rate": 0.0,
+        "attempts": [
+          {
+            "trial": "product_analytics-hard-signup_funnel__r1-pi-pis0",
+            "score_source": "tests_passed_over_max_tests_total",
+            "tests_passed": 7,
+            "tests_total": 13,
+            "reward": 0.5385,
+            "full_pass": false,
+            "build_error": false
+          },
+          {
+            "trial": "product_analytics-hard-signup_funnel__r2-pi-pis0",
+            "score_source": "tests_passed_over_max_tests_total",
+            "tests_passed": 2,
+            "tests_total": 13,
+            "reward": 0.1538,
+            "full_pass": false,
+            "build_error": false
+          }
+        ]
+      },
+      "python_port-medium-blog_tags": {
+        "n_attempts": 2,
+        "reward": 0.675,
+        "pass_rate": 0.0,
+        "attempts": [
+          {
+            "trial": "python_port-medium-blog_tags__r1-pi-pis0",
+            "score_source": "reward",
+            "tests_passed": 9,
+            "tests_total": 20,
+            "reward": 0.45,
+            "full_pass": false,
+            "build_error": false
+          },
+          {
+            "trial": "python_port-medium-blog_tags__r2-pi-pis0",
+            "score_source": "reward",
+            "tests_passed": 18,
+            "tests_total": 20,
+            "reward": 0.9,
+            "full_pass": false,
+            "build_error": false
+          }
+        ]
+      }
+    },
+    "definitions": {
+      "reward": "mean of verifier-reported per-trial score; build_error -> 0",
+      "pass_rate": "fraction of trials with verifier score >= 1.0",
+      "score_source": "score.json reward > overall > test_pass_rate > tests_passed/tests_total fallback",
+      "aggregation": "mean over attempts within each task, then mean over tasks",
+      "denominator_rebasing": "pure test-count attempts are re-scored as tests_passed/max(tests_total) across a task's attempts so a shrunken suite cannot inflate the ratio; composite LLM+rule scores are exempt"
+    },
+    "sourceMetricsSha256": "d999001efd99f3df9ef2664bcf162b010f1dee5f3826d9ef829db34b41ef1183",
+    "pathRedactedForPublication": true
+  }
+}
