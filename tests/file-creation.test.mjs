@@ -53,7 +53,7 @@ test('daily defaults allow normal requests while explicit guards and SDK default
   assert.equal(loadCliConfig({ maxRequestInputBytes: 24000 }, {}).maxRequestInputTokens, 24000);
   const large = loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '216000' });
   const budget = contextBudget(large, { messages: [] });
-  assert.equal(budget.inputLimit, 207808); assert.equal(budget.triggerTokens, 166246);
+  assert.equal(budget.inputLimit, 199616); assert.equal(budget.triggerTokens, 199616);
   assert.equal(large.maxRequestInputBytes, config.maxRequestInputBytes);
   assert.throws(() => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '8192' }), /larger than output/);
   assert.throws(() => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '2.5' }), /safe integer/);

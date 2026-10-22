@@ -33,7 +33,7 @@ You can also edit the JSON directly. For the GLM provider used in our experiment
 }
 ```
 
-Daily CLI defaults are ContextOS, automatic compaction, memory GC, native file creation, capability feedback and no monetary cap. A conservative 32,768-token scheduling window reserves 4,096 output tokens and 4,096 safety tokens; set the window to your provider's documented capacity. The independent wire guard is 2 MiB and ContextOS target 32,000 bytes. See [Token budget configuration](CONTEXT_BUDGET.md).
+Daily CLI defaults are ContextOS, automatic compaction, memory GC, native file creation, capability feedback and no monetary cap. The Pi-style budget policy uses a conservative 32,768-token fallback window with a 16,384-token context reserve and a 4,096-token output ceiling fitted to remaining estimated capacity; set the window to your provider's documented capacity. The independent wire guard is 2 MiB and ContextOS target 32,000 bytes. See [Token budget configuration](CONTEXT_BUDGET.md).
 
 ## Precedence and options
 
@@ -66,3 +66,8 @@ Live benchmark commands and comparison harnesses keep their explicit environment
 ## Edit permissions
 
 `editPermissions` accepts workspace-relative `deny`, `ask` and `allow` lists. Configure protected existing tests, approval-only files and optional write scopes in your user config or per-task options. See [Edit permissions and tool policy](EDIT_PERMISSIONS.md) for matching, SDK hooks and subprocess limitations.
+
+
+## Pi-style budget fields
+
+The config file accepts `contextBudgetPolicy` (`pi` or `reserved-output`), `compactionKeepRecentTokens` and `compactionReserveTokens`. Defaults and compatibility details: [context budget guide](CONTEXT_BUDGET.md). Omit `maxToolCalls` to use the uncapped daily default; an existing explicit numeric setting continues to apply. Environment variables override saved settings. This change does not rewrite your config file.
