@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "attempts": 4,
+  "submittedRequests": 208,
+  "allHashesUsageControlsAndInitialIdentitiesMatched": true,
+  "unknownUsage": 0,
+  "retryCount": 0,
+  "protocolSha256": "120845cd81ed51f24fbbf676669f3312de1277b6d2a2f19baca60578b270f5a6",
+  "localTargeted": {
+    "passed": 49,
+    "failed": 0
+  },
+  "fullRegression": {
+    "passed": 450,
+    "skipped": 1,
+    "failed": 0
+  },
+  "reportHashes": {
+    "diagnostics.json": "fddf0b29f99d04777d7a20ec263368f985364d1a2039e8a46aef19790117582b",
+    "preflight.json": "135fcad3ded22daaea9d6359908631b82f9c0364739e3a00e3f2c657454387fc",
+    "protocol.json": "120845cd81ed51f24fbbf676669f3312de1277b6d2a2f19baca60578b270f5a6",
+    "README.md": "9741cf529b9a5552220ea9adec388991024120c2fb38b134e8d65acb79c31f30",
+    "results.json": "df4a36e5b70c0fe8bdd8a60586012690e0b4ff29fe39d0bfe65226c839fdc13e",
+    "RESULTS.zh-CN.md": "e5a0edd97e26775be2c698355386ec485d656baf6a021baf5f83d3bf702fdf6b"
+  }
+}

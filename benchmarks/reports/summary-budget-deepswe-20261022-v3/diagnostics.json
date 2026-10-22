@@ -1,0 +1,1095 @@
+{
+  "scope": "Observed tool operations, summary usage and post-run failure names; no hidden verifier source or private model reasoning.",
+  "runs": [
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/manifest_stream_test.go"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "toolCounts": {
+        "read_file": 47,
+        "run_shell": 8,
+        "run_tests": 21,
+        "search_code": 17,
+        "recall_context": 6,
+        "write_file": 2,
+        "apply_patch": 4
+      },
+      "firstEditToolOrdinal": 63,
+      "repeatedIdenticalReadSearchRecallCalls": 20,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest.go"
+          },
+          "count": 8
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/status.go"
+          },
+          "count": 5
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/template.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/v1/util/manifest.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/interfaces.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/upgrade.go"
+          },
+          "count": 2
+        },
+        {
+          "tool": "search_code",
+          "input": {
+            "maxResults": 20,
+            "path": "pkg/action",
+            "query": "DryRunStrategy"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "endLine": 205,
+            "path": "pkg/cmd/template.go",
+            "startLine": 185
+          },
+          "count": 2
+        }
+      ],
+      "toolErrors": [
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Outside the frozen benchmark command policy; use a documented validation or CLI entry\n[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied "
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative f"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\ntime=\"2026-10-22T11:53:51Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"\ntime=\"2026-10-22T11:53:51.479592015Z\" level=warning msg=\"No HTTP secret provided - generated random se"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\ntime=\"2026-10-22T11:55:35Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"\ntime=\"2026-10-22T11:55:35.255825755Z\" level=warning msg=\"No HTTP secret provided - generated random se"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\ntime=\"2026-10-22T11:56:25Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"\ntime=\"2026-10-22T11:56:25.408339098Z\" level=warning msg=\"No HTTP secret provided - generated random se"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git -C /app status && git -C /app log --oneline -3",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git -C /app status",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_tests",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "git log --oneline -3 main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go build ./pkg/cmd/... ./pkg/release/... ./pkg/action/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/... 2>&1 | tail -40",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run \"TestGetManifest|TestTemplate|TestInstall|TestUpgrade|TestStatus\" 2>&1 | grep -E \"^(--- FAIL|=== RUN.*FAIL|FAIL|ok)\" ",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run \"TestGetManifest|TestTemplate|TestInstall|TestUpgrade|TestStatus\" -update",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestGetManifest -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestTemplate -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestInstall -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestUpgrade -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestStatus -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -failfast",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestGetCmd -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -failfast",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd -run TestUnifiedManifestStream -v",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go build ./...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go vet ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add -A pkg/cmd && git commit -s -m \"feat(cmd): unified manifest-stream output\n\nEmit one stable, reproducible manifest stream from helm template,\ninstall/upgrade dry-runs, and helm get manifest without a new flag.\nDocuments are ordered lexicographically by full Source path, in-file\nmulti-document order is preserved, and hooks are included. Dry-runs\nshow a single MANIFEST section without extra trailing blank lines;\nhelm template ends with a trailing newline; hooks sort before non-hook\nresources of the same Source path in get manifest; upgrade dry-run no\nlonger prints the Happy Helming! success line.\n\nSigned-off-by: TEA <tea@teaguard.dev>\"",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add pkg/cmd/manifest_stream.go pkg/cmd/manifest_stream_test.go pkg/cmd/get_manifest.go pkg/cmd/status.go pkg/cmd/upgrade.go pkg/cmd/template.go pkg/cmd/testdata/output",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output for template, dry-runs, and get manifest\"",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short && git log --oneline -1 && git show --stat --oneline HEAD",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "testFailureSignals": [
+        {
+          "command": "git switch -c unified-manifest-stream main",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/... 2>&1 | tail -40",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd -run \"TestGetManifest|TestTemplate|TestInstall|TestUpgrade|TestStatus\" 2>&1 | grep -E \"^(--- FAIL|=== RUN.*FAIL|FAIL|ok)\" ",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd -run \"TestGetManifest|TestTemplate|TestInstall|TestUpgrade|TestStatus\" -update",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd -failfast",
+          "signals": []
+        }
+      ],
+      "compactionRequests": [
+        {
+          "requestId": "899150bb-cc73-4f4b-8574-7fa0312bc2c6",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 26252,
+            "output_tokens": 1382,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 85725,
+          "elapsedMs": 17433
+        }
+      ],
+      "compactionEvents": [
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        }
+      ],
+      "patch": {
+        "exists": true,
+        "sha256": "0484f52905c5ea6ade493af477223aba444d266173b2593d7442680c2356a3a5",
+        "bytes": 38438,
+        "processCreationLines": [],
+        "selfAuthoredAssertionLines": []
+      }
+    },
+    {
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 1,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_just_starts_when_not_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_stops_then_starts_when_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_processes_files_and_supports_status_and_stop"
+      ],
+      "toolCounts": {
+        "run_shell": 11,
+        "read_file": 14,
+        "apply_patch": 7,
+        "search_code": 3,
+        "write_file": 2,
+        "run_tests": 6
+      },
+      "firstEditToolOrdinal": 10,
+      "repeatedIdenticalReadSearchRecallCalls": 8,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_spec.py"
+          },
+          "count": 5
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/__main__.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/argument.py"
+          },
+          "count": 2
+        }
+      ],
+      "toolErrors": [
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\nF\n=================================== FAILURES ===================================\n_____________________ test_run_once_moves_files_top_level ______________________\ntests/local/test_daemon.py:48: in test_run_once_moves_files_t"
+        },
+        {
+          "tool": "apply_patch",
+          "outputHead": "apply_patch requires a non-empty search string and a replace string for each edit. To create a new file, use write_file with path and content\n[tool_feedback] {\"version\":1,\"code\":\"INPUT_INVALID\",\"retryable\":false,\"missingCapability\":\"valid-i"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\nF\n=================================== FAILURES ===================================\n_____________________ test_run_once_moves_files_top_level ______________________\ntests/local/test_daemon.py:55: in test_run_once_moves_files_t"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\n....F\n=================================== FAILURES ===================================\n______________________ test_lifecycle_and_stats_and_logs _______________________\ntests/local/test_daemon.py:131: in test_lifecycle_and_sta"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\n........F\n=================================== FAILURES ===================================\n______________________ test_exclude_patterns_from_config _______________________\ntests/local/test_daemon.py:211: in test_exclude_patte"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Outside the frozen benchmark command policy; use a documented validation or CLI entry\n[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied "
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git status && git branch -a",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git log --oneline -3",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c daemon-feature main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -c \"import mnamer.__main__, mnamer.daemon; print('ok')\"",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add mnamer/__main__.py mnamer/setting_store.py mnamer/daemon.py tests/local/test_daemon.py",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -m Add daemon directives: watch dirs, lifecycle, state, logs, stats, run-once with dry-run, stability checks, batch cap, config validation",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -m \"Add daemon directives: watch dirs, lifecycle, state, logs, stats, run-once, dry-run, stability, batch cap, config validation\"",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git log --oneline -1",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "testFailureSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: /usr/local/bin/python: No module named mnamer",
+            "E     ",
+            "E   assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', '/tmp/pytest-of-root/p...once_moves_files_top_0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files_top_level - Asse..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert {'movie.mkv',...ething.partx'} == {'movie.mkv',...ething.partx'}",
+            "E     ",
+            "E     Extra items in the left set:",
+            "E     'skip.tmp'",
+            "E     Use -v to get more diff",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files_top_level - Asse..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon', 'start', '--watch', '/tmp/pytest-of-root/p...   raise MnamerException(\\nmnamer.exceptions.MnamerException: --movie-directory is required when watching CLI paths\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_lifecycle_and_stats_and_logs - Assert..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert {'movie.mkv',...ething.partx'} == {'movie.mkv', 'other.mp4'}",
+            "E     ",
+            "E     Extra items in the left set:",
+            "E     'something.partx'",
+            "E     Use -v to get more diff",
+            "FAILED tests/local/test_daemon.py::test_exclude_patterns_from_config - Assert..."
+          ]
+        }
+      ],
+      "compactionRequests": [],
+      "compactionEvents": [],
+      "patch": {
+        "exists": true,
+        "sha256": "d38f71b1d4a7246152be3d5447df3a559cef9af29022b47c40365f8f5a3b665a",
+        "bytes": 30201,
+        "processCreationLines": [
+          "    return subprocess.run("
+        ],
+        "selfAuthoredAssertionLines": [
+          "    assert result.returncode == 0, result.stderr",
+          "    assert {p.name for p in moved.iterdir()} == {",
+          "    assert (workspace / \"watch\" / \"incomplete.part\").exists()",
+          "    assert not any(p.name.endswith(\".part\") for p in moved.iterdir())",
+          "    assert run_mnamer(*args, cwd=workspace).returncode == 0",
+          "    assert run_mnamer(*args, cwd=workspace).returncode == 0",
+          "    assert state1[\"processed\"] != state2[\"processed\"] or \"cycles\" in state1",
+          "    assert \"updated_epoch\" in state1 and \"updated_epoch\" in state2",
+          "    assert result.returncode == 0",
+          "    assert list((workspace / \"movies\").iterdir()) == []",
+          "    assert (workspace / \"state.json\").exists()",
+          "    assert result.returncode == 0",
+          "    assert len(list((workspace / \"movies\").iterdir())) == 1",
+          "    assert result.returncode == 0",
+          "    assert \"movie.mkv\" in result.stdout",
+          "    assert \"->\" in result.stdout",
+          "    assert list((workspace / \"movies\").iterdir()) == []",
+          "    assert not (workspace / \"state.json\").exists()",
+          "    assert not (workspace / \"state.json.log\").exists()",
+          "    assert start.returncode == 0",
+          "    assert (workspace / \"state.json\").exists()",
+          "    assert status.returncode == 0",
+          "    assert \"running\" in status.stdout",
+          "    assert logs.returncode == 0",
+          "    assert \"cycle complete\" in logs.stdout",
+          "    assert tail.returncode == 0",
+          "    assert len(tail.stdout.strip().splitlines()) == 1",
+          "    assert stats.returncode == 0",
+          "    assert \"processed=\" in stats.stdout",
+          "    assert \"last_epoch=\" in stats.stdout"
+        ]
+      }
+    },
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/upgrade_test.go",
+        "pkg/cmd/manifest_stream_test.go"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [],
+      "toolCounts": {
+        "read_file": 59,
+        "search_code": 25,
+        "recall_context": 9,
+        "run_shell": 12,
+        "write_file": 2,
+        "apply_patch": 5,
+        "run_tests": 5
+      },
+      "firstEditToolOrdinal": 80,
+      "repeatedIdenticalReadSearchRecallCalls": 29,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest.go"
+          },
+          "count": 10
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/template.go"
+          },
+          "count": 7
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/status.go"
+          },
+          "count": 6
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/common.go"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/v1/util/manifest.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/upgrade.go"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/install.go"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/testdata/output/get-manifest.txt"
+          },
+          "count": 2
+        }
+      ],
+      "toolErrors": [
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "recall_context",
+          "outputHead": "Invalid memory page bounds\n[tool_feedback] {\"version\":1,\"code\":\"TOOL_FAILED\",\"retryable\":false,\"missingCapability\":\"successful-tool-result\",\"next\":\"Inspect the reported failure and obtain new evidence before another attempt.\"}"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\ntime=\"2026-10-22T12:24:55Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"\ntime=\"2026-10-22T12:24:55.669929229Z\" level=warning msg=\"No HTTP secret provided - generated random se"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Outside the frozen benchmark command policy; use a documented validation or CLI entry\n[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied "
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git -C /app status --short && git -C /app rev-parse --abbrev-ref HEAD && git -C /app log --oneline -1",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git branch --show-current",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go build ./pkg/cmd/... ./pkg/release/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_shell",
+          "command": "go test ./pkg/cmd/ -run 'TestTemplate|TestGetManifest|TestUpgrade|TestInstall' 2>&1 | grep -E '^(--- FAIL|=== RUN|--- PASS)' | head -80",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git diff --stat",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -run TestUpgradeCmd -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "wc -c pkg/cmd/testdata/output/upgrade-dry-run.txt",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git rev-parse --abbrev-ref HEAD",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add -A",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output for template, dry-run and get manifest\n\nEmit a single stable, reproducible manifest stream without any new flag:\n- template, install/upgrade dry-run and get manifest order documents by\n  full Source path lexicographically, preserving in-file rendered order\n- hooks are included in the stream; on a shared Source path hooks come\n  before non-hook resources\n- dry-run output presents a single MANIFEST section with no extra\n  trailing blank lines, and upgrade dry-run no longer prints the\n  'Happy Helming!' success line\n- template output ends with a trailing newline\"",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): emit unified manifest stream for template, dry-run and get manifest\"",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "testFailureSignals": [
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        }
+      ],
+      "compactionRequests": [
+        {
+          "requestId": "3a7228ff-7248-4113-80dc-e574cad9294f",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 20610,
+            "output_tokens": 1140,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 67374,
+          "elapsedMs": 15992
+        },
+        {
+          "requestId": "504f21d6-af60-43c7-b536-027a5ed0032e",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 23468,
+            "output_tokens": 1371,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 77954,
+          "elapsedMs": 26553
+        }
+      ],
+      "compactionEvents": [
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        },
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        }
+      ],
+      "patch": {
+        "exists": true,
+        "sha256": "f6bd6dc3fdf17d611b52adab8eaf3f50144d66eeee957c04bd8fd2f8bc719857",
+        "bytes": 41481,
+        "processCreationLines": [],
+        "selfAuthoredAssertionLines": []
+      }
+    },
+    {
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 2,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [],
+      "toolCounts": {
+        "read_file": 22,
+        "search_code": 2,
+        "recall_context": 7,
+        "run_shell": 6,
+        "list_files": 1,
+        "write_file": 2,
+        "apply_patch": 5,
+        "run_tests": 6
+      },
+      "firstEditToolOrdinal": 31,
+      "repeatedIdenticalReadSearchRecallCalls": 8,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/__main__.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/argument.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_store.py"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_spec.py"
+          },
+          "count": 2
+        }
+      ],
+      "toolErrors": [
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "read_file",
+          "outputHead": "endLine must be greater than or equal to startLine\n[tool_feedback] {\"version\":1,\"code\":\"TOOL_FAILED\",\"retryable\":false,\"missingCapability\":\"successful-tool-result\",\"next\":\"Inspect the reported failure and obtain new evidence before another "
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\nF\n=================================== FAILURES ===================================\n________________________ test_validate_requires_config _________________________\ntests/local/test_daemon.py:53: in test_validate_requires_conf"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\n..................F\n=================================== FAILURES ===================================\n________________________ test_run_once_batch_size_zero _________________________\ntests/local/test_daemon.py:246: in test_run"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\n......................F\n=================================== FAILURES ===================================\n____________________ test_run_once_config_plus_cli_combined ____________________\ntests/local/test_daemon.py:324: in test"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git -C /app status --porcelain=v1 && git -C /app rev-parse --abbrev-ref HEAD",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c daemon-move-feature main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -x -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git diff --stat",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add mnamer/daemon.py mnamer/__main__.py mnamer/setting_store.py tests/local/test_daemon.py",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -m \"Add daemon watch-and-move feature with CLI directives and tests\"",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "testFailureSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 1 == 2",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--validate-daemon-config'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_validate_requires_config - AssertionE..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert not [PosixPath('/tmp/pytest-of-root/pytest-1/test_run_once_batch_size_zero0/movies/a.mp4')]",
+            "E    +  where [PosixPath('/tmp/pytest-of-root/pytest-1/test_run_once_batch_size_zero0/movies/a.mp4')] = list(<generator object Path.iterdir at 0x70ef581969b0>)",
+            "E    +    where <generator object Path.iterdir at 0x70ef581969b0> = iterdir()",
+            "E    +      where iterdir = PosixPath('/tmp/pytest-of-root/pytest-1/test_run_once_batch_size_zero0/movies').iterdir",
+            "FAILED tests/local/test_daemon.py::test_run_once_batch_size_zero - AssertionE..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert False",
+            "E    +  where False = exists()",
+            "E    +    where exists = (PosixPath('/tmp/pytest-of-root/pytest-2/test_run_once_config_plus_cli_0/movies') / 'b.mp4').exists",
+            "FAILED tests/local/test_daemon.py::test_run_once_config_plus_cli_combined - A..."
+          ]
+        }
+      ],
+      "compactionRequests": [],
+      "compactionEvents": [],
+      "patch": {
+        "exists": true,
+        "sha256": "c81a023b2baec07fdcacff45bb6f96da3febc061ca32121fd824d90f7f5420ea",
+        "bytes": 42077,
+        "processCreationLines": [
+          "        process = subprocess.Popen(",
+          "    return subprocess.run("
+        ],
+        "selfAuthoredAssertionLines": [
+          "    assert result.returncode == 2",
+          "    assert result.returncode == 2",
+          "    assert \"config\" in (result.stdout + result.stderr).lower()",
+          "    assert result.returncode == 0",
+          "    assert result.returncode == 0",
+          "    assert result.returncode == 2",
+          "    assert \"config\" in (result.stdout + result.stderr).lower()",
+          "    assert result.returncode == 2",
+          "    assert result.returncode == 0",
+          "    assert (env[\"movies\"] / \"a.mp4\").exists()",
+          "    assert not (env[\"watch\"] / \"a.mp4\").exists()",
+          "    assert (env[\"watch\"] / \"sub\" / \"nested.mp4\").exists()  # no recursion",
+          "    assert result.returncode == 0",
+          "    assert \"processed\" in state and \"updated_epoch\" in state",
+          "    assert first != second  # content changes across runs",
+          "    assert (env[\"root\"] / \"st.json.log\").exists()",
+          "    assert result.returncode == 0",
+          "    assert (env[\"movies\"] / \"keep.mp4\").exists()",
+          "    assert (env[\"watch\"] / \"skip.tmp\").exists()",
+          "    assert (env[\"watch\"] / \"skip.partial\").exists()",
+          "    assert (env[\"watch\"] / \"growing.part\").exists()",
+          "    assert (env[\"movies\"] / \"part.of.the.movie.mp4\").exists()",
+          "    assert (env[\"movies\"] / \"a.mp4\").read_text() == \"old\"",
+          "    assert len(moved) == 1",
+          "    assert result.returncode == 0",
+          "    assert len(list(env[\"movies\"].iterdir())) == 2",
+          "    assert not list(env[\"movies\"].iterdir())",
+          "    assert result.returncode == 0",
+          "    assert result.returncode == 0",
+          "    assert \"->\" in result.stdout"
+        ]
+      }
+    }
+  ]
+}
