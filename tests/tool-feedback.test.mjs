@@ -43,7 +43,7 @@ test('S1 is explicitly opt-in and disabled by default', () => {
   assert.equal(loadConfig({}, { TEA_CAPABILITY_FEEDBACK: '1' }).capabilityFeedback, true);
 });
 
-test('disabled feedback preserves inherited history with the explicitly updated prompt and patch schema', async () => {
+test('disabled feedback preserves inherited history with explicit prompt, patch and negative-probe schema migrations', async () => {
   const { root, config } = await fixture();
   const requests = [];
   const steps = () => [calls([{ name: 'read_file', input: { path: 'value.mjs' } }, { name: 'run_shell', input: { command: 'node --version' } }]), done];
@@ -51,14 +51,14 @@ test('disabled feedback preserves inherited history with the explicitly updated 
   const current = await runTask('Inspect value', { ...disabled, runId: 'current' }, { approveCommand: () => false, adapterFactory: adapter(steps(), requests) });
   const payloads = list => list.map(({ system, messages, tools }) => ({ system, messages, tools }));
   // Keep the historical fixture immutable. Declare the intentional workflow
-  // prompt / patch-schema migration; all other definitions and history match.
+  // prompt / patch / negative-probe schema migrations; all other definitions and history match.
   const normalize = value => typeof value === 'string' ? value.replaceAll(root, '[WORKSPACE]').replaceAll('Command not approved by approval handler.','Command denied by user.')
     : Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,normalize(v)])) : value;
   const baseline = JSON.parse(await readFile(new URL('./fixtures/s1-default-parent-requests.json', import.meta.url), 'utf8'));
   assert.equal(baseline.parentCommit, 'c97b950797294f48e31752508af11a80814e66d8');
   const expected = baseline.requests.map(request => ({ ...request,
     system: buildSystemPrompt(request.tools),
-    tools: request.tools.map(tool => tool.name === 'apply_patch' ? TOOL_DEFINITIONS.find(item => item.name === 'apply_patch')
+    tools: request.tools.map(tool => ['apply_patch', 'run_shell'].includes(tool.name) ? TOOL_DEFINITIONS.find(item => item.name === tool.name)
       : tool.name === 'search_code' ? { ...tool, description: tool.description.replace('Use path to search another directory after bounded scans;', 'Use path for a single file or a directory;') } : tool),
   }));
   assert.deepEqual(normalize(payloads(requests)), expected);

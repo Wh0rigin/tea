@@ -49,6 +49,48 @@ export function validationCommandKey(command) {
   catch { return JSON.stringify({ invalid: String(command) }); }
 }
 
+// Conservative entry-point detection, not arbitrary shell-output classification.
+// Test wrappers, inline probes, search misses and handled CLI usage errors must
+// not create a product-crash obligation. Unsupported launchers remain untracked.
+export function entryPointCrashed(command, output) {
+  const text = String(output);
+  if (!/^exit=[1-9]\d*\n/.test(text)) return false;
+  let parsed;
+  try { parsed = parseCommand(command); } catch { return false; }
+  const name = parsed.executable.split(/[\\/]/).at(-1).replace(/\.exe$/i, '').toLowerCase();
+  const args = parsed.args;
+  const stderr = text.split('\nstderr:\n').slice(1).join('\nstderr:\n');
+  if (/^python(?:3(?:\.\d+)?)?$/.test(name)) {
+    const entry = args[0] === '-m' && args[1] && !['pytest', 'unittest', 'pip', 'compileall'].includes(args[1])
+      || args[0] && !args[0].startsWith('-') && /\.py$/i.test(args[0]);
+    return Boolean(entry && /^Traceback \(most recent call last\):\r?$/m.test(stderr)
+      && /^\w*(?:Error|Exception):/m.test(stderr));
+  }
+  if (name === 'node' && args[0] && !args[0].startsWith('-') && /\.(?:mjs|cjs|js)$/i.test(args[0])) {
+    return /^(?:\w*Error|\w*Exception):[^\n]*\n\s+at /m.test(stderr);
+  }
+  return false;
+}
+
+export function entryPointNeedsValidation(state, command, output, expectedExitCode = 0) {
+  const key = validationCommandKey(command);
+  const existing = (state.validationFailures || []).some(item => item.kind === 'entry_crash' && item.key === key);
+  const exit = String(output).match(/^exit=(\d+)\n/);
+  const expected = Number.isInteger(expectedExitCode) && expectedExitCode > 0 && expectedExitCode <= 255
+    && exit && Number(exit[1]) === expectedExitCode;
+  return existing || !expected && entryPointCrashed(command, output);
+}
+
+export function observeEntryPoint(state, command, output, failed = false) {
+  const key = validationCommandKey(command);
+  const existing = (state.validationFailures || []).some(item => item.kind === 'entry_crash' && item.key === key);
+  const next = observeValidation(state, command, output, failed);
+  if (!existing && entryPointCrashed(command, output)) {
+    next.validationFailures = next.validationFailures.map(item => item.key === key ? { ...item, kind: 'entry_crash' } : item);
+  }
+  return next;
+}
+
 export function observeValidation(state, command, output, failed = false, error) {
   const key = validationCommandKey(command);
   const success = !failed && validationSucceeded(output);

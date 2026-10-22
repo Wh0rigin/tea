@@ -440,8 +440,11 @@ export class WorkspaceTools {
     return this.#spawnCommand(parsed, this.maxCommandMs);
   }
 
-  async runShell({ command } = {}) {
+  async runShell({ command, expected_exit_code = 0 } = {}) {
     this.lastCommandTiming = { approvalMs: 0, executionMs: 0 };
+    if (!Number.isInteger(expected_exit_code) || expected_exit_code < 0 || expected_exit_code > 255) {
+      throw new ToolFeedbackError('INPUT_INVALID', 'expected_exit_code must be an integer from 0 to 255');
+    }
     const parsed = parseCommand(command);
     assertCommandPolicy(parsed);
     const value = command.trim();
@@ -580,7 +583,7 @@ export const TOOL_DEFINITIONS = [
   { name: 'apply_patch', description: 'Edit one file. Use edits for multiple unique, non-overlapping replacements matched against the original text; all must match before writing. A single search/replace pair is also accepted. Never mix the two forms.', input_schema: { type: 'object', properties: { path: { type: 'string' }, edits: { type: 'array', minItems: 1, maxItems: 32, items: { type: 'object', properties: { search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['search', 'replace'], additionalProperties: false } }, search: { type: 'string', minLength: 1 }, replace: { type: 'string' } }, required: ['path'], oneOf: [{ required: ['edits'] }, { required: ['search', 'replace'] }], additionalProperties: false } },
   { name: 'write_file', description: 'Create a new UTF-8 text file within the workspace and create missing parent directories. Never overwrites an existing file: read it and use apply_patch instead. Do not use shell commands to create files. Run relevant tests after creation.', input_schema: { type: 'object', properties: { path: { type: 'string' }, content: { type: 'string' } }, required: ['path', 'content'], additionalProperties: false } },
   { name: 'run_tests', description: 'Run an allowlisted test, lint, typecheck, or read-only Git diagnostic command. Only actual validation commands can satisfy the post-edit validation requirement. Long output retains the beginning and end; successful commands use a smaller output budget.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
-  { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked.', input_schema: { type: 'object', properties: { command: { type: 'string' } }, required: ['command'], additionalProperties: false } },
+  { name: 'run_shell', description: 'Run a bounded command in the workspace. Unlisted commands need explicit interactive approval; destructive commands are blocked. For intentional negative probes, declare expected_exit_code before execution; this cannot waive a previously observed crash.', input_schema: { type: 'object', properties: { command: { type: 'string' }, expected_exit_code: { type: 'integer', minimum: 0, maximum: 255 } }, required: ['command'], additionalProperties: false } },
 ];
 
 // Small inventories retain the previous wire schemas until continuation is

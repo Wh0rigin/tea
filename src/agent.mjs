@@ -15,7 +15,7 @@ import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } f
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 import { runtimeError } from './runtime-error.mjs';
 import { buildSystemPrompt } from './prompts.mjs';
-import { observeValidation, unresolvedValidationCommands, unavailableValidationNotice, validationRunnerUnavailable, invalidateUnavailableValidation } from './validation.mjs';
+import { observeValidation, observeEntryPoint, entryPointNeedsValidation, unresolvedValidationCommands, unavailableValidationNotice, validationRunnerUnavailable, invalidateUnavailableValidation } from './validation.mjs';
 
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
 
@@ -376,6 +376,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         let output;
         let isError = false;
         let toolError;
+        let entryValidation = false;
         const effects = toolService.effects(call.name, call.input);
         failureStage = 'tool';
         emit({ type: 'tool_start', name: call.name, input: call.input, number: toolCalls });
@@ -391,19 +392,26 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           } else if (effects.validatesSource) {
             validationAttempts += 1;
             ({ validationFailures, validationUnavailable, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output));
+          } else if (call.name === 'run_shell' && entryPointNeedsValidation(runtimeState(), call.input?.command, output, call.input?.expected_exit_code)) {
+            entryValidation = true;
+            validationAttempts += 1;
+            ({ validationFailures, validationUnavailable, validationPassed, pendingValidation } = observeEntryPoint(runtimeState(), call.input?.command, output));
           }
         } catch (error) {
           isError = true;
           toolError = error;
           output = error.message;
-          if (effects.validatesSource) {
+          if (effects.validatesSource || call.name === 'run_shell' && entryPointNeedsValidation(runtimeState(), call.input?.command, output)) {
+            entryValidation = !effects.validatesSource;
             validationAttempts += 1;
-            ({ validationFailures, validationUnavailable, validationPassed, pendingValidation } = observeValidation(runtimeState(), call.input?.command, output, true, error));
+            ({ validationFailures, validationUnavailable, validationPassed, pendingValidation } = entryValidation
+              ? observeEntryPoint(runtimeState(), call.input?.command, output, true)
+              : observeValidation(runtimeState(), call.input?.command, output, true, error));
           }
         }
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command), runnerUnavailable: effects.validatesSource && validationRunnerUnavailable(call.input?.command, output, toolError) }) : null;
         output = appendFailureFeedback(output, feedback);
-        if (effects.validatesSource && validationFailures.length) {
+        if ((effects.validatesSource || entryValidation) && validationFailures.length) {
           output += '\n[validation_pending] Rerun unresolved commands; a different pass does not clear them: '
             + JSON.stringify(unresolvedValidationCommands(runtimeState()).map(redactText));
         }
