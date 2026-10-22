@@ -1,0 +1,33 @@
+{
+  "sourceOnlyPolicyInspection": true,
+  "notCausalAblation": true,
+  "tea": {
+    "contextWindow": 216000,
+    "outputCeiling": 131072,
+    "contextReserve": 4096,
+    "inputLimit": 80832,
+    "automaticTriggerEstimatedInput": 64665,
+    "contextosTargetBytes": 32000,
+    "keepRecentToolRounds": 2
+  },
+  "pi": {
+    "version": "0.87.1",
+    "contextWindow": 216000,
+    "compactionReserve": 16384,
+    "shouldCompactContextThreshold": 199616,
+    "nativeTokenEstimatorDiffers": true,
+    "sourceFiles": [
+      {
+        "file": "dist/core/settings-manager.js",
+        "sha256": "5368b155ec26d88374cec9e66b8e588b5041a0fb0047414f70b34e13892c4f48",
+        "matchesFrozenPiArchiveManifest": true
+      },
+      {
+        "file": "dist/core/compaction/compaction.js",
+        "sha256": "871f81769ef67a78c63cfc674e09f13097899effe4677f156a3613878c387640",
+        "matchesFrozenPiArchiveManifest": true
+      }
+    ]
+  },
+  "hypothesis": "Earlier summary compaction and a much smaller evidence residency target can create re-reading/recall churn in broad repository tasks; no causality established without a frozen ablation."
+}

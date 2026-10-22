@@ -1,5 +1,7 @@
 # TEA outcome validation: official GLM DeepSWE run
 
+**Completed: TEA official full-task acceptance **1/4**; historical Pi **4/4**. All **213** TEA requests independently metered,4,593,245 tokens.** The single official-pass/known-usage historical pair uses **137.78%** more tokens for TEA; its client still stopped at a local context guard. No code-only benefit claim. See [Chinese results and diagnostics](RESULTS.zh-CN.md), [data](results.json), and [verification](verification.json).
+
 Protocol frozen before task inference. Candidate runtime: `819bd728039a59ac7e9bb5ed1a0080c9f14ecbd8`. Two previously seen DeepSWE tasks, two repetitions, **four TEA attempts only**. Pi 0.87.1 results are reused from `../native-pi-s0-20261022/deepswe-results.json`; no Pi remeasurement.
 
 Provider: official BigModel Anthropic-compatible endpoint, `https://open.bigmodel.cn/api/anthropic`; model `glm-5.3-flash`, streaming, thinking enabled/low, context216000, output ceiling131072. Original limits retained:128 submitted requests,4096 tools,900s per request,1800s agent wall,10USD conservative control allocation per trial/40USD suite; separate endpoint probe0.10USD allocation. These are guard allocations, not official CNY invoice estimates. Official published prices are0.8CNY input/0.23CNY cached input/2.8CNY output per million tokens.

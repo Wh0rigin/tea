@@ -1,0 +1,1276 @@
+{
+  "scope": "Observed tool operations, native runtime and model-generated patch only; no hidden verifier/reference source or private model reasoning.",
+  "runs": [
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "nativeStatus": "failed",
+      "nativeError": {
+        "code": "MODEL_CONTEXT_LIMIT",
+        "name": "ModelError",
+        "message": "Request blocked by model context budget: estimated input 85525 tokens exceeds 80832; compact or start a new conversation",
+        "stage": "model",
+        "requestSubmitted": false,
+        "budget": {
+          "estimatedInputTokens": 85525,
+          "inputLimit": 80832,
+          "triggerTokens": 64665,
+          "contextWindowTokens": 216000,
+          "requestBytes": 213075,
+          "maxWireBytes": 2097152,
+          "outputLimit": 131072,
+          "residentBytes": 297971,
+          "residentLimit": 4194304,
+          "automaticCompactions": 2,
+          "emergencyCompactions": 0
+        }
+      },
+      "changedFiles": [],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": false,
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "toolCounts": {
+        "read_file": 34,
+        "run_shell": 3,
+        "search_code": 24,
+        "recall_context": 25,
+        "list_files": 1
+      },
+      "firstEditToolOrdinal": null,
+      "repeatedIdenticalReadSearchRecallCalls": 24,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest.go"
+          },
+          "count": 7
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/template.go"
+          },
+          "count": 5
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/status.go"
+          },
+          "count": 5
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/upgrade.go"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/v1/util/manifest.go"
+          },
+          "count": 4
+        },
+        {
+          "tool": "search_code",
+          "input": {
+            "path": "pkg/cmd",
+            "query": "Happy Helming"
+          },
+          "count": 2
+        },
+        {
+          "tool": "search_code",
+          "input": {
+            "path": "pkg/cmd",
+            "query": "MANIFEST"
+          },
+          "count": 2
+        },
+        {
+          "tool": "recall_context",
+          "input": {
+            "maxBytes": 8000,
+            "ref": "ctx-72b33abfdc3e656f7f62"
+          },
+          "count": 2
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git -C /app status && git -C /app log --oneline -3",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "compactionRequests": [
+        {
+          "requestId": "2f7cd387-e0a0-4a6a-af08-fb18d14ce81c",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 23390,
+            "output_tokens": 998,
+            "cache_read_input_tokens": 0
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 78192,
+          "elapsedMs": 20059
+        },
+        {
+          "requestId": "da967cad-75b2-499e-9bf9-6f6d175d1654",
+          "purpose": "compaction",
+          "stopReason": "max_tokens",
+          "usage": {
+            "input_tokens": 20283,
+            "output_tokens": 1200,
+            "cache_read_input_tokens": 0
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 67244,
+          "elapsedMs": 21515
+        }
+      ],
+      "compactionEvents": [
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        },
+        {
+          "type": "compaction_end",
+          "status": "unchanged",
+          "reason": "threshold",
+          "detail": "The summary was incomplete or missing required sections; history remains intact."
+        }
+      ],
+      "patch": {
+        "exists": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "processCreationLines": []
+      },
+      "toolErrorCategories": [
+        {
+          "tool": "run_shell",
+          "firstLine": "Shell operators and multiline commands are blocked",
+          "feedbackCode": "CAPABILITY_DENIED"
+        },
+        {
+          "tool": "recall_context",
+          "firstLine": "Unknown context reference in this conversation",
+          "feedbackCode": "TOOL_FAILED"
+        },
+        {
+          "tool": "recall_context",
+          "firstLine": "Unknown context reference in this conversation",
+          "feedbackCode": "TOOL_FAILED"
+        }
+      ],
+      "checkFailureObservations": []
+    },
+    {
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 1,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py",
+        "scratch/e2e/src/sample.mkv",
+        "scratch/e2e/good-config.json",
+        "scratch/e2e/bad-config.json"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_just_starts_when_not_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_stops_then_starts_when_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_with_valid_config_exits_zero"
+      ],
+      "toolCounts": {
+        "read_file": 29,
+        "recall_context": 6,
+        "run_shell": 16,
+        "search_code": 7,
+        "apply_patch": 6,
+        "write_file": 5,
+        "run_tests": 6
+      },
+      "firstEditToolOrdinal": 31,
+      "repeatedIdenticalReadSearchRecallCalls": 16,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/__main__.py"
+          },
+          "count": 6
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_spec.py"
+          },
+          "count": 5
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_store.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/argument.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "endLine": 452,
+            "path": "mnamer/setting_store.py",
+            "startLine": 342
+          },
+          "count": 2
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "grep -rn \"bulk_apply\" tests mnamer | head -30",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "ls tests/local",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c feature/daemon main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --watch scratch/e2e/src --movie-directory scratch/e2e/movies --daemon-state scratch/e2e/state.json --stability-checks 0",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon start --daemon-state scratch/e2e/state2.json",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --watch scratch/e2e/src --movie-directory scratch/e2e/movies --daemon-state scratch/e2e/state.json --stability-checks 0",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stats --daemon-state scratch/e2e/state.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon logs --daemon-state scratch/e2e/state.json --lines 2",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --dry-run --watch scratch/e2e/src --movie-directory scratch/e2e/movies --daemon-state scratch/e2e/state.json --stability-checks 0",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config scratch/e2e/good-config.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config scratch/e2e/bad-config.json",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config scratch/e2e/missing.json",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --batch --daemon-run-once --watch scratch/e2e/src --movie-directory scratch/e2e/movies --daemon-state scratch/e2e/state.json --stability-checks 0",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add mnamer/daemon.py mnamer/setting_store.py mnamer/__main__.py tests/local/test_daemon.py",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -m \"Add daemon mode: watch dirs, move files, state, logs, validation\"",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "compactionRequests": [],
+      "compactionEvents": [],
+      "patch": {
+        "exists": true,
+        "sha256": "aa9a11d93687cb500fde5e0ead31fccf8e1ce1cb2a7a178331dd0ff1184eee3a",
+        "bytes": 30454,
+        "processCreationLines": [
+          "    pid = os.fork()",
+          "        threading.Thread(target=append, daemon=True).start()"
+        ]
+      },
+      "toolErrorCategories": [
+        {
+          "tool": "run_shell",
+          "firstLine": "Shell operators and multiline commands are blocked",
+          "feedbackCode": "CAPABILITY_DENIED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "Outside the frozen benchmark command policy; use a documented validation or CLI entry",
+          "feedbackCode": "COMMAND_POLICY_DENIED"
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        }
+      ],
+      "checkFailureObservations": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "networkResolutionFailureObserved": false,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "networkResolutionFailureObserved": false,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files",
+            "FAILED tests/local/test_daemon.py::test_validate_ok_and_bad"
+          ]
+        }
+      ]
+    },
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "nativeStatus": "failed",
+      "nativeError": {
+        "code": "MODEL_CONTEXT_LIMIT",
+        "name": "ModelError",
+        "message": "Request blocked by model context budget: estimated input 87497 tokens exceeds 80832; compact or start a new conversation",
+        "stage": "model",
+        "requestSubmitted": false,
+        "budget": {
+          "estimatedInputTokens": 87497,
+          "inputLimit": 80832,
+          "triggerTokens": 64665,
+          "contextWindowTokens": 216000,
+          "requestBytes": 218038,
+          "maxWireBytes": 2097152,
+          "outputLimit": 131072,
+          "residentBytes": 280200,
+          "residentLimit": 4194304,
+          "automaticCompactions": 2,
+          "emergencyCompactions": 0
+        }
+      },
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": false,
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "toolCounts": {
+        "read_file": 56,
+        "run_shell": 5,
+        "search_code": 20,
+        "recall_context": 13,
+        "write_file": 1
+      },
+      "firstEditToolOrdinal": 91,
+      "repeatedIdenticalReadSearchRecallCalls": 28,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest.go"
+          },
+          "count": 11
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/template.go"
+          },
+          "count": 7
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/v1/util/manifest.go"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/upgrade.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/status.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/common.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "search_code",
+          "input": {
+            "maxResults": 20,
+            "path": "pkg/cmd",
+            "query": "MANIFEST:"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/install.go"
+          },
+          "count": 2
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git status && git log --oneline -3",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git log --oneline -3",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "compactionRequests": [
+        {
+          "requestId": "cc892d81-4e52-4d60-838a-4f652e04238e",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 26775,
+            "output_tokens": 1142,
+            "cache_read_input_tokens": 0
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 87108,
+          "elapsedMs": 26482
+        },
+        {
+          "requestId": "672081b3-d290-42d2-8727-15c42b517376",
+          "purpose": "compaction",
+          "stopReason": "max_tokens",
+          "usage": {
+            "input_tokens": 31286,
+            "output_tokens": 1200,
+            "cache_read_input_tokens": 0
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 104347,
+          "elapsedMs": 25955
+        }
+      ],
+      "compactionEvents": [
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        },
+        {
+          "type": "compaction_end",
+          "status": "unchanged",
+          "reason": "threshold",
+          "detail": "The summary was incomplete or missing required sections; history remains intact."
+        }
+      ],
+      "patch": {
+        "exists": true,
+        "sha256": "898eba4b0e341a410e9a0c59c032f5f33df9b8ea905ae8cdddedd188d7bb5929",
+        "bytes": 4249,
+        "processCreationLines": []
+      },
+      "toolErrorCategories": [
+        {
+          "tool": "run_shell",
+          "firstLine": "Shell operators and multiline commands are blocked",
+          "feedbackCode": "CAPABILITY_DENIED"
+        },
+        {
+          "tool": "read_file",
+          "firstLine": "ENOENT: no such file or directory, realpath '/app/pkg/release/accessor.go'",
+          "feedbackCode": "INPUT_INVALID"
+        }
+      ],
+      "checkFailureObservations": []
+    },
+    {
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 2,
+      "nativeStatus": "failed",
+      "nativeError": {
+        "code": "MODEL_CONTEXT_LIMIT",
+        "name": "ModelError",
+        "message": "Request blocked by model context budget: estimated input 80953 tokens exceeds 80832; compact or start a new conversation",
+        "stage": "model",
+        "requestSubmitted": false,
+        "budget": {
+          "estimatedInputTokens": 80953,
+          "inputLimit": 80832,
+          "triggerTokens": 64665,
+          "contextWindowTokens": 216000,
+          "requestBytes": 201494,
+          "maxWireBytes": 2097152,
+          "outputLimit": 131072,
+          "residentBytes": 353445,
+          "residentLimit": 4194304,
+          "automaticCompactions": 1,
+          "emergencyCompactions": 0
+        }
+      },
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/__main__.py",
+        "tmp_daemon_test/config.json",
+        "tmp_daemon_test/watch/aladdin.1992.avi",
+        "tmp_daemon_test/watch/backup.part",
+        "tmp_daemon_test/watch/notes.tmp",
+        "tmp_daemon_test/empty.json",
+        "tmp_daemon_test/bad.json",
+        "tmp_daemon_test/watch2/apart.mkv",
+        "tmp_daemon_test/other/standalone.mkv",
+        "tmp_daemon_test/movies/dupe.mkv",
+        "tmp_daemon_test/watch/dupe.mkv",
+        "tests/local/test_daemon.py"
+      ],
+      "validationFailures": [
+        {
+          "key": "{\"executable\":\"python\",\"args\":[\"-m\",\"pytest\",\"tests\",\"-x\",\"-q\",\"--ignore=tests/network\"]}",
+          "command": "python -m pytest tests -x -q --ignore=tests/network"
+        },
+        {
+          "key": "{\"executable\":\"python\",\"args\":[\"-m\",\"pytest\",\"tests/local\",\"tests/unit\",\"-q\"]}",
+          "command": "python -m pytest tests/local tests/unit -q"
+        },
+        {
+          "key": "{\"executable\":\"python\",\"args\":[\"-m\",\"pytest\",\"tests\",\"-q\",\"--ignore=tests/network\"]}",
+          "command": "python -m pytest tests -q --ignore=tests/network"
+        },
+        {
+          "key": "{\"executable\":\"python\",\"args\":[\"-m\",\"pytest\",\"tests/e2e/test_errors.py::test_no_matches_found\",\"-q\"]}",
+          "command": "python -m pytest tests/e2e/test_errors.py::test_no_matches_found -q"
+        }
+      ],
+      "validationUnavailable": [],
+      "validationPassed": false,
+      "officialFailureNames": [],
+      "toolCounts": {
+        "list_files": 2,
+        "read_file": 36,
+        "recall_context": 3,
+        "run_shell": 44,
+        "write_file": 12,
+        "apply_patch": 5,
+        "search_code": 1,
+        "run_tests": 12
+      },
+      "firstEditToolOrdinal": 40,
+      "repeatedIdenticalReadSearchRecallCalls": 20,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/__main__.py"
+          },
+          "count": 5
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_store.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/argument.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/setting_spec.py"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "endLine": 452,
+            "path": "mnamer/setting_store.py",
+            "startLine": 342
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/frontends.py"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/types.py"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "mnamer/const.py"
+          },
+          "count": 2
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git -C /app rev-parse --abbrev-ref HEAD && git -C /app status --porcelain=v1 | head -20",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git rev-parse --abbrev-ref HEAD",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --porcelain=v1",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c daemon-watch-feature main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests -x -q --ignore=tests/network",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local tests/unit -q",
+          "exitPrefix": "exit=4"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "mkdir -p tmp_daemon_test/watch tmp_daemon_test/movies",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --dry-run --daemon-config tmp_daemon_test/config.json --daemon-state tmp_daemon_test/dry.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --daemon-config tmp_daemon_test/config.json --daemon-state tmp_daemon_test/state.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stats --daemon-state tmp_daemon_test/state.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon logs --daemon-state tmp_daemon_test/state.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --batch-size 0 --watch tmp_daemon_test/watch --movie-directory tmp_daemon_test/movies --daemon-state tmp_daemon_test/zero.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config tmp_daemon_test/missing.json",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config tmp_daemon_test/config.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon start --daemon-state tmp_daemon_test/life.json --batch",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --daemon-state tmp_daemon_test/nostate.json --daemon-config tmp_daemon_test/empty.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config tmp_daemon_test/bad.json",
+          "exitPrefix": "exit=2"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config tmp_daemon_test/empty.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon logs --daemon-state tmp_daemon_test/nolog.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon status --daemon-state tmp_daemon_test/state.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon start --daemon-config tmp_daemon_test/config.json --daemon-state tmp_daemon_test/life.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon status --daemon-state tmp_daemon_test/life.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stop --daemon-state tmp_daemon_test/life.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stop --daemon-state tmp_daemon_test/nostate.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon status --daemon-state tmp_daemon_test/life.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon restart --daemon-config tmp_daemon_test/config.json --daemon-state tmp_daemon_test/life.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stop --daemon-state tmp_daemon_test/life.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon status --daemon-state tmp_daemon_test/state.json --lines 1",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --watch tmp_daemon_test/watch tmp_daemon_test/watch/aladdin.1992.avi --movie-directory tmp_daemon_test/movies --daemon-state tmp_daemon_test/comb.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --watch tmp_daemon_test/watch2 --movie-directory tmp_daemon_test/movies tmp_daemon_test/other/standalone.mkv --daemon-state tmp_daemon_test/comb.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stats --daemon-state tmp_daemon_test/comb.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon logs --daemon-state tmp_daemon_test/comb.json --lines 2",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --watch tmp_daemon_test/watch --movie-directory tmp_daemon_test/movies --daemon-state tmp_daemon_test/comb.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon logs --daemon-state tmp_daemon_test/comb.json --lines 2",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon status --daemon-state tmp_daemon_test/watch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon logs --daemon-state tmp_daemon_test/watch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stop --daemon-state tmp_daemon_test/watch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stats --daemon-state tmp_daemon_test/nolog.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon stats --daemon-state tmp_daemon_test/dry.json",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "python -m mnamer --daemon-run-once --daemon-state tmp_daemon_test/emptydir-state.json --daemon-config tmp_daemon_test/empty.json --batch",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local -q",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests -q --ignore=tests/network",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git stash",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/e2e/test_errors.py::test_no_matches_found -q",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_shell",
+          "command": "rm -r tmp_daemon_test",
+          "exitPrefix": "Destructive commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add mnamer/daemon.py mnamer/setting_store.py mnamer/__main__.py tests/local/test_daemon.py",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -m \"Add watch daemon: run-once/start/stop/status/logs/stats/restart, state+log files, stability checks, batch cap, config validation\"",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --porcelain=v1",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests -x -q --ignore=tests/network",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/local tests/unit -q",
+          "exitPrefix": "exit=4"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests -q --ignore=tests/network",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "python -m pytest tests/e2e/test_errors.py::test_no_matches_found -q",
+          "exitPrefix": "exit=1"
+        }
+      ],
+      "compactionRequests": [
+        {
+          "requestId": "804da54e-6909-4bb8-8117-1a79d4551252",
+          "purpose": "compaction",
+          "stopReason": "max_tokens",
+          "usage": {
+            "input_tokens": 34580,
+            "output_tokens": 1200,
+            "cache_read_input_tokens": 0
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 120733,
+          "elapsedMs": 26416
+        }
+      ],
+      "compactionEvents": [
+        {
+          "type": "compaction_end",
+          "status": "unchanged",
+          "reason": "threshold",
+          "detail": "The summary was incomplete or missing required sections; history remains intact."
+        }
+      ],
+      "patch": {
+        "exists": true,
+        "sha256": "aa80d2c80ad8ea434c10e0fc04dd0a92d0fab861c7c1a110e21cc6eb7be080a3",
+        "bytes": 34240,
+        "processCreationLines": [
+          "        process = subprocess.Popen(",
+          "            start_new_session=True,"
+        ]
+      },
+      "toolErrorCategories": [
+        {
+          "tool": "run_shell",
+          "firstLine": "Shell operators and multiline commands are blocked",
+          "feedbackCode": "CAPABILITY_DENIED"
+        },
+        {
+          "tool": "read_file",
+          "firstLine": "endLine must be greater than or equal to startLine",
+          "feedbackCode": "TOOL_FAILED"
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=4",
+          "feedbackCode": "VALIDATION_FAILED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "Outside the frozen benchmark command policy; use a documented validation or CLI entry",
+          "feedbackCode": "COMMAND_POLICY_DENIED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "exit=2",
+          "feedbackCode": "EXECUTION_FAILED"
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "Outside the frozen benchmark command policy; use a documented validation or CLI entry",
+          "feedbackCode": "COMMAND_POLICY_DENIED"
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_shell",
+          "firstLine": "Destructive commands are blocked",
+          "feedbackCode": "CAPABILITY_DENIED"
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=4",
+          "feedbackCode": "VALIDATION_FAILED"
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        },
+        {
+          "tool": "run_tests",
+          "firstLine": "exit=1",
+          "feedbackCode": null
+        }
+      ],
+      "checkFailureObservations": [
+        {
+          "command": "python -m pytest tests -x -q --ignore=tests/network",
+          "networkResolutionFailureObserved": true,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/e2e/test_directives.py::test_id__omdb"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local tests/unit -q",
+          "networkResolutionFailureObserved": false,
+          "invalidCheckPathObserved": true,
+          "failedTestNames": []
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "networkResolutionFailureObserved": false,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": []
+        },
+        {
+          "command": "python -m pytest tests -q --ignore=tests/network",
+          "networkResolutionFailureObserved": true,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/e2e/test_directives.py::test_id__omdb",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path",
+            "FAILED tests/e2e/test_moving.py::test_no_guess",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/e2e/test_errors.py::test_no_matches_found -q",
+          "networkResolutionFailureObserved": true,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found"
+          ]
+        },
+        {
+          "command": "python -m pytest tests -x -q --ignore=tests/network",
+          "networkResolutionFailureObserved": true,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/e2e/test_directives.py::test_id__omdb"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local tests/unit -q",
+          "networkResolutionFailureObserved": false,
+          "invalidCheckPathObserved": true,
+          "failedTestNames": []
+        },
+        {
+          "command": "python -m pytest tests -q --ignore=tests/network",
+          "networkResolutionFailureObserved": true,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/e2e/test_directives.py::test_id__omdb",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path",
+            "FAILED tests/e2e/test_moving.py::test_no_guess",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/e2e/test_errors.py::test_no_matches_found -q",
+          "networkResolutionFailureObserved": true,
+          "invalidCheckPathObserved": false,
+          "failedTestNames": [
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found"
+          ]
+        }
+      ]
+    }
+  ],
+  "historicalPiProcessCalls": [
+    {
+      "repeat": 1,
+      "call": "subprocess.Popen(  # noqa: S603\n            command,\n            stdin=subprocess.DEVNULL,\n            stdout=subprocess.DEVNULL,\n            stderr=subprocess.DEVNULL,\n            start_new_session=True,\n        )"
+    },
+    {
+      "repeat": 2,
+      "call": "subprocess.Popen(  # noqa: S603\n        argv,\n        env=child_env,\n        stdin=subprocess.DEVNULL,\n        stdout=subprocess.DEVNULL,\n        stderr=subprocess.DEVNULL,\n        start_new_session=True,\n    )"
+    }
+  ]
+}
