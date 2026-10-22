@@ -194,3 +194,29 @@ test('ordinary agent loop reuses resident edited source and still validates the 
   assert.match(reads[2], /^Evidence unchanged;/);
   assert.match(reads[3], /^Evidence unchanged;/);
 }));
+
+
+test('bounded working set retains delivered source through unrelated discovery without a recall round', async () => scenario(async ({ root, tools, config, assemble }) => {
+ await writeFile(path.join(root, 'module.mjs'), source('current'));
+ const body = await tools.readFile({ path: 'module.mjs' });
+ const messages = [{ role: 'user', content: 'Inspect all' }, ...pair('working', 'read_file', { path: 'module.mjs' }, body), ...recent()];
+ const baseline = await assemble(messages, { commit: false });
+ assert.equal(baseline.diagnostics.units.find(u => u.path === 'module.mjs').decision, 'reference');
+ const candidate = await assemble(messages, { config: { ...config, contextosWorkingSetBytes: 24000 } });
+ assert.match(JSON.stringify(candidate.request.messages), /current-中文-0/);
+ assert.equal(validToolProtocol(candidate.request.messages), true);
+ assert.match(await tools.readFile({ path: 'module.mjs' }), /^Evidence unchanged;/);
+ await writeFile(path.join(root, 'module.mjs'), source('external'));
+ const stale = await assemble(messages, { config: { ...config, contextosWorkingSetBytes: 24000 } });
+ assert.doesNotMatch(JSON.stringify(stale.request.messages), /current-中文-0/);
+ assert.match(JSON.stringify(stale.request.messages), /STALE/);
+}));
+
+test('working set cannot exceed its byte allowance or revive omitted source', async () => scenario(async ({ root, tools, config, assemble }) => {
+ await writeFile(path.join(root, 'module.mjs'), source('current'));
+ const messages = [{ role: 'user', content: 'Inspect all' }, ...pair('working', 'read_file', { path: 'module.mjs' }, await tools.readFile({ path: 'module.mjs' })), ...recent()];
+ const bounded = await assemble(messages, { config: { ...config, contextosWorkingSetBytes: 1 } });
+ assert.equal(bounded.diagnostics.units.find(u => u.path === 'module.mjs').decision, 'reference');
+ const omitted = await assemble(messages, { messages: [messages[0], ...recent()], config: { ...config, contextosWorkingSetBytes: 24000 } });
+ assert.doesNotMatch(JSON.stringify(omitted.request.messages), /current-中文-0/);
+}));
