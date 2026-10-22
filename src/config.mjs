@@ -67,6 +67,11 @@ export function loadConfig(options = {}, env = process.env) {
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
     options.defaultCompactionKeepRecentBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
+  const compactionReserveTokens = positiveNumber(options.compactionReserveTokens ?? env.TEA_COMPACTION_RESERVE_TOKENS,
+    16384, 'Compaction reserve tokens');
+  if (!Number.isSafeInteger(compactionReserveTokens) || compactionReserveTokens < 2) {
+    throw new ConfigError('Compaction reserve tokens must be a safe integer of at least 2');
+  }
   const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
   if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
   const memoryGc = String(options.memoryGc || env.TEA_MEMORY_GC || 'auto').toLowerCase();
@@ -128,6 +133,7 @@ export function loadConfig(options = {}, env = process.env) {
     compactionTriggerRatio,
     compactionKeepRecentBytes,
     compactionMaxPerTurn,
+    compactionReserveTokens,
     memoryGc,
     memoryCacheBytes,
     memoryGcMaxResidentBytes,

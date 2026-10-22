@@ -77,3 +77,9 @@ Paid evaluation must include summary usage, task acceptance, repeated runs, and 
 
 
 A 4 MiB serialized resident-history threshold also triggers automatic compaction; it is not a hard process-heap limit.
+
+## Summary output budget
+
+Summary requests use `min(TEA_MAX_OUTPUT_TOKENS, floor(0.8 * TEA_COMPACTION_RESERVE_TOKENS))`, following Pi 0.87.1's reserve-based budgeting approach. The summary reserve defaults to 16,384 tokens (summary ceiling: 13,107); the CLI output default of 4,096 still limits summaries to 4,096 unless configured higher. Set `TEA_COMPACTION_RESERVE_TOKENS` to an integer of at least 2 to override it. This is separate from `TEA_CONTEXT_RESERVE_TOKENS` and does not change the main-request trigger or input guard.
+
+The former 1,200-token summary cap and 350-word target are removed. Truncated or malformed summaries remain rejected, and checkpoints must still reduce the next request size. A larger ceiling is not a requirement to fill it and is not evidence of measured token savings; no new live benchmark is claimed by this change.
