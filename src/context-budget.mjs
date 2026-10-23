@@ -11,17 +11,22 @@ export function estimateContextTokens(request, scale = 1) {
 
 export function contextBudget(config, request, scale = 1) {
   if (!config.contextWindowTokens) return null; // Legacy SDK/experiment configurations.
-  const inputLimit = config.contextWindowTokens - config.contextReserveTokens
-    - (config.contextBudgetPolicy === 'pi' ? 0 : (request.maxTokens ?? config.maxOutputTokens));
+  const piPolicy = config.contextBudgetPolicy === 'pi';
+  const originalInputLimit = config.contextWindowTokens - config.contextReserveTokens
+    - (piPolicy ? 0 : (request.maxTokens ?? config.maxOutputTokens));
+  const inputLimit = !piPolicy && config.fitOutputBudget
+    ? config.contextWindowTokens - config.contextReserveTokens : originalInputLimit;
   return { estimatedInputTokens: estimateContextTokens(request, scale), inputLimit,
-    triggerTokens: Math.floor(inputLimit * config.compactionTriggerRatio),
+    triggerTokens: Math.floor(originalInputLimit * config.compactionTriggerRatio),
     contextWindowTokens: config.contextWindowTokens, source: 'local-estimate' };
 }
 
-// Retain the configured output ceiling when space permits; reduce this request's
-// allowance near the window instead of reserving the entire ceiling on every turn.
+// Pi scheduling keeps main's fitted output allowance. The opt-in experiment
+// applies only to reserved-output scheduling and preserves its earlier trigger.
 export function fitOutputLimit(config, request, scale = 1) {
   const ceiling = request.maxTokens ?? config.maxOutputTokens;
-  if (config.contextBudgetPolicy !== 'pi' || !config.contextWindowTokens) return ceiling;
-  return Math.min(ceiling, Math.max(1, config.contextWindowTokens - estimateContextTokens(request, scale)));
+  const piPolicy = config.contextBudgetPolicy === 'pi';
+  if ((!piPolicy && !config.fitOutputBudget) || !config.contextWindowTokens) return ceiling;
+  const reserve = piPolicy ? 0 : config.contextReserveTokens;
+  return Math.min(ceiling, Math.max(1, config.contextWindowTokens - reserve - estimateContextTokens(request, scale)));
 }
