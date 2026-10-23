@@ -60,3 +60,7 @@ tea config path   # 查看绝对路径
 ## Frozen PR16 profile / PR16 冻结配置
 
 Set `configurationProfile` to `"pr16-quality"` (GLM default) or `"pi"`. `contextosWorkingSetBytes` and `compactionMaxPerTurn` can override the profile. Environment equivalents are `TEA_CONFIG_PROFILE`, `TEA_CONTEXTOS_WORKING_SET_BYTES` and `TEA_COMPACTION_MAX_PER_TURN`. Explicit options and environment settings retain precedence. See [full settings and limitations](PR16_QUALITY_PROFILE.md).
+
+## Experimental requirement review / 实验性需求复核
+
+`"requirementReview": true` (or `TEA_REQUIREMENT_REVIEW=1`) enables one evidence-oriented review when an edited/pending turn attempts to finish. It defaults to off, preserves unresolved validation and is reported as a frozen-profile override. No paid correctness or token benefit is established yet. See [behavior, regression evidence and evaluation plan](REQUIREMENT_REVIEW.md).

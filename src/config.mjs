@@ -132,6 +132,7 @@ export function loadConfig(options = {}, env = process.env) {
     maxRequestInputBytes: maxRequestInputTokens,
     contextWindowTokens, contextReserveTokens, contextBudgetPolicy,
     fitOutputBudget: options.fitOutputBudget ?? env.TEA_FIT_OUTPUT_BUDGET === '1',
+    requirementReview: options.requirementReview ?? env.TEA_REQUIREMENT_REVIEW === '1',
     maxToolCalls: (env.TEA_MAX_TOOL_CALLS === undefined && (contextBudgetPolicy === 'pi' || options.defaultUnlimitedToolCalls) ? null : Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS'))),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
@@ -212,7 +213,7 @@ export function loadCliConfig(options = {}, env = process.env) {
     defaultContextosTargetBytes: 32000, defaultCapabilityFeedback: true }, effectiveEnv);
   const dailyExceptions = new Set(['maxCostUsd', 'maxToolCalls', 'inputRateUsdPerMillion', 'outputRateUsdPerMillion']);
   const configurationProfileOverrides = profile === 'pr16-quality'
-    ? Object.entries({ ...PR16_PROFILE.expectedConfig, contextBudgetPolicy: 'reserved-output', fitOutputBudget: false, compactionKeepRecentTokens: undefined }).filter(([key, value]) => !dailyExceptions.has(key) && JSON.stringify(config[key]) !== JSON.stringify(value)).map(([key]) => key)
+    ? Object.entries({ ...PR16_PROFILE.expectedConfig, contextBudgetPolicy: 'reserved-output', fitOutputBudget: false, requirementReview: false, compactionKeepRecentTokens: undefined }).filter(([key, value]) => !dailyExceptions.has(key) && JSON.stringify(config[key]) !== JSON.stringify(value)).map(([key]) => key)
     : [];
   return { ...config, configurationProfile: profile, configurationProfileOverrides };
 }

@@ -11,6 +11,7 @@ import { redactText } from './tools.mjs';
 const MAX_CONFIG_BYTES = 65536;
 const FIELDS = {
   configurationProfile: ['TEA_CONFIG_PROFILE', 'string'],
+  requirementReview: ['TEA_REQUIREMENT_REVIEW', 'boolean'],
   contextosWorkingSetBytes: ['TEA_CONTEXTOS_WORKING_SET_BYTES', 'number'],
   compactionMaxPerTurn: ['TEA_COMPACTION_MAX_PER_TURN', 'number'],
   editPermissions: ['TEA_EDIT_PERMISSIONS', 'json'],
