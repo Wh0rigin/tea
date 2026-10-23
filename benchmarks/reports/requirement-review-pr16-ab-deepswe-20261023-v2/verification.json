@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "sourceArchiveMatchesFrozenGitBlobs": true,
+  "adapterHashesMatchProtocol": true,
+  "allAttemptConfigAndTaskHashesMatched": true,
+  "requestHashAndUsageReconciliation": true,
+  "reviewActivationBounded": true,
+  "workingSetWithin24000": true,
+  "allAttemptTokenRatioAvailable": false,
+  "providerCallsByPublisher": 0,
+  "limitations": "Independent accounting/configuration verification; not unseen acceptance or private reasoning/hidden verifier source inspection.",
+  "protocolFrozenCommit": "474d6b5",
+  "protocolMatchesBeforeCallCommit": true,
+  "allComparativeQualityOutcomes": "not evaluated"
+}

@@ -15,6 +15,7 @@ import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } f
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 import { runtimeError } from './runtime-error.mjs';
 import { buildSystemPrompt } from './prompts.mjs';
+import { requirementReviewMessage, requirementReviewOperation } from './requirement-review.mjs';
 import { observeValidation, observeEntryPoint, entryPointNeedsValidation, unresolvedValidationCommands, unavailableValidationNotice, validationRunnerUnavailable, invalidateUnavailableValidation } from './validation.mjs';
 
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -249,6 +250,9 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let finalText = '';
   let toolCalls = 0;
   let forcedValidationNudges = 0;
+  let editedThisTurn = false;
+  let requirementReviewCount = 0;
+  const reviewOperations = [];
   const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
     fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
   const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, validationFailures, validationUnavailable, changedFiles });
@@ -359,6 +363,20 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           onText('\nAgent stopped because the response reached its output-token limit.');
           break;
         }
+        if (config.requirementReview && requirementReviewCount === 0 && (editedThisTurn || pendingValidation)
+          && !session.budgetUnknown && toolCalls < (config.maxToolCalls ?? Infinity)) {
+          requirementReviewCount += 1;
+          // Merge the first pending-validation reminder into the review; never clear obligations.
+          if (pendingValidation) forcedValidationNudges += 1;
+          const notice = requirementReviewMessage({ state: runtimeState(), operations: reviewOperations,
+            unresolved: unresolvedValidationCommands(runtimeState()), unavailable: unavailableValidationNotice(runtimeState()) });
+          await appendSessionMessage(session, { role: 'user', content: notice });
+          const event = { type: 'requirement_review_requested', count: requirementReviewCount,
+            pendingValidation, operationCount: reviewOperations.length };
+          await ledger.event(event);
+          emit(event);
+          continue;
+        }
         if (pendingValidation && forcedValidationNudges < 2 && toolCalls < (config.maxToolCalls ?? Infinity)) {
           forcedValidationNudges += 1;
           const unresolved = unresolvedValidationCommands(runtimeState());
@@ -394,6 +412,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         try {
           output = await toolService.execute(call.name, call.input || {});
           if (effects.mutatesWorkspace) {
+            editedThisTurn = true;
             pendingValidation = true;
             validationPassed = false;
             validationUnavailable = invalidateUnavailableValidation(runtimeState());
@@ -418,6 +437,10 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
               ? observeEntryPoint(runtimeState(), call.input?.command, output, true)
               : observeValidation(runtimeState(), call.input?.command, output, true, error));
           }
+        }
+        if (config.requirementReview && (effects.mutatesWorkspace || effects.validatesSource || call.name === 'run_shell')) {
+          reviewOperations.push(requirementReviewOperation(call, isError));
+          if (reviewOperations.length > 8) reviewOperations.shift();
         }
         const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command), runnerUnavailable: effects.validatesSource && validationRunnerUnavailable(call.input?.command, output, toolError) }) : null;
         output = appendFailureFeedback(output, feedback);
@@ -468,6 +491,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   if (session.taskState) { session.taskState.phase = status === 'completed' ? 'finish' : session.taskState.phase; session.taskState.validation = runtimeState(); }
   if (status === 'cancelled') await appendSessionMessage(session, { role: 'user', content: 'Runtime notice: the previous turn was interrupted by the user. Completed edits remain; skipped or interrupted operations did not establish success. Follow the next user instruction rather than resuming automatically.' });
   await persistRuntimeState(session);
+  contextDiagnostics.requirementReviewCount = requirementReviewCount;
   if (lastBudget) contextDiagnostics.finalBudget = lastBudget;
   if (validationUnavailable.length) {
     const limitation = `\nValidation limitation: ${redactText(unavailableValidationNotice(runtimeState()))}`;

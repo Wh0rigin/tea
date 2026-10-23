@@ -1,0 +1,143 @@
+{
+  "status": "stopped",
+  "runs": [
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "baseline",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "failed",
+      "errorCode": "RUNTIME_ERROR",
+      "runtimeError": {
+        "code": "RUNTIME_ERROR",
+        "name": "ModelError",
+        "message": "Provider returned HTTP 401: {\"error\":{\"message\":\"令牌已过期或验证不正确\",\"type\":\"401\"}}",
+        "stage": "model",
+        "httpStatus": 401,
+        "requestSubmitted": true,
+        "budget": {
+          "estimatedInputTokens": 3784,
+          "inputLimit": 80832,
+          "triggerTokens": 64665,
+          "contextWindowTokens": 216000,
+          "requestBytes": 8833,
+          "maxWireBytes": 2097152,
+          "residentBytes": 3388,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [],
+      "toolCounts": {},
+      "toolErrorCounts": {},
+      "validationCommands": [],
+      "firstEditToolOrdinal": null,
+      "repeatedIdenticalReadSearchRecallCalls": 0,
+      "compactionRequests": [],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 10,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "requirementReview": false,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 1,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": [
+        {
+          "call": 1,
+          "status": "transport_finished",
+          "httpStatus": 401,
+          "messageStopSeen": false,
+          "auditInvalid": false,
+          "usageComplete": false,
+          "elapsedMs": 152,
+          "usage": {}
+        }
+      ]
+    }
+  ],
+  "privateReasoningRead": false,
+  "mechanismAuditSource": "Native ledger requirement review events, tool results and config; no private reasoning or hidden verifier implementation."
+}

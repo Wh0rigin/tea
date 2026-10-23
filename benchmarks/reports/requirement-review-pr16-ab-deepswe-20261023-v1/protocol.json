@@ -1,0 +1,252 @@
+{
+  "name": "requirement-review-pr16-ab-deepswe-20261023-v1",
+  "status": "frozen_before_model_calls",
+  "teaCommit": "c63fb1344f22790c207bc0c71980494f3b82705a",
+  "piVersion": "0.87.1",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799"
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 4,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 3,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 3,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 4,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    }
+  ],
+  "endpointSha256": "1e90246348f66dd206b4bcbd68e0dff9657bfda32df9ae69b9b2ee7e164251ce",
+  "archivesSha256": {
+    "helpers": "b7433cf78d1d4f7d734fdcf5acf33c96096009ae5ba2b1959825a7fd894f6b5e",
+    "tea": "bf8d8dd6f3121b088f2de15f573def0a17988fb00f22fe379397b9d8e8dcdc98"
+  },
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "maxToolCalls": 4096,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 10,
+  "suiteControlBudgetUsd": 80,
+  "attemptsPerTaskPerArm": 2,
+  "nativeAssets": {
+    "nodeVersion": "24.12.0",
+    "nodeSha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+    "piArchiveSha256": "549868f43568a6c8a102e706a711a2f3a67343fd51c7d766b5929067f9ca9620",
+    "piPackageFiles": 14114
+  },
+  "adapterSha256": {
+    "collect.py": "ee8026669068611d6758e66d4303df599a2be4c34429963abbd7125f0b912fbc",
+    "inference_relay.py": "6acf5ed2e29a9c5833213736a19522a47bcdb4a58ff20913c6fe8b9c91f116d4",
+    "preflight.py": "46195c2f6003175bce235cc224b9e41869638f7c38e98e6b4cc1c2a39384f8b1",
+    "run-tea.mjs": "4c924ae837739d1cf3552d01214346dddbaa13ef476e1938c77eb57000bbecce",
+    "run_suite.py": "caf957369382cd99fef00c50e128fd9d23f13f5be032299e9375aa5e889ecac3",
+    "task-profiles.json": "19b760964be32d84ba1294e06252bf8cdf438ec226fcfecd42566f17d2aa6468",
+    "tea_adapter.py": "985f0ad47d112b7d7545e7e5a3c8edf760a83cc9c91a43a453605010bafe0c8f",
+    "test_relay.py": "017fc7f0aec7a3b8db898249f4874dbb49dfe0c5e1a8df1012ad7abc16f4219f"
+  },
+  "thinkingBudgetTokens": 8000,
+  "frameworkPins": {
+    "deepSweDataset": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "workbuddyFramework": "625b2233093ae4f23e76be28c1f341d41cc70373",
+    "harbor": "527d50deb63a5d279e8c20593c18a2cbc7f61f9e"
+  },
+  "analysisPolicy": {
+    "primary": "Official full-task acceptance and native completion; all attempts retained.",
+    "tokenUnit": "provider input + output + cache read + cache creation; thinking included once in output",
+    "savingsSubset": "Report both all-attempt totals and predeclared task/pairRepeat pairs with both official full-pass, native completed and fully metered. No imputation for unknowns.",
+    "missingUsage": "null; retain full 10 USD allocation; no automatic retry",
+    "scope": "Two previously seen DeepSWE tasks, two paired repeats each, balanced serial AB/BA. Diagnostic screen, not unseen generalization or statistical proof. Historical Pi uses another endpoint and is descriptive only.",
+    "stopAfter": "Eight scheduled TEA attempts then user review; stop launching tasks on first unknown-usage or pre-inference infrastructure failure. No automatic retry.",
+    "allAttemptTokenRatio": "Unavailable if any attempted run has unknown usage; retain full reservation. Failed samples remain in totals; no failed-sample means."
+  },
+  "endpoint": "https://open.bigmodel.cn/api/anthropic",
+  "historicalReference": {
+    "piReport": "../native-pi-s0-20261022/deepswe-results.json",
+    "piReportSha256": "3f11be7d682fc4bd89f8deed1573e465b375aa76043e09119ddabccc88afbe9c",
+    "piRetested": false,
+    "sameEndpoint": false,
+    "sameSource": false,
+    "causalCodeBenefitIdentifiable": false
+  },
+  "officialDocs": [
+    "https://zcode.z.ai/en/docs/configuration",
+    "https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash",
+    "https://docs.bigmodel.cn/cn/guide/start/pricing"
+  ],
+  "pricing": {
+    "currency": "CNY",
+    "inputPerMillion": 0.8,
+    "outputPerMillion": 2.8,
+    "cacheReadPerMillion": 0.23,
+    "controlEstimate": "Retain previous conservative .8/1.6/2.8 USD-equivalent allocation arithmetic as safety bounds, not actual currency cost; report tokens separately."
+  },
+  "preflightProviderProbe": {
+    "calls": 0,
+    "includedInTaskTokens": false
+  },
+  "baselineReport": null,
+  "change": "Same runtime archive and complete frozen PR16 quality configuration, only requirementReview false versus true. No S7 implementation. Historical Pi not rerun.",
+  "adoptionGate": {
+    "priority": "Whole-task correctness first; report token increases without hiding failures.",
+    "candidateOfficialPassCountAtLeastBaseline": true,
+    "candidateNativeCompleteAtLeastBaseline": true,
+    "preserveAllCandidateP2P": true,
+    "fullyMeteredAttempts": 8,
+    "mechanismMustActivate": true,
+    "minimumEvidenceForDefaultEnable": "This seen-task screen alone is insufficient; require unseen task follow-up.",
+    "otherwise": "Keep disabled; no confirmed generalization or token-saving claim."
+  },
+  "variants": {
+    "baseline": {
+      "runtimeCommit": "c63fb1344f22790c207bc0c71980494f3b82705a",
+      "workingSetBytes": 24000,
+      "requirementReview": false
+    },
+    "candidate": {
+      "runtimeCommit": "c63fb1344f22790c207bc0c71980494f3b82705a",
+      "workingSetBytes": 24000,
+      "requirementReview": true
+    }
+  },
+  "mechanismAudit": "Native ledger requirement_review_requested plus complete exported non-secret experiment-config and official acceptance. No private reasoning or hidden verifier implementation inspection.",
+  "runtimeBudgetPolicy": "reserved-output",
+  "workingSetBytes": 24000,
+  "qualityProfile": "pr16-quality",
+  "frozenOriginalRuntimeCommit": "8ed56262b3c41d701f8a3a55834683af2e1331ef",
+  "frozenAlgorithmConfig": {
+    "editPermissions": {
+      "allow": [],
+      "ask": [],
+      "deny": []
+    },
+    "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+    "model": "glm-5.3-flash",
+    "apiVersion": "2023-06-01",
+    "maxCostUsd": 10,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "maxOutputTokens": 131072,
+    "maxRequestInputTokens": 2097152,
+    "maxRequestInputBytes": 2097152,
+    "contextWindowTokens": 216000,
+    "contextReserveTokens": 4096,
+    "maxToolCalls": 4096,
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "timeoutMs": 900000,
+    "effort": "low",
+    "thinkingMode": "enabled",
+    "contextStrategy": "v1",
+    "initialFileLimit": 8,
+    "historyStrategy": "full",
+    "historyKeepRecent": 2,
+    "memoryPolicy": "contextos",
+    "contextosTargetBytes": 32000,
+    "contextosWorkingSetBytes": 24000,
+    "contextosKeepRecent": 2,
+    "compaction": "auto",
+    "compactionTriggerRatio": 0.8,
+    "compactionKeepRecentBytes": 16000,
+    "compactionMaxPerTurn": 2,
+    "compactionReserveTokens": 16384,
+    "memoryGc": "auto",
+    "memoryCacheBytes": 262144,
+    "memoryGcMaxResidentBytes": 4194304,
+    "sessionStorageMaxBytes": 536870912,
+    "stream": true,
+    "storeRaw": false
+  }
+}
