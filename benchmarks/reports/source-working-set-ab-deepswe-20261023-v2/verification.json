@@ -1,0 +1,44 @@
+{
+  "submittedRequests": 468,
+  "attempts": 8,
+  "metered": 8,
+  "retryCount": 0,
+  "countsHashesUsageControlsInitialIdentitiesMatched": true,
+  "allPairIdentitiesMatched": true,
+  "allCapturedConfigurationsAndAuditsMatched": true,
+  "protocolSha256": "bb18b3f69c035f17b3ac0e47b0e72d0ad6b8575e7130abe4bb5fe2d579387dc0",
+  "runtimeCommit": "8ed56262b3c41d701f8a3a55834683af2e1331ef",
+  "defaultEnabled": false,
+  "artifactHashes": {
+    "diagnostics.json": "45cccb38da53cfb415ae723bfbe93ad96e83e915ffe11172f8a06236a1b5c84d",
+    "preflight.json": "7cb50590f231a6c16878bc77df861950aa62b67632a8504282d5bb65e17a996f",
+    "protocol.json": "bb18b3f69c035f17b3ac0e47b0e72d0ad6b8575e7130abe4bb5fe2d579387dc0",
+    "README.md": "31097dd0c15e3b057dbdca6b1b9c10003d3c35c94d06d89c8463efb15ee870a6",
+    "results.json": "e0ce078735f8df0aa0e80c74bc25d7a736461b262a3aeb88c8ed72bef19f59ca",
+    "RESULTS.zh-CN.md": "fc500e474494b67f450772135659cca4e8d5250b4cc5d0ba9d6f1e4d5d3185f1"
+  },
+  "runtimeRegression": {
+    "executedInThisConfirmation": false,
+    "previousFrozenRuntimeResult": {
+      "passed": 452,
+      "skipped": 1,
+      "failed": 0
+    },
+    "runtimeSourceUnchanged": true
+  },
+  "unknownSubmittedRequests": 0,
+  "paidControllersExited": true,
+  "executedProtocolFileSha256": "78ac2982b22d131ee32ad77d5228640c044c9a67af52dc8071fd4740784779d3",
+  "executedProtocolEqualsFrozenGitAfterLineEndingNormalization": true,
+  "publicationAuditNote": "Initial exact Git/local protocol byte comparison detected CRLF vs LF only. Exact normalized-byte comparison passed. Published text uses LF; original executed protocol hash is retained separately. No protocol fields, runtime or paid results changed. Runtime archive was independently compared to raw Git blobs (git show), avoiding git archive checkout-EOL conversion; all 51 files match exactly.",
+  "postCollectionAudit": {
+    "frozenProtocolMatchesGit": true,
+    "runtimeArchiveFilesMatchGitCommit": 51,
+    "adapterAndArchiveHashesMatched": true,
+    "actualOrderMatchesFrozenSchedule": true,
+    "allTokenComponentsAndAggregatesRecomputed": true,
+    "allEightConfigurationsAndActivationAuditsMatched": true,
+    "noUnknownUsageOrRetries": true,
+    "reportJsonHashesAndCredentialPatternScanPassed": true
+  }
+}

@@ -1,0 +1,676 @@
+{
+  "cohort": "source-working-set-ab-deepswe-20261023-v2",
+  "status": "completed",
+  "runtimeCommit": "8ed56262b3c41d701f8a3a55834683af2e1331ef",
+  "runtimeContextPolicy": {
+    "declaredWindowTokens": 216000,
+    "fixedOutputReservationTokens": 131072,
+    "additionalReserveTokens": 4096,
+    "localEstimatedInputLimit": 80832,
+    "localEstimatedCompactionTrigger": 64665,
+    "source": "Offline inspection of frozen runtime, not provider usage or physical capacity"
+  },
+  "protocolFrozenCommit": "3e3aa78",
+  "comparison": "Same runtime archive; serial balanced AB/BA, working-set 0 vs 24000 bytes; previously seen tasks.",
+  "runs": [
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "agentStatus": "needs_validation",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": true,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 96,
+      "providerSubmittedRequests": 96,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 2078518,
+        "output_tokens": 33750,
+        "cache_read_input_tokens": 408320,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 2520588,
+      "reportedTokenLowerBound": 2520588,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {
+        "read_file": 79,
+        "run_shell": 13,
+        "search_code": 30,
+        "recall_context": 15,
+        "write_file": 1,
+        "apply_patch": 12,
+        "run_tests": 38
+      },
+      "toolErrorsByName": {
+        "run_shell": 6,
+        "apply_patch": 7,
+        "run_tests": 12
+      },
+      "compactionRequests": 2,
+      "adoptedCompactions": 2,
+      "errorCode": null,
+      "validationPassedByTea": false,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "baseline",
+      "pairRepeat": 1,
+      "workingSetBytes": 0
+    },
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": true,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 60,
+      "providerSubmittedRequests": 60,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 1057002,
+        "output_tokens": 21973,
+        "cache_read_input_tokens": 172416,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 1251391,
+      "reportedTokenLowerBound": 1251391,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {
+        "read_file": 37,
+        "run_shell": 13,
+        "search_code": 27,
+        "list_files": 2,
+        "recall_context": 3,
+        "write_file": 3,
+        "apply_patch": 9,
+        "run_tests": 8
+      },
+      "toolErrorsByName": {
+        "run_shell": 5,
+        "apply_patch": 4,
+        "run_tests": 3,
+        "write_file": 1
+      },
+      "compactionRequests": 1,
+      "adoptedCompactions": 1,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "candidate",
+      "pairRepeat": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "arm": "tea",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 2,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFullPass": true,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 34,
+      "providerSubmittedRequests": 34,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 348088,
+        "output_tokens": 15058,
+        "cache_read_input_tokens": 270272,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 633418,
+      "reportedTokenLowerBound": 633418,
+      "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+      "toolCallsByName": {
+        "read_file": 7,
+        "run_shell": 8,
+        "apply_patch": 8,
+        "write_file": 2,
+        "search_code": 7,
+        "run_tests": 7
+      },
+      "toolErrorsByName": {
+        "apply_patch": 1,
+        "run_shell": 2,
+        "run_tests": 5
+      },
+      "compactionRequests": 0,
+      "adoptedCompactions": 0,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "candidate",
+      "pairRepeat": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "arm": "tea",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 1,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFullPass": true,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 33,
+      "providerSubmittedRequests": 33,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 355244,
+        "output_tokens": 18021,
+        "cache_read_input_tokens": 132416,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 505681,
+      "reportedTokenLowerBound": 505681,
+      "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+      "toolCallsByName": {
+        "run_shell": 25,
+        "list_files": 1,
+        "read_file": 9,
+        "search_code": 4,
+        "apply_patch": 5,
+        "write_file": 11,
+        "run_tests": 4
+      },
+      "toolErrorsByName": {
+        "run_shell": 9
+      },
+      "compactionRequests": 0,
+      "adoptedCompactions": 0,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "baseline",
+      "pairRepeat": 1,
+      "workingSetBytes": 0
+    },
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 4,
+      "agentStatus": "needs_validation",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": true,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 83,
+      "providerSubmittedRequests": 83,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 1302052,
+        "output_tokens": 27689,
+        "cache_read_input_tokens": 301568,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 1631309,
+      "reportedTokenLowerBound": 1631309,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {
+        "read_file": 53,
+        "run_shell": 8,
+        "run_tests": 25,
+        "search_code": 21,
+        "recall_context": 3,
+        "write_file": 1,
+        "apply_patch": 8
+      },
+      "toolErrorsByName": {
+        "run_shell": 5,
+        "apply_patch": 2,
+        "run_tests": 9
+      },
+      "compactionRequests": 2,
+      "adoptedCompactions": 2,
+      "errorCode": null,
+      "validationPassedByTea": false,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "candidate",
+      "pairRepeat": 2,
+      "workingSetBytes": 24000
+    },
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 3,
+      "agentStatus": "failed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": false,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 76,
+      "providerSubmittedRequests": 76,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 1213128,
+        "output_tokens": 34525,
+        "cache_read_input_tokens": 301376,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 1549029,
+      "reportedTokenLowerBound": 1549029,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {
+        "read_file": 73,
+        "run_shell": 4,
+        "search_code": 48,
+        "recall_context": 26,
+        "write_file": 1,
+        "apply_patch": 1
+      },
+      "toolErrorsByName": {
+        "run_shell": 1,
+        "read_file": 1
+      },
+      "compactionRequests": 2,
+      "adoptedCompactions": 2,
+      "errorCode": "MODEL_CONTEXT_LIMIT",
+      "validationPassedByTea": false,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "baseline",
+      "pairRepeat": 2,
+      "workingSetBytes": 0
+    },
+    {
+      "arm": "tea",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 3,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 50,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFullPass": false,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 28,
+      "providerSubmittedRequests": 28,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 386121,
+        "output_tokens": 21374,
+        "cache_read_input_tokens": 129536,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 537031,
+      "reportedTokenLowerBound": 537031,
+      "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+      "toolCallsByName": {
+        "run_shell": 8,
+        "read_file": 19,
+        "list_files": 1,
+        "search_code": 1,
+        "recall_context": 2,
+        "apply_patch": 3,
+        "write_file": 2,
+        "run_tests": 3
+      },
+      "toolErrorsByName": {
+        "run_shell": 2,
+        "read_file": 1,
+        "run_tests": 1
+      },
+      "compactionRequests": 0,
+      "adoptedCompactions": 0,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "baseline",
+      "pairRepeat": 2,
+      "workingSetBytes": 0
+    },
+    {
+      "arm": "tea",
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "repeat": 4,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 50,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFullPass": false,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 58,
+      "providerSubmittedRequests": 58,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 912263,
+        "output_tokens": 21546,
+        "cache_read_input_tokens": 321792,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 1255601,
+      "reportedTokenLowerBound": 1255601,
+      "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+      "toolCallsByName": {
+        "read_file": 19,
+        "search_code": 10,
+        "run_shell": 39,
+        "write_file": 13,
+        "apply_patch": 5,
+        "run_tests": 3
+      },
+      "toolErrorsByName": {
+        "run_shell": 9,
+        "read_file": 1
+      },
+      "compactionRequests": 0,
+      "adoptedCompactions": 0,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "candidate",
+      "pairRepeat": 2,
+      "workingSetBytes": 24000
+    }
+  ],
+  "aggregates": {
+    "baseline": {
+      "attempts": 4,
+      "officialFullPassed": 2,
+      "nativeCompleted": 2,
+      "nativeCompletedAndOfficialPassed": 1,
+      "meteredAttempts": 4,
+      "allAttemptTokens": 5112329,
+      "reportedTokenLowerBound": 5112329,
+      "providerSubmittedRequests": 233
+    },
+    "candidate": {
+      "attempts": 4,
+      "officialFullPassed": 3,
+      "nativeCompleted": 3,
+      "nativeCompletedAndOfficialPassed": 2,
+      "meteredAttempts": 4,
+      "allAttemptTokens": 4771719,
+      "reportedTokenLowerBound": 4771719,
+      "providerSubmittedRequests": 235
+    }
+  },
+  "pairs": [
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "pairRepeat": 1,
+      "sameSnapshotAndInstruction": true,
+      "baselineOfficialPassed": true,
+      "candidateOfficialPassed": true,
+      "baselineNativeStatus": "needs_validation",
+      "candidateNativeStatus": "completed",
+      "baselineTokens": 2520588,
+      "candidateTokens": 1251391,
+      "eligibleBothPassedNativeCompleted": false,
+      "tokenReductionPercent": 50.35321123483886
+    },
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "pairRepeat": 2,
+      "sameSnapshotAndInstruction": true,
+      "baselineOfficialPassed": false,
+      "candidateOfficialPassed": true,
+      "baselineNativeStatus": "failed",
+      "candidateNativeStatus": "needs_validation",
+      "baselineTokens": 1549029,
+      "candidateTokens": 1631309,
+      "eligibleBothPassedNativeCompleted": false,
+      "tokenReductionPercent": -5.311714628970798
+    },
+    {
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "pairRepeat": 1,
+      "sameSnapshotAndInstruction": true,
+      "baselineOfficialPassed": true,
+      "candidateOfficialPassed": true,
+      "baselineNativeStatus": "completed",
+      "candidateNativeStatus": "completed",
+      "baselineTokens": 505681,
+      "candidateTokens": 633418,
+      "eligibleBothPassedNativeCompleted": true,
+      "tokenReductionPercent": -25.26039143254344
+    },
+    {
+      "taskId": "mnamer-daemon-watch-lifecycle",
+      "pairRepeat": 2,
+      "sameSnapshotAndInstruction": true,
+      "baselineOfficialPassed": false,
+      "candidateOfficialPassed": false,
+      "baselineNativeStatus": "completed",
+      "candidateNativeStatus": "completed",
+      "baselineTokens": 537031,
+      "candidateTokens": 1255601,
+      "eligibleBothPassedNativeCompleted": false,
+      "tokenReductionPercent": -133.80419379886823
+    }
+  ],
+  "byTask": {
+    "helm-unified-manifest-stream": {
+      "baseline": {
+        "officialFullPasses": 1,
+        "tokens": 4069617,
+        "requests": 172,
+        "tokenComponents": {
+          "input_tokens": 3291646,
+          "output_tokens": 68275,
+          "cache_read_input_tokens": 709696,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "candidate": {
+        "officialFullPasses": 2,
+        "tokens": 2882700,
+        "requests": 143,
+        "tokenComponents": {
+          "input_tokens": 2359054,
+          "output_tokens": 49662,
+          "cache_read_input_tokens": 473984,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "tokenReductionPercent": 29.165324402763204
+    },
+    "mnamer-daemon-watch-lifecycle": {
+      "baseline": {
+        "officialFullPasses": 1,
+        "tokens": 1042712,
+        "requests": 61,
+        "tokenComponents": {
+          "input_tokens": 741365,
+          "output_tokens": 39395,
+          "cache_read_input_tokens": 261952,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "candidate": {
+        "officialFullPasses": 1,
+        "tokens": 1889019,
+        "requests": 92,
+        "tokenComponents": {
+          "input_tokens": 1260351,
+          "output_tokens": 36604,
+          "cache_read_input_tokens": 592064,
+          "cache_creation_input_tokens": 0
+        }
+      },
+      "tokenReductionPercent": -81.16402228036121
+    }
+  },
+  "leaveOnePairOutSensitivity": [
+    {
+      "omittedTask": "helm-unified-manifest-stream",
+      "omittedPairRepeat": 1,
+      "remainingTokenReductionPercent": -35.828695845765445,
+      "descriptiveOnly": true
+    },
+    {
+      "omittedTask": "helm-unified-manifest-stream",
+      "omittedPairRepeat": 2,
+      "remainingTokenReductionPercent": 11.867931411893473,
+      "descriptiveOnly": true
+    },
+    {
+      "omittedTask": "mnamer-daemon-watch-lifecycle",
+      "omittedPairRepeat": 1,
+      "remainingTokenReductionPercent": 10.166763338548979,
+      "descriptiveOnly": true
+    },
+    {
+      "omittedTask": "mnamer-daemon-watch-lifecycle",
+      "omittedPairRepeat": 2,
+      "remainingTokenReductionPercent": 23.149967499384736,
+      "descriptiveOnly": true
+    }
+  ],
+  "bothPassedNativeCompletedEfficiency": {
+    "pairs": 1,
+    "baselineTokens": 505681,
+    "candidateTokens": 633418,
+    "tokenReductionPercent": -25.26039143254344
+  },
+  "allAttemptTokenReductionPercent": 6.662521132736177,
+  "screeningGateChecks": {
+    "officialAcceptanceNotWorse": true,
+    "nativeCompletionNotWorse": true,
+    "allCandidateP2PPreserved": true,
+    "eightMetered": true,
+    "atLeastTwoBothPassedNativePairs": false,
+    "allAttemptTokensLower": true,
+    "bothPassedTokensLower": false,
+    "mechanismActivated": true
+  },
+  "screeningGatePassed": false,
+  "unknownReservations": [],
+  "defaultEnabled": false,
+  "unseenGeneralizationClaim": false
+}

@@ -1,13 +1,13 @@
-# Bounded source working set: concurrent-cohort confirmation
+# Bounded source working set: balanced paid confirmation
 
-Status: prepared; no paid results yet.
+[中文结果](RESULTS.zh-CN.md)
 
-Two previously seen DeepSWE tasks (Helm and Mnamer), two matched repeats per task, baseline/candidate in balanced AB/BA serial order: eight scheduled attempts. Both variants use the exact `8ed5626` runtime archive; only `TEA_CONTEXTOS_WORKING_SET_BYTES` changes (0 versus 24000). Pi and Claude are not rerun.
+Eight scheduled attempts on two previously seen DeepSWE tasks, two matched pairs each, serial balanced AB/BA. Same exact runtime archive; only source working-set budget changes from 0 to 24000 bytes. Frozen protocol commit: `3e3aa78`.
 
-All endpoint/model/thinking/effort/output/context/tool/time controls remain equal. Each attempt starts from its task base snapshot and pristine container. The protocol records source and adapter identities, order, and scoring rules before any model call.
+Official full passes: baseline 2/4, candidate 3/4. All-attempt provider tokens: 5,112,329 -> 4,771,719; reduction +6.66%. Both-passed/native-completed/fully-metered pairs: 1/4; reduction -25.26%. Negative reduction means increased usage. Failures remain in all-attempt totals; unknown usage is never zero.
 
-Controls: 10 USD-equivalent allocation per attempt, 80 total, 128 submitted requests per attempt, 900 seconds per request, 1800 seconds per agent. These conservative controls are not provider invoices. Missing usage remains unknown and holds the complete attempt allocation; no automatic retry.
+Predeclared screening gate: not passed. Feature remains off by default, pending review. These are small seen-task results, not statistical significance or unseen generalization. Provider cache/timing/model randomness remain limitations. Pi and Claude were not rerun. Control allocations (10 USD-equivalent per attempt, 80 total) are conservative controls, not actual invoices.
 
-Primary results: official full-task acceptance and native completion. Report all-attempt token totals including failures, plus the predeclared both-official-pass/native-completed/fully-metered paired subset. A lower total with worse acceptance is not success. At least two eligible pairs are required by the screening gate. Missing audit or usage cannot be replaced by zeros.
+Only one of four pairs reduced tokens. Omitting the first Helm pair increases the remaining total by 35.83% (descriptive sensitivity only). Helm pooled reduction was 29.17%, while Mnamer pooled usage increased 81.16%. The only both-passed/native-completed pair increased usage 25.26%; the predeclared minimum of two eligible pairs was not met. This does not confirm stable token savings. The second Mnamer pair failed the same log-subdirectory requirement on both sides (369/370), despite substantially more candidate operations.
 
-This is a small confirmation on seen tasks, not unseen-task generalization or statistical significance. Serial timing and provider cache/model randomness remain limitations. Keep the feature disabled by default until reviewed.
+All 468 submitted requests have independently reconciled usage, hashes and controls; unknown usage and paid retries are both zero. Exit metadata audits confirmed all eight variants and budget bounds, with no missing assembly artifacts in these runs. Private reasoning and hidden verifier implementations were not read.
