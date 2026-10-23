@@ -34,3 +34,7 @@ For other models, select provider-supported capacities explicitly. Choosing the 
 [Original paid report](../benchmarks/reports/source-working-set-ab-deepswe-20261023-v2/RESULTS.zh-CN.md): two seen tasks, two paired repetitions each. Official acceptance rose from 2/4 to 3/4. Total provider tokens fell 6.66%, but the comparable both-passed/native-complete subset increased 25.26%; the preregistered efficiency gate failed. Activation is an explicit correctness-first decision, not a claim of stable token savings or universal 75% success.
 
 Current offline validation: 467 passed, one skipped, zero failed, including four new profile tests and existing working-set freshness, compaction and Pi compatibility coverage. No paid API calls were made for this activation.
+
+## Explicitly requested network recovery addition
+
+Daily use now defaults to five retries for explicit `Internal Network Failure`, following the maintainer's later instruction. This changes transport recovery, not the frozen model/context parameters. `/status` reports `internalNetworkRetries` as a difference from the historical no-retry runtime. `loadPr16BenchmarkConfig()` defaults this setting to zero for exact historical reconstruction. Earlier paid archives/protocols/results remain unchanged; they do not measure this new policy.

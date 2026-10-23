@@ -75,3 +75,7 @@ The config file accepts `contextBudgetPolicy` (`pi` or `reserved-output`), `comp
 ## Frozen PR16 profile / PR16 冻结配置
 
 Set `configurationProfile` to `"pr16-quality"` (GLM default) or `"pi"`. `contextosWorkingSetBytes` and `compactionMaxPerTurn` can override the profile. Environment equivalents are `TEA_CONFIG_PROFILE`, `TEA_CONTEXTOS_WORKING_SET_BYTES` and `TEA_COMPACTION_MAX_PER_TURN`. Explicit options and environment settings retain precedence. See [full settings and limitations](PR16_QUALITY_PROFILE.md).
+
+## Internal Network Failure retries / 内部网络错误重试
+
+`internalNetworkRetries` / `TEA_INTERNAL_NETWORK_RETRIES`: integer 0–5, default **5**. This means one original submission plus up to five retries for an explicit `Internal Network Failure`. Backoff is 1, 2, 4, 8 and 16 seconds. Set 0 to disable. Cancel and explicit spending/input limits take precedence. See [retry behavior and accounting](NETWORK_RETRIES.md).
