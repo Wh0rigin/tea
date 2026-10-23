@@ -1,0 +1,29 @@
+{
+  "status": "passed_with_activation_scope_limitation",
+  "submittedRequests": 113,
+  "attempts": 2,
+  "unknown": 0,
+  "retryCount": 0,
+  "countsHashesUsageControlsInitialIdentitiesMatched": true,
+  "protocolSha256": "3dd0d48b0714ad3a3478fbaab425c9f7f6031781fa29fdf1a861deb3914c2b9c",
+  "runtimeCommit": "8ed56262b3c41d701f8a3a55834683af2e1331ef",
+  "screenGatePassed": true,
+  "activationVerifiedRepeats": [
+    1
+  ],
+  "completeResidencyAuditForRepeat2": false,
+  "fullRegression": {
+    "passed": 452,
+    "skipped": 1,
+    "failed": 0
+  },
+  "artifactHashes": {
+    "diagnostics.json": "4c2f898e7de6f1a52b153a570726790f674341d21fe8606e5e68be32db672d4a",
+    "offline-projection.json": "12ebebbbda7b2316117597b6ff51eaae412e687b65b3fd10065f711f3f2a3efa",
+    "preflight.json": "135fcad3ded22daaea9d6359908631b82f9c0364739e3a00e3f2c657454387fc",
+    "protocol.json": "3dd0d48b0714ad3a3478fbaab425c9f7f6031781fa29fdf1a861deb3914c2b9c",
+    "README.md": "5ec40b3f525fe40cc490d0eddb0ac9a9fe4f0174735a5f90aedbde06d739307d",
+    "results.json": "5c7c3301831c33ee946c6c948c93026801e17c9537cdce6d10e0cdfa3574ffcf",
+    "RESULTS.zh-CN.md": "5d2d82f765cbd7a4a33ce96e10fa16ca4bd291bb583b850fca052b777f636bfa"
+  }
+}
