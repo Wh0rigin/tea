@@ -1,0 +1,32 @@
+{
+  "attempts": 8,
+  "submittedRequests": 322,
+  "unknownSubmittedRequests": 5,
+  "meteredAttempts": 3,
+  "protocolFrozenBeforeCalls": true,
+  "frozenProtocolMatchesGit": true,
+  "protocolExecutedSha256": "1cb1667a24d58a63658bbe882a202563c6dad93091fa49d50c58275f89e7103f",
+  "protocolGitSha256": "9fd509110389ba1d578fac06dd24ab62d3bf3ea93050195adf7b8d58a8072c71",
+  "protocolLineEndingNormalizationDisclosed": true,
+  "firstRequestHashesIdenticalWithinEachTask": true,
+  "runtimeFilesMatchGit": 50,
+  "adapterAndArchiveHashesMatched": true,
+  "retryCount": 0,
+  "artifactHashes": {
+    "diagnostics.json": "1a99e8d4c4b49e70a4f067280b1859b7e34ca4da9d74600fe31b61f4df8e1aff",
+    "preflight.json": "1084d5100b25002d7764dd4c16a6a47633059de5eee15e5a61ffceb0ebfa6726",
+    "protocol.json": "9fd509110389ba1d578fac06dd24ab62d3bf3ea93050195adf7b8d58a8072c71",
+    "README.md": "bea08a3cd686c472adf12ba601d8958c644996911778a294565644ac6375efc3",
+    "results.json": "40d97d4949384d05b22bd84a3cc30b48b7b747b5296ef4b540acba50f37facb7",
+    "RESULTS.zh-CN.md": "39c17831a5c585df6f80996cb98b3dbc90f620d9b2ac32f627123884abf34a09"
+  },
+  "all322RequestCountsHashesReportedUsageControlsMatched": true,
+  "allEightInitialSnapshotAndInstructionIdentitiesMatched": true,
+  "allEightConfigurationsMatched": true,
+  "reviewActivationCount": 0,
+  "knownTokenLowerBound": 10474398,
+  "unknownReservationsUsd": 50,
+  "completeTotalTokens": null,
+  "providerProcessesExited": true,
+  "diagnosticTemporaryPathsNormalized": true
+}

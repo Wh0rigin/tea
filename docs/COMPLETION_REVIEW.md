@@ -40,3 +40,7 @@ check persisted artifacts, and report whole-task acceptance before token savings
 No paid evaluation is launched by this implementation.
 
 Verification: targeted agent suite 18/18 passed; full suite 467 passed, 1 skipped, 0 failed (468 tests). These are offline results.
+
+## Paid DeepSWE screen
+
+[Paired results](../benchmarks/reports/completion-review-ab-deepswe-20261023-v1/README.md): eight attempts completed. Official full passes were 1/4 in each arm; all four candidates failed to reach the review trigger. Five requests have incomplete usage, so overall token savings are unknown. This does not validate the feature; it stays off. The run exposed a trigger limitation when broad validation remains unresolved, repeated failing test commands, and separate streaming errors. See the report for the fully metered pair's cost increase and differing acceptance.
