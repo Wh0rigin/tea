@@ -1,0 +1,569 @@
+{
+  "candidate": {
+    "schemaVersion": 1,
+    "benchmark": "deepswe",
+    "scope": "six previously seen tasks overall; two repeats; no unseen/full-benchmark claim",
+    "status": "completed_with_unknown_usage",
+    "plannedAttempts": 4,
+    "runs": [
+      {
+        "arm": "tea",
+        "taskId": "helm-unified-manifest-stream",
+        "repeat": 1,
+        "agentStatus": "cancelled",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 0,
+          "f2p_total": 5,
+          "f2p_passed": 0,
+          "p2p_total": 2,
+          "p2p_passed": 2
+        },
+        "officialFullPass": false,
+        "metered": false,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": false,
+        "controlProfileMatched": true,
+        "clientRequests": 62,
+        "providerSubmittedRequests": 62,
+        "unknownSubmittedRequests": [
+          {
+            "call": 62,
+            "status": "transport_failed:BrokenPipeError",
+            "httpStatus": 200,
+            "messageStopSeen": false,
+            "auditInvalid": false,
+            "elapsedMs": 4062
+          }
+        ],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": null,
+        "totalTokens": null,
+        "reportedTokenLowerBound": 3019350,
+        "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+        "toolCallsByName": {
+          "read_file": 73,
+          "run_shell": 4,
+          "search_code": 31,
+          "recall_context": 29,
+          "write_file": 1
+        },
+        "toolErrorsByName": {
+          "run_shell": 1,
+          "recall_context": 1,
+          "read_file": 2
+        },
+        "compactionRequests": 1,
+        "adoptedCompactions": 1,
+        "errorCode": "MODEL_REQUEST_FAILED",
+        "validationPassedByTea": false,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "mnamer-daemon-watch-lifecycle",
+        "repeat": 1,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 1,
+          "f2p_total": 51,
+          "f2p_passed": 51,
+          "p2p_total": 319,
+          "p2p_passed": 319
+        },
+        "officialFullPass": true,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 42,
+        "providerSubmittedRequests": 42,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 569533,
+          "output_tokens": 21794,
+          "cache_read_input_tokens": 184256,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 775583,
+        "reportedTokenLowerBound": 775583,
+        "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+        "toolCallsByName": {
+          "run_shell": 9,
+          "list_files": 1,
+          "read_file": 13,
+          "recall_context": 8,
+          "search_code": 3,
+          "apply_patch": 8,
+          "write_file": 2,
+          "run_tests": 5
+        },
+        "toolErrorsByName": {
+          "run_shell": 2,
+          "apply_patch": 2,
+          "run_tests": 3
+        },
+        "compactionRequests": 0,
+        "adoptedCompactions": 0,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "helm-unified-manifest-stream",
+        "repeat": 2,
+        "agentStatus": "cancelled",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 0,
+          "f2p_total": 5,
+          "f2p_passed": 0,
+          "p2p_total": 2,
+          "p2p_passed": 2
+        },
+        "officialFullPass": false,
+        "metered": false,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": false,
+        "controlProfileMatched": true,
+        "clientRequests": 93,
+        "providerSubmittedRequests": 93,
+        "unknownSubmittedRequests": [
+          {
+            "call": 93,
+            "status": "transport_failed:BrokenPipeError",
+            "httpStatus": 200,
+            "messageStopSeen": false,
+            "auditInvalid": false,
+            "elapsedMs": 7102
+          }
+        ],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": null,
+        "totalTokens": null,
+        "reportedTokenLowerBound": 3992251,
+        "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+        "toolCallsByName": {
+          "read_file": 51,
+          "run_shell": 3,
+          "search_code": 83,
+          "recall_context": 15,
+          "write_file": 1,
+          "apply_patch": 13
+        },
+        "toolErrorsByName": {
+          "run_shell": 1,
+          "recall_context": 2,
+          "apply_patch": 11
+        },
+        "compactionRequests": 0,
+        "adoptedCompactions": 0,
+        "errorCode": "RUNTIME_ERROR",
+        "validationPassedByTea": false,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "mnamer-daemon-watch-lifecycle",
+        "repeat": 2,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 0,
+          "f2p_total": 51,
+          "f2p_passed": 50,
+          "p2p_total": 319,
+          "p2p_passed": 319
+        },
+        "officialFullPass": false,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 26,
+        "providerSubmittedRequests": 26,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 339708,
+          "output_tokens": 16387,
+          "cache_read_input_tokens": 46144,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 402239,
+        "reportedTokenLowerBound": 402239,
+        "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+        "toolCallsByName": {
+          "run_shell": 20,
+          "read_file": 8,
+          "search_code": 3,
+          "apply_patch": 3,
+          "write_file": 2
+        },
+        "toolErrorsByName": {
+          "run_shell": 7,
+          "read_file": 1
+        },
+        "compactionRequests": 0,
+        "adoptedCompactions": 0,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      }
+    ],
+    "pairs": [],
+    "aggregates": {
+      "tea": {
+        "planned": 4,
+        "attempted": 4,
+        "officialEvaluated": 4,
+        "officialFullPassed": 1,
+        "nativeCompletedAndOfficialPassed": 1,
+        "meteredAttempts": 2,
+        "allAttemptTokens": null,
+        "reportedTokenLowerBound": 8189423
+      },
+      "pi": {
+        "planned": 0,
+        "attempted": 0,
+        "officialEvaluated": 0,
+        "officialFullPassed": 0,
+        "nativeCompletedAndOfficialPassed": 0,
+        "meteredAttempts": 0,
+        "allAttemptTokens": 0,
+        "reportedTokenLowerBound": 0
+      }
+    },
+    "bothPassedEfficiency": {
+      "pairs": 0,
+      "teaTokens": null,
+      "piTokens": null,
+      "teaTokenReductionPercent": null
+    },
+    "unknownReservations": [
+      {
+        "repeat": 1,
+        "arm": "tea",
+        "task": "helm-unified-manifest-stream",
+        "reservationUsd": 10,
+        "notRetried": true
+      },
+      {
+        "repeat": 2,
+        "arm": "tea",
+        "task": "helm-unified-manifest-stream",
+        "reservationUsd": 10,
+        "notRetried": true
+      }
+    ],
+    "protocolSha256": "5305a1dc6cb608f409d75bd1811d30793f36fe0357fafdb4b680c3d994bd3c78",
+    "sortedJsonProtocolSha256": "c53532b1a7b116176b7dfd76515e1eedaf5800fa0150a36ed76de6274ac2922f",
+    "unstarted": []
+  },
+  "baseline": {
+    "schemaVersion": 1,
+    "benchmark": "deepswe",
+    "scope": "six previously seen tasks overall; two repeats; no unseen/full-benchmark claim",
+    "status": "completed",
+    "plannedAttempts": 4,
+    "runs": [
+      {
+        "arm": "tea",
+        "taskId": "helm-unified-manifest-stream",
+        "repeat": 1,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 0,
+          "f2p_total": 5,
+          "f2p_passed": 1,
+          "p2p_total": 2,
+          "p2p_passed": 2
+        },
+        "officialFullPass": false,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 65,
+        "providerSubmittedRequests": 65,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 1077311,
+          "output_tokens": 19041,
+          "cache_read_input_tokens": 189568,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 1285920,
+        "reportedTokenLowerBound": 1285920,
+        "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+        "toolCallsByName": {
+          "read_file": 47,
+          "run_shell": 8,
+          "run_tests": 21,
+          "search_code": 17,
+          "recall_context": 6,
+          "write_file": 2,
+          "apply_patch": 4
+        },
+        "toolErrorsByName": {
+          "run_shell": 4,
+          "run_tests": 7
+        },
+        "compactionRequests": 1,
+        "adoptedCompactions": 1,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "mnamer-daemon-watch-lifecycle",
+        "repeat": 1,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 0,
+          "f2p_total": 51,
+          "f2p_passed": 47,
+          "p2p_total": 319,
+          "p2p_passed": 319
+        },
+        "officialFullPass": false,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 35,
+        "providerSubmittedRequests": 35,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 384884,
+          "output_tokens": 15336,
+          "cache_read_input_tokens": 138304,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 538524,
+        "reportedTokenLowerBound": 538524,
+        "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+        "toolCallsByName": {
+          "run_shell": 11,
+          "read_file": 14,
+          "apply_patch": 7,
+          "search_code": 3,
+          "write_file": 2,
+          "run_tests": 6
+        },
+        "toolErrorsByName": {
+          "run_shell": 3,
+          "run_tests": 4,
+          "apply_patch": 1
+        },
+        "compactionRequests": 0,
+        "adoptedCompactions": 0,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "helm-unified-manifest-stream",
+        "repeat": 2,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 1,
+          "f2p_total": 5,
+          "f2p_passed": 5,
+          "p2p_total": 2,
+          "p2p_passed": 2
+        },
+        "officialFullPass": true,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 70,
+        "providerSubmittedRequests": 70,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 1121807,
+          "output_tokens": 24677,
+          "cache_read_input_tokens": 141248,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 1287732,
+        "reportedTokenLowerBound": 1287732,
+        "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+        "toolCallsByName": {
+          "read_file": 59,
+          "search_code": 25,
+          "recall_context": 9,
+          "run_shell": 12,
+          "write_file": 2,
+          "apply_patch": 5,
+          "run_tests": 5
+        },
+        "toolErrorsByName": {
+          "run_shell": 4,
+          "recall_context": 1,
+          "run_tests": 1
+        },
+        "compactionRequests": 2,
+        "adoptedCompactions": 2,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "mnamer-daemon-watch-lifecycle",
+        "repeat": 2,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 1,
+          "f2p_total": 51,
+          "f2p_passed": 51,
+          "p2p_total": 319,
+          "p2p_passed": 319
+        },
+        "officialFullPass": true,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 38,
+        "providerSubmittedRequests": 38,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 514758,
+          "output_tokens": 17770,
+          "cache_read_input_tokens": 160512,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 693040,
+        "reportedTokenLowerBound": 693040,
+        "initialBaseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649",
+        "toolCallsByName": {
+          "read_file": 22,
+          "search_code": 2,
+          "recall_context": 7,
+          "run_shell": 6,
+          "list_files": 1,
+          "write_file": 2,
+          "apply_patch": 5,
+          "run_tests": 6
+        },
+        "toolErrorsByName": {
+          "run_shell": 1,
+          "read_file": 1,
+          "run_tests": 3
+        },
+        "compactionRequests": 0,
+        "adoptedCompactions": 0,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      }
+    ],
+    "pairs": [],
+    "aggregates": {
+      "tea": {
+        "planned": 4,
+        "attempted": 4,
+        "officialEvaluated": 4,
+        "officialFullPassed": 2,
+        "nativeCompletedAndOfficialPassed": 2,
+        "meteredAttempts": 4,
+        "allAttemptTokens": 3805216,
+        "reportedTokenLowerBound": 3805216
+      },
+      "pi": {
+        "planned": 0,
+        "attempted": 0,
+        "officialEvaluated": 0,
+        "officialFullPassed": 0,
+        "nativeCompletedAndOfficialPassed": 0,
+        "meteredAttempts": 0,
+        "allAttemptTokens": 0,
+        "reportedTokenLowerBound": 0
+      }
+    },
+    "bothPassedEfficiency": {
+      "pairs": 0,
+      "teaTokens": null,
+      "piTokens": null,
+      "teaTokenReductionPercent": null
+    },
+    "unknownReservations": [],
+    "protocolSha256": "120845cd81ed51f24fbbf676669f3312de1277b6d2a2f19baca60578b270f5a6",
+    "sortedJsonProtocolSha256": "75782ef33a8fa4656e78f31f9c79c566be60ec11a41d1bc290e95446317dc922",
+    "unstarted": []
+  },
+  "fullTokenChangePercent": null,
+  "reason": "Two candidate attempts have unknown usage; no complete total or paired success efficiency claim."
+}
