@@ -24,6 +24,49 @@ test('direct argv parser handles both quote styles, empty arguments and Windows 
   for (const text of ['node "oops', '', '"" x']) assert.throws(()=>parseCommand(text),e=>e.feedbackCode==='INPUT_INVALID');
   for (const text of ['git status && git log','node -e "x;x"','node\n--test']) assert.throws(()=>parseCommand(text),/operators/);
 });
+
+test('quoted regex pipes are literal arguments while actual shell syntax remains blocked', () => {
+  for (const pattern of ["'TestA|TestB'", '"TestA|TestB"', "'TestA'\"|\"'TestB'"]) {
+    const command = `go test ./pkg/cmd -run ${pattern}`;
+    assert.deepEqual(parseCommand(command), { executable: 'go', args: ['test', './pkg/cmd', '-run', 'TestA|TestB'] });
+    assert.equal(isAllowedCommand(command), true);
+    assert.equal(isValidationCommand(command), true);
+  }
+  assert.deepEqual(parseCommand(String.raw`node --test "a\"|b"`), { executable: 'node', args: ['--test', 'a"|b'] });
+  for (const command of [
+    'go test ./... | more', 'go test ./... || go test ./...',
+    "go test -run 'TestA'|'TestB'", "go test -run 'TestA|TestB' | more",
+    'go test -run "TestA|TestB" && git status',
+    'go test -run "TestA;TestB"', 'go test -run "TestA&TestB"',
+    'go test -run "TestA>TestB"', 'go test -run "TestA<TestB"',
+    'go test -run "TestA`TestB"', 'go test -run "TestA\nTestB"',
+    'go test -run "TestA\rTestB"',
+    String.raw`go test -run "TestA\\"|more`,
+  ]) assert.throws(() => parseCommand(command), error => error.feedbackCode === 'CAPABILITY_DENIED', command);
+  for (const command of ["go test -run 'TestA|TestB", 'go test -run "TestA|TestB']) {
+    assert.throws(() => parseCommand(command), error => error.feedbackCode === 'INPUT_INVALID');
+  }
+  assert.throws(() => windowsNpmArguments(['test', '--', 'TestA|TestB']), /CMD/);
+  assert.throws(() => assertCommandPolicy(parseCommand('rm "TestA|TestB"')), /blocked/);
+});
+
+test('both command tools run a quoted test regex once without approval or shell interpretation', async t => {
+  const { root, tools } = await fixture(t);
+  await writeFile(path.join(root, 'a b.test.mjs'), "import test from 'node:test';\ntest('alpha',()=>{});\ntest('beta',()=>{});\ntest('unexpected',()=>{throw new Error('must be filtered out')});\n");
+  let approvals = 0;
+  tools.approveCommand = () => { approvals++; return true; };
+  for (const quote of ["'", '"']) {
+    const command = `node --test --test-reporter=tap --test-name-pattern=${quote}alpha|beta${quote} "a b.test.mjs"`;
+    for (const method of ['runTests', 'runShell']) {
+      const output = await tools[method]({ command });
+      assert.match(output, /^exit=0/);
+      assert.match(output, /# pass 2/);
+      assert.match(output, /# fail 0/);
+    }
+  }
+  await assert.rejects(tools.runShell({ command: 'node --test | git status' }), error => error.feedbackCode === 'CAPABILITY_DENIED');
+  assert.equal(approvals, 0);
+});
 test('destructive policy checks actual executable and Git operation, not literal format arguments', () => {
   for (const text of ['git log --format="%H %s"','node format.test.mjs','git commit -m "format changes"']) assert.doesNotThrow(()=>assertCommandPolicy(parseCommand(text)));
   for (const text of ['rm file','C:\\Windows\\format.exe D:','git --no-pager reset --hard','git -C somewhere clean -fd','git switch --discard-changes main','powershell -Command "Remove-Item file"']) assert.throws(()=>assertCommandPolicy(parseCommand(text)),/blocked/);
@@ -83,4 +126,9 @@ test('actual Go tests use provisioned cache through ordinary run_tests when Go i
   await writeFile(path.join(root,'go.mod'),'module tea-fixture\n\ngo 1.18\n');
   await writeFile(path.join(root,'value_test.go'),'package fixture\nimport "testing"\nfunc TestValue(t *testing.T) {}\n');
   assert.match(await tools.runTests({command:'go test ./...'}),/^exit=0/);
+  for (const quote of ["'", '"']) {
+    const output = await tools.runTests({ command: `go test ./... -run ${quote}TestValue|TestMissing${quote} -v` });
+    assert.match(output, /^exit=0/);
+    assert.match(output, /--- PASS: TestValue/);
+  }
 });

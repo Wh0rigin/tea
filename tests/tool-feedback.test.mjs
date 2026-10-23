@@ -68,7 +68,8 @@ test('disabled feedback preserves inherited history with explicit prompt, patch 
 
 test('capability notices describe headless/interactive Windows and other platforms without granting runners', () => {
   const windows = capabilityNotice(runtimeCapabilities(unavailable));
-  assert.match(windows, /cannot obtain approval/); assert.match(windows, /including quoted JavaScript/);
+  assert.match(windows, /cannot obtain approval/); assert.match(windows, /Quoted \| passes literally to direct executables/);
+  assert.match(windows, /unquoted pipes, other shell operators and multiline commands are blocked/);
   assert.match(windows, /Windows npm allowlisted commands/); assert.match(windows, /Installed runners depend on the project/);
   const interactive = capabilityNotice(runtimeCapabilities({ ...unavailable, stdinIsTTY: true, stdoutIsTTY: true }));
   assert.match(interactive, /needs explicit approval/); assert.doesNotMatch(interactive, /cannot obtain approval/);

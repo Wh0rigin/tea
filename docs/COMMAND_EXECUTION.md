@@ -4,7 +4,7 @@
 
 ## Direct execution
 
-`run_tests` and `run_shell` use the same parsed executable and argument array. They do not evaluate a shell. Balanced single/double quotes group arguments, including paths with spaces. Backslashes are literal except immediately before double quotes, where pairs produce literal backslashes and an odd remainder escapes the quote. Shell operators and multiline commands remain blocked, including inside quotes.
+`run_tests` and `run_shell` use the same parsed executable and argument array. They do not evaluate a shell. Balanced single/double quotes group arguments, including paths with spaces. Backslashes are literal except immediately before double quotes, where pairs produce literal backslashes and an odd remainder escapes the quote. A pipe inside balanced quotes is a literal argument: `go test ./pkg/cmd -run 'TestA|TestB'` executes one process with one regex argument. Unquoted pipes and all previously blocked semicolons, ampersands, redirects, backticks and multiline commands remain blocked, even when those other characters occur inside quotes. This is not shell evaluation; approvals and destructive-operation checks still apply. The Windows npm CMD bridge continues to reject pipes even inside quotes.
 
 Validation entries include Node tests, npm test/lint/check/typecheck, Python/Python 3 pytest/unittest, pytest, and Go test/build/vet. Common read-only Git diagnostics accept forms such as:
 
