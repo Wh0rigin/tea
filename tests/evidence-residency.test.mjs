@@ -224,7 +224,7 @@ test('working set cannot exceed its byte allowance or revive omitted source', as
 
 test('working-set residency and freshness coexist with main Pi CLI budgets', async () => scenario(async ({ root, tools, assemble }) => {
  const env = { TEA_CONTEXT_WINDOW_TOKENS: '216000', TEA_MAX_OUTPUT_TOKENS: '131072' };
- const options = { workspace: root, memoryPolicy: 'contextos', contextosTargetBytes: 4000 };
+ const options = { configurationProfile: 'pi', workspace: root, memoryPolicy: 'contextos', contextosTargetBytes: 4000 };
  const baselineConfig = loadCliConfig(options, env);
  const config = loadCliConfig(options, { ...env, TEA_CONTEXTOS_WORKING_SET_BYTES: '24000' });
  assert.equal(baselineConfig.contextosWorkingSetBytes, 0);

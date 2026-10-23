@@ -36,8 +36,8 @@ test('all representative legacy-admissible task and summary requests are byte-id
 });
 
 test('Pi defaults take precedence over the isolated legacy fitting flag', () => {
- const baseline = loadCliConfig({}, env);
- const candidate = loadCliConfig({}, { ...env, TEA_FIT_OUTPUT_BUDGET: '1' });
+ const baseline = loadCliConfig({ configurationProfile: 'pi' }, env);
+ const candidate = loadCliConfig({ configurationProfile: 'pi' }, { ...env, TEA_FIT_OUTPUT_BUDGET: '1' });
  const request = { messages: [{ role: 'user', content: 'x'.repeat(450000) }] };
  assert.equal(candidate.contextBudgetPolicy, 'pi');
  assert.equal(contextBudget(candidate, request).triggerTokens, 199616);

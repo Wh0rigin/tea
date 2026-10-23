@@ -41,8 +41,8 @@ test('creation rejects escapes, metadata, credentials and invalid text', async (
   await assert.rejects(disabled.writeFile({ path: 'disabled.py', content: '' }), /disabled|not enabled/i);
 }));
 
-test('daily defaults allow normal requests while explicit guards and SDK defaults remain configurable', () => {
-  const config = loadCliConfig({}, {});
+test('explicit Pi defaults allow normal requests while explicit guards and SDK defaults remain configurable', () => {
+  const config = loadCliConfig({ configurationProfile: 'pi' }, {});
   assert.equal(config.maxRequestInputBytes, 2097152);
   assert.equal(config.contextWindowTokens, 32768);
   assert.equal(config.maxOutputTokens, 4096);
@@ -51,12 +51,12 @@ test('daily defaults allow normal requests while explicit guards and SDK default
   assert.equal(config.capabilityFeedback, true);
   assert.equal(loadConfig({}, {}).maxRequestInputTokens, 12000);
   assert.equal(loadCliConfig({ maxRequestInputBytes: 24000 }, {}).maxRequestInputTokens, 24000);
-  const large = loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '216000' });
+  const large = loadCliConfig({ configurationProfile: 'pi' }, { TEA_CONTEXT_WINDOW_TOKENS: '216000' });
   const budget = contextBudget(large, { messages: [] });
   assert.equal(budget.inputLimit, 199616); assert.equal(budget.triggerTokens, 199616);
   assert.equal(large.maxRequestInputBytes, config.maxRequestInputBytes);
-  assert.throws(() => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '8192' }), /larger than output/);
-  assert.throws(() => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '2.5' }), /safe integer/);
+  assert.throws(() => loadCliConfig({ configurationProfile: 'pi' }, { TEA_CONTEXT_WINDOW_TOKENS: '8192' }), /larger than output/);
+  assert.throws(() => loadCliConfig({ configurationProfile: 'pi' }, { TEA_CONTEXT_WINDOW_TOKENS: '2.5' }), /safe integer/);
   const unicode = { messages: [{ role: 'user', content: '中文🚀'.repeat(100) }] };
   assert.ok(estimateContextTokens(unicode) > estimateContextTokens({ messages: [] }));
   assert.ok(Math.abs(estimateContextTokens(unicode, 2) - 2 * estimateContextTokens(unicode)) <= 1);

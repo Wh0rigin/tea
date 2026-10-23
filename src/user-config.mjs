@@ -10,6 +10,9 @@ import { redactText } from './tools.mjs';
 
 const MAX_CONFIG_BYTES = 65536;
 const FIELDS = {
+  configurationProfile: ['TEA_CONFIG_PROFILE', 'string'],
+  contextosWorkingSetBytes: ['TEA_CONTEXTOS_WORKING_SET_BYTES', 'number'],
+  compactionMaxPerTurn: ['TEA_COMPACTION_MAX_PER_TURN', 'number'],
   editPermissions: ['TEA_EDIT_PERMISSIONS', 'json'],
   apiKey: ['ANTHROPIC_API_KEY', 'string'], baseUrl: ['ANTHROPIC_BASE_URL', 'string'],
   model: ['ANTHROPIC_MODEL', 'string'], apiVersion: ['ANTHROPIC_VERSION', 'string'],
@@ -55,6 +58,7 @@ export function userConfigEnvironment(settings) {
     env[variable] = typeof value === 'boolean' ? (value ? '1' : '0') : String(value);
   }
   // Validate file values independently so an environment override cannot hide bad configuration.
+  if (settings.configurationProfile !== undefined && !['pr16-quality', 'pi'].includes(settings.configurationProfile)) throw new ConfigError('Configuration profile must be pr16-quality or pi');
   loadConfig({}, env);
   return env;
 }
