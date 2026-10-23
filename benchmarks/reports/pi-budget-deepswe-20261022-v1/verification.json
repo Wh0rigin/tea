@@ -1,0 +1,15 @@
+{
+  "submittedRequests": 223,
+  "attempts": 4,
+  "unknownAttempts": 2,
+  "requestCountsHashesControlsInitialSnapshotsMatched": true,
+  "completeAllAttemptTokens": null,
+  "noRetry": true,
+  "artifactHashes": {
+    "preflight.json": "135fcad3ded22daaea9d6359908631b82f9c0364739e3a00e3f2c657454387fc",
+    "protocol.json": "5305a1dc6cb608f409d75bd1811d30793f36fe0357fafdb4b680c3d994bd3c78",
+    "README.md": "8818c18f55eba84d4d1c933a4bd06d22397c9071575a073f6d80ed7ec2b79924",
+    "results.json": "427dc6642861439b95b72c0b1108a5d1d781bcb011b3db02cb403d882a8ad880",
+    "RESULTS.zh-CN.md": "0e2258a745a535994ddb8efd3a48c63c945c30a980f1b79c1c0b42d33a29504e"
+  }
+}
