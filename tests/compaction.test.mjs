@@ -350,3 +350,13 @@ test('summary reserve configuration rejects invalid integers', () => {
     assert.throws(() => loadConfig({}, { TEA_COMPACTION_RESERVE_TOKENS: value }));
   }
 });
+
+
+test('Pi-style summaries retain the middle of historical tool evidence', () => {
+  const state = session();
+  const marker = 'IMPORTANT_MIDDLE_FAILURE_DETAILS';
+  state.messages[2].content[0].content = 'a'.repeat(4000) + marker + 'z'.repeat(4000);
+  const plan = prepareCompaction(state, cfg({ contextBudgetPolicy: 'pi' }));
+  assert.equal(plan.status, 'prepared');
+  assert.ok(plan.request.messages[0].content.includes(marker));
+});

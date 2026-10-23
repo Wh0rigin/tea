@@ -268,7 +268,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       automaticCompactions: autoCompactionAttempts, emergencyCompactions: 0 };
   };
   try {
-    while (toolCalls <= config.maxToolCalls) {
+    while (toolCalls <= (config.maxToolCalls ?? Infinity)) {
       if (signal?.aborted) { status = 'cancelled'; break; }
       let result;
       try {
@@ -279,7 +279,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         const currentBytes = requestBytes(config, prepared.request), currentResidentBytes = residentHistoryBytes(session);
         const cooledDown = !backoff || currentBytes >= backoff.requestBytes + Math.max(4096, backoff.requestBytes * 0.25)
           || currentResidentBytes >= backoff.residentBytes + Math.max(4096, backoff.residentBytes * 0.25);
-        while (config.compaction === 'auto' && !session.budgetUnknown && !autoCompactionFailedThisTurn && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? 2)
+        while (config.compaction === 'auto' && !session.budgetUnknown && (!autoCompactionFailedThisTurn || config.contextBudgetPolicy === 'pi') && cooledDown && autoCompactionAttempts < (config.compactionMaxPerTurn ?? (config.contextBudgetPolicy === 'pi' ? Infinity : 2))
           && ((contextBudget(config, prepared.request, adapter.contextTokenScale)?.estimatedInputTokens ?? 0) >=
               (contextBudget(config, prepared.request, adapter.contextTokenScale)?.triggerTokens ?? Infinity)
             || requestBytes(config, prepared.request) >= config.maxRequestInputTokens * (config.contextWindowTokens ? 0.95 : (config.compactionTriggerRatio ?? 0.8))
@@ -349,7 +349,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           onText('\nAgent stopped because the response reached its output-token limit.');
           break;
         }
-        if (pendingValidation && forcedValidationNudges < 2 && toolCalls < config.maxToolCalls) {
+        if (pendingValidation && forcedValidationNudges < 2 && toolCalls < (config.maxToolCalls ?? Infinity)) {
           forcedValidationNudges += 1;
           const unresolved = unresolvedValidationCommands(runtimeState());
           await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace checks'}). ${unresolved.length ? `Rerun unresolved commands: ${JSON.stringify(unresolved)}. A different passing command cannot clear them.` : 'No relevant check has passed after the latest edit or workspace change.'} ${unavailableValidationNotice(runtimeState())} If validation cannot be completed, report the outstanding checks; do not claim completion.` });
@@ -367,7 +367,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           continue;
         }
         toolCalls += 1;
-        if (toolCalls > config.maxToolCalls) {
+        if (toolCalls > (config.maxToolCalls ?? Infinity)) {
           status = 'tool_limit_reached';
           toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: 'Tool not executed: tool-call limit reached.', is_error: true });
           continue;

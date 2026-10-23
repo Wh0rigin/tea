@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { normalizeAnthropicUsage } from './usage.mjs';
 import { hasProviderPrices } from './config.mjs';
-import { contextBudget, estimateContextTokens } from './context-budget.mjs';
+import { contextBudget, estimateContextTokens, fitOutputLimit } from './context-budget.mjs';
 
 export class ModelError extends Error {
   constructor(message, status, { code, submitted, budget } = {}) {
@@ -15,7 +15,7 @@ export class ModelError extends Error {
 // Shared by the adapter and compaction preflight. This is the wire payload,
 // including controls; its UTF-8 byte length is not a tokenizer measurement.
 export function buildMessagesRequest(config, { system, messages, tools = [], maxTokens }) {
-  const outputLimit = maxTokens ?? config.maxOutputTokens;
+  const outputLimit = fitOutputLimit(config, { system, messages, tools, maxTokens });
   return {
     model: config.model, max_tokens: outputLimit, stream: config.stream,
     system, messages, tools,
@@ -156,7 +156,8 @@ export class AnthropicMessagesAdapter {
   async complete({ system, messages, tools, maxTokens, signal, onTextDelta }) {
     signal?.throwIfAborted();
     const config = this.config;
-    const outputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
+    const configuredOutputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
+    const outputLimit = fitOutputLimit(config, { system, messages, tools, maxTokens: configuredOutputLimit }, this.contextTokenScale);
     if (this.requestInFlight) throw new ModelError('Concurrent requests are blocked to preserve session accounting');
     const capped = config.maxCostUsd != null;
     const priced = hasProviderPrices(config);
@@ -164,19 +165,17 @@ export class AnthropicMessagesAdapter {
       || [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion].some(value => value !== undefined && (!Number.isFinite(value) || value < 0))
       || !Number.isSafeInteger(config.maxRequestInputTokens) || config.maxRequestInputTokens <= 0
       || !Number.isSafeInteger(config.maxOutputTokens) || config.maxOutputTokens <= 0
+      || !Number.isSafeInteger(configuredOutputLimit) || configuredOutputLimit <= 0
       || !Number.isSafeInteger(outputLimit) || outputLimit <= 0) {
       throw new ModelError('Live requests require valid optional prices, a positive explicit cost cap with prices when configured, and positive integer token limits');
     }
     if (capped && !this.costKnown) throw new ModelError('Cannot apply a monetary cap to a session with unpriced historical spending; start a new session');
-    if (outputLimit > config.maxOutputTokens) throw new ModelError('Request output limit cannot exceed the configured maxOutputTokens cap');
+    if (configuredOutputLimit > config.maxOutputTokens) throw new ModelError('Request output limit cannot exceed the configured maxOutputTokens cap');
     if (!['adaptive', 'enabled'].includes(config.thinkingMode)) throw new ModelError('Unsupported thinking mode');
     if (!['low', 'high', 'max'].includes(config.effort)) throw new ModelError('Unsupported reasoning effort');
     // No interleaved-thinking beta header is sent. Manual thinking needs a
     // 1024-token minimum and budget_tokens strictly below this request's limit.
     // https://platform.claude.com/docs/en/build-with-claude/extended-thinking
-    if (config.thinkingMode === 'enabled' && outputLimit <= 1024) {
-      throw new ModelError('Enabled thinking requires max_tokens greater than 1024; choose a compatible output limit');
-    }
     const body = buildMessagesRequest(config, { system, messages, tools, maxTokens: outputLimit });
     const requestId = randomUUID();
     const url = `${config.baseUrl}/v1/messages`;
@@ -187,6 +186,9 @@ export class AnthropicMessagesAdapter {
       throw new ModelError(`Request blocked by model context budget: estimated input ${tokenBudget.estimatedInputTokens} tokens exceeds ${tokenBudget.inputLimit}; compact or start a new conversation`, undefined,
         { code: 'MODEL_CONTEXT_LIMIT', submitted: false, budget: { ...tokenBudget,
           requestBytes, maxWireBytes: config.maxRequestInputTokens, outputLimit } });
+    }
+    if (config.thinkingMode === 'enabled' && outputLimit <= 1024) {
+      throw new ModelError('Enabled thinking requires max_tokens greater than 1024; choose a compatible output limit');
     }
     if (conservativeInputBound > config.maxRequestInputTokens) {
       throw new ModelError(`Request blocked: serialized request is ${conservativeInputBound} bytes; per-request wire limit is ${config.maxRequestInputTokens} bytes`, undefined,

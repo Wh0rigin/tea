@@ -11,8 +11,17 @@ export function estimateContextTokens(request, scale = 1) {
 
 export function contextBudget(config, request, scale = 1) {
   if (!config.contextWindowTokens) return null; // Legacy SDK/experiment configurations.
-  const inputLimit = config.contextWindowTokens - (request.maxTokens ?? config.maxOutputTokens) - config.contextReserveTokens;
+  const inputLimit = config.contextWindowTokens - config.contextReserveTokens
+    - (config.contextBudgetPolicy === 'pi' ? 0 : (request.maxTokens ?? config.maxOutputTokens));
   return { estimatedInputTokens: estimateContextTokens(request, scale), inputLimit,
     triggerTokens: Math.floor(inputLimit * config.compactionTriggerRatio),
     contextWindowTokens: config.contextWindowTokens, source: 'local-estimate' };
+}
+
+// Retain the configured output ceiling when space permits; reduce this request's
+// allowance near the window instead of reserving the entire ceiling on every turn.
+export function fitOutputLimit(config, request, scale = 1) {
+  const ceiling = request.maxTokens ?? config.maxOutputTokens;
+  if (config.contextBudgetPolicy !== 'pi' || !config.contextWindowTokens) return ceiling;
+  return Math.min(ceiling, Math.max(1, config.contextWindowTokens - estimateContextTokens(request, scale)));
 }

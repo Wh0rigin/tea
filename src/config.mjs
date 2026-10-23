@@ -49,15 +49,17 @@ export function loadConfig(options = {}, env = process.env) {
 
   const compaction = String(options.compaction || env.TEA_COMPACTION || 'auto').toLowerCase();
   if (!['off', 'auto'].includes(compaction)) throw new ConfigError('Compaction must be off or auto');
-  const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, 0.8, 'Compaction trigger ratio');
-  if (compactionTriggerRatio >= 1) throw new ConfigError('Compaction trigger ratio must be less than 1');
+  const contextBudgetPolicy = options.contextBudgetPolicy ?? env.TEA_CONTEXT_BUDGET_POLICY ?? options.defaultContextBudgetPolicy ?? 'reserved-output';
+  if (!['pi', 'reserved-output'].includes(contextBudgetPolicy)) throw new ConfigError('Context budget policy must be pi or reserved-output');
+  const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, contextBudgetPolicy === 'pi' ? 1 : 0.8, 'Compaction trigger ratio');
+  if (compactionTriggerRatio > 1 || (contextBudgetPolicy !== 'pi' && compactionTriggerRatio === 1)) throw new ConfigError('Compaction trigger ratio must be at most 1');
   const contextWindowValue = options.contextWindowTokens ?? env.TEA_CONTEXT_WINDOW_TOKENS ?? options.defaultContextWindowTokens;
   const contextWindowTokens = contextWindowValue === undefined ? undefined : positiveNumber(contextWindowValue, undefined, 'Context window tokens');
-  const contextReserveTokens = positiveNumber(options.contextReserveTokens ?? env.TEA_CONTEXT_RESERVE_TOKENS, 4096, 'Context reserve tokens');
+  const contextReserveTokens = positiveNumber(options.contextReserveTokens ?? env.TEA_CONTEXT_RESERVE_TOKENS, contextBudgetPolicy === 'pi' ? 16384 : 4096, 'Context reserve tokens');
   const configuredOutput = Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, options.defaultMaxOutputTokens ?? 1200, 'TEA_MAX_OUTPUT_TOKENS'));
   if (!Number.isSafeInteger(contextReserveTokens) || (contextWindowTokens !== undefined &&
-    (!Number.isSafeInteger(contextWindowTokens) || contextWindowTokens <= configuredOutput + contextReserveTokens))) {
-    throw new ConfigError('Context window must be a safe integer larger than output plus reserve tokens');
+    (!Number.isSafeInteger(contextWindowTokens) || contextWindowTokens <= (contextBudgetPolicy === 'pi' ? contextReserveTokens : configuredOutput + contextReserveTokens)))) {
+    throw new ConfigError('Context window must be a safe integer larger than output/reserve requirements for its budget policy');
   }
   const maxRequestInputTokens = Math.floor(positiveNumber(options.maxRequestInputBytes ?? env.TEA_MAX_REQUEST_INPUT_BYTES ?? env.TEA_MAX_REQUEST_INPUT_TOKENS,
     options.defaultMaxRequestInputBytes ?? 12000, 'TEA_MAX_REQUEST_INPUT_TOKENS'));
@@ -77,8 +79,17 @@ export function loadConfig(options = {}, env = process.env) {
   if (!Number.isSafeInteger(compactionReserveTokens) || compactionReserveTokens < 2) {
     throw new ConfigError('Compaction reserve tokens must be a safe integer of at least 2');
   }
-  const compactionMaxPerTurn = positiveNumber(env.TEA_COMPACTION_MAX_PER_TURN, 2, 'Compaction attempts per turn');
-  if (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
+  const recentTokenValue = options.compactionKeepRecentTokens ?? env.TEA_COMPACTION_KEEP_RECENT_TOKENS
+    ?? (contextBudgetPolicy === 'pi' && options.compactionKeepRecentBytes === undefined && env.TEA_COMPACTION_KEEP_RECENT_BYTES === undefined ? 20000 : undefined);
+  let compactionKeepRecentTokens = recentTokenValue === undefined ? undefined : positiveNumber(recentTokenValue, undefined, 'Compaction recent tokens');
+  if (compactionKeepRecentTokens !== undefined && !Number.isSafeInteger(compactionKeepRecentTokens)) throw new ConfigError('Compaction recent tokens must be a safe integer');
+  // Small windows must leave room for the checkpoint and subsequent work.
+  if (contextWindowTokens && compactionKeepRecentTokens !== undefined) {
+    compactionKeepRecentTokens = Math.min(compactionKeepRecentTokens, Math.max(1, Math.floor((contextWindowTokens - contextReserveTokens) / 2)));
+  }
+  const attemptValue = env.TEA_COMPACTION_MAX_PER_TURN;
+  const compactionMaxPerTurn = attemptValue === undefined && contextBudgetPolicy === 'pi' ? null : positiveNumber(attemptValue, 2, 'Compaction attempts per turn');
+  if (compactionMaxPerTurn !== null && (!Number.isInteger(compactionMaxPerTurn) || compactionMaxPerTurn > 8)) throw new ConfigError('Compaction attempts per turn must be an integer from 1 through 8');
   const memoryGc = String(options.memoryGc || env.TEA_MEMORY_GC || 'auto').toLowerCase();
   if (!['auto', 'off'].includes(memoryGc)) throw new ConfigError('Memory GC must be auto or off');
   const memoryCacheBytes = positiveNumber(env.TEA_MEMORY_CACHE_BYTES, 262144, 'Memory cache bytes');
@@ -118,8 +129,8 @@ export function loadConfig(options = {}, env = process.env) {
     maxOutputTokens: Math.floor(positiveNumber(env.TEA_MAX_OUTPUT_TOKENS, options.defaultMaxOutputTokens ?? 1200, 'TEA_MAX_OUTPUT_TOKENS')),
     maxRequestInputTokens,
     maxRequestInputBytes: maxRequestInputTokens,
-    contextWindowTokens, contextReserveTokens,
-    maxToolCalls: Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS')),
+    contextWindowTokens, contextReserveTokens, contextBudgetPolicy,
+    maxToolCalls: (env.TEA_MAX_TOOL_CALLS === undefined && contextBudgetPolicy === 'pi' ? null : Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS'))),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
@@ -136,7 +147,7 @@ export function loadConfig(options = {}, env = process.env) {
     resume,
     compaction,
     compactionTriggerRatio,
-    compactionKeepRecentBytes,
+    compactionKeepRecentBytes, compactionKeepRecentTokens,
     compactionMaxPerTurn,
     compactionReserveTokens,
     memoryGc,
@@ -162,7 +173,7 @@ export function assertLiveConfig(config) {
   for (const value of [config.inputRateUsdPerMillion, config.outputRateUsdPerMillion, config.cacheCreationRateUsdPerMillion].filter(value => value !== undefined)) {
     if (!Number.isFinite(value) || value < 0) throw new ConfigError('Provider prices must be finite non-negative numbers');
   }
-  for (const field of ['maxOutputTokens', 'maxRequestInputTokens', 'maxToolCalls', 'timeoutMs']) {
+  for (const field of ['maxOutputTokens', 'maxRequestInputTokens', 'timeoutMs', ...(config.maxToolCalls === null ? [] : ['maxToolCalls'])]) {
     if (!Number.isSafeInteger(config[field]) || config[field] <= 0) throw new ConfigError(`${field} must be a positive safe integer`);
   }
   if (config.maxInputTokens !== undefined && (!Number.isSafeInteger(config.maxInputTokens) || config.maxInputTokens <= 0)) throw new ConfigError('maxInputTokens must be a positive safe integer');
@@ -170,6 +181,7 @@ export function assertLiveConfig(config) {
 
 export function loadCliConfig(options = {}, env = process.env) {
   return loadConfig({ ...options,
+    defaultContextBudgetPolicy: 'pi',
     defaultMemoryPolicy: options.historyStrategy || env.TEA_HISTORY_STRATEGY ? undefined : 'contextos',
     defaultMaxRequestInputBytes: 2097152, defaultMaxOutputTokens: 4096, defaultContextWindowTokens: 32768,
     defaultCompactionKeepRecentBytes: 16000,

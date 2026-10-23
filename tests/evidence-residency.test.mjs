@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { ContextMemory, validToolProtocol } from '../src/context-assembler.mjs';
 import { WorkspaceTools } from '../src/tools.mjs';
-import { loadConfig } from '../src/config.mjs';
+import { loadConfig, loadCliConfig } from '../src/config.mjs';
+import { contextBudget } from '../src/context-budget.mjs';
 import { createAgentSession, runTask } from '../src/agent.mjs';
 
 const pair = (id, name, input, output) => [
@@ -219,4 +220,28 @@ test('working set cannot exceed its byte allowance or revive omitted source', as
  assert.equal(bounded.diagnostics.units.find(u => u.path === 'module.mjs').decision, 'reference');
  const omitted = await assemble(messages, { messages: [messages[0], ...recent()], config: { ...config, contextosWorkingSetBytes: 24000 } });
  assert.doesNotMatch(JSON.stringify(omitted.request.messages), /current-中文-0/);
+}));
+
+test('working-set residency and freshness coexist with main Pi CLI budgets', async () => scenario(async ({ root, tools, assemble }) => {
+ const env = { TEA_CONTEXT_WINDOW_TOKENS: '216000', TEA_MAX_OUTPUT_TOKENS: '131072' };
+ const options = { workspace: root, memoryPolicy: 'contextos', contextosTargetBytes: 4000 };
+ const baselineConfig = loadCliConfig(options, env);
+ const config = loadCliConfig(options, { ...env, TEA_CONTEXTOS_WORKING_SET_BYTES: '24000' });
+ assert.equal(baselineConfig.contextosWorkingSetBytes, 0);
+ assert.equal(config.contextBudgetPolicy, 'pi');
+ assert.equal(contextBudget(config, { messages: [] }).triggerTokens, 199616);
+ assert.equal(config.compactionKeepRecentTokens, 20000);
+ assert.equal(config.compactionMaxPerTurn, null);
+ await writeFile(path.join(root, 'module.mjs'), source('current'));
+ const messages = [{ role: 'user', content: 'Inspect all' }, ...pair('pi-working', 'read_file', { path: 'module.mjs' }, await tools.readFile({ path: 'module.mjs' })), ...recent()];
+ const baseline = await assemble(messages, { config: baselineConfig, commit: false });
+ assert.equal(baseline.diagnostics.units.find(u => u.path === 'module.mjs').decision, 'reference');
+ const candidate = await assemble(messages, { config });
+ assert.match(JSON.stringify(candidate.request.messages), /current-中文-0/);
+ assert.equal(validToolProtocol(candidate.request.messages), true);
+ assert.match(await tools.readFile({ path: 'module.mjs' }), /^Evidence unchanged;/);
+ await writeFile(path.join(root, 'module.mjs'), source('external'));
+ const stale = await assemble(messages, { config });
+ assert.equal(stale.diagnostics.staleUnits, 1);
+ assert.doesNotMatch(JSON.stringify(stale.request.messages), /current-中文-0/);
 }));
