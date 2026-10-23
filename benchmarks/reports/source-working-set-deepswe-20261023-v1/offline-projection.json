@@ -1,0 +1,19 @@
+{
+  "selfAuthoredScriptedConsumer": true,
+  "providerCalls": 0,
+  "unit": "serialized UTF-8 bytes, not provider tokens",
+  "results": [
+    {
+      "allowance": 0,
+      "firstRequestBytes": 5921,
+      "sourceAcquisitionRequestBytes": 20155,
+      "additionalRetrievals": 1
+    },
+    {
+      "allowance": 24000,
+      "firstRequestBytes": 8363,
+      "sourceAcquisitionRequestBytes": 8363,
+      "additionalRetrievals": 0
+    }
+  ]
+}

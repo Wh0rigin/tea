@@ -66,6 +66,11 @@ export function loadConfig(options = {}, env = process.env) {
   const contextosTargetBytes = positiveNumber(options.contextosTargetBytes ?? env.TEA_CONTEXTOS_TARGET_BYTES,
     options.defaultContextosTargetBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * .5)), 'ContextOS target bytes');
   if (!Number.isSafeInteger(contextosTargetBytes)) throw new ConfigError('ContextOS target bytes must be a positive safe integer');
+  const workingSetValue = options.contextosWorkingSetBytes ?? env.TEA_CONTEXTOS_WORKING_SET_BYTES ?? 0;
+  const contextosWorkingSetBytes = Number(workingSetValue);
+  if (!Number.isSafeInteger(contextosWorkingSetBytes) || contextosWorkingSetBytes < 0 || contextosWorkingSetBytes > 262144) {
+    throw new ConfigError('ContextOS working set bytes must be an integer from 0 through 262144');
+  }
   const compactionKeepRecentBytes = positiveNumber(options.compactionKeepRecentBytes ?? env.TEA_COMPACTION_KEEP_RECENT_BYTES,
     options.defaultCompactionKeepRecentBytes ?? Math.max(1, Math.floor(maxRequestInputTokens * 0.3)), 'Compaction recent bytes');
   if (!Number.isSafeInteger(compactionKeepRecentBytes)) throw new ConfigError('Compaction recent bytes must be a positive safe integer');
@@ -137,7 +142,7 @@ export function loadConfig(options = {}, env = process.env) {
     historyStrategy: options.memoryPolicy || env.TEA_MEMORY_POLICY ? (memoryPolicy === 'compact-tools' ? 'compact-tools' : 'full') : historyStrategy,
     historyKeepRecent,
     memoryPolicy,
-    contextosTargetBytes,
+    contextosTargetBytes, contextosWorkingSetBytes,
     contextosKeepRecent: historyKeepRecent,
     sessionId,
     resume,

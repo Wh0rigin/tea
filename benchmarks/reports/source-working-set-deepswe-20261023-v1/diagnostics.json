@@ -1,0 +1,527 @@
+{
+  "scope": "Observed tool operations, native runtime and model-generated patch only; no hidden verifier/reference source or private model reasoning.",
+  "runs": [
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/manifest_stream_test.go"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [],
+      "toolCounts": {
+        "read_file": 22,
+        "run_shell": 13,
+        "search_code": 12,
+        "recall_context": 3,
+        "write_file": 2,
+        "apply_patch": 7,
+        "run_tests": 8
+      },
+      "firstEditToolOrdinal": 35,
+      "repeatedIdenticalReadSearchRecallCalls": 2,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest.go"
+          },
+          "count": 2
+        },
+        {
+          "tool": "search_code",
+          "input": {
+            "path": "pkg/cmd",
+            "query": "Happy Helming"
+          },
+          "count": 2
+        }
+      ],
+      "toolErrors": [
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Outside the frozen benchmark command policy; use a documented validation or CLI entry\n[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied "
+        },
+        {
+          "tool": "apply_patch",
+          "outputHead": "Patch search text was not found; all edits remain unapplied\n[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refre"
+        },
+        {
+          "tool": "apply_patch",
+          "outputHead": "Patch search text was not found; all edits remain unapplied\n[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refre"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\ntime=\"2026-10-22T16:58:54Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"\ntime=\"2026-10-22T16:58:54.473027669Z\" level=warning msg=\"No HTTP secret provided - generated random se"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Outside the frozen benchmark command policy; use a documented validation or CLI entry\n[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied "
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git -C /app status && git -C /app log --oneline -3",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git log --oneline -3",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "gofmt -l pkg/cmd",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go build ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/... 2>&1 | tail -40",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/... -run 'TestTemplate|TestUpgrade|TestInstall|TestGetManifest|TestStatus' ",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git diff --stat -- pkg/cmd/testdata",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git diff -- pkg/cmd/testdata/output/upgrade-dry-run-golden.txt pkg/cmd/testdata/output/install-dry-run-golden.txt pkg/cmd/testdata/output/get-manifest-with-hooks-golden.txt",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git diff -- pkg/cmd/testdata/output/install-dry-run-with-secret.txt pkg/cmd/testdata/output/get-manifest.txt pkg/cmd/testdata/output/get-release.txt",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "grep -c HOOKS pkg/cmd/testdata/output/install-dry-run-with-secret.txt",
+          "exitPrefix": "Outside the frozen benchmark command policy; use a documented validation or CLI entry"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -run 'TestBuildUnifiedManifestStream' -v",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go vet ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add -A",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output without new flags\n\nEmit one stable, reproducible manifest stream across helm template,\ninstall/upgrade dry-runs, and helm get manifest: documents sorted by\nfull Source path, in-file order preserved, hooks included and placed\nbefore non-hooks sharing a Source path. Dry-run output now shows a\nsingle MANIFEST section without extra trailing blank lines, template\noutput ends with a trailing newline, and upgrade dry-runs no longer\nprint the Happy Helming! success line.\"",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output\"",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "testFailureSignals": [
+        {
+          "command": "go test ./pkg/cmd/... 2>&1 | tail -40",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/... -run 'TestTemplate|TestUpgrade|TestInstall|TestGetManifest|TestStatus' ",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        }
+      ],
+      "compactionRequests": [],
+      "compactionEvents": [],
+      "patch": {
+        "exists": true,
+        "sha256": "36e890445f09cef8be4c29962bd5a94fe3c41d1629ba651ff9f9f6a55e53bfd4",
+        "bytes": 40254,
+        "processCreationLines": [],
+        "selfAuthoredAssertionLines": []
+      }
+    },
+    {
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "nativeStatus": "completed",
+      "nativeError": null,
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/get_manifest_test.go"
+      ],
+      "validationFailures": [],
+      "validationUnavailable": [],
+      "validationPassed": true,
+      "officialFailureNames": [],
+      "toolCounts": {
+        "read_file": 41,
+        "run_shell": 10,
+        "search_code": 23,
+        "recall_context": 11,
+        "search_history": 1,
+        "write_file": 1,
+        "apply_patch": 9,
+        "run_tests": 9
+      },
+      "firstEditToolOrdinal": 66,
+      "repeatedIdenticalReadSearchRecallCalls": 17,
+      "repeatedInputs": [
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest.go"
+          },
+          "count": 6
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/upgrade.go"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/template.go"
+          },
+          "count": 4
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/v1/util/manifest_sorter.go"
+          },
+          "count": 3
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/status.go"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/release/interfaces.go"
+          },
+          "count": 2
+        },
+        {
+          "tool": "recall_context",
+          "input": {
+            "maxBytes": 8000,
+            "ref": "ctx-2777eec4263f84055dea"
+          },
+          "count": 2
+        },
+        {
+          "tool": "read_file",
+          "input": {
+            "path": "pkg/cmd/get_manifest_test.go"
+          },
+          "count": 2
+        }
+      ],
+      "toolErrors": [
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        },
+        {
+          "tool": "apply_patch",
+          "outputHead": "Patch search text was not found; all edits remain unapplied\n[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refre"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\n\nstderr:\n# helm.sh/helm/v4/pkg/cmd\npkg/cmd/get_manifest.go:20:2: \"fmt\" imported and not used\n\n[tool_feedback] {\"version\":1,\"code\":\"VALIDATION_FAILED\",\"retryable\":false,\"missingCapability\":\"passing-validation\",\"next\":\"Inspect "
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\ntime=\"2026-10-22T17:16:48Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"\ntime=\"2026-10-22T17:16:48.197528496Z\" level=warning msg=\"No HTTP secret provided - generated random se"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\nFAIL\thelm.sh/helm/v4/pkg/cmd [build failed]\nFAIL\n\nstderr:\n# helm.sh/helm/v4/pkg/cmd [helm.sh/helm/v4/pkg/cmd.test]\npkg/cmd/get_manifest_test.go:73:16: out.String undefined (type string has no field or method String)\n\n[tool_fe"
+        },
+        {
+          "tool": "run_tests",
+          "outputHead": "exit=1\nstdout:\n=== RUN   TestGetManifestHookBeforeNonHookWithSameSource\n    get_manifest_test.go:71: \n        \tError Trace:\t/app/pkg/cmd/get_manifest_test.go:71\n        \tError:      \tReceived unexpected error:\n        \t            \trelease:"
+        },
+        {
+          "tool": "search_code",
+          "outputHead": "ENOENT: no such file or directory, realpath '/app/pkg/cmd/helm_test.go'\n[tool_feedback] {\"version\":1,\"code\":\"INPUT_INVALID\",\"retryable\":false,\"missingCapability\":\"valid-input\",\"next\":\"Correct the input using workspace-relative paths and doc"
+        },
+        {
+          "tool": "run_shell",
+          "outputHead": "Shell operators and multiline commands are blocked\n[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation en"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "run_shell",
+          "command": "git status && git log --oneline -3",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git log --oneline -3",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git switch -c unified-manifest-stream main",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git branch --show-current",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git branch --show-current",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go build ./pkg/cmd/... ./pkg/action/...",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go build ./pkg/cmd/... ./pkg/action/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -run TestTemplateCmd -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -update",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -run TestGetManifestHookBeforeNonHookWithSameSource -v",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -run TestGetManifestHookBeforeNonHookWithSameSource -v",
+          "exitPrefix": "exit=1"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/ -run TestGetManifestHookBeforeNonHookWithSameSource -v",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_tests",
+          "command": "go test ./pkg/cmd/...",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git status --short",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git add pkg/cmd/manifest_stream.go pkg/cmd/template.go pkg/cmd/status.go pkg/cmd/get_manifest.go pkg/cmd/get_manifest_test.go pkg/cmd/upgrade.go pkg/cmd/testdata/output",
+          "exitPrefix": "exit=0"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output\n\nEmit one stable, reproducible manifest stream from helm template,\ninstall/upgrade dry-run, and helm get manifest, without new flags.\n\n- Documents ordered lexicographically by full Source path; hooks included\n- Multi-document YAML keeps rendered top-to-bottom order within a file\n- Dry-run output shows a single MANIFEST section with no extra blank lines\n- get manifest places hooks before non-hooks sharing a Source path\n- helm template output ends with a trailing newline\n- upgrade dry-run no longer prints the Happy Helming! success line\"",
+          "exitPrefix": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "tool": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output: order documents lexicographically by full Source path, include hooks, single MANIFEST section for dry-runs, hooks before non-hooks on same Source for get manifest, trailing newline for template, and suppress Happy Helming! on upgrade dry-run\"",
+          "exitPrefix": "exit=0"
+        }
+      ],
+      "testFailureSignals": [
+        {
+          "command": "go build ./pkg/cmd/... ./pkg/action/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetManifestHookBeforeNonHookWithSameSource -v",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetManifestHookBeforeNonHookWithSameSource -v",
+          "signals": [
+            "        \t            \trelease: not found"
+          ]
+        }
+      ],
+      "compactionRequests": [
+        {
+          "requestId": "c96a45ba-d041-4a3b-8173-05e2715b3c0e",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 16017,
+            "output_tokens": 1245,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 53779,
+          "elapsedMs": 18762
+        },
+        {
+          "requestId": "0cf1c593-6383-4db6-82ef-301a78b8d5a3",
+          "purpose": "compaction",
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 17087,
+            "output_tokens": 1557,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true,
+          "estimatedInputTokens": 56439,
+          "elapsedMs": 21473
+        }
+      ],
+      "compactionEvents": [
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        },
+        {
+          "type": "compaction_end",
+          "status": "compacted",
+          "reason": "threshold",
+          "detail": null
+        }
+      ],
+      "patch": {
+        "exists": true,
+        "sha256": "a3dec51f8c95c60278022451bd1ac22294eb92bfe0e4db4aff0963b97f8d689d",
+        "bytes": 43713,
+        "processCreationLines": [],
+        "selfAuthoredAssertionLines": []
+      }
+    }
+  ],
+  "workingSetActivationSnapshots": [
+    {
+      "repeat": 1,
+      "assemblies": 31,
+      "residentWorkingSetOccurrences": 136,
+      "additionalOlderSourceOccurrences": 84,
+      "maxSelectedBodyBytes": 23906,
+      "onlyMemoryAssemblyMetadata": true
+    }
+  ],
+  "finishedActivationLimitation": "Finished-container scan did not locate matching retained containers; only captured live memory-assembly snapshots are independently confirmed."
+}

@@ -227,6 +227,29 @@ export class ContextMemory {
     for (const unit of this.units.values()) {
       if (unit.path && (rounds.slice(-2).includes(unit.messageIndex) || goal.toLowerCase().includes(unit.path.toLowerCase()))) activeFiles.add(unit.path);
     }
+    // Experimental bounded recent source residency, selected from the actual
+    // projection only. Never resurrect a source body covered by a checkpoint.
+    const workingSet = new Set(), workingPaths = new Set();
+    let workingBytes = 0;
+    const candidates = [];
+    if (config.contextosWorkingSetBytes > 0) for (let index = 1; index < messages.length; index++) {
+      const message = messages[index];
+      if (message.role !== 'user' || !Array.isArray(message.content)) continue;
+      const calls = Array.isArray(messages[index - 1]?.content) ? messages[index - 1].content : [];
+      for (const block of message.content) {
+        if (block.type !== 'tool_result') continue;
+        const call = calls.find(c => c.type === 'tool_use' && c.id === block.tool_use_id);
+        const unit = call && this.units.get(refFor(call, block));
+        if (unit?.kind === 'source_evidence' && unit.path && unit.sourceHash && !unit.error
+          && /^\d+: /m.test(unit.output)) candidates.push(unit);
+      }
+    }
+    for (const unit of candidates.reverse()) {
+      if (workingPaths.has(unit.path) || workingPaths.size >= 8) continue;
+      workingPaths.add(unit.path);
+      if (workingBytes + unit.bytes > (config.contextosWorkingSetBytes ?? 0)) continue;
+      workingBytes += unit.bytes; workingSet.add(unit.ref);
+    }
     const decisions = [], selected = [];
     const projected = messages.map((message, index) => {
       if (message.role !== 'user' || !Array.isArray(message.content)) return message;
@@ -238,10 +261,10 @@ export class ContextMemory {
         if (!call) return block;
         const ref = refFor(call, block), unit = this.units.get(ref);
         if (!unit) return block;
-        const pinned = recent.has(index) || unit.error || !evictable(unit)
+        const pinned = workingSet.has(ref) || recent.has(index) || unit.error || !evictable(unit)
           || (unit.path && (activeFiles.has(unit.path) || /(?:^|[\\/])(?:AGENTS\.md|README(?:\.[^/\\]+)?)$/i.test(unit.path)));
         decisions.push({ ref, path: unit.path, kind: unit.kind, provenance: unit.provenance, bytes: unit.bytes,
-          estimatedTokens: estimateTextTokens(unit.output), decision: 'resident', reason: pinned ? 'recent-active-or-protected' : 'recoverable-older-output', validity: unit.validity });
+          estimatedTokens: estimateTextTokens(unit.output), decision: 'resident', reason: workingSet.has(ref) ? 'source-working-set' : pinned ? 'recent-active-or-protected' : 'recoverable-older-output', validity: unit.validity });
         if (pinned || before <= (config.contextosTargetBytes ?? Math.floor(config.maxRequestInputTokens * .5))) return block;
         const replacement = `[ContextOS historical ${unit.kind}; ref=${ref}; bytes=${unit.bytes}] Recover details with recall_context. This is not current validation.`;
         if (bytes(replacement) >= unit.bytes) return block;

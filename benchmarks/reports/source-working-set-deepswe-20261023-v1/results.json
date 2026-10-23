@@ -1,0 +1,302 @@
+{
+  "candidate": {
+    "schemaVersion": 1,
+    "benchmark": "deepswe",
+    "scope": "six previously seen tasks overall; two repeats; no unseen/full-benchmark claim",
+    "status": "completed",
+    "plannedAttempts": 2,
+    "runs": [
+      {
+        "arm": "tea",
+        "taskId": "helm-unified-manifest-stream",
+        "repeat": 1,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 1,
+          "f2p_total": 5,
+          "f2p_passed": 5,
+          "p2p_total": 2,
+          "p2p_passed": 2
+        },
+        "officialFullPass": true,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 44,
+        "providerSubmittedRequests": 44,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 683031,
+          "output_tokens": 11422,
+          "cache_read_input_tokens": 132992,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 827445,
+        "reportedTokenLowerBound": 827445,
+        "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+        "toolCallsByName": {
+          "read_file": 22,
+          "run_shell": 13,
+          "search_code": 12,
+          "recall_context": 3,
+          "write_file": 2,
+          "apply_patch": 7,
+          "run_tests": 8
+        },
+        "toolErrorsByName": {
+          "run_shell": 4,
+          "apply_patch": 2,
+          "run_tests": 3
+        },
+        "compactionRequests": 0,
+        "adoptedCompactions": 0,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      },
+      {
+        "arm": "tea",
+        "taskId": "helm-unified-manifest-stream",
+        "repeat": 2,
+        "agentStatus": "completed",
+        "terminalSummaryPresent": true,
+        "officialGrade": {
+          "reward": 1,
+          "f2p_total": 5,
+          "f2p_passed": 5,
+          "p2p_total": 2,
+          "p2p_passed": 2
+        },
+        "officialFullPass": true,
+        "metered": true,
+        "requestCountMatched": true,
+        "requestHashesMatched": true,
+        "wireUsageMatched": true,
+        "allSubmittedStreamsComplete": true,
+        "controlProfileMatched": true,
+        "clientRequests": 69,
+        "providerSubmittedRequests": 69,
+        "unknownSubmittedRequests": [],
+        "knownNotSubmittedGuards": [],
+        "tokenComponents": {
+          "input_tokens": 1167702,
+          "output_tokens": 22889,
+          "cache_read_input_tokens": 155776,
+          "cache_creation_input_tokens": 0
+        },
+        "totalTokens": 1346367,
+        "reportedTokenLowerBound": 1346367,
+        "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+        "initialBaseMatchesProtocol": true,
+        "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+        "toolCallsByName": {
+          "read_file": 41,
+          "run_shell": 10,
+          "search_code": 23,
+          "recall_context": 11,
+          "search_history": 1,
+          "write_file": 1,
+          "apply_patch": 9,
+          "run_tests": 9
+        },
+        "toolErrorsByName": {
+          "run_shell": 2,
+          "apply_patch": 1,
+          "run_tests": 4,
+          "search_code": 1
+        },
+        "compactionRequests": 2,
+        "adoptedCompactions": 2,
+        "errorCode": null,
+        "validationPassedByTea": true,
+        "nativePiLastStop": null,
+        "nativePiErrorCategory": null,
+        "taskOutputLimitStops": 0,
+        "originalControlAllocationUsd": 10
+      }
+    ],
+    "pairs": [],
+    "aggregates": {
+      "tea": {
+        "planned": 2,
+        "attempted": 2,
+        "officialEvaluated": 2,
+        "officialFullPassed": 2,
+        "nativeCompletedAndOfficialPassed": 2,
+        "meteredAttempts": 2,
+        "allAttemptTokens": 2173812,
+        "reportedTokenLowerBound": 2173812
+      },
+      "pi": {
+        "planned": 0,
+        "attempted": 0,
+        "officialEvaluated": 0,
+        "officialFullPassed": 0,
+        "nativeCompletedAndOfficialPassed": 0,
+        "meteredAttempts": 0,
+        "allAttemptTokens": 0,
+        "reportedTokenLowerBound": 0
+      }
+    },
+    "bothPassedEfficiency": {
+      "pairs": 0,
+      "teaTokens": null,
+      "piTokens": null,
+      "teaTokenReductionPercent": null
+    },
+    "unknownReservations": [],
+    "protocolSha256": "3dd0d48b0714ad3a3478fbaab425c9f7f6031781fa29fdf1a861deb3914c2b9c",
+    "sortedJsonProtocolSha256": "d716a0412c1bb66de82d119e5222207817479d27eac6f7cf236d0e74e50c99ea",
+    "unstarted": []
+  },
+  "baselineRuns": [
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 1,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": false,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 65,
+      "providerSubmittedRequests": 65,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 1077311,
+        "output_tokens": 19041,
+        "cache_read_input_tokens": 189568,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 1285920,
+      "reportedTokenLowerBound": 1285920,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {
+        "read_file": 47,
+        "run_shell": 8,
+        "run_tests": 21,
+        "search_code": 17,
+        "recall_context": 6,
+        "write_file": 2,
+        "apply_patch": 4
+      },
+      "toolErrorsByName": {
+        "run_shell": 4,
+        "run_tests": 7
+      },
+      "compactionRequests": 1,
+      "adoptedCompactions": 1,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10
+    },
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "agentStatus": "completed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": true,
+      "metered": true,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": true,
+      "controlProfileMatched": true,
+      "clientRequests": 70,
+      "providerSubmittedRequests": 70,
+      "unknownSubmittedRequests": [],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": {
+        "input_tokens": 1121807,
+        "output_tokens": 24677,
+        "cache_read_input_tokens": 141248,
+        "cache_creation_input_tokens": 0
+      },
+      "totalTokens": 1287732,
+      "reportedTokenLowerBound": 1287732,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {
+        "read_file": 59,
+        "search_code": 25,
+        "recall_context": 9,
+        "run_shell": 12,
+        "write_file": 2,
+        "apply_patch": 5,
+        "run_tests": 5
+      },
+      "toolErrorsByName": {
+        "run_shell": 4,
+        "recall_context": 1,
+        "run_tests": 1
+      },
+      "compactionRequests": 2,
+      "adoptedCompactions": 2,
+      "errorCode": null,
+      "validationPassedByTea": true,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10
+    }
+  ],
+  "pairs": [
+    {
+      "repeat": 1,
+      "baselineTokens": 1285920,
+      "candidateTokens": 827445,
+      "tokenChangePercent": -35.653462112728626,
+      "bothOfficialPassed": false
+    },
+    {
+      "repeat": 2,
+      "baselineTokens": 1287732,
+      "candidateTokens": 1346367,
+      "tokenChangePercent": 4.553354269366605,
+      "bothOfficialPassed": true
+    }
+  ],
+  "allAttemptTokenReductionPercent": 15.535899958502553,
+  "historicalSequentialComparison": true,
+  "isolatedCausalSavingClaim": false,
+  "screenGate": "passed",
+  "activationIndependentlyConfirmedRepeats": [
+    1
+  ]
+}

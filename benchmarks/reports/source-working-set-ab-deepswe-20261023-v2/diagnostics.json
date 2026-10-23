@@ -1,0 +1,1251 @@
+{
+  "status": "completed",
+  "runs": [
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "baseline",
+      "workingSetBytes": 0,
+      "nativeStatus": "needs_validation",
+      "errorCode": null,
+      "validationPassed": false,
+      "validationFailures": [
+        {
+          "command": "go test ./pkg/action/..."
+        }
+      ],
+      "failedTestSignals": [
+        {
+          "command": "go build ./...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplate",
+          "signals": [
+            "--- FAIL: TestTemplateCmd (0.13s)",
+            "    --- FAIL: TestTemplateCmd/check_name (0.00s)"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestInstall|TestUpgrade|TestStatusCmd|TestGetManifest|TestRelease' -update",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGet",
+          "signals": [
+            "--- FAIL: TestGetCmd (0.00s)",
+            "    --- FAIL: TestGetCmd/get_all_with_a_release (0.00s)"
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/ -run 'TestInstall|TestUpgrade'",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        }
+      ],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/template.go"
+      ],
+      "toolCounts": {
+        "read_file": 79,
+        "run_shell": 13,
+        "search_code": 30,
+        "recall_context": 15,
+        "write_file": 1,
+        "apply_patch": 12,
+        "run_tests": 38
+      },
+      "toolErrorCounts": {
+        "run_shell": 6,
+        "apply_patch": 7,
+        "run_tests": 12
+      },
+      "validationCommands": [
+        {
+          "command": "go build ./...",
+          "error": true,
+          "resultHead": "Command timed out after 120000 ms"
+        },
+        {
+          "command": "go build ./...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplate",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplate -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestInstall|TestUpgrade|TestStatusCmd|TestGetManifest|TestRelease' -update",
+          "error": true,
+          "resultHead": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestUpgradeCmd -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestInstallCmd -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestStatusCmd -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetManifestCmd -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestInstall -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetManifest -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplate",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestUpgrade",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestStatus",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestRelease",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetManifest",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestInstall",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGet",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestList",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestRollback",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplateCmdWith",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetCmd -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplate",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGet",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go vet ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/action/ -run 'TestInstall|TestUpgrade'",
+          "error": true,
+          "resultHead": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "go test ./pkg/action/ -run TestInstall",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/ -run TestUpgrade",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestTemplate",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        }
+      ],
+      "firstEditToolOrdinal": 116,
+      "repeatedIdenticalReadSearchRecallCalls": 39,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 23503,
+            "output_tokens": 1211,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        },
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 14123,
+            "output_tokens": 1382,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "workingSetBytes": 0
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 96,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [],
+      "patchSha256": "1f477d0ef25449cc083ef4cf8b6367e15693e7863af05cc9f673e4b2bb26e1a2"
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "pairRepeat": 1,
+      "variant": "candidate",
+      "workingSetBytes": 24000,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "go test ./pkg/cmd/... 2>&1 | tail -80",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestUnifiedManifestStream|TestTemplate|TestUpgrade|TestInstall|TestGetManifest|TestGetRelease|TestStatus'",
+          "signals": []
+        }
+      ],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/manifest_stream_test.go"
+      ],
+      "toolCounts": {
+        "read_file": 37,
+        "run_shell": 13,
+        "search_code": 27,
+        "list_files": 2,
+        "recall_context": 3,
+        "write_file": 3,
+        "apply_patch": 9,
+        "run_tests": 8
+      },
+      "toolErrorCounts": {
+        "run_shell": 5,
+        "apply_patch": 4,
+        "run_tests": 3,
+        "write_file": 1
+      },
+      "validationCommands": [
+        {
+          "command": "go build ./pkg/cmd/... ./pkg/release/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/... 2>&1 | tail -80",
+          "error": true,
+          "resultHead": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go vet ./pkg/cmd/",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestUnifiedManifestStream|TestTemplate|TestUpgrade|TestInstall|TestGetManifest|TestGetRelease|TestStatus'",
+          "error": true,
+          "resultHead": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 65,
+      "repeatedIdenticalReadSearchRecallCalls": 10,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 21122,
+            "output_tokens": 1190,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 60,
+        "residentWorkingSetOccurrences": 242,
+        "additionalOlderSourceOccurrences": 178,
+        "maxSelectedBodyBytes": 23884,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [],
+      "patchSha256": "e893227956ba487f36218474b6549098713da65150338d495dbfc7cabc6fb04c"
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 2,
+      "pairRepeat": 1,
+      "variant": "candidate",
+      "workingSetBytes": 24000,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: /usr/local/bin/python: No module named mnamer",
+            "E     ",
+            "E   assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', 'watch', '--movie-dire...', '--stability-interval-ms', '10'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_top_level_files - Asse..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: ",
+            "E   assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', 'watch', '--movie-dire...Please consider filling an issue at\\nhttps://github.com/jkwill87/mnamer/issues along with this report.\\n\\n', stderr='').returncode",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_top_level_files - Asse..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: ",
+            "E     ============================== CRASH REPORT BEGIN ==============================",
+            "E     ",
+            "E     --------------------------------- environment ----------------------------------",
+            "E     ",
+            "E      - date = 2026-10-23",
+            "E      - platform = Linux-6.17.0-22-generic-x86_64-with-glibc2.36",
+            "E      - arguments = ['--daemon-run-once', '--watch', 'watch', '--movie-directory', 'movies', '--daemon-state', 'state.json', '--stability-interval-ms', '10']",
+            "E      - cache location = /root/.cache/mnamer-py3.12.sqlite",
+            "E      - python version = 3.12.12",
+            "E      - mnamer version = 0.0.0",
+            "E      - appdirs version = 1.4.4"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: \u001b[31mUSAGE: mnamer [preferences] [directives] target [targets ...]\u001b[0m",
+            "E     ",
+            "E   assert 2 == 0",
+            "E    +  where 2 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', 'watch', '--movie-dire...10'], returncode=2, stdout='\\x1b[31mUSAGE: mnamer [preferences] [directives] target [targets ...]\\x1b[0m\\n', stderr='').returncode",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_top_level_files - AssertionError: \u001b[31mUSAGE: mnamer [preferences] [directives] target [targets ...]\u001b[0m"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 'watch/movie.mkv -> movies/movie.mkv' in 'watch/movie.mkv -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/movie.mkv\\nwatch/note.tmp -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/note.tmp\\n'",
+            "E    +  where 'watch/movie.mkv -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/movie.mkv\\nwatch/note.tmp -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/note.tmp\\n' = <built-in method replace of str object at 0x72b6e2efad30>('\\\\', '/')",
+            "E    +    where <built-in method replace of str object at 0x72b6e2efad30> = 'watch/movie.mkv -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/movie.mkv\\nwatch/note.tmp -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/note.tmp\\n'.replace",
+            "E    +      where 'watch/movie.mkv -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/movie.mkv\\nwatch/note.tmp -> /tmp/pytest-of-root/pytest-4/test_run_once_dry_run_no_chang0/movies/note.tmp\\n' = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--dry-run', '--watch', 'watch', ...ovie.mkv\\nwatch/note.tmp -> /tmp/pytest-of-root/pytest-4/test_",
+            "FAILED tests/local/test_daemon.py::test_run_once_dry_run_no_changes - Asserti..."
+          ]
+        }
+      ],
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py"
+      ],
+      "toolCounts": {
+        "read_file": 7,
+        "run_shell": 8,
+        "apply_patch": 8,
+        "write_file": 2,
+        "search_code": 7,
+        "run_tests": 7
+      },
+      "toolErrorCounts": {
+        "apply_patch": 1,
+        "run_shell": 2,
+        "run_tests": 5
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 8,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 34,
+        "residentWorkingSetOccurrences": 131,
+        "additionalOlderSourceOccurrences": 98,
+        "maxSelectedBodyBytes": 15138,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [],
+      "patchSha256": "62c0b7a8fc114db9545a03c47a5fb1d73b25aa152f236eb350d1e8302cf5079c"
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "baseline",
+      "workingSetBytes": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tmpd/watch1/a.txt",
+        "tmpd/watch1/b.part",
+        "tmpd/watch1/c.tmp",
+        "tmpd/watch1/sub/d.txt",
+        "tmpd/cfg.json",
+        "tmpd/bad.json",
+        "tmpd/empty.json",
+        "tmpd/movies/a.txt",
+        "tests/local/test_daemon.py",
+        "tmpclean.py"
+      ],
+      "toolCounts": {
+        "run_shell": 25,
+        "list_files": 1,
+        "read_file": 9,
+        "search_code": 4,
+        "apply_patch": 5,
+        "write_file": 11,
+        "run_tests": 4
+      },
+      "toolErrorCounts": {
+        "run_shell": 9
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 10,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "workingSetBytes": 0
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 33,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [],
+      "patchSha256": "f62542a8e2a7b04aa8672ffee2a159ca52123526149c9dadc3e0c5df3121c161"
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 4,
+      "pairRepeat": 2,
+      "variant": "candidate",
+      "workingSetBytes": 24000,
+      "nativeStatus": "needs_validation",
+      "errorCode": null,
+      "validationPassed": false,
+      "validationFailures": [
+        {
+          "command": "go test ./pkg/action/"
+        }
+      ],
+      "failedTestSignals": [
+        {
+          "command": "go build ./pkg/cmd/ ./pkg/action/",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "git grep -n \"Happy Helming\" pkg/cmd/testdata/output/",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on <sandbox-dns>:53: dial udp <sandbox-dns>:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        }
+      ],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/upgrade_test.go"
+      ],
+      "toolCounts": {
+        "read_file": 53,
+        "run_shell": 8,
+        "run_tests": 25,
+        "search_code": 21,
+        "recall_context": 3,
+        "write_file": 1,
+        "apply_patch": 8
+      },
+      "toolErrorCounts": {
+        "run_shell": 5,
+        "apply_patch": 2,
+        "run_tests": 9
+      },
+      "validationCommands": [
+        {
+          "command": "git status",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git status",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go build ./pkg/cmd/ ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "git status",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go build ./pkg/cmd/ ./pkg/action/",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -update",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/action/ -skip TestPullRun",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git status",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git diff --stat",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git diff pkg/cmd/testdata/output/get-release.txt pkg/cmd/testdata/output/get-manifest.txt pkg/cmd/testdata/output/install-dry-run-with-secret.txt",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git grep -n \"Happy Helming\" pkg/cmd/testdata/output/",
+          "error": true,
+          "resultHead": "Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests"
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git branch --show-current",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git status",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "git diff main..HEAD --stat",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "git status",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "git diff main..HEAD --name-only",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/action/",
+          "error": true,
+          "resultHead": "exit=1"
+        }
+      ],
+      "firstEditToolOrdinal": 63,
+      "repeatedIdenticalReadSearchRecallCalls": 15,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 18793,
+            "output_tokens": 1313,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        },
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 23074,
+            "output_tokens": 1925,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 83,
+        "residentWorkingSetOccurrences": 299,
+        "additionalOlderSourceOccurrences": 153,
+        "maxSelectedBodyBytes": 23930,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [],
+      "patchSha256": "7aa17b613669a1057b5a5465f5a6c6ec8e47a2da21cbcf3d41264aa832ea74af"
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 3,
+      "pairRepeat": 2,
+      "variant": "baseline",
+      "workingSetBytes": 0,
+      "nativeStatus": "failed",
+      "errorCode": "MODEL_CONTEXT_LIMIT",
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go"
+      ],
+      "toolCounts": {
+        "read_file": 73,
+        "run_shell": 4,
+        "search_code": 48,
+        "recall_context": 26,
+        "write_file": 1,
+        "apply_patch": 1
+      },
+      "toolErrorCounts": {
+        "run_shell": 1,
+        "read_file": 1
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": 69,
+      "repeatedIdenticalReadSearchRecallCalls": 25,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 23120,
+            "output_tokens": 1463,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        },
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 20968,
+            "output_tokens": 1318,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "workingSetBytes": 0
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 77,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "7bb72033ff886370092e5449e07daf8cbb1406984d834e41d61e2c19a2febb90"
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 3,
+      "pairRepeat": 2,
+      "variant": "baseline",
+      "workingSetBytes": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', '/tmp/pytest-of-root/p...run_once_moves_files_top_0/movies'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files_top_level_only"
+          ]
+        }
+      ],
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py"
+      ],
+      "toolCounts": {
+        "run_shell": 8,
+        "read_file": 19,
+        "list_files": 1,
+        "search_code": 1,
+        "recall_context": 2,
+        "apply_patch": 3,
+        "write_file": 2,
+        "run_tests": 3
+      },
+      "toolErrorCounts": {
+        "run_shell": 2,
+        "read_file": 1,
+        "run_tests": 1
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 27,
+      "repeatedIdenticalReadSearchRecallCalls": 2,
+      "compactionRequests": [],
+      "config": {
+        "workingSetBytes": 0
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 28,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 50,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory"
+      ],
+      "patchSha256": "66311c8344418e60c722a31a6be053ac72cc49c2118690a8df4790d86364dfd2"
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 4,
+      "pairRepeat": 2,
+      "variant": "candidate",
+      "workingSetBytes": 24000,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/const.py",
+        "mnamer/__main__.py",
+        "tmp/daemon-config.json",
+        "tmp/bad-config.json",
+        "tmp/watch1/movie.mkv",
+        "tmp/watch1/skip.tmp",
+        "tmp/watch2/part.of.something.mkv",
+        "tmp/watch2/incomplete.part",
+        "tmp/watch2/b.mkv",
+        "tmp/movies/b.mkv",
+        "tmp/watch2/c.mkv",
+        "tmp/empty-config.json",
+        "tmp/bad-exclude.json",
+        "tests/local/test_daemon.py"
+      ],
+      "toolCounts": {
+        "read_file": 19,
+        "search_code": 10,
+        "run_shell": 39,
+        "write_file": 13,
+        "apply_patch": 5,
+        "run_tests": 3
+      },
+      "toolErrorCounts": {
+        "run_shell": 9,
+        "read_file": 1
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 14,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 58,
+        "residentWorkingSetOccurrences": 295,
+        "additionalOlderSourceOccurrences": 178,
+        "maxSelectedBodyBytes": 22936,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 50,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory"
+      ],
+      "patchSha256": "d625bcfa3662724ac48d71f3ba78554b4253ba10ca44ab44fe5e0acbbdcb4ea5"
+    }
+  ],
+  "privateReasoningRead": false,
+  "mechanismAuditSource": "Only memory_assembly metadata captured by frozen wrapper at exit; no model reasoning decryption."
+}
