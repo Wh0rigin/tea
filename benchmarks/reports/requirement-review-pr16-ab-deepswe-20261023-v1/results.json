@@ -1,0 +1,186 @@
+{
+  "cohort": "requirement-review-pr16-ab-deepswe-20261023-v1",
+  "status": "stopped",
+  "stopReason": "unknown_usage_stop",
+  "runtimeCommit": "c63fb1344f22790c207bc0c71980494f3b82705a",
+  "qualityProfile": "pr16-quality",
+  "runs": [
+    {
+      "arm": "tea",
+      "taskId": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "agentStatus": "failed",
+      "terminalSummaryPresent": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFullPass": false,
+      "metered": false,
+      "requestCountMatched": true,
+      "requestHashesMatched": true,
+      "wireUsageMatched": true,
+      "allSubmittedStreamsComplete": false,
+      "controlProfileMatched": true,
+      "clientRequests": 1,
+      "providerSubmittedRequests": 1,
+      "unknownSubmittedRequests": [
+        {
+          "call": 1,
+          "status": "transport_finished",
+          "httpStatus": 401,
+          "messageStopSeen": false,
+          "auditInvalid": false,
+          "elapsedMs": 152
+        }
+      ],
+      "knownNotSubmittedGuards": [],
+      "tokenComponents": null,
+      "totalTokens": null,
+      "reportedTokenLowerBound": 0,
+      "initialBaseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "initialBaseMatchesProtocol": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799",
+      "toolCallsByName": {},
+      "toolErrorsByName": {},
+      "compactionRequests": 0,
+      "adoptedCompactions": 0,
+      "errorCode": "RUNTIME_ERROR",
+      "validationPassedByTea": false,
+      "nativePiLastStop": null,
+      "nativePiErrorCategory": null,
+      "taskOutputLimitStops": 0,
+      "originalControlAllocationUsd": 10,
+      "variant": "baseline",
+      "pairRepeat": 1,
+      "requirementReview": false,
+      "reviewRequestedCount": 0
+    }
+  ],
+  "aggregates": {
+    "baseline": {
+      "planned": 4,
+      "attempted": 1,
+      "officialFullPassed": 0,
+      "nativeCompleted": 0,
+      "nativeCompletedAndOfficialPassed": 0,
+      "meteredAttempts": 0,
+      "allAttemptTokens": null,
+      "reportedTokenLowerBound": 0,
+      "providerSubmittedRequests": 1,
+      "reviewActivations": 0
+    },
+    "candidate": {
+      "planned": 4,
+      "attempted": 0,
+      "officialFullPassed": 0,
+      "nativeCompleted": 0,
+      "nativeCompletedAndOfficialPassed": 0,
+      "meteredAttempts": 0,
+      "allAttemptTokens": null,
+      "reportedTokenLowerBound": 0,
+      "providerSubmittedRequests": 0,
+      "reviewActivations": 0
+    }
+  },
+  "pairs": [],
+  "allAttemptTokenReductionPercent": null,
+  "bothPassedNativeCompletedEfficiency": {
+    "pairs": 0,
+    "baselineTokens": null,
+    "candidateTokens": null,
+    "tokenReductionPercent": null
+  },
+  "correctnessScreenChecks": {
+    "allEightAttempts": false,
+    "officialAcceptanceNotWorse": true,
+    "nativeCompletionNotWorse": true,
+    "allCandidateP2PPreserved": false,
+    "eightMetered": false,
+    "mechanismActivated": false
+  },
+  "correctnessScreenPassed": false,
+  "unknownReservations": [
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000,
+      "reservationUsd": 10,
+      "notRetried": true
+    }
+  ],
+  "unstarted": [
+    {
+      "repeat": 2,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 4,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 3,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 3,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 4,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "candidate",
+      "requirementReview": 1,
+      "workingSetBytes": 24000
+    }
+  ],
+  "defaultEnabled": false,
+  "unseenGeneralizationClaim": false
+}
