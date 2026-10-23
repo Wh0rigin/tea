@@ -38,7 +38,11 @@ A self-authored Node fixture uses real child processes. Its original unit test p
 
 Current verification: dedicated review suite 10/10, review plus frozen-profile suite 14/14; full regression 477 passed, one skipped, zero failed. All checks are offline.
 
-## Next paid evaluation (not started)
+## Initial paid attempt (interrupted)
+
+The [authorized official-credential round](../benchmarks/reports/requirement-review-pr16-ab-deepswe-20261023-v2/README.md) stopped in its first baseline: seven complete requests totaled 43,004 provider tokens, then request eight returned `Internal Network Failure` without normal stream completion. Whole-attempt usage is unknown; seven planned attempts, including all candidates, were not started. This does not determine accuracy or token effect. The earlier HTTP401 credential failure is retained separately. The full frozen profile remains intact and review stays off.
+
+## Next complete paid evaluation (pending; interrupted records retained)
 
 1. Freeze one runtime archive and two explicit configurations, differing only in `requirementReview` (0/1). Assert every preserved PR16 algorithm/model setting and record full effective configuration hashes. Keep streaming and official GLM enabled/low.
 2. Use the same original Helm/Mnamer snapshots and instructions; two balanced AB/BA paired repetitions per task (eight attempts). Do not reuse historical successes as newly measured controls. Historical Pi remains a behavioral reference; no Pi rerun is needed.

@@ -96,8 +96,8 @@
   },
   "correctnessScreenChecks": {
     "allEightAttempts": false,
-    "officialAcceptanceNotWorse": true,
-    "nativeCompletionNotWorse": true,
+    "officialAcceptanceNotWorse": null,
+    "nativeCompletionNotWorse": null,
     "allCandidateP2PPreserved": false,
     "eightMetered": false,
     "mechanismActivated": false
@@ -182,5 +182,11 @@
     }
   ],
   "defaultEnabled": false,
-  "unseenGeneralizationClaim": false
+  "unseenGeneralizationClaim": false,
+  "assessment": {
+    "candidateEvaluated": false,
+    "correctnessEffect": "not_determined",
+    "tokenEffect": "not_determined",
+    "reason": "HTTP401 before tools; credential failure retained separately."
+  }
 }
