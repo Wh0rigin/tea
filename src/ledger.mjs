@@ -54,7 +54,7 @@ export class TokenLedger {
     catch (error) { this.ledgerIntegrity = false; throw error; }
   }
 
-  async request({ requestId, payload, response, usage = {}, usageStatus, costBasis, estimatedInputTokens = 0, estimatedUsd = 0, elapsedMs = 0, error, purpose = 'task' }) {
+  async request({ requestId, payload, response, usage = {}, usageStatus, costBasis, estimatedInputTokens = 0, estimatedUsd = 0, elapsedMs = 0, error, purpose = 'task', retryAttempt = 0, recoveredRequestIds = [] }) {
     const counts = normalizeAnthropicUsage(usage);
     const status = usageStatus === 'complete' && !counts.complete ? counts.status
       : usageStatus || (error ? 'partial' : counts.status);
@@ -79,7 +79,7 @@ export class TokenLedger {
     }
     const row = {
       type: 'model_request', timestamp: new Date().toISOString(), requestId,
-      purpose,
+      purpose, retryAttempt, recoveredRequestIds,
       model: this.model, usage, usageSource: this.usageSource,
       usageStatus: status, usageComplete: status === 'complete' && counts.complete,
       reportedInputTokens: counts.inputTokens, reportedOutputTokens: counts.outputTokens,

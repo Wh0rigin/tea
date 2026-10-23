@@ -16,7 +16,8 @@ test('frozen PR16 benchmark matches every original exported field', () => {
 test('daily quality profile preserves algorithms without imposing benchmark spending controls', () => {
   const config = loadCliConfig({}, {});
   assert.equal(config.configurationProfile, 'pr16-quality');
-  assert.deepEqual(config.configurationProfileOverrides, []);
+  assert.deepEqual(config.configurationProfileOverrides, ['internalNetworkRetries']);
+  assert.equal(config.internalNetworkRetries, 5);
   assert.equal(config.maxCostUsd, null);
   assert.equal(config.maxToolCalls, null);
   assert.equal(config.inputRateUsdPerMillion, undefined);

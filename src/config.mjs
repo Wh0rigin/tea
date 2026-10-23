@@ -50,6 +50,8 @@ export function loadConfig(options = {}, env = process.env) {
 
   const compaction = String(options.compaction || env.TEA_COMPACTION || 'auto').toLowerCase();
   if (!['off', 'auto'].includes(compaction)) throw new ConfigError('Compaction must be off or auto');
+  const internalNetworkRetries = nonNegativeNumber(options.internalNetworkRetries ?? env.TEA_INTERNAL_NETWORK_RETRIES, 5, 'Internal network retries');
+  if (!Number.isInteger(internalNetworkRetries) || internalNetworkRetries > 5) throw new ConfigError('Internal network retries must be an integer from 0 through 5');
   const contextBudgetPolicy = options.contextBudgetPolicy ?? env.TEA_CONTEXT_BUDGET_POLICY ?? options.defaultContextBudgetPolicy ?? 'reserved-output';
   if (!['pi', 'reserved-output'].includes(contextBudgetPolicy)) throw new ConfigError('Context budget policy must be pi or reserved-output');
   const compactionTriggerRatio = positiveNumber(env.TEA_COMPACTION_TRIGGER_RATIO, contextBudgetPolicy === 'pi' ? 1 : 0.8, 'Compaction trigger ratio');
@@ -133,6 +135,8 @@ export function loadConfig(options = {}, env = process.env) {
     contextWindowTokens, contextReserveTokens, contextBudgetPolicy,
     fitOutputBudget: options.fitOutputBudget ?? env.TEA_FIT_OUTPUT_BUDGET === '1',
     requirementReview: options.requirementReview ?? env.TEA_REQUIREMENT_REVIEW === '1',
+
+    internalNetworkRetries,
     maxToolCalls: (env.TEA_MAX_TOOL_CALLS === undefined && (contextBudgetPolicy === 'pi' || options.defaultUnlimitedToolCalls) ? null : Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS'))),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
@@ -193,7 +197,7 @@ function freezeProfile(value) {
 export const PR16_PROFILE = freezeProfile(JSON.parse(readFileSync(new URL('./profiles/pr16-frozen.json', import.meta.url), 'utf8')));
 
 export function loadPr16BenchmarkConfig(options = {}, env = {}) {
-  return loadCliConfig({ ...options, configurationProfile: 'pr16-quality' }, { ...PR16_PROFILE.environment, ...env });
+  return loadCliConfig({ ...options, configurationProfile: 'pr16-quality' }, { TEA_INTERNAL_NETWORK_RETRIES: '0', ...PR16_PROFILE.environment, ...env });
 }
 
 export function loadCliConfig(options = {}, env = process.env) {
@@ -213,7 +217,7 @@ export function loadCliConfig(options = {}, env = process.env) {
     defaultContextosTargetBytes: 32000, defaultCapabilityFeedback: true }, effectiveEnv);
   const dailyExceptions = new Set(['maxCostUsd', 'maxToolCalls', 'inputRateUsdPerMillion', 'outputRateUsdPerMillion']);
   const configurationProfileOverrides = profile === 'pr16-quality'
-    ? Object.entries({ ...PR16_PROFILE.expectedConfig, contextBudgetPolicy: 'reserved-output', fitOutputBudget: false, requirementReview: false, compactionKeepRecentTokens: undefined }).filter(([key, value]) => !dailyExceptions.has(key) && JSON.stringify(config[key]) !== JSON.stringify(value)).map(([key]) => key)
+    ? Object.entries({ ...PR16_PROFILE.expectedConfig, contextBudgetPolicy: 'reserved-output', fitOutputBudget: false, requirementReview: false, internalNetworkRetries: 0, compactionKeepRecentTokens: undefined }).filter(([key, value]) => !dailyExceptions.has(key) && JSON.stringify(config[key]) !== JSON.stringify(value)).map(([key]) => key)
     : [];
   return { ...config, configurationProfile: profile, configurationProfileOverrides };
 }

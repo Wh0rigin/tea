@@ -1,3 +1,4 @@
+import { setTimeout as sleep } from 'node:timers/promises';
 import { randomUUID } from 'node:crypto';
 import { normalizeAnthropicUsage } from './usage.mjs';
 import { hasProviderPrices } from './config.mjs';
@@ -57,7 +58,8 @@ async function readSseMessage(body, onTextDelta) {
     try { event = JSON.parse(rawData); }
     catch { throw new ModelError('Provider returned malformed streaming JSON'); }
     if (name === 'error' || event.type === 'error') {
-      failure = new ModelError(safeProviderError(event.error?.message || event.message || 'Provider stream failed'));
+      const message = safeProviderError(event.error?.message || event.message || 'Provider stream failed');
+      failure = new ModelError(message, undefined, { code: message.trim() === 'Internal Network Failure' ? 'MODEL_INTERNAL_NETWORK_FAILURE' : undefined });
       return;
     }
     switch (event.type || name) {
@@ -151,9 +153,34 @@ async function readSseMessage(body, onTextDelta) {
 }
 
 export class AnthropicMessagesAdapter {
-  constructor(config) { this.config = config; this.costKnown = hasProviderPrices(config); }
+  constructor(config, { waitForRetry = (ms, signal) => sleep(ms, undefined, { signal }) } = {}) {
+    this.config = config; this.costKnown = hasProviderPrices(config); this.waitForRetry = waitForRetry;
+  }
 
-  async complete({ system, messages, tools, maxTokens, signal, onTextDelta }) {
+  async complete(request) {
+    if (this.completionInFlight) throw new ModelError('Concurrent requests are blocked to preserve session accounting');
+    const retries = this.config.internalNetworkRetries ?? 5;
+    if (!Number.isInteger(retries) || retries < 0 || retries > 5) throw new ModelError('internalNetworkRetries must be an integer from 0 through 5');
+    this.completionInFlight = true;
+    const recoveredRequestIds = [];
+    try {
+      const payload = structuredClone({ system: request.system, messages: request.messages, tools: request.tools, maxTokens: request.maxTokens });
+      for (let attempt = 0; ; attempt++) {
+        request.signal?.throwIfAborted();
+        try {
+          return await this.#completeAttempt({ ...payload, signal: request.signal, onTextDelta: request.onTextDelta }, { retryAttempt: attempt, recoveredRequestIds });
+        } catch (error) {
+          if (error.code !== 'MODEL_INTERNAL_NETWORK_FAILURE' || attempt >= retries || request.signal?.aborted) throw error;
+          recoveredRequestIds.push(error.requestId);
+          const delayMs = Math.min(1000 * 2 ** attempt, 16000);
+          await this.onRetry?.({ type: 'model_retry', code: error.code, retry: attempt + 1, maxRetries: retries, delayMs, failedRequestId: error.requestId });
+          await this.waitForRetry(delayMs, request.signal);
+        }
+      }
+    } finally { this.completionInFlight = false; }
+  }
+
+  async #completeAttempt({ system, messages, tools, maxTokens, signal, onTextDelta }, { retryAttempt = 0, recoveredRequestIds = [] } = {}) {
     signal?.throwIfAborted();
     const config = this.config;
     const configuredOutputLimit = maxTokens === undefined ? config.maxOutputTokens : maxTokens;
@@ -239,8 +266,14 @@ export class AnthropicMessagesAdapter {
         body: JSON.stringify(body),
         signal: controller.signal,
       });
-      if (!response.ok) throw new ModelError(`Provider returned HTTP ${response.status}: ${safeProviderError(await response.text())}`, response.status);
+      if (!response.ok) {
+        const text = await response.text();
+        let message = text; try { const error = JSON.parse(text); message = error.error?.message || error.message || text; } catch { /* Plain error body. */ }
+        throw new ModelError(`Provider returned HTTP ${response.status}: ${safeProviderError(text)}`, response.status,
+          { code: response.status >= 500 && String(message).trim() === 'Internal Network Failure' ? 'MODEL_INTERNAL_NETWORK_FAILURE' : undefined });
+      }
       result = config.stream ? await readSseMessage(response.body, onTextDelta) : await response.json();
+      if (result?.error?.message === 'Internal Network Failure') throw new ModelError('Internal Network Failure', undefined, { code: 'MODEL_INTERNAL_NETWORK_FAILURE' });
       const usage = result.usage || {};
       const counts = normalizeAnthropicUsage(usage);
       if (!counts.complete) {
@@ -257,7 +290,7 @@ export class AnthropicMessagesAdapter {
       if (tokenBudget) this.contextTokenScale = Math.max(this.contextTokenScale || 1,
         counts.inputTokens / estimateContextTokens({ system, messages, tools }));
       recorded = true;
-      await this.onRequest?.({ requestId, payload: body, response: result, usage, usageStatus: 'complete', costBasis: priced ? 'conservative-reported-usage' : 'reported-usage-unpriced', estimatedInputTokens: conservativeInputBound, estimatedUsd: actualUsd, elapsedMs: Date.now() - started });
+      await this.onRequest?.({ requestId, retryAttempt, recoveredRequestIds: [...recoveredRequestIds], payload: body, response: result, usage, usageStatus: 'complete', costBasis: priced ? 'conservative-reported-usage' : 'reported-usage-unpriced', estimatedInputTokens: conservativeInputBound, estimatedUsd: actualUsd, elapsedMs: Date.now() - started });
       if (counts.inputTokens > (tokenBudget ? tokenBudget.inputLimit : config.maxRequestInputTokens) || counts.outputTokens > body.max_tokens) {
         throw new ModelError('Provider-reported usage exceeded the per-request token limits; stopping after this billed request');
       }
@@ -275,6 +308,7 @@ export class AnthropicMessagesAdapter {
       if (!submitted) throw error;
       if (!(error instanceof Error)) error = new ModelError(String(error));
       error.submitted = true;
+      error.requestId = requestId;
       if (!recorded) {
         // Keep the full preflight reservation after a transport error: the provider may have processed the request.
         const usage = error.usage || {};
@@ -286,7 +320,7 @@ export class AnthropicMessagesAdapter {
         this.spentInputBound += conservativeInputBound;
         if (completeUsage) this.actualInputTokens += counts.inputTokens;
         recorded = true;
-        await this.onRequest?.({ requestId, payload: body, response: result || null, usage,
+        await this.onRequest?.({ requestId, retryAttempt, payload: body, response: result || null, usage,
           usageStatus: error.usageStatus || 'unknown',
           costBasis: priced ? (completeUsage ? 'conservative-reported-usage' : 'full-preflight-reservation') : 'unpriced-unknown-or-reported-usage',
           estimatedInputTokens: conservativeInputBound, estimatedUsd: retainedUsd,
