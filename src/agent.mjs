@@ -137,11 +137,21 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   session.offline = offline;
   let requestPurpose = 'task';
   adapter.onBeforeRequest = session.journal ? event => session.journal.append('request_intent', event) : undefined;
+  const recoveryBlockedRequests = new Set(session.budgetUnknown ? ['historical-unknown'] : []);
+  adapter.onRetry = async event => {
+    await ledger.event(event);
+    emit(event);
+    onText(`Model retry ${event.retry}/${event.maxRetries}: Internal Network Failure; failed response discarded, retrying in ${event.delayMs / 1000}s.`);
+  };
   adapter.onRequest = async (event) => {
-    // Unknown billing blocks recovery in transient sessions as well as journals.
-    session.budgetUnknown = Boolean(session.budgetUnknown || event.usageStatus !== 'complete');
+    // Only a successful explicitly authorized retry releases its recovery block.
+    // Unknown token usage and retained monetary reservations remain in the ledger.
+    if (event.usageStatus !== 'complete') recoveryBlockedRequests.add(event.requestId || 'unknown');
+    else for (const id of event.recoveredRequestIds || []) recoveryBlockedRequests.delete(id);
+    session.budgetUnknown = recoveryBlockedRequests.size > 0;
     if (session.journal) {
       await session.journal.append('request_settled', { requestId: event.requestId, purpose: requestPurpose,
+        retryAttempt: event.retryAttempt || 0, recoveredRequestIds: event.recoveredRequestIds || [],
         usage: event.usage, usageStatus: event.usageStatus, costBasis: event.costBasis,
         requestSha256: createTaskHash(JSON.stringify(event.payload)), responseSha256: createTaskHash(JSON.stringify(event.response)),
         budget: { spentUsd: adapter.spentUsd, costKnown: adapter.costKnown, contextTokenScale: adapter.contextTokenScale || 1, spentInputBound: adapter.spentInputBound,
