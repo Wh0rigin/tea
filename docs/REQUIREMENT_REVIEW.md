@@ -28,7 +28,7 @@ No review is added to a read-only turn without pending work, disabled mode, a tr
 
 `requirement_review_requested` is written to the ledger and emitted as an event. `contextDiagnostics.requirementReviewCount` records activation. Metadata collection is bounded and only occurs when enabled. The disabled variant adds no system/review prompt or model call.
 
-Enabled mode can add one immediate model request plus any diagnostics, edits and validation the model chooses; the follow-up itself may enter normal compaction and existing request/cost guards. There is no separate free review model. True token cost and accuracy effects have not been measured.
+Enabled mode can add one immediate model request plus any diagnostics, edits and validation the model chooses; the follow-up itself may enter normal compaction and existing request/cost guards. There is no separate free review model. The retry-aware paid screen below records actual follow-up cost, but net accuracy/token effects remain undetermined because transport failures interrupted the controls.
 
 ## Offline verification
 
@@ -51,3 +51,13 @@ The [authorized official-credential round](../benchmarks/reports/requirement-rev
 5. Correctness is primary: target fixing the remaining omission without losing prior successes. No activation means no mechanism evidence; unchanged acceptance means no demonstrated quality gain. A 4/4 result would remain a small seen-task observation, not universal correctness. Default activation requires user review after this stage.
 
 PR18 provides the full frozen quality profile; this change is built on that commit and does not merge the older S7 completion-review implementation.
+
+## Retry-aware DeepSWE v3: interrupted, not an improvement claim
+
+[Full report](../benchmarks/reports/pr19-r5-deepswe-20261023-v3/README.md) · [中文分析](../benchmarks/reports/pr19-r5-deepswe-20261023-v3/RESULTS.zh-CN.md)
+
+Four of eight scheduled attempts ran. Both candidates activated review once, completed normally and passed official checks (Helm 7/7; Mnamer 370/370). Their complete measured total was 2,807,986 provider tokens for these two attempts. Both baseline totals remain unknown: Helm recovered one explicit Internal Network Failure and passed; Mnamer later timed out without stream completion before source editing, stopping the cohort. No fully metered paired comparison is available, and four attempts were not started.
+
+Post-review requests consumed 599,152 tokens on Helm and 376,850 on Mnamer, including checks and test repair; these are observed follow-up costs, not causal net overhead estimates. Review generated additional checks, but no demonstrated net accuracy/token improvement follows from this interrupted screen. Keep default off and retain the complete PR16 profile. No Pi/Claude reruns and no replacement of earlier failed records.
+
+Runtime archive: `46a475393e5afbe14edc3fdd54ab73ab208a07bf`. Protocol frozen before calls in `f12db59b9468ae6182e6344ba4a58b77bd7191ef`. Integration regression: 487 passed, one skipped, zero failed; all six Windows/Ubuntu Node 20/22/24 CI jobs passed.
