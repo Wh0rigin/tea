@@ -71,3 +71,7 @@ Live benchmark commands and comparison harnesses keep their explicit environment
 ## Pi-style budget fields
 
 The config file accepts `contextBudgetPolicy` (`pi` or `reserved-output`), `compactionKeepRecentTokens` and `compactionReserveTokens`. Defaults and compatibility details: [context budget guide](CONTEXT_BUDGET.md). Omit `maxToolCalls` to use the uncapped daily default; an existing explicit numeric setting continues to apply. Environment variables override saved settings. This change does not rewrite your config file.
+
+## Frozen PR16 profile / PR16 冻结配置
+
+Set `configurationProfile` to `"pr16-quality"` (GLM default) or `"pi"`. `contextosWorkingSetBytes` and `compactionMaxPerTurn` can override the profile. Environment equivalents are `TEA_CONFIG_PROFILE`, `TEA_CONTEXTOS_WORKING_SET_BYTES` and `TEA_COMPACTION_MAX_PER_TURN`. Explicit options and environment settings retain precedence. See [full settings and limitations](PR16_QUALITY_PROFILE.md).

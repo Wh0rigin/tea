@@ -1,8 +1,14 @@
 # Token context budget / Token 上下文预算
 
-## Current CLI policy: Pi-style budgeting
+## Current CLI default: frozen PR16 quality profile
 
-The daily CLI defaults to `contextBudgetPolicy: "pi"`, following the reserve-based scheduling policy in Pi 0.87.1. TEA retains its own estimator, ContextOS, validation obligations and encrypted history.
+For GLM-5.3-flash (and an unconfigured CLI), `pr16-quality` preserves the full algorithm/model configuration from runtime `8ed5626`, whose small paired DeepSWE cohort achieved 3/4 official acceptances. It uses reserved-output scheduling: 216,000 context, 131,072 output ceiling, 4,096 safety reserve, an 80% trigger (64,665 estimated input tokens), 16,000 recent bytes and at most two compactions per turn. ContextOS retains a 24,000-byte source working set. Daily use has no monetary or tool-call cap; historical experiment controls remain separate.
+
+See [the frozen quality profile](PR16_QUALITY_PROFILE.md). Explicit settings override defaults and `/status` lists differing fields. Other configured models retain the Pi fallback to avoid imposing GLM capacities.
+
+## Optional Pi-style budgeting
+
+Select `configurationProfile: "pi"` in `~/.tea/config.json` to use `contextBudgetPolicy: "pi"`, following the reserve-based scheduling policy in Pi 0.87.1. TEA retains its own estimator, ContextOS, validation obligations and encrypted history.
 
 ```json
 {

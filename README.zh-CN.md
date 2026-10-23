@@ -1,5 +1,7 @@
 # TEA
 
+GLM 日常 CLI 默认启用完整冻结的 `pr16-quality` 配置，包括 24KB 源码工作集与原版压缩策略。历史小样本 DeepSWE 官方验收为 3/4；这不是普遍成功率保证，也不是本轮重新付费测得的结果。[配置、覆盖规则与独立实验限额](docs/PR16_QUALITY_PROFILE.md)。
+
 日常 CLI 支持通过 `write_file` 原生创建 UTF-8 文件及父目录，创建后执行实际测试；已有文件使用精确补丁。自动压缩按可配置的模型 Token 窗口调度，预留输出和安全空间，并独立管理请求字节保护。详见[上下文容量配置](docs/CONTEXT_BUDGET.md)和[运行修复说明](docs/RUNTIME_REPAIR.md)。
 
 可配置编辑路径权限，在写入前拒绝受保护文件或要求审批。详见[编辑权限与执行前策略](docs/EDIT_PERMISSIONS.zh-CN.md)，包括配置方法和子进程边界。

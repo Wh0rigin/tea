@@ -56,3 +56,7 @@ tea config path   # 查看绝对路径
 ## 编辑权限
 
 `editPermissions` 支持相对工作区的 deny、ask、allow 路径列表，可配置受保护的既有测试、需审批文件及可选写入范围。详见[编辑权限与工具策略](EDIT_PERMISSIONS.zh-CN.md)，包括匹配规则、SDK 拦截和子进程限制。
+
+## Frozen PR16 profile / PR16 冻结配置
+
+Set `configurationProfile` to `"pr16-quality"` (GLM default) or `"pi"`. `contextosWorkingSetBytes` and `compactionMaxPerTurn` can override the profile. Environment equivalents are `TEA_CONFIG_PROFILE`, `TEA_CONTEXTOS_WORKING_SET_BYTES` and `TEA_COMPACTION_MAX_PER_TURN`. Explicit options and environment settings retain precedence. See [full settings and limitations](PR16_QUALITY_PROFILE.md).

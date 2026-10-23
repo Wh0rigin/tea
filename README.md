@@ -1,5 +1,7 @@
 # TEA
 
+The GLM daily CLI now defaults to the complete frozen `pr16-quality` configuration, including a 24KB source working set and its original compaction policy. The historical small DeepSWE cohort accepted 3/4 attempts; this is not a general success guarantee or a new paid measurement. [Profile, overrides and separate experiment controls](docs/PR16_QUALITY_PROFILE.md).
+
 Daily CLI supports native UTF-8 file creation (`write_file`), including parent directories, followed by actual test execution. Existing files use exact patches. Automatic compaction uses a configurable model Token window, reserves output and safety space, and keeps request bytes separate. See [context budget configuration](docs/CONTEXT_BUDGET.md) and [runtime repair notes](docs/RUNTIME_REPAIR.md).
 
 Configured edit-path permissions can deny protected files or request approval before a write. See [edit permissions and pre-tool policy](docs/EDIT_PERMISSIONS.md) for setup and subprocess limits.

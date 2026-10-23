@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { normalizeEditPermissions } from './edit-permissions.mjs';
 import path from 'node:path';
 import { validateRunId } from './run-id.mjs';
@@ -131,7 +132,7 @@ export function loadConfig(options = {}, env = process.env) {
     maxRequestInputBytes: maxRequestInputTokens,
     contextWindowTokens, contextReserveTokens, contextBudgetPolicy,
     fitOutputBudget: options.fitOutputBudget ?? env.TEA_FIT_OUTPUT_BUDGET === '1',
-    maxToolCalls: (env.TEA_MAX_TOOL_CALLS === undefined && contextBudgetPolicy === 'pi' ? null : Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS'))),
+    maxToolCalls: (env.TEA_MAX_TOOL_CALLS === undefined && (contextBudgetPolicy === 'pi' || options.defaultUnlimitedToolCalls) ? null : Math.floor(positiveNumber(env.TEA_MAX_TOOL_CALLS, 24, 'TEA_MAX_TOOL_CALLS'))),
     capabilityFeedback: env.TEA_CAPABILITY_FEEDBACK === undefined ? Boolean(options.defaultCapabilityFeedback) : env.TEA_CAPABILITY_FEEDBACK === '1',
     enableFileCreation: options.enableFileCreation ?? (env.TEA_ENABLE_FILE_CREATION === undefined || env.TEA_ENABLE_FILE_CREATION === '1'),
     timeoutMs: Math.floor(positiveNumber(env.TEA_REQUEST_TIMEOUT_MS, 90000, 'TEA_REQUEST_TIMEOUT_MS')),
@@ -180,13 +181,40 @@ export function assertLiveConfig(config) {
   if (config.maxInputTokens !== undefined && (!Number.isSafeInteger(config.maxInputTokens) || config.maxInputTokens <= 0)) throw new ConfigError('maxInputTokens must be a positive safe integer');
 }
 
+function freezeProfile(value) {
+  if (value && typeof value === 'object') {
+    for (const child of Object.values(value)) freezeProfile(child);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+export const PR16_PROFILE = freezeProfile(JSON.parse(readFileSync(new URL('./profiles/pr16-frozen.json', import.meta.url), 'utf8')));
+
+export function loadPr16BenchmarkConfig(options = {}, env = {}) {
+  return loadCliConfig({ ...options, configurationProfile: 'pr16-quality' }, { ...PR16_PROFILE.environment, ...env });
+}
+
 export function loadCliConfig(options = {}, env = process.env) {
-  return loadConfig({ ...options,
+  const explicitPolicy = options.contextBudgetPolicy ?? env.TEA_CONTEXT_BUDGET_POLICY;
+  const otherModel = env.ANTHROPIC_MODEL && env.ANTHROPIC_MODEL.toLowerCase() !== 'glm-5.3-flash';
+  const profile = options.configurationProfile ?? env.TEA_CONFIG_PROFILE ?? (explicitPolicy === 'pi' || otherModel ? 'pi' : 'pr16-quality');
+  if (!['pr16-quality', 'pi'].includes(profile)) throw new ConfigError('Configuration profile must be pr16-quality or pi');
+  const supplied = Object.fromEntries(Object.entries(env).filter(([, value]) => value !== undefined));
+  const effectiveEnv = profile === 'pr16-quality' ? { ...PR16_PROFILE.dailyEnvironment, ...supplied } : supplied;
+  if (supplied.TEA_MAX_REQUEST_INPUT_BYTES === undefined && supplied.TEA_MAX_REQUEST_INPUT_TOKENS !== undefined) effectiveEnv.TEA_MAX_REQUEST_INPUT_BYTES = supplied.TEA_MAX_REQUEST_INPUT_TOKENS;
+  if ((options.historyStrategy || env.TEA_HISTORY_STRATEGY) && !options.memoryPolicy && !env.TEA_MEMORY_POLICY) delete effectiveEnv.TEA_MEMORY_POLICY;
+  const config = loadConfig({ ...options, defaultUnlimitedToolCalls: true,
     defaultContextBudgetPolicy: 'pi',
     defaultMemoryPolicy: options.historyStrategy || env.TEA_HISTORY_STRATEGY ? undefined : 'contextos',
     defaultMaxRequestInputBytes: 2097152, defaultMaxOutputTokens: 4096, defaultContextWindowTokens: 32768,
     defaultCompactionKeepRecentBytes: 16000,
-    defaultContextosTargetBytes: 32000, defaultCapabilityFeedback: true }, env);
+    defaultContextosTargetBytes: 32000, defaultCapabilityFeedback: true }, effectiveEnv);
+  const dailyExceptions = new Set(['maxCostUsd', 'maxToolCalls', 'inputRateUsdPerMillion', 'outputRateUsdPerMillion']);
+  const configurationProfileOverrides = profile === 'pr16-quality'
+    ? Object.entries({ ...PR16_PROFILE.expectedConfig, contextBudgetPolicy: 'reserved-output', fitOutputBudget: false, compactionKeepRecentTokens: undefined }).filter(([key, value]) => !dailyExceptions.has(key) && JSON.stringify(config[key]) !== JSON.stringify(value)).map(([key]) => key)
+    : [];
+  return { ...config, configurationProfile: profile, configurationProfileOverrides };
 }
 
 export function hasProviderPrices(config) {

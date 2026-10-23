@@ -9,7 +9,7 @@ import { buildMessagesRequest, AnthropicMessagesAdapter } from '../src/model.mjs
 import { userConfigEnvironment } from '../src/user-config.mjs';
 import { runTask } from '../src/agent.mjs';
 
-const configured = (env = {}) => loadCliConfig({}, { TEA_CONTEXT_WINDOW_TOKENS: '216000', TEA_MAX_OUTPUT_TOKENS: '131072', ...env });
+const configured = (env = {}) => loadCliConfig({ configurationProfile: 'pi' }, { TEA_CONTEXT_WINDOW_TOKENS: '216000', TEA_MAX_OUTPUT_TOKENS: '131072', ...env });
 
 test('Pi policy reaches window minus reserve without reserving the full output cap', () => {
   const c = configured(), budget = contextBudget(c, { messages: [] });
@@ -38,7 +38,7 @@ test('explicit caps, legacy retention and user configuration remain available', 
   const env = userConfigEnvironment({ contextBudgetPolicy: 'pi', compactionKeepRecentTokens: 20000, compactionReserveTokens: 16384 });
   assert.equal(env.TEA_COMPACTION_KEEP_RECENT_TOKENS, '20000');
   assert.equal(env.TEA_COMPACTION_RESERVE_TOKENS, '16384');
-  assert.equal(loadCliConfig({}, {}).compactionKeepRecentTokens, 8192);
+  assert.equal(loadCliConfig({ configurationProfile: 'pi' }, {}).compactionKeepRecentTokens, 8192);
 });
 
 async function temporary(fn) {
