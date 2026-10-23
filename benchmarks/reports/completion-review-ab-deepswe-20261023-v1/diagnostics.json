@@ -1,0 +1,1204 @@
+{
+  "status": "completed_with_unknown_usage",
+  "runs": [
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "baseline",
+      "completionReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "cancelled",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": false,
+      "validationFailures": [
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/..."
+        }
+      ],
+      "failedTestSignals": [
+        {
+          "command": "go build ./pkg/...",
+          "signals": []
+        },
+        {
+          "command": "go build ./pkg/... ./cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/release/... ./pkg/action/... 2>&1 | tail -60",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "signals": [
+            "--- FAIL: TestPullRun_ChartNotFound (0.00s)",
+            "        \tError:      \tError \"Get \\\"https://charts.helm.sh/stable/nginx-0.2.0.tgz\\\": dial tcp: lookup charts.helm.sh on 172.31.114.115:53: dial udp 172.31.114.115:53: connect: network is unreachable\" does not contain \"404 Not Found\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "signals": []
+        }
+      ],
+      "changedFiles": [
+        "pkg/release/v1/util/manifest_sorter.go",
+        "pkg/action/action.go",
+        "pkg/action/install.go",
+        "pkg/action/upgrade.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/action/action_test.go"
+      ],
+      "toolCounts": {
+        "read_file": 62,
+        "run_shell": 11,
+        "search_code": 16,
+        "recall_context": 8,
+        "apply_patch": 19,
+        "run_tests": 13
+      },
+      "toolErrorCounts": {
+        "run_shell": 3,
+        "recall_context": 1,
+        "apply_patch": 4,
+        "run_tests": 8
+      },
+      "validationCommands": [
+        {
+          "command": "go build ./pkg/release/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go build ./pkg/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go build ./pkg/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go build ./pkg/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go build ./pkg/... ./cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go build ./pkg/... ./cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/release/... ./pkg/action/... 2>&1 | tail -60",
+          "error": true,
+          "resultHead": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/release/v1/util/... ./pkg/action/...",
+          "error": true,
+          "resultHead": "Command cancelled; completed edits remain in the workspace"
+        }
+      ],
+      "firstEditToolOrdinal": 70,
+      "repeatedIdenticalReadSearchRecallCalls": 24,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": false,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 85,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [],
+      "patchSha256": "a7539bae58d2c14c7daaeda316d2a3f5eea6434baae78060a2d231667fc57c79",
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": []
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "pairRepeat": 1,
+      "variant": "candidate",
+      "completionReview": 1,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "failed",
+      "errorCode": "RUNTIME_ERROR",
+      "runtimeError": {
+        "code": "RUNTIME_ERROR",
+        "name": "ModelError",
+        "message": "Provider returned malformed streaming JSON",
+        "stage": "model",
+        "usageStatus": "partial",
+        "requestSubmitted": true,
+        "budget": {
+          "estimatedInputTokens": 85927,
+          "inputLimit": 199616,
+          "triggerTokens": 199616,
+          "contextWindowTokens": 216000,
+          "requestBytes": 214107,
+          "maxWireBytes": 2097152,
+          "residentBytes": 432063,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go"
+      ],
+      "toolCounts": {
+        "read_file": 40,
+        "run_shell": 3,
+        "search_code": 18,
+        "recall_context": 13,
+        "write_file": 1,
+        "apply_patch": 1
+      },
+      "toolErrorCounts": {
+        "run_shell": 1
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": 74,
+      "repeatedIdenticalReadSearchRecallCalls": 22,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": true,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 43,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "c89f2626a936b19e5ccb4a9e621956b3f3d2208b98b38408e7cb66db8b999c60",
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": [
+        {
+          "call": 43,
+          "status": "transport_finished",
+          "httpStatus": 200,
+          "messageStopSeen": false,
+          "auditInvalid": true,
+          "usageComplete": false,
+          "elapsedMs": 155500,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 2,
+      "pairRepeat": 1,
+      "variant": "candidate",
+      "completionReview": 1,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "failed",
+      "errorCode": "RUNTIME_ERROR",
+      "runtimeError": {
+        "code": "RUNTIME_ERROR",
+        "name": "ModelError",
+        "message": "Provider returned malformed streaming JSON",
+        "stage": "model",
+        "usageStatus": "partial",
+        "requestSubmitted": true,
+        "budget": {
+          "estimatedInputTokens": 29184,
+          "inputLimit": 199616,
+          "triggerTokens": 199616,
+          "contextWindowTokens": 216000,
+          "requestBytes": 72307,
+          "maxWireBytes": 2097152,
+          "residentBytes": 71840,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [],
+      "toolCounts": {
+        "read_file": 8,
+        "run_shell": 1,
+        "apply_patch": 2,
+        "search_code": 2,
+        "recall_context": 2
+      },
+      "toolErrorCounts": {
+        "run_shell": 1,
+        "apply_patch": 2
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": 7,
+      "repeatedIdenticalReadSearchRecallCalls": 2,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": true,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 10,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 0,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_batch_size_carries_across_runs",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_batch_size_is_global_across_watches",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_batch_size_zero_processes_no_files",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_batches_processing_to_avoid_rate_limits",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_combined_watch_and_positional_paths_both_applied",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_config_combined_with_cli_watch",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_config_exclude_skips_matching_files",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_ignores_files_that_are_still_changing_size",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_log_entry_count_matches_cycles",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_are_available_via_command",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_default_state_path_emits_exact_message_when_no_logs",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_emits_exact_message_when_log_file_is_empty",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_emits_exact_message_when_no_logs_available",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_emits_no_logs_available_when_state_path_is_directory",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_lines_controls_output_exactly",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_without_lines_returns_all_lines",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_notification_webhook_failure_does_not_crash",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_persists_state_and_can_resume",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_just_starts_when_not_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_stops_then_starts_when_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_accepts_positional_watch_only",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_debounces_partial_download_and_processes_complete",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_destination_exists_no_overwrite",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_dry_run_no_state_or_log",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_dry_run_reports_without_moving",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_handles_nonexistent_watch_dir",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_moves_various_extensions",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_only_processes_toplevel_files",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_only_skips_part_suffix",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_preserves_filename_exactly",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_requires_no_network_or_prompts",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_skips_directories_inside_watch_folder",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_updates_state_file_when_no_files_processed",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_uses_default_state_path_when_omitted",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_with_multiple_watch_paths",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_run_once_writes_log_entries",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_processes_files_and_supports_status_and_stop",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_with_valid_config_exits_zero",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_state_content_updates_between_run_once_invocations",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_state_file_is_valid_json_after_run_once",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_stats_outputs_summary",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_status_not_running_when_state_exists_but_no_process",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_status_reports_not_running_when_state_path_is_directory",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_status_reports_stopped_when_no_state_file",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_status_without_daemon_state_uses_default_path",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_stop_is_idempotent",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_stop_succeeds_when_state_path_is_directory",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_supports_multiple_watch_directories_with_independent_config",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_validate_daemon_config_empty_watch_array_valid",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_validate_daemon_config_valid_exits_zero"
+      ],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "firstRequestSha256": "549bafcb9d739f050d3d6c9aeec50470c30bc2b360741b25909c9b0c2d2bc1d2",
+      "unknownTransport": [
+        {
+          "call": 10,
+          "status": "transport_finished",
+          "httpStatus": 200,
+          "messageStopSeen": false,
+          "auditInvalid": true,
+          "usageComplete": false,
+          "elapsedMs": 16771,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "baseline",
+      "completionReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "failed",
+      "errorCode": "RUNTIME_ERROR",
+      "runtimeError": {
+        "code": "RUNTIME_ERROR",
+        "name": "ModelError",
+        "message": "Provider returned malformed streaming JSON",
+        "stage": "model",
+        "usageStatus": "partial",
+        "requestSubmitted": true,
+        "budget": {
+          "estimatedInputTokens": 36275,
+          "inputLimit": 199616,
+          "triggerTokens": 199616,
+          "contextWindowTokens": 216000,
+          "requestBytes": 89944,
+          "maxWireBytes": 2097152,
+          "residentBytes": 151171,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tmp_daemon/watch1/sample.mp4",
+        "tmp_daemon/config.json"
+      ],
+      "toolCounts": {
+        "read_file": 19,
+        "search_code": 5,
+        "run_shell": 7,
+        "apply_patch": 4,
+        "recall_context": 2,
+        "write_file": 3
+      },
+      "toolErrorCounts": {
+        "apply_patch": 1,
+        "run_shell": 1
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": 12,
+      "repeatedIdenticalReadSearchRecallCalls": 9,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": false,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 25,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 47,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_batch_size_is_global_across_watches",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_just_starts_when_not_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_stops_then_starts_when_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_processes_files_and_supports_status_and_stop"
+      ],
+      "patchSha256": "bf45a70f7be22becf1899a488e568b0d524a85b2a1b5f10e5473bd59cfbf447a",
+      "firstRequestSha256": "549bafcb9d739f050d3d6c9aeec50470c30bc2b360741b25909c9b0c2d2bc1d2",
+      "unknownTransport": [
+        {
+          "call": 25,
+          "status": "transport_finished",
+          "httpStatus": 200,
+          "messageStopSeen": false,
+          "auditInvalid": true,
+          "usageComplete": false,
+          "elapsedMs": 6099,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 4,
+      "pairRepeat": 2,
+      "variant": "candidate",
+      "completionReview": 1,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "failed",
+      "errorCode": "RUNTIME_ERROR",
+      "runtimeError": {
+        "code": "RUNTIME_ERROR",
+        "name": "ModelError",
+        "message": "Provider returned malformed streaming JSON",
+        "stage": "model",
+        "usageStatus": "partial",
+        "requestSubmitted": true,
+        "budget": {
+          "estimatedInputTokens": 34243,
+          "inputLimit": 199616,
+          "triggerTokens": 199616,
+          "contextWindowTokens": 216000,
+          "requestBytes": 84973,
+          "maxWireBytes": 2097152,
+          "residentBytes": 92998,
+          "residentLimit": 4194304,
+          "automaticCompactions": 0,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [],
+      "toolCounts": {
+        "read_file": 7,
+        "run_shell": 4,
+        "search_code": 5,
+        "recall_context": 2
+      },
+      "toolErrorCounts": {
+        "run_shell": 1
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": null,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": true,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 10,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": [
+        {
+          "call": 10,
+          "status": "transport_finished",
+          "httpStatus": 200,
+          "messageStopSeen": false,
+          "auditInvalid": true,
+          "usageComplete": false,
+          "elapsedMs": 7040,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 3,
+      "pairRepeat": 2,
+      "variant": "baseline",
+      "completionReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "cancelled",
+      "errorCode": "RUNTIME_ERROR",
+      "runtimeError": {
+        "code": "RUNTIME_ERROR",
+        "name": "ModelError",
+        "message": "Provider stream ended before the message_stop event",
+        "stage": "model",
+        "usageStatus": "partial",
+        "requestSubmitted": true,
+        "budget": {
+          "estimatedInputTokens": 50068,
+          "inputLimit": 199616,
+          "triggerTokens": 199616,
+          "contextWindowTokens": 216000,
+          "requestBytes": 124308,
+          "maxWireBytes": 2097152,
+          "residentBytes": 168759,
+          "residentLimit": 4194304,
+          "automaticCompactions": 1,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [],
+      "toolCounts": {
+        "read_file": 79,
+        "run_shell": 3,
+        "search_code": 16,
+        "recall_context": 11
+      },
+      "toolErrorCounts": {
+        "run_shell": 1,
+        "read_file": 2
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": null,
+      "repeatedIdenticalReadSearchRecallCalls": 39,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 139464,
+            "output_tokens": 1894,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "completionReview": false,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 59,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": [
+        {
+          "call": 59,
+          "status": "transport_failed:BrokenPipeError",
+          "httpStatus": 200,
+          "messageStopSeen": false,
+          "auditInvalid": false,
+          "usageComplete": false,
+          "elapsedMs": 178778,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 3,
+      "pairRepeat": 2,
+      "variant": "baseline",
+      "completionReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   assert '{\\n  \"processed\": {},\\n  \"processed_count\": 0,\\n  \"updated_epoch\": 1792745579\\n}' != '{\\n  \"processed\": {},\\n  \"processed_count\": 0,\\n  \"updated_epoch\": 1792745579\\n}'",
+            "FAILED tests/local/test_daemon.py::test_run_once_updates_state_each_cycle - a..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon_cli.py -q",
+          "signals": [
+            "E   AssertionError: /usr/local/bin/python: No module named mnamer",
+            "E     ",
+            "E   assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--batch', '--daemon-state', 'sta.../test_run_once_end_to_end0/movies'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: /usr/local/bin/python: No module named mnamer",
+            "E     ",
+            "E   assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--dry-run', '--batch', '--daemon...4/test_dry_run_end_to_end0/movies'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: assert 1 == 2",
+            "E   AssertionError: /usr/local/bin/python: No module named mnamer",
+            "E     ",
+            "E   assert 1 == 0"
+          ]
+        }
+      ],
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py",
+        "tests/local/test_daemon_cli.py"
+      ],
+      "toolCounts": {
+        "read_file": 8,
+        "write_file": 3,
+        "recall_context": 3,
+        "apply_patch": 6,
+        "run_shell": 14,
+        "run_tests": 6
+      },
+      "toolErrorCounts": {
+        "run_shell": 3,
+        "run_tests": 2
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon_cli.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon_cli.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 6,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": false,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 27,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 50,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory"
+      ],
+      "patchSha256": "325855259c8ab8c1bb20e2442afcf72d4a47faad313543779547a4d674e4974c",
+      "firstRequestSha256": "549bafcb9d739f050d3d6c9aeec50470c30bc2b360741b25909c9b0c2d2bc1d2",
+      "unknownTransport": []
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 4,
+      "pairRepeat": 2,
+      "variant": "candidate",
+      "completionReview": 1,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "needs_validation",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": false,
+      "validationFailures": [
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\""
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\""
+        }
+      ],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ...",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb - assert 'Joker' in 'Start...",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb - assert 'Dexter' in 'Star...",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found - assert 'no matches f...",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path - assert 'Kill Bill Vol. ...",
+            "FAILED tests/e2e/test_moving.py::test_no_guess - assert 3 == 2",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers - assert '/T/Teenage ...",
+            "FAILED tests/e2e/test_moving.py::test_multiple_nested_directories - assert '/...",
+            "FAILED tests/e2e/test_moving.py::test_format_id - assert 'Aladdin (tt0103639)..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given",
+            "E   TypeError: SettingStore.load() takes 1 positional argument but 2 were given"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   RuntimeError: invalid arguments: -q",
+            "E   mnamer.exceptions.MnamerException: invalid arguments: -q",
+            "E   RuntimeError: invalid arguments: -q",
+            "E   mnamer.exceptions.MnamerException: invalid arguments: -q",
+            "E   RuntimeError: invalid arguments: -q",
+            "E   mnamer.exceptions.MnamerException: invalid arguments: -q",
+            "E   RuntimeError: invalid arguments: -q",
+            "E   mnamer.exceptions.MnamerException: invalid arguments: -q",
+            "E   RuntimeError: invalid arguments: -q",
+            "E   mnamer.exceptions.MnamerException: invalid arguments: -q",
+            "E   RuntimeError: invalid arguments: -q",
+            "E   mnamer.exceptions.MnamerException: invalid arguments: -q"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   AssertionError: assert 3 == 1",
+            "E    +  where 3 = len(['cycle processed=0', 'cycle processed=0', '2026-10-23T09:09:24 cycle processed=0'])",
+            "FAILED tests/local/test_daemon.py::test_logs_tail_and_missing - AssertionErro..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ...",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb - assert 'Joker' in 'Start...",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb - assert 'Dexter' in 'Star...",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found - assert 'no matches f...",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path - assert 'Kill Bill Vol. ...",
+            "FAILED tests/e2e/test_moving.py::test_no_guess - assert 3 == 2",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers - assert '/T/Teenage ...",
+            "FAILED tests/e2e/test_moving.py::test_multiple_nested_directories - assert '/...",
+            "FAILED tests/e2e/test_moving.py::test_format_id - assert 'Aladdin (tt0103639)..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ...",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb - assert 'Joker' in 'Start...",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb - assert 'Dexter' in 'Star...",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found - assert 'no matches f...",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path - assert 'Kill Bill Vol. ...",
+            "FAILED tests/e2e/test_moving.py::test_no_guess - assert 3 == 2",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers - assert '/T/Teenage ...",
+            "FAILED tests/e2e/test_moving.py::test_multiple_nested_directories - assert '/...",
+            "FAILED tests/e2e/test_moving.py::test_format_id - assert 'Aladdin (tt0103639)..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ...",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb - assert 'Joker' in 'Start...",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb - assert 'Dexter' in 'Star...",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found - assert 'no matches f...",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path - assert 'Kill Bill Vol. ...",
+            "FAILED tests/e2e/test_moving.py::test_no_guess - assert 3 == 2",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers - assert '/T/Teenage ...",
+            "FAILED tests/e2e/test_moving.py::test_multiple_nested_directories - assert '/...",
+            "FAILED tests/e2e/test_moving.py::test_format_id - assert 'Aladdin (tt0103639)..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "signals": [
+            "E   assert 'Shape of Water' in 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully'",
+            "E    +  where 'Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully' = E2EResult(code=0, out='Starting mnamer\\n\\nProcessing Movie \"aladdin.1992.avi\" (0.00B)\\nnetwork error\\nmoving to <temporary-directory>/Aladdin (1992).avi\\nOK!\\n\\n1 out of 1 files processed successfully').out",
+            "FAILED tests/e2e/test_directives.py::test_id__omdb - assert 'Shape of Water' ...",
+            "FAILED tests/e2e/test_directives.py::test_id__tmdb - assert 'Joker' in 'Start...",
+            "FAILED tests/e2e/test_directives.py::test_id__tvdb - assert 'Dexter' in 'Star...",
+            "FAILED tests/e2e/test_errors.py::test_no_matches_found - assert 'no matches f...",
+            "FAILED tests/e2e/test_moving.py::test_absolute_path - assert 'Kill Bill Vol. ...",
+            "FAILED tests/e2e/test_moving.py::test_no_guess - assert 3 == 2",
+            "FAILED tests/e2e/test_moving.py::test_format_specifiers - assert '/T/Teenage ...",
+            "FAILED tests/e2e/test_moving.py::test_multiple_nested_directories - assert '/...",
+            "FAILED tests/e2e/test_moving.py::test_format_id - assert 'Aladdin (tt0103639)..."
+          ]
+        }
+      ],
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/__main__.py",
+        ".tmpdaemon/config.json",
+        ".tmpdaemon/cfgwatch/movie1.mkv",
+        ".tmpdaemon/cfgwatch/skipme.tmp",
+        ".tmpdaemon/watch/a.mkv",
+        ".tmpdaemon/watch/b.tmp",
+        ".tmpdaemon/watch/c.part",
+        ".tmpdaemon/watch/d.partx",
+        ".tmpdaemon/watch/e.mkv",
+        ".tmpdaemon/watch/f.mkv",
+        ".tmpdaemon/dest3/e.mkv",
+        ".tmpdaemon/bad.json",
+        ".tmpdaemon/empty.json",
+        "tests/local/test_daemon.py"
+      ],
+      "toolCounts": {
+        "read_file": 9,
+        "run_shell": 37,
+        "write_file": 14,
+        "apply_patch": 9,
+        "recall_context": 2,
+        "run_tests": 13,
+        "list_files": 1,
+        "search_history": 1
+      },
+      "toolErrorCounts": {
+        "apply_patch": 2,
+        "run_tests": 11,
+        "run_shell": 8
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests -x -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests -q -k \"not network\"",
+          "error": true,
+          "resultHead": "exit=1"
+        }
+      ],
+      "firstEditToolOrdinal": 7,
+      "repeatedIdenticalReadSearchRecallCalls": 2,
+      "compactionRequests": [],
+      "config": {
+        "completionReview": true,
+        "workingSetBytes": 0,
+        "contextBudgetPolicy": "pi",
+        "contextReserveTokens": 16384
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 63,
+        "residentWorkingSetOccurrences": 0,
+        "additionalOlderSourceOccurrences": 0,
+        "maxSelectedBodyBytes": 0,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [],
+      "patchSha256": "13e41d706930d60c7cb4bdadab68c71b2ccab035bb73269d22089b50827dfb63",
+      "firstRequestSha256": "549bafcb9d739f050d3d6c9aeec50470c30bc2b360741b25909c9b0c2d2bc1d2",
+      "unknownTransport": []
+    }
+  ],
+  "privateReasoningRead": false,
+  "mechanismAuditSource": "Native ledger completion review events, tool results and config; no private reasoning or hidden verifier implementation."
+}

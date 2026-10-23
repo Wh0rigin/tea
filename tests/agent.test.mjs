@@ -24,14 +24,14 @@ function scriptedFactory(steps, captured = []) {
     return step || { content: [{ type: 'text', text: 'Finished.' }], stop_reason: 'end_turn' };
   } });
 }
-async function scenario(steps, callback, { maxToolCalls = 24, initializeGit = false, historyStrategy = 'full', verbose = false } = {}) {
+async function scenario(steps, callback, { maxToolCalls = 24, initializeGit = false, historyStrategy = 'full', verbose = false, completionReview = false } = {}) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'tea-agent-'));
   try {
     await writeFile(path.join(root, 'value.mjs'), 'export const value = 1;\n');
     await writeFile(path.join(root, 'value.test.mjs'), "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { value } from './value.mjs';\ntest('value', () => assert.equal(value, 2));\n");
     if (verbose) await writeFile(path.join(root, 'verbose.test.mjs'), "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { value } from './value.mjs';\ntest('verbose actual validation', () => { for (let i = 0; i < 200; i++) console.log('fixed log ' + i + ' ' + 'x'.repeat(80)); assert.equal(value, 2); });\n");
     if (initializeGit) await promisify(execFile)('git', ['init', '-q'], { cwd: root, windowsHide: true });
-    const config = { ...loadConfig({ workspace: root, runId: 'integration', historyStrategy, compaction: 'off' }, {}), maxToolCalls };
+    const config = { ...loadConfig({ workspace: root, runId: 'integration', historyStrategy, compaction: 'off', completionReview }, {}), maxToolCalls };
     const captured = [];
     const result = await runTask('修复 value 的值', config, { adapterFactory: scriptedFactory(steps, captured) });
     await callback(result, root, captured);
@@ -187,4 +187,40 @@ test('compresses old successful logs in actual agent requests while retaining re
     assert.equal(rows.length, result.contextDiagnostics.requestCount);
     assert.ok(rows.every((row) => row.sentPayloadBytes <= row.fullPayloadBytes));
   }, { historyStrategy: 'compact-tools', verbose: true });
+});
+
+// Scripted responses test orchestration, not real model accuracy or token savings.
+test('completion review runs once after validation and keeps the public evidence checklist', async () => {
+  await scenario([toolResult([patch, verify])], async (result, root, captured) => {
+    assert.equal(result.status, 'completed');
+    assert.equal(result.validationPassed, true);
+    const reviews = captured.at(-1).filter(m => typeof m.content === 'string' && m.content.startsWith('Completion review'));
+    assert.equal(reviews.length, 1);
+    assert.match(reviews[0].content, /fixtures pre-created/);
+    assert.match(reviews[0].content, /rather than implementation helpers/);
+    assert.equal(captured.length, 3);
+  }, { completionReview: true });
+});
+
+test('review repairs invalidate validation and do not trigger another review', async () => {
+  await scenario([toolResult([patch, verify]),
+    { content: [{ type: 'text', text: 'Done' }], stop_reason: 'end_turn' },
+    toolResult([{ name: 'apply_patch', input: { path: 'value.mjs', search: 'value = 2', replace: 'value = 3' } }])], async result => {
+      assert.equal(result.status, 'needs_validation');
+      assert.equal(result.validationPassed, false);
+    }, { completionReview: true });
+});
+
+test('review does not spend an extra request on unchanged or unvalidated work', async () => {
+  await scenario([], async (result, root, captured) => assert.equal(captured.length, 1), { completionReview: true });
+  await scenario([toolResult([patch])], async (result, root, captured) => {
+    assert.equal(result.status, 'needs_validation');
+    assert.ok(!captured.flat().some(m => typeof m.content === 'string' && m.content.startsWith('Completion review')));
+  }, { completionReview: true });
+});
+
+test('completion review configuration is explicit and disabled by default', () => {
+  assert.equal(loadConfig({}, {}).completionReview, false);
+  assert.equal(loadConfig({}, { TEA_COMPLETION_REVIEW: '1' }).completionReview, true);
+  assert.equal(loadConfig({ completionReview: false }, { TEA_COMPLETION_REVIEW: '1' }).completionReview, false);
 });

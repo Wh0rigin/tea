@@ -239,6 +239,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
   let finalText = '';
   let toolCalls = 0;
   let forcedValidationNudges = 0;
+  let completionReviewRequested = false;
   const contextDiagnostics = { requestCount: 0, fullRequestPayloadBytes: 0, sentRequestPayloadBytes: 0,
     fullRequestPayloadChars: 0, sentRequestPayloadChars: 0, fullHeuristicTokens: 0, sentHeuristicTokens: 0, compactedResultOccurrences: 0 };
   const runtimeState = () => ({ pendingValidation, validationPassed, validationAttempts, validationFailures, validationUnavailable, changedFiles });
@@ -355,6 +356,16 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           await appendSessionMessage(session, { role: 'user', content: `Runtime validation is pending (${changedFiles.join(', ') || 'workspace checks'}). ${unresolved.length ? `Rerun unresolved commands: ${JSON.stringify(unresolved)}. A different passing command cannot clear them.` : 'No relevant check has passed after the latest edit or workspace change.'} ${unavailableValidationNotice(runtimeState())} If validation cannot be completed, report the outstanding checks; do not claim completion.` });
           continue;
         }
+        if (config.completionReview && !completionReviewRequested && changedFiles.length && !pendingValidation) {
+          completionReviewRequested = true;
+          session.taskState.completionReview = { status: 'requested', provenance: 'observed' };
+          session.taskState.pending_steps = [{ action: 'Review public requirements against independent observable outcomes', provenance: 'observed' }];
+          await appendSessionMessage(session, { role: 'user', content: 'Completion review (once per turn): Before finishing, compare the original public requirements with current edits and observed checks. Passing tests establish only those checks, not full requirement coverage. Identify uncovered defaults and interactions. For persisted artifacts, inspect the actual entry point and independently derive expected paths and contents from the requirement, rather than implementation helpers. Check whether fixtures pre-created a directory, file or other condition the program itself must handle; exercise missing parents, custom paths or no-side-effect modes only when relevant to the contract. Reuse existing evidence; do not repeat the entire suite without a reason. If a gap is found, repair and validate through normal tools. Report any unverified outcomes explicitly; do not invent evidence.' });
+          await ledger.event({ type: 'completion_review_requested', changedFileCount: changedFiles.length });
+          await persistRuntimeState(session, runtimeState());
+          continue;
+        }
+        if (completionReviewRequested) session.taskState.completionReview.status = 'responded';
         status = pendingValidation ? 'needs_validation' : 'completed';
         break;
       }
@@ -430,6 +441,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           if (isError || /^exit=[^0]/.test(output) || feedback) taskState.failed_attempts.push(finding);
           taskState.validation = runtimeState();
           taskState.pending_steps = pendingValidation ? [{ action: 'Run relevant validation on current source', provenance: 'observed', sourceEventId: observedEvent?.eventId || null }] : [];
+          if (taskState.completionReview?.status === 'requested') taskState.pending_steps.push({ action: 'Finish public requirement coverage review; report unverified outcomes', provenance: 'observed' });
           const costCap = adapter.config ? adapter.config.maxCostUsd : config.maxCostUsd;
           taskState.budget_remaining = costCap == null ? null : Math.max(0, costCap - (adapter.spentUsd || 0));
           taskState.evidence_refs = [...(session.contextMemory?.units.keys() || [])];
