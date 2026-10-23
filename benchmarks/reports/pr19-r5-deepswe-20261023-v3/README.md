@@ -30,3 +30,7 @@ The same runtime archive and effective PR16 model/context settings were independ
 **Verdict: correctness and net token benefit are undetermined.** Leave review disabled pending review. The interrupted baseline failed in transport before source editing, not as evidence of worse reasoning. A separate future timeout/EOF recovery policy would need its own bounded retry and unknown-usage accounting; the explicit-error policy cannot be retroactively expanded for this cohort.
 
 [Results](results.json) · [Operation diagnostics](diagnostics.json) · [Frozen protocol](protocol.json) · [Audit](verification.json)
+
+## Subsequent continuation
+
+The four previously unstarted entries were evaluated separately in [v4](../pr19-r5-deepswe-20261024-v4/README.md). This interrupted cohort and its unknown usage remain unchanged.

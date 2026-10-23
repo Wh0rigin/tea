@@ -1,0 +1,1045 @@
+{
+  "status": "completed",
+  "runs": [
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 4,
+      "pairRepeat": 2,
+      "variant": "candidate",
+      "requirementReview": 1,
+      "reviewFollowup": {
+        "requested": true,
+        "requests": 20,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 675440,
+        "tools": [
+          {
+            "name": "run_shell",
+            "path": null,
+            "command": "git show --stat HEAD",
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd/testdata/output",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/testdata/output/get-manifest.txt",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd/testdata/output",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd/testdata/output",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/testdata/output/object-order.txt",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/testdata/output/object-order.txt",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd/upgrade_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/upgrade_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/get_manifest_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd/helm_test.go",
+            "command": null,
+            "error": true
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/cmd",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/helpers_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/cmd/helpers_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "pkg/release",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/release/v1/mock.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "pkg/release/v1/hook.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "apply_patch",
+            "path": "pkg/cmd/upgrade_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "apply_patch",
+            "path": "pkg/cmd/get_manifest_test.go",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "run_tests",
+            "path": null,
+            "command": "go test ./pkg/cmd/ -run 'TestUpgradeWithDryRun|TestGetManifestHooksBeforeNonHooksWithSameSource' -v",
+            "error": true
+          },
+          {
+            "name": "run_tests",
+            "path": null,
+            "command": "go test ./pkg/cmd/ -run TestUpgradeWithDryRun -v",
+            "error": false
+          },
+          {
+            "name": "run_tests",
+            "path": null,
+            "command": "go test ./pkg/cmd/ -run TestGetManifestHooksBeforeNonHooksWithSameSource -v",
+            "error": false
+          },
+          {
+            "name": "run_tests",
+            "path": null,
+            "command": "go test ./pkg/cmd/...",
+            "error": false
+          },
+          {
+            "name": "run_shell",
+            "path": null,
+            "command": "git status",
+            "error": false
+          },
+          {
+            "name": "run_shell",
+            "path": null,
+            "command": "git add pkg/cmd/get_manifest_test.go pkg/cmd/upgrade_test.go",
+            "error": false
+          },
+          {
+            "name": "run_shell",
+            "path": null,
+            "command": "git commit -s -m \"test(cmd): assert upgrade dry-run MANIFEST section and get manifest hooks-first ordering\"",
+            "error": false
+          }
+        ]
+      },
+      "reviewRequestedCount": 1,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "go test ./pkg/cmd/...",
+          "signals": []
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestUpgradeWithDryRun|TestGetManifestHooksBeforeNonHooksWithSameSource' -v",
+          "signals": []
+        }
+      ],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/manifest_stream_test.go",
+        "pkg/cmd/upgrade_test.go",
+        "pkg/cmd/get_manifest_test.go"
+      ],
+      "toolCounts": {
+        "read_file": 47,
+        "run_shell": 17,
+        "search_code": 36,
+        "write_file": 2,
+        "apply_patch": 10,
+        "recall_context": 3,
+        "run_tests": 7
+      },
+      "toolErrorCounts": {
+        "run_shell": 2,
+        "search_code": 2,
+        "apply_patch": 3,
+        "run_tests": 2
+      },
+      "validationCommands": [
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestBuildUnifiedManifestStream' -v",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run 'TestUpgradeWithDryRun|TestGetManifestHooksBeforeNonHooksWithSameSource' -v",
+          "error": true,
+          "resultHead": "Shell operators and multiline commands are blocked"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestUpgradeWithDryRun -v",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run TestGetManifestHooksBeforeNonHooksWithSameSource -v",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "go test ./pkg/cmd/...",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 63,
+      "repeatedIdenticalReadSearchRecallCalls": 13,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 26959,
+            "output_tokens": 1164,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "requirementReview": true,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "requirementReview",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 77,
+        "residentWorkingSetOccurrences": 334,
+        "additionalOlderSourceOccurrences": 243,
+        "maxSelectedBodyBytes": 23994,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 1,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "5699d92f43a78d58532f6b7d41447cc28a12bb6cc87e296ec155b2eb0c00c7f3",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 1836983,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": []
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 3,
+      "pairRepeat": 2,
+      "variant": "baseline",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "failed",
+      "errorCode": "MODEL_CONTEXT_LIMIT",
+      "runtimeError": {
+        "code": "MODEL_CONTEXT_LIMIT",
+        "name": "ModelError",
+        "message": "Request blocked by model context budget: estimated input 83283 tokens exceeds 80832; compact or start a new conversation",
+        "stage": "model",
+        "requestSubmitted": false,
+        "budget": {
+          "estimatedInputTokens": 83283,
+          "inputLimit": 80832,
+          "triggerTokens": 64665,
+          "contextWindowTokens": 216000,
+          "requestBytes": 207244,
+          "maxWireBytes": 2097152,
+          "outputLimit": 131072,
+          "residentBytes": 257235,
+          "residentLimit": 4194304,
+          "automaticCompactions": 2,
+          "emergencyCompactions": 0
+        }
+      },
+      "validationPassed": false,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [],
+      "toolCounts": {
+        "read_file": 65,
+        "run_shell": 13,
+        "search_code": 17,
+        "recall_context": 4
+      },
+      "toolErrorCounts": {
+        "run_shell": 3,
+        "read_file": 2
+      },
+      "validationCommands": [],
+      "firstEditToolOrdinal": null,
+      "repeatedIdenticalReadSearchRecallCalls": 16,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 22307,
+            "output_tokens": 1393,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        },
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 13708,
+            "output_tokens": 1986,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "requirementReview": false,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 45,
+        "residentWorkingSetOccurrences": 152,
+        "additionalOlderSourceOccurrences": 54,
+        "maxSelectedBodyBytes": 23946,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 5,
+        "f2p_passed": 0,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_get_manifest",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_install_dry-run",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_template",
+        "[f2p] helm.sh/helm/v4/pkg/cmd.TestDeterministicRenderOrdering/deterministic_ordering_in_upgrade_dry-run"
+      ],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 861306,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "6592baf8024bfc718e8113f188d52814a2dce671ca68d3dd54fc2937d1bdab3d",
+      "unknownTransport": []
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 3,
+      "pairRepeat": 2,
+      "variant": "baseline",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--batch', '--daemon-run-once', '--movie-directory', '...once_moves_and_update0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', '/tmp/pytest-of-root/p...once_no_files_still_u0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: assert 1 == 0",
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--daemon-config', '/tmp/pytest-o...ig_and_cli_watch_comb0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', '/tmp/pytest-of-root/p...t_exists_no_overwrite0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon-run-once', '--watch', '/tmp/pytest-of-root/p...xistent_watch_skipped0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "E   AssertionError: assert 1 == 0"
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   AssertionError: assert False",
+            "E    +  where False = is_file()",
+            "E    +    where is_file = ((PosixPath('/tmp/pytest-of-root/pytest-1/test_batch_size_zero0') / 'watch') / 'a.mkv').is_file",
+            "FAILED tests/local/test_daemon.py::test_batch_size_zero - AssertionError: ass..."
+          ]
+        },
+        {
+          "command": "python -m mnamer --config-dump",
+          "signals": []
+        }
+      ],
+      "changedFiles": [
+        "mnamer/setting_store.py",
+        "mnamer/daemon.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py"
+      ],
+      "toolCounts": {
+        "run_shell": 12,
+        "read_file": 8,
+        "apply_patch": 5,
+        "write_file": 2,
+        "run_tests": 6,
+        "recall_context": 1
+      },
+      "toolErrorCounts": {
+        "run_shell": 3,
+        "read_file": 1,
+        "run_tests": 3
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m mnamer --config-dump",
+          "error": true,
+          "resultHead": "Only the documented test, lint, typecheck, and read-only Git commands are allowed in run_tests"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 12,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "requirementReview": false,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 29,
+        "residentWorkingSetOccurrences": 81,
+        "additionalOlderSourceOccurrences": 52,
+        "maxSelectedBodyBytes": 13956,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 47,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_just_starts_when_not_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_restart_stops_then_starts_when_running",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_start_processes_files_and_supports_status_and_stop",
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_status_not_running_when_state_exists_but_no_process"
+      ],
+      "patchSha256": "4795ad7ef83a22fd4067fbcb80d2aace8e07e819edcbf49af7a595cd620d97e3",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 507794,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "549bafcb9d739f050d3d6c9aeec50470c30bc2b360741b25909c9b0c2d2bc1d2",
+      "unknownTransport": []
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 4,
+      "pairRepeat": 2,
+      "variant": "candidate",
+      "requirementReview": 1,
+      "reviewFollowup": {
+        "requested": true,
+        "requests": 11,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 103305,
+        "tools": [
+          {
+            "name": "search_code",
+            "path": "mnamer/daemon.py",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "search_code",
+            "path": "mnamer/daemon.py",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "write_file",
+            "path": "tmp_rev/cfg.json",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "write_file",
+            "path": "tmp_rev/watch/movie.mkv",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "run_shell",
+            "path": null,
+            "command": "python -m mnamer --daemon-run-once --dry-run --daemon-config tmp_rev/cfg.json --daemon-state tmp_rev/state.json",
+            "error": false
+          },
+          {
+            "name": "run_shell",
+            "path": null,
+            "command": "ls -R tmp_rev",
+            "error": true
+          },
+          {
+            "name": "read_file",
+            "path": "tmp_rev/state.json",
+            "command": null,
+            "error": true
+          },
+          {
+            "name": "read_file",
+            "path": "tmp_rev/state.json.log",
+            "command": null,
+            "error": true
+          },
+          {
+            "name": "read_file",
+            "path": "tmp_rev/watch/movie.mkv",
+            "command": null,
+            "error": false
+          },
+          {
+            "name": "read_file",
+            "path": "tmp_rev/movies/movie.mkv",
+            "command": null,
+            "error": true
+          },
+          {
+            "name": "run_tests",
+            "path": null,
+            "command": "python -m pytest tests/local -q",
+            "error": false
+          }
+        ]
+      },
+      "reviewRequestedCount": 1,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert False",
+            "E    +  where False = is_file()",
+            "E    +    where is_file = (PosixPath('/tmp/pytest-of-root/pytest-0/test_run_once_moves_files0/movies') / 'a.mkv').is_file",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files - AssertionError..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   AssertionError: assert False",
+            "E    +  where False = is_file()",
+            "E    +    where is_file = (PosixPath('/tmp/pytest-of-root/pytest-1/test_run_once_moves_files0/watch') / 'c.partx').is_file",
+            "E   NameError: name 'capsys' is not defined",
+            "E   NameError: name 'capsys' is not defined",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_files - AssertionError...",
+            "FAILED tests/local/test_daemon.py::test_status_stop_stats_logs_state_dir - Na...",
+            "FAILED tests/local/test_daemon.py::test_logs_tail_and_all - NameError: name '..."
+          ]
+        }
+      ],
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/frontends.py",
+        "tests/local/test_daemon.py",
+        "tmp_e2e/watch/movie.mkv",
+        "tmp_e2e/watch/skip.tmp",
+        "tmp_e2e/cfg.json",
+        "tmp_e2e/bad.json",
+        "tmp_rev/cfg.json",
+        "tmp_rev/watch/movie.mkv"
+      ],
+      "toolCounts": {
+        "read_file": 14,
+        "list_files": 2,
+        "search_code": 4,
+        "run_shell": 28,
+        "write_file": 8,
+        "apply_patch": 7,
+        "run_tests": 7
+      },
+      "toolErrorCounts": {
+        "run_shell": 7,
+        "run_tests": 2,
+        "apply_patch": 1,
+        "read_file": 3
+      },
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 13,
+      "repeatedIdenticalReadSearchRecallCalls": 0,
+      "compactionRequests": [
+        {
+          "stopReason": "end_turn",
+          "usage": {
+            "input_tokens": 17823,
+            "output_tokens": 1421,
+            "cache_read_input_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0
+            },
+            "service_tier": "standard"
+          },
+          "usageComplete": true
+        }
+      ],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "requirementReview": true,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "requirementReview",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 53,
+        "residentWorkingSetOccurrences": 168,
+        "additionalOlderSourceOccurrences": 144,
+        "maxSelectedBodyBytes": 18603,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [],
+      "patchSha256": "37a02ef405b63c40202ca1dedf5bff1ab2877b7aaacf5c260893429e902a8b3c",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 1238036,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "549bafcb9d739f050d3d6c9aeec50470c30bc2b360741b25909c9b0c2d2bc1d2",
+      "unknownTransport": []
+    }
+  ],
+  "privateReasoningRead": false,
+  "mechanismAuditSource": "Native ledger requirement review events, tool results and config; no private reasoning or hidden verifier implementation.",
+  "lastAttemptTransportMetadata": [
+    {
+      "call": 51,
+      "submitted": true,
+      "status": "transport_finished",
+      "httpStatus": 200,
+      "elapsedMs": 10850,
+      "messageStopSeen": true,
+      "auditInvalid": false,
+      "usageComplete": true,
+      "usage": {
+        "input_tokens": 128,
+        "output_tokens": 514,
+        "cache_read_input_tokens": 8384
+      }
+    },
+    {
+      "call": 52,
+      "submitted": true,
+      "status": "transport_finished",
+      "httpStatus": 200,
+      "elapsedMs": 1828,
+      "messageStopSeen": true,
+      "auditInvalid": false,
+      "usageComplete": true,
+      "usage": {
+        "input_tokens": 627,
+        "output_tokens": 45,
+        "cache_read_input_tokens": 8512
+      }
+    },
+    {
+      "call": 53,
+      "submitted": true,
+      "status": "transport_finished",
+      "httpStatus": 200,
+      "elapsedMs": 6510,
+      "messageStopSeen": true,
+      "auditInvalid": false,
+      "usageComplete": true,
+      "usage": {
+        "input_tokens": 5337,
+        "output_tokens": 129,
+        "cache_read_input_tokens": 3904
+      }
+    }
+  ],
+  "diagnosticBoundary": "Client explicit provider-error event and relay framing metadata only; no raw private reasoning or hidden verifier implementation."
+}

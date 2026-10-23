@@ -61,3 +61,13 @@ Four of eight scheduled attempts ran. Both candidates activated review once, com
 Post-review requests consumed 599,152 tokens on Helm and 376,850 on Mnamer, including checks and test repair; these are observed follow-up costs, not causal net overhead estimates. Review generated additional checks, but no demonstrated net accuracy/token improvement follows from this interrupted screen. Keep default off and retain the complete PR16 profile. No Pi/Claude reruns and no replacement of earlier failed records.
 
 Runtime archive: `46a475393e5afbe14edc3fdd54ab73ab208a07bf`. Protocol frozen before calls in `f12db59b9468ae6182e6344ba4a58b77bd7191ef`. Integration regression: 487 passed, one skipped, zero failed; all six Windows/Ubuntu Node 20/22/24 CI jobs passed.
+
+## Four-attempt continuation: higher observed acceptance, higher tokens
+
+[Continuation report](../benchmarks/reports/pr19-r5-deepswe-20261024-v4/README.md) · [中文](../benchmarks/reports/pr19-r5-deepswe-20261024-v4/RESULTS.zh-CN.md)
+
+All four previously unstarted second-pair entries were evaluated under the same frozen runtime. Baseline accepted 0/2 tasks and candidate 1/2. Complete all-attempt provider tokens increased from 1,369,100 to 3,075,019 (**+124.60%**). No both-passed pair is available, and the baseline Helm attempt hit its input guard before editing. Candidate Helm failed official ordering checks despite local passes; Mnamer candidate passed 370/370 versus baseline 366/370. Neither candidate made product-source repairs after review, so causal quality benefit is unproven.
+
+Review follow-up cost was 675,440 tokens on Helm and 103,305 on Mnamer. Both arms retained original PR16 settings, including 216k context, full output reservation and two compactions; no runtime edits were made during evaluation. The new cohort was frozen in 08b4849 before paid calls. Keep default off: this is not a demonstrated token optimization.
+
+Across the two cohorts, the original eight entries have now been attempted, with candidate 3/4 versus baseline 1/4 on repeats of two seen tasks. Earlier transport failures and unknown usage remain; full baseline tokens and any combined token reduction are unknown. These counts must not be equated with the historical PR16 four-task result or advertised as causal improvement.
