@@ -5,11 +5,14 @@ import { ToolFeedbackError } from './tool-feedback.mjs';
 // A direct-executable grammar, not a shell. Parsing and policy share these argv.
 export function parseCommand(command) {
   if (typeof command !== 'string' || !command.trim() || command.includes('\0')) throw new ToolFeedbackError('INPUT_INVALID', 'command must be a non-empty string without NUL bytes');
-  if (/[;&|<>`\n\r]/.test(command)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Shell operators and multiline commands are blocked');
+  if (/[;&<>`\n\r]/.test(command)) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Shell operators and multiline commands are blocked');
   const argv = []; let value = '', quote = '', started = false;
   const text = command.trim();
   for (let i = 0; i < text.length; i++) {
     const ch = text[i];
+    // A quoted pipe is a literal argv character (e.g. Go's -run regex),
+    // not a pipeline. Keep unquoted pipes and the other existing guards blocked.
+    if (ch === '|' && !quote) throw new ToolFeedbackError('CAPABILITY_DENIED', 'Shell operators and multiline commands are blocked');
     // Preserve path backslashes. Only a run immediately before a double quote
     // is special: pairs yield literal slashes; an odd remainder escapes it.
     if (ch === '\\' && quote !== "'") {
