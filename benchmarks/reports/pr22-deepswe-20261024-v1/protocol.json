@@ -1,0 +1,225 @@
+{
+  "name": "pr22-deepswe-20261024-v1",
+  "status": "frozen_before_model_calls",
+  "teaCommit": "a3571e56b597ac4f3b8458e929b4621c93e76c30",
+  "piVersion": "0.87.1",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799"
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "production",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "production",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "production",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "production",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    }
+  ],
+  "endpointSha256": "1e90246348f66dd206b4bcbd68e0dff9657bfda32df9ae69b9b2ee7e164251ce",
+  "archivesSha256": {
+    "helpers": "b7433cf78d1d4f7d734fdcf5acf33c96096009ae5ba2b1959825a7fd894f6b5e",
+    "tea": "34bb95fe7e377465d9ce09c1324d2e357a74b87122cd4c9c930e007dac548a9d"
+  },
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "maxToolCalls": 4096,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 30,
+  "suiteControlBudgetUsd": 120,
+  "attemptsPerTaskPerArm": 2,
+  "nativeAssets": {
+    "nodeVersion": "24.12.0",
+    "nodeSha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+    "piArchiveSha256": "549868f43568a6c8a102e706a711a2f3a67343fd51c7d766b5929067f9ca9620",
+    "piPackageFiles": 14114
+  },
+  "adapterSha256": {
+    "tea_adapter.py": "6bdd4a1cc5cd828376f7a297cf5deea847b8e569be87b068108e3894181dc81c",
+    "run_suite.py": "0bb473a7505790a97d5a05cc11b24b762944793e606d326596fa91af2e4deddc",
+    "preflight.py": "73d45b277c985e6192f28e7d505035c78c9e426803a1956a1389da934ac7f363",
+    "inference_relay.py": "3818241ae3c7ded924ca473597554b9b5af20d60075bd4d695ad1e748fbfef8a",
+    "test_relay.py": "6be5128429559454ef1cc9a11f2ac04faa8d6d69256fd076b343d47b36171fb7",
+    "collect.py": "5fb6add2707cf1b71cab0f5da056732771b481fb2e69db1046b04e8d1258469b",
+    "run-tea.mjs": "1efeac3693ddb7011ced0374ff701a1cf7247638e3c3dd08b705552c24d9b4ad",
+    "task-profiles.json": "19b760964be32d84ba1294e06252bf8cdf438ec226fcfecd42566f17d2aa6468"
+  },
+  "thinkingBudgetTokens": 8000,
+  "frameworkPins": {
+    "deepSweDataset": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "workbuddyFramework": "625b2233093ae4f23e76be28c1f341d41cc70373",
+    "harbor": "527d50deb63a5d279e8c20593c18a2cbc7f61f9e"
+  },
+  "analysisPolicy": {
+    "primary": "Official full-task acceptance and native completion; all attempts retained.",
+    "tokenUnit": "provider input + output + cache read + cache creation; thinking included once in output",
+    "savingsSubset": "No contemporaneous other-agent or parent control. Historical results descriptive only; no causal token savings or correctness uplift claim.",
+    "missingUsage": "null, never zero; retain all request reservations plus the full30 attempt allocation. Only explicitly classified Internal Network Failure may recover through up to5 identical-payload retries; recovered unknown usage stays unknown.",
+    "scope": "Two previously seen DeepSWE tasks, two production repeats each. Diagnostic capability screen, not full/unseen benchmark score.",
+    "stopAfter": "Four serial attempts; keep original explicit-error retry policy. Stop on unrecovered unknown, no paid task replacement or automatic relaunch.",
+    "allAttemptTokenRatio": "No ratio to historical cohorts. Complete production total only if all four metered; unknown remains null."
+  },
+  "endpoint": "https://open.bigmodel.cn/api/anthropic",
+  "historicalReference": {
+    "piReport": "../native-pi-s0-20261022/deepswe-results.json",
+    "piReportSha256": "3f11be7d682fc4bd89f8deed1573e465b375aa76043e09119ddabccc88afbe9c",
+    "piRetested": false,
+    "sameEndpoint": false,
+    "sameSource": false,
+    "causalCodeBenefitIdentifiable": false
+  },
+  "officialDocs": [
+    "https://zcode.z.ai/en/docs/configuration",
+    "https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash",
+    "https://docs.bigmodel.cn/cn/guide/start/pricing"
+  ],
+  "pricing": {
+    "currency": "CNY",
+    "inputPerMillion": 0.8,
+    "outputPerMillion": 2.8,
+    "cacheReadPerMillion": 0.23,
+    "controlEstimate": "Retain previous conservative .8/1.6/2.8 USD-equivalent allocation arithmetic as safety bounds, not actual currency cost; report tokens separately."
+  },
+  "preflightProviderProbe": {
+    "calls": 0,
+    "includedInTaskTokens": false
+  },
+  "baselineReport": null,
+  "change": "Merged production PR22 command parser fix; no PR19 requirement review code. Preserve full PR16 model/context profile plus production retry5. One runtime, four serial attempts, no new parent/Pi/Claude controls.",
+  "variants": {
+    "production": {
+      "runtimeCommit": "a3571e56b597ac4f3b8458e929b4621c93e76c30",
+      "requirementReview": false,
+      "internalNetworkRetries": 5
+    }
+  },
+  "mechanismAudit": "Native ledger requirement_review_requested plus complete exported non-secret experiment-config and official acceptance. No private reasoning or hidden verifier implementation inspection.",
+  "runtimeBudgetPolicy": "reserved-output",
+  "workingSetBytes": 24000,
+  "qualityProfile": "pr16-quality",
+  "frozenOriginalRuntimeCommit": "8ed56262b3c41d701f8a3a55834683af2e1331ef",
+  "frozenAlgorithmConfig": {
+    "editPermissions": {
+      "allow": [],
+      "ask": [],
+      "deny": []
+    },
+    "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+    "model": "glm-5.3-flash",
+    "apiVersion": "2023-06-01",
+    "maxCostUsd": 10,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "maxOutputTokens": 131072,
+    "maxRequestInputTokens": 2097152,
+    "maxRequestInputBytes": 2097152,
+    "contextWindowTokens": 216000,
+    "contextReserveTokens": 4096,
+    "maxToolCalls": 4096,
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "timeoutMs": 900000,
+    "effort": "low",
+    "thinkingMode": "enabled",
+    "contextStrategy": "v1",
+    "initialFileLimit": 8,
+    "historyStrategy": "full",
+    "historyKeepRecent": 2,
+    "memoryPolicy": "contextos",
+    "contextosTargetBytes": 32000,
+    "contextosWorkingSetBytes": 24000,
+    "contextosKeepRecent": 2,
+    "compaction": "auto",
+    "compactionTriggerRatio": 0.8,
+    "compactionKeepRecentBytes": 16000,
+    "compactionMaxPerTurn": 2,
+    "compactionReserveTokens": 16384,
+    "memoryGc": "auto",
+    "memoryCacheBytes": 262144,
+    "memoryGcMaxResidentBytes": 4194304,
+    "sessionStorageMaxBytes": 536870912,
+    "stream": true,
+    "storeRaw": false
+  },
+  "credentialSource": "Previously user-provided official GLM credential; supplied through hidden input and kept only in process memory.",
+  "priorAttempt": {
+    "cohorts": [
+      "pr19-r5-deepswe-20261024-v4"
+    ],
+    "recordsRetained": true,
+    "newAuthorization": "User requested DeepSWE testing after PR22 was merged. Fresh production capability evaluation, not retry or replacement of previous tasks."
+  },
+  "internalNetworkRetries": 5,
+  "retryPolicy": {
+    "maximumRetries": 5,
+    "maximumSubmissionsPerLogicalRequest": 6,
+    "backoffSeconds": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "onlyExplicitInternalNetworkFailure": true,
+    "samePayloadRequired": true,
+    "unknownReservationRetained": true,
+    "completeTokenRatioUnavailableIfAnyUnknown": true
+  }
+}
