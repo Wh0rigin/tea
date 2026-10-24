@@ -12,7 +12,7 @@ export function buildSystemPrompt(tools = []) {
     ...(names.has('run_tests') || names.has('run_shell')
       ? ['For multi-part changes, keep a short requirement -> observable outcome -> check list in your working response; cover defaults and interacting behaviors. Update it as evidence changes; no separate planning round is required.',
         'Finish a coherent set of edits, then run relevant checks. Repair failures and rerun each unresolved command; a narrower pass cannot clear it. New edits require fresh validation.',
-        'Exercise the real entry point and requirement edge cases using existing inputs, not only fixtures you wrote. Check actual outputs and persisted results, not just exit codes or status flags. For background work, verify continued work after the starter exits, then stop and clean up test workers.',
+        'Exercise the real entry point and requirement edge cases with fresh inputs. For file outputs, test missing parents; fixtures must not precreate product-owned outputs. Check persisted results, not just exit codes or status flags; preserve dry-run/read-only behavior. For background work, verify continued work after the starter exits, then stop and clean up test workers.',
         'Distinguish unavailable runners, expected negative cases and product failures; report unverified checks. If a command fails from invalid usage, change the invocation instead of repeating it unchanged. Reuse current source evidence and group related read-only lookups when supported; change strategy when repeated searches add no evidence.'] : []),
   ];
   return ['You are TEA, a coding agent operating inside the supplied workspace.',
