@@ -1,0 +1,1558 @@
+{
+  "status": "completed",
+  "runs": [
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "production",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/manifest_stream_test.go"
+      ],
+      "modelAuthoredTimeoutSupport": false,
+      "failedOperationHeads": [
+        {
+          "name": "read_file",
+          "command": null,
+          "path": "pkg/cmd/upgrade.go",
+          "outputHead": [
+            "endLine must be greater than or equal to startLine",
+            "[tool_feedback] {\"version\":1,\"code\":\"TOOL_FAILED\",\"retryable\":false,\"missingCapability\":\"successful-tool-result\",\"next\":\"Inspect the reported failure and obtain new evidence before another attempt.\"}"
+          ]
+        },
+        {
+          "name": "write_file",
+          "command": null,
+          "path": "pkg/cmd/manifest_stream.go",
+          "outputHead": [
+            "File already exists; write_file never overwrites existing files. Use apply_patch with current source evidence; read only if that evidence is missing or stale.",
+            "[tool_feedback] {\"version\":1,\"code\":\"FILE_EXISTS\",\"retryable\":false,\"missingCapability\":\"edit-existing-file\",\"next\":\"Use apply_patch with current source evidence; read only if it is missing or stale. File existence alone does not invalidate a prior read.\"}"
+          ]
+        },
+        {
+          "name": "apply_patch",
+          "command": null,
+          "path": "pkg/cmd/manifest_stream.go",
+          "outputHead": [
+            "Patch search text was not found; all edits remain unapplied",
+            "[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refresh the relevant range if needed. A missing match does not prove a version change.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go build ./pkg/cmd/",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "",
+            "stderr:",
+            "# helm.sh/helm/v4/pkg/cmd"
+          ]
+        },
+        {
+          "name": "apply_patch",
+          "command": null,
+          "path": "pkg/cmd/upgrade.go",
+          "outputHead": [
+            "Patch search text was not found; all edits remain unapplied",
+            "[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refresh the relevant range if needed. A missing match does not prove a version change.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go test ./pkg/cmd/ 2>&1 | tail -60",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go test ./pkg/cmd/",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T02:43:42Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T02:43:42.878351878Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T02:43:42.878374344Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go test ./pkg/cmd/ -run \"TestBuildUnifiedManifestStream|TestSplitManifestDocuments|TestUpgrade|TestInstall|TestTemplate|TestGetManifest\"",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "level=WARN msg=\"this chart is deprecated\"",
+            "level=WARN msg=\"--dry-run is deprecated and should be replaced with '--dry-run=client'\"",
+            "level=WARN msg=\"--dry-run is deprecated and should be replaced with '--dry-run=client'\""
+          ]
+        },
+        {
+          "name": "apply_patch",
+          "command": null,
+          "path": "pkg/cmd/manifest_stream_test.go",
+          "outputHead": [
+            "Patch search text was not found; all edits remain unapplied",
+            "[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refresh the relevant range if needed. A missing match does not prove a version change.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output for template, dry-runs and get manifest\n\nReplace the separate MANIFEST/HOOKS sections with a single, stable manifest\nstream ordered by full Source path (lexicographically), preserving render\norder within each file and placing hooks before non-hook resources sharing\nthe same Source. Applies to helm template, install/upgrade dry-runs and\nhelm get manifest, with no new flags. Dry-run output now has a single\nMANIFEST section with no extra trailing blank lines, helm template output\nends with a trailing newline, and upgrade dry-run no longer prints the\nHappy Helming! success line.\n\nSigned-off-by: TEA <tea@example.com>\"",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): unified manifest-stream output for template, dry-runs and get manifest\" -m \"Replace the separate MANIFEST/HOOKS sections with a single, stable manifest stream ordered by full Source path (lexicographically), preserving render order within each file and placing hooks before non-hook resources sharing the same Source. Applies to helm template, install/upgrade dry-runs and helm get manifest, with no new flags. Dry-run output now has a single MANIFEST section with no extra trailing blank lines, helm template output ends with a trailing newline, and upgrade dry-run no longer prints the Happy Helming! success line.\" -m \"Signed-off-by: TEA <tea@example.com>\"",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        }
+      ],
+      "toolCounts": {
+        "read_file": 25,
+        "run_shell": 21,
+        "search_code": 17,
+        "write_file": 3,
+        "apply_patch": 14
+      },
+      "toolErrorCounts": {
+        "read_file": 1,
+        "write_file": 1,
+        "apply_patch": 3,
+        "run_shell": 6
+      },
+      "shellValidationCommands": [
+        {
+          "command": "go build ./pkg/cmd/",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "",
+            "stderr:",
+            "# helm.sh/helm/v4/pkg/cmd"
+          ]
+        },
+        {
+          "command": "go build ./pkg/cmd/",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/ 2>&1 | tail -60",
+          "error": true,
+          "resultHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T02:43:42Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T02:43:42.878351878Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T02:43:42.878374344Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/ -update",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "ok  \thelm.sh/helm/v4/pkg/cmd\t17.411s",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "ok  \thelm.sh/helm/v4/pkg/cmd\t16.876s",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run \"TestBuildUnifiedManifestStream|TestSplitManifestDocuments|TestUpgrade|TestInstall|TestTemplate|TestGetManifest\"",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "level=WARN msg=\"this chart is deprecated\"",
+            "level=WARN msg=\"--dry-run is deprecated and should be replaced with '--dry-run=client'\"",
+            "level=WARN msg=\"--dry-run is deprecated and should be replaced with '--dry-run=client'\""
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run \"TestBuildUnifiedManifestStream|TestSplitManifestDocuments|TestUpgrade|TestInstall|TestTemplate|TestGetManifest\"",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "ok  \thelm.sh/helm/v4/pkg/cmd\t0.353s",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "ok  \thelm.sh/helm/v4/pkg/cmd\t16.829s",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go vet ./pkg/cmd/",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "",
+            "stderr:"
+          ]
+        }
+      ],
+      "pipeCommandCalls": [
+        {
+          "command": "go test ./pkg/cmd/ 2>&1 | tail -60",
+          "error": true
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run \"TestBuildUnifiedManifestStream|TestSplitManifestDocuments|TestUpgrade|TestInstall|TestTemplate|TestGetManifest\"",
+          "error": true
+        },
+        {
+          "command": "go test ./pkg/cmd/ -run \"TestBuildUnifiedManifestStream|TestSplitManifestDocuments|TestUpgrade|TestInstall|TestTemplate|TestGetManifest\"",
+          "error": false
+        }
+      ],
+      "validationCommands": [],
+      "firstEditToolOrdinal": 23,
+      "repeatedIdenticalReadSearchRecallCalls": 3,
+      "compactionRequests": [],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 57,
+        "residentWorkingSetOccurrences": 196,
+        "additionalOlderSourceOccurrences": 147,
+        "maxSelectedBodyBytes": 23954,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [],
+      "patchSha256": "98e811d3209be87b0f6dc1834bb303118517c745a7fcfd48d3b3cc90b6e72e57",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 1323164,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "dab5f26c3b4e4272aec1441fc5f9fbfc2488ebd890168925c3b758380c5aee2b",
+      "unknownTransport": []
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 1,
+      "pairRepeat": 1,
+      "variant": "production",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 1 == 2",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--validate-daemon-config'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_validate_missing_config_flag - Assert..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": []
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "signals": []
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "signals": []
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "signals": []
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"lifecycle\"",
+          "signals": [
+            "E   subprocess.TimeoutExpired: Command '['/usr/local/bin/python', '-m', 'mnamer', '--daemon', 'start', '--daemon-config', '/tmp/pytest-of-root/pytest-4/test_daemon_lifecycle0/config.json', '--daemon-state', '/tmp/pytest-of-root/pytest-4/test_daemon_lifecycle0/state.json']' timed out after 60 seconds",
+            "FAILED tests/local/test_daemon.py::test_daemon_lifecycle - subprocess.Timeout..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "signals": []
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "signals": []
+        }
+      ],
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/frontends.py",
+        "tmp-daemon-test/config.json",
+        "tmp-daemon-test/bad.json",
+        "tmp-daemon-test/make_fixtures.py",
+        "tests/local/test_daemon.py",
+        "conftest.py"
+      ],
+      "modelAuthoredTimeoutSupport": true,
+      "failedOperationHeads": [
+        {
+          "name": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config",
+          "path": null,
+          "outputHead": [
+            "exit=2",
+            "stdout:",
+            "validate: missing daemon config; use --daemon-config=<PATH>",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config tmp-daemon-test/bad.json",
+          "path": null,
+          "outputHead": [
+            "exit=2",
+            "stdout:",
+            "invalid daemon config: invalid daemon config structure: watch entry 0 requires a string 'path'",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -m mnamer --validate-daemon-config --daemon-config tmp-daemon-test/nope.json",
+          "path": null,
+          "outputHead": [
+            "exit=2",
+            "stdout:",
+            "invalid daemon config: daemon config not found: 'tmp-daemon-test/nope.json'",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -m mnamer --daemon start --daemon-state tmp-daemon-test/state.json",
+          "path": null,
+          "outputHead": [
+            "exit=2",
+            "stdout:",
+            "no watch directories configured",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -c \"import pathlib; d=pathlib.Path('tmp-daemon-test/watch'); d.mkdir(parents=True, exist_ok=True); (d/'movie one.mkv').write_bytes(b'x'*10); (d/'skip.tmp').write_bytes(b'x'); (d/'skip.partial').write_bytes(b'x'); (d/'skip.part').write_bytes(b'x'); (d/'no.partfile').write_bytes(b'y'*10); (d/'grow.mkv').write_bytes(b'x'*5); (d/'a.tmp').mkdir(exist_ok=True)\"",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python tmp-daemon-test/make_fixtures.py",
+          "path": null,
+          "outputHead": [
+            "Outside the frozen benchmark command policy; use a documented validation or CLI entry",
+            "[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied this operation. Follow its reason; use an allowed entry or report the missing capability.\"}"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "F",
+            "=================================== FAILURES ===================================",
+            "______________________ test_validate_missing_config_flag _______________________"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "path": null,
+          "outputHead": [
+            "Command timed out after 120000 ms",
+            "stdout:",
+            "...................F.F",
+            "stderr:",
+            ""
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "path": null,
+          "outputHead": [
+            "exit=4",
+            "stdout:",
+            "",
+            "stderr:",
+            "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "path": null,
+          "outputHead": [
+            "Command timed out after 120000 ms",
+            "stdout:",
+            "F.F",
+            "stderr:",
+            ""
+          ]
+        },
+        {
+          "name": "apply_patch",
+          "command": null,
+          "path": "mnamer/daemon.py",
+          "outputHead": [
+            "Patch search text was not found; all edits remain unapplied",
+            "[tool_feedback] {\"version\":1,\"code\":\"PATCH_NOT_FOUND\",\"retryable\":false,\"missingCapability\":\"matching-search-text\",\"next\":\"Check the exact search text against current source; refresh the relevant range if needed. A missing match does not prove a version change.\"}"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "path": null,
+          "outputHead": [
+            "Command timed out after 120000 ms",
+            "stdout:",
+            "..F",
+            "stderr:",
+            ""
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"lifecycle\"",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "F                                                                        [100%]",
+            "=================================== FAILURES ===================================",
+            "____________________________ test_daemon_lifecycle _____________________________"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "rm -rf tmp-daemon-test",
+          "path": null,
+          "outputHead": [
+            "Destructive commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "git status --porcelain && git log --oneline -2 && git rev-parse --abbrev-ref HEAD",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "path": null,
+          "outputHead": [
+            "exit=4",
+            "stdout:",
+            "",
+            "stderr:",
+            "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "path": null,
+          "outputHead": [
+            "exit=4",
+            "stdout:",
+            "",
+            "stderr:",
+            "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -m pip install pytest-timeout",
+          "path": null,
+          "outputHead": [
+            "Outside the frozen benchmark command policy; use a documented validation or CLI entry",
+            "[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied this operation. Follow its reason; use an allowed entry or report the missing capability.\"}"
+          ]
+        }
+      ],
+      "toolCounts": {
+        "read_file": 9,
+        "search_code": 3,
+        "run_shell": 23,
+        "write_file": 6,
+        "apply_patch": 8,
+        "run_tests": 18
+      },
+      "toolErrorCounts": {
+        "run_shell": 9,
+        "run_tests": 8,
+        "apply_patch": 1
+      },
+      "shellValidationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "..........................                                               [100%]",
+            "26 passed in 16.49s",
+            ""
+          ]
+        }
+      ],
+      "pipeCommandCalls": [],
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "Command timed out after 120000 ms"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "error": true,
+          "resultHead": "exit=4"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "error": true,
+          "resultHead": "Command timed out after 120000 ms"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "error": true,
+          "resultHead": "Command timed out after 120000 ms"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"lifecycle\"",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\"",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"lifecycle\"",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "error": true,
+          "resultHead": "exit=4"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "error": true,
+          "resultHead": "exit=4"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q -k \"combined or start_requires or lifecycle or restart or logs or directory_state\" --timeout=90",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q --timeout=90",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 10,
+      "repeatedIdenticalReadSearchRecallCalls": 0,
+      "compactionRequests": [],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 61,
+        "residentWorkingSetOccurrences": 195,
+        "additionalOlderSourceOccurrences": 169,
+        "maxSelectedBodyBytes": 21453,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 0,
+        "f2p_total": 51,
+        "f2p_passed": 50,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [
+        "[f2p] tests.e2e.test_watch_folder_daemon_mode.test_daemon_logs_respects_state_path_with_subdirectory"
+      ],
+      "patchSha256": "f7bcfb4e044b494fede4c3a5adce7e7e298faf5c7b1993a8f554d99d62b90e5e",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 1391537,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "dc32b0ffa4d1a9845106047d1dd14d8a0ae1fad5e1eea586ea02ae1fc76b42fa",
+      "unknownTransport": []
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "repeat": 2,
+      "pairRepeat": 2,
+      "variant": "production",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 1 == 0",
+            "E    +  where 1 = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--batch', '--movie-directory', '/tmp/pytest-of-root/p..._once_moves_top_level0/state.json'], returncode=1, stdout='', stderr='/usr/local/bin/python: No module named mnamer\\n').returncode",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_top_level - AssertionE..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert False",
+            "E    +  where False = is_file()",
+            "E    +    where is_file = (PosixPath('/tmp/pytest-of-root/pytest-1/test_run_once_moves_top_level0/watch') / 'skip.me.tmp').is_file",
+            "FAILED tests/local/test_daemon.py::test_run_once_moves_top_level - AssertionE..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert 4 == 3",
+            "E    +  where 4 = len(['/tmp/pytest-of-root/pytest-2/test_run_once_dry_run0/watch/movie.one.mkv -> /tmp/pytest-of-root/pytest-2/test_run_onc...-2/test_run_once_dry_run0/watch/skip.me.tmp -> /tmp/pytest-of-root/pytest-2/test_run_once_dry_run0/movies/skip.me.tmp'])",
+            "FAILED tests/local/test_daemon.py::test_run_once_dry_run - AssertionError: as..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "signals": [
+            "E   AssertionError: assert not [PosixPath('/tmp/pytest-of-root/pytest-3/test_batch_size_zero_and_cap0/movies/movie.one.mkv'), PosixPath('/tmp/pytest-...cap0/movies/movie.two.mkv'), PosixPath('/tmp/pytest-of-root/pytest-3/test_batch_size_zero_and_cap0/movies/part.y.mkv')]",
+            "E    +  where [PosixPath('/tmp/pytest-of-root/pytest-3/test_batch_size_zero_and_cap0/movies/movie.one.mkv'), PosixPath('/tmp/pytest-...cap0/movies/movie.two.mkv'), PosixPath('/tmp/pytest-of-root/pytest-3/test_batch_size_zero_and_cap0/movies/part.y.mkv')] = list(<generator object Path.iterdir at 0x79aef3ac7c60>)",
+            "E    +    where <generator object Path.iterdir at 0x79aef3ac7c60> = iterdir()",
+            "E    +      where iterdir = PosixPath('/tmp/pytest-of-root/pytest-3/test_batch_size_zero_and_cap0/movies').iterdir",
+            "FAILED tests/local/test_daemon.py::test_batch_size_zero_and_cap - AssertionEr..."
+          ]
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "signals": [
+            "E   AssertionError: assert 'processed=3' in 'processed=4\\nlast_epoch=1792812144\\n'",
+            "E    +  where 'processed=4\\nlast_epoch=1792812144\\n' = CompletedProcess(args=['/usr/local/bin/python', '-m', 'mnamer', '--daemon', 'stats', '--daemon-state', '/tmp/pytest-of...t-4/test_state_and_logs_commands0/state.json'], returncode=0, stdout='processed=4\\nlast_epoch=1792812144\\n', stderr='').stdout",
+            "FAILED tests/local/test_daemon.py::test_state_and_logs_commands - AssertionEr..."
+          ]
+        }
+      ],
+      "changedFiles": [
+        "mnamer/daemon.py",
+        "mnamer/setting_store.py",
+        "mnamer/__main__.py",
+        "tests/local/test_daemon.py",
+        ".dtest/watch/aa.mkv",
+        ".dtest/watch/bb.mkv",
+        "cleanup_scratch.py",
+        ".gitignore"
+      ],
+      "modelAuthoredTimeoutSupport": false,
+      "failedOperationHeads": [
+        {
+          "name": "apply_patch",
+          "command": null,
+          "path": null,
+          "outputHead": [
+            "apply_patch requires a non-empty search string and a replace string for each edit. To create a new file, use write_file with path and content",
+            "[tool_feedback] {\"version\":1,\"code\":\"INPUT_INVALID\",\"retryable\":false,\"missingCapability\":\"valid-input\",\"next\":\"Correct the input using workspace-relative paths and documented tool parameters.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -c \"import mnamer.daemon, mnamer.__main__, mnamer.setting_store; print('imports ok')\"",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "apply_patch",
+          "command": null,
+          "path": null,
+          "outputHead": [
+            "apply_patch requires a non-empty search string and a replace string for each edit. To create a new file, use write_file with path and content",
+            "[tool_feedback] {\"version\":1,\"code\":\"INPUT_INVALID\",\"retryable\":false,\"missingCapability\":\"valid-input\",\"next\":\"Correct the input using workspace-relative paths and documented tool parameters.\"}"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "F",
+            "=================================== FAILURES ===================================",
+            "________________________ test_run_once_moves_top_level _________________________"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "F",
+            "=================================== FAILURES ===================================",
+            "________________________ test_run_once_moves_top_level _________________________"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            ".F",
+            "=================================== FAILURES ===================================",
+            "____________________________ test_run_once_dry_run _____________________________"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "..F",
+            "=================================== FAILURES ===================================",
+            "_________________________ test_batch_size_zero_and_cap _________________________"
+          ]
+        },
+        {
+          "name": "run_tests",
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "...F......                                                               [100%]",
+            "=================================== FAILURES ===================================",
+            "_________________________ test_state_and_logs_commands _________________________"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "mkdir -p /tmp/dtest/watch /tmp/dtest/movies && printf a > /tmp/dtest/watch/aa.mkv && printf b > /tmp/dtest/watch/bb.mkv",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python -c \"import pathlib; w=pathlib.Path('/app/.dtest/watch'); m=pathlib.Path('/app/.dtest/movies'); w.mkdir(parents=True, exist_ok=True); m.mkdir(parents=True, exist_ok=True); (w/'aa.mkv').write_text('a'); (w/'bb.mkv').write_text('b'); print('ok')\"",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "python cleanup_scratch.py",
+          "path": null,
+          "outputHead": [
+            "Outside the frozen benchmark command policy; use a documented validation or CLI entry",
+            "[tool_feedback] {\"version\":1,\"code\":\"COMMAND_POLICY_DENIED\",\"retryable\":false,\"missingCapability\":\"command-policy\",\"next\":\"The host command policy denied this operation. Follow its reason; use an allowed entry or report the missing capability.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "rm -rf .dtest",
+          "path": null,
+          "outputHead": [
+            "Destructive commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        }
+      ],
+      "toolCounts": {
+        "read_file": 10,
+        "list_files": 2,
+        "write_file": 5,
+        "search_code": 2,
+        "run_shell": 20,
+        "apply_patch": 11,
+        "run_tests": 13
+      },
+      "toolErrorCounts": {
+        "apply_patch": 2,
+        "run_shell": 5,
+        "run_tests": 5
+      },
+      "shellValidationCommands": [],
+      "pipeCommandCalls": [],
+      "validationCommands": [
+        {
+          "command": "python -m pytest tests/local -x -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": true,
+          "resultHead": "exit=1"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -x -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local/test_daemon.py -q",
+          "error": false,
+          "resultHead": "exit=0"
+        },
+        {
+          "command": "python -m pytest tests/local -q",
+          "error": false,
+          "resultHead": "exit=0"
+        }
+      ],
+      "firstEditToolOrdinal": 8,
+      "repeatedIdenticalReadSearchRecallCalls": 1,
+      "compactionRequests": [],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 53,
+        "residentWorkingSetOccurrences": 211,
+        "additionalOlderSourceOccurrences": 144,
+        "maxSelectedBodyBytes": 19128,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 51,
+        "f2p_passed": 51,
+        "p2p_total": 319,
+        "p2p_passed": 319
+      },
+      "officialFailureNames": [],
+      "patchSha256": "e10ce6cff30b89eb1b2c9cfe22b66ee4e4c8716ff718a583df2847f1f31921cd",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 1234506,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "dc32b0ffa4d1a9845106047d1dd14d8a0ae1fad5e1eea586ea02ae1fc76b42fa",
+      "unknownTransport": []
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "repeat": 2,
+      "pairRepeat": 2,
+      "variant": "production",
+      "requirementReview": 0,
+      "reviewFollowup": {
+        "requested": false,
+        "requests": 0,
+        "allFollowupRequestsMetered": true,
+        "knownTokenLowerBound": 0,
+        "tools": []
+      },
+      "reviewRequestedCount": 0,
+      "nativeStatus": "completed",
+      "errorCode": null,
+      "runtimeError": null,
+      "validationPassed": true,
+      "validationFailures": [],
+      "failedTestSignals": [],
+      "changedFiles": [
+        "pkg/cmd/manifest_stream.go",
+        "pkg/cmd/template.go",
+        "pkg/cmd/status.go",
+        "pkg/cmd/get_manifest.go",
+        "pkg/cmd/upgrade.go",
+        "pkg/cmd/manifest_stream_test.go"
+      ],
+      "modelAuthoredTimeoutSupport": false,
+      "failedOperationHeads": [
+        {
+          "name": "run_shell",
+          "command": "git status && git log --oneline -3",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go build ./pkg/cmd/ ./pkg/...",
+          "path": null,
+          "outputHead": [
+            "Command timed out after 120000 ms",
+            "stdout:",
+            "",
+            "stderr:",
+            "# helm.sh/helm/v4/pkg/cmd"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go build ./pkg/cmd/ ./pkg/...",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "",
+            "stderr:",
+            "# helm.sh/helm/v4/pkg/cmd"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go test ./pkg/cmd/",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T03:36:47Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T03:36:47.430712641Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T03:36:47.430739285Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go test ./pkg/cmd/",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T03:37:28Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T03:37:28.958507469Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T03:37:28.958549819Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "go test ./pkg/cmd/",
+          "path": null,
+          "outputHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T03:38:20Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T03:38:20.890715858Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T03:38:20.890739182Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "name": "run_shell",
+          "command": "git commit -s -m \"feat(cmd): emit unified manifest stream across template, dry-runs, and get manifest\n\nMerge release manifests and hooks into a single, stable stream ordered\nby full Source path (lexicographic), preserving render order within a\ntemplate file and placing hooks before non-hook resources sharing the\nsame source. Dry-run output now shows a single MANIFEST section without\nextra trailing blank lines, template output ends with a newline, and\nupgrade dry-run no longer prints the Happy Helming! success line.\"",
+          "path": null,
+          "outputHead": [
+            "Shell operators and multiline commands are blocked",
+            "[tool_feedback] {\"version\":1,\"code\":\"CAPABILITY_DENIED\",\"retryable\":false,\"missingCapability\":\"operation-policy\",\"next\":\"Use workspace-relative files and an existing permitted validation entry; quoting cannot enable a blocked operation. A denial is not evidence of a source-code defect.\"}"
+          ]
+        }
+      ],
+      "toolCounts": {
+        "read_file": 21,
+        "run_shell": 21,
+        "search_code": 13,
+        "list_files": 3,
+        "write_file": 2,
+        "apply_patch": 10
+      },
+      "toolErrorCounts": {
+        "run_shell": 7
+      },
+      "shellValidationCommands": [
+        {
+          "command": "go build ./pkg/cmd/ ./pkg/...",
+          "error": true,
+          "resultHead": [
+            "Command timed out after 120000 ms",
+            "stdout:",
+            "",
+            "stderr:",
+            "# helm.sh/helm/v4/pkg/cmd"
+          ]
+        },
+        {
+          "command": "go build ./pkg/cmd/ ./pkg/...",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "",
+            "stderr:",
+            "# helm.sh/helm/v4/pkg/cmd"
+          ]
+        },
+        {
+          "command": "go build ./pkg/cmd/ ./pkg/...",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T03:36:47Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T03:36:47.430712641Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T03:36:47.430739285Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T03:37:28Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T03:37:28.958507469Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T03:37:28.958549819Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": true,
+          "resultHead": [
+            "exit=1",
+            "stdout:",
+            "time=\"2026-10-24T03:38:20Z\" level=warning msg=\"error parsing level \\\"\\\": not a valid logrus Level: \\\"\\\", using \\\"info\\\"\\t\"",
+            "time=\"2026-10-24T03:38:20.890715858Z\" level=warning msg=\"No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable.\" go.version=go1.25.5",
+            "time=\"2026-10-24T03:38:20.890739182Z\" level=info msg=\"redis not configured\" go.version=go1.25.5"
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/ -update",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "ok  \thelm.sh/helm/v4/pkg/cmd\t17.371s",
+            "",
+            "stderr:"
+          ]
+        },
+        {
+          "command": "go vet ./pkg/cmd/",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "",
+            "stderr:",
+            ""
+          ]
+        },
+        {
+          "command": "go test ./pkg/cmd/",
+          "error": false,
+          "resultHead": [
+            "exit=0",
+            "stdout:",
+            "ok  \thelm.sh/helm/v4/pkg/cmd\t16.834s",
+            "",
+            "stderr:"
+          ]
+        }
+      ],
+      "pipeCommandCalls": [],
+      "validationCommands": [],
+      "firstEditToolOrdinal": 34,
+      "repeatedIdenticalReadSearchRecallCalls": 5,
+      "compactionRequests": [],
+      "config": {
+        "editPermissions": {
+          "allow": [],
+          "ask": [],
+          "deny": []
+        },
+        "baseUrl": "http://tea-inference",
+        "model": "glm-5.3-flash",
+        "apiVersion": "2023-06-01",
+        "maxCostUsd": 30,
+        "inputRateUsdPerMillion": 0.8,
+        "outputRateUsdPerMillion": 2.8,
+        "maxOutputTokens": 131072,
+        "maxRequestInputTokens": 2097152,
+        "maxRequestInputBytes": 2097152,
+        "contextWindowTokens": 216000,
+        "contextReserveTokens": 4096,
+        "contextBudgetPolicy": "reserved-output",
+        "fitOutputBudget": false,
+        "internalNetworkRetries": 5,
+        "maxToolCalls": 4096,
+        "capabilityFeedback": true,
+        "enableFileCreation": true,
+        "timeoutMs": 900000,
+        "effort": "low",
+        "thinkingMode": "enabled",
+        "contextStrategy": "v1",
+        "initialFileLimit": 8,
+        "historyStrategy": "full",
+        "historyKeepRecent": 2,
+        "memoryPolicy": "contextos",
+        "contextosTargetBytes": 32000,
+        "contextosWorkingSetBytes": 24000,
+        "contextosKeepRecent": 2,
+        "compaction": "auto",
+        "compactionTriggerRatio": 0.8,
+        "compactionKeepRecentBytes": 16000,
+        "compactionMaxPerTurn": 2,
+        "compactionReserveTokens": 16384,
+        "memoryGc": "auto",
+        "memoryCacheBytes": 262144,
+        "memoryGcMaxResidentBytes": 4194304,
+        "sessionStorageMaxBytes": 536870912,
+        "stream": true,
+        "storeRaw": false,
+        "configurationProfile": "pr16-quality",
+        "configurationProfileOverrides": [
+          "baseUrl",
+          "internalNetworkRetries"
+        ],
+        "workingSetBytes": 24000
+      },
+      "configMatchesVariant": true,
+      "activationAudit": {
+        "assemblies": 52,
+        "residentWorkingSetOccurrences": 215,
+        "additionalOlderSourceOccurrences": 151,
+        "maxSelectedBodyBytes": 23904,
+        "unavailableArtifacts": 0,
+        "onlyMemoryAssemblyMetadata": true
+      },
+      "activationAuditWithinBudget": true,
+      "officialGrade": {
+        "reward": 1,
+        "f2p_total": 5,
+        "f2p_passed": 5,
+        "p2p_total": 2,
+        "p2p_passed": 2
+      },
+      "officialFailureNames": [],
+      "patchSha256": "cb39c3f1167076d9477addb9498be842a6af413fb36321a0c449d9e23251113b",
+      "networkRetryEvents": [],
+      "knownCompleteRequestTokenSubtotal": 875583,
+      "recoveryIdentityAuditPassed": true,
+      "retryAttemptRows": 0,
+      "retryRecoveredRequestIds": [],
+      "retryPayloadAuditPassed": true,
+      "firstRequestSha256": "dab5f26c3b4e4272aec1441fc5f9fbfc2488ebd890168925c3b758380c5aee2b",
+      "unknownTransport": []
+    }
+  ],
+  "privateReasoningRead": false,
+  "mechanismAuditSource": "Native ledger requirement review events, tool results and config; no private reasoning or hidden verifier implementation.",
+  "lastAttemptTransportMetadata": [
+    {
+      "call": 50,
+      "submitted": true,
+      "status": "transport_finished",
+      "httpStatus": 200,
+      "elapsedMs": 5570,
+      "messageStopSeen": true,
+      "auditInvalid": false,
+      "usageComplete": true,
+      "usage": {
+        "input_tokens": 1677,
+        "output_tokens": 71,
+        "cache_read_input_tokens": 21184
+      }
+    },
+    {
+      "call": 51,
+      "submitted": true,
+      "status": "transport_finished",
+      "httpStatus": 200,
+      "elapsedMs": 6646,
+      "messageStopSeen": true,
+      "auditInvalid": false,
+      "usageComplete": true,
+      "usage": {
+        "input_tokens": 1837,
+        "output_tokens": 81,
+        "cache_read_input_tokens": 21184
+      }
+    },
+    {
+      "call": 52,
+      "submitted": true,
+      "status": "transport_finished",
+      "httpStatus": 200,
+      "elapsedMs": 13281,
+      "messageStopSeen": true,
+      "auditInvalid": false,
+      "usageComplete": true,
+      "usage": {
+        "input_tokens": 1785,
+        "output_tokens": 490,
+        "cache_read_input_tokens": 21440
+      }
+    }
+  ],
+  "diagnosticBoundary": "Client explicit provider-error event and relay framing metadata only; no raw private reasoning or hidden verifier implementation."
+}

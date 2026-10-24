@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "providerCalls": 0,
+  "frozenProtocolUnchanged": true,
+  "runtimeArchiveMatchesGit": true,
+  "adapterAndArchiveHashesMatched": true,
+  "taskAndEffectiveConfigMatched": true,
+  "requestAndUsageReconciled": true,
+  "retryIdentityMatched": true,
+  "workingSetBounded": true,
+  "requirementReviewActivations": 0
+}
