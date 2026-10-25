@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "providerCalls": 0,
+  "frozenProtocolUnchanged": true,
+  "runtimeArchiveMatchesGit": true,
+  "adapterAndArchiveHashesMatched": true,
+  "taskAndEffectiveConfigMatched": true,
+  "requestAndUsageReconciled": true,
+  "retryIdentityMatched": true,
+  "workingSetBounded": true,
+  "requirementReviewActivations": 0,
+  "runtimeDiffFromPrevious": [
+    "src/prompts.mjs"
+  ],
+  "completeMeteredAttempts": 4,
+  "submittedRequests": 198,
+  "officialAcceptanceCountReconciled": true,
+  "allAttemptArithmeticPassed": true,
+  "historicalComparisonDescriptiveOnly": true,
+  "adoptionGatePassed": false
+}
