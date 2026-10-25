@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "providerCalls": 0,
+  "frozenProtocolMatched": true,
+  "runtimeArchivesMatchGit": true,
+  "adapterHashesMatched": true,
+  "allNumericPr16FieldsMatched": true,
+  "variantFlagMatched": true,
+  "taskAndRequestHashesMatched": true,
+  "usageReconciled": true,
+  "oneEmergencyBoundChecked": true,
+  "completedAttempts": 8,
+  "runtimeDiffFromParent": [
+    "src/agent.mjs",
+    "src/config.mjs"
+  ],
+  "initialRequestHashesMatched": [
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "pairRepeat": 1,
+      "initialRequestHashMatched": true
+    },
+    {
+      "task": "mnamer-daemon-watch-lifecycle",
+      "pairRepeat": 2,
+      "initialRequestHashMatched": true
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "pairRepeat": 1,
+      "initialRequestHashMatched": true
+    },
+    {
+      "task": "helm-unified-manifest-stream",
+      "pairRepeat": 2,
+      "initialRequestHashMatched": true
+    }
+  ],
+  "submittedRequests": 416,
+  "fullyMeteredAttempts": 8,
+  "networkRetries": 0,
+  "unknownUsageResponses": 0,
+  "primaryArithmeticMatched": true,
+  "adoptionGatePassed": false
+}

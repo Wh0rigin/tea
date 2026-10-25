@@ -267,6 +267,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     return { ...prepareContextRequest(activeMessages, config, requestTools, systemPrompt), fullPayload };
   };
   let autoCompactionAttempts = 0;
+  let emergencyCompactions = 0;
   const attemptedContexts = new Set();
   let autoCompactionFailedThisTurn = false;
   let terminalError, lastBudget;
@@ -275,7 +276,16 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     const budget = contextBudget(config, prepared.request, adapter.contextTokenScale);
     return { ...budget, requestBytes: requestBytes(config, prepared.request), maxWireBytes: config.maxRequestInputTokens,
       residentBytes: residentHistoryBytes(session), residentLimit: config.memoryGcMaxResidentBytes,
-      automaticCompactions: autoCompactionAttempts, emergencyCompactions: 0 };
+      automaticCompactions: autoCompactionAttempts, emergencyCompactions };
+  };
+  const recordCompactionPressure = async (reason, outcome, before, after) => {
+    const event = { type: 'compaction_pressure', reason, status: outcome.status,
+      before, after, estimatedTokensFreed: before.estimatedInputTokens - after.estimatedInputTokens,
+      requestBytesFreed: before.requestBytes - after.requestBytes,
+      fitsInputGuard: after.inputLimit != null && after.estimatedInputTokens <= after.inputLimit,
+      metricSource: 'actual assembled request bytes and local token estimate; not provider usage' };
+    await ledger.event(event);
+    emit(event);
   };
   try {
     while (toolCalls <= (config.maxToolCalls ?? Infinity)) {
@@ -299,14 +309,33 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
           attemptedContexts.add(fingerprint);
           autoCompactionAttempts += 1;
           failureStage = 'compaction';
+          const before = pressure(prepared);
           const outcome = await summarize(runtimeState(), 'threshold');
           if (outcome.status === 'unchanged') {
             autoCompactionFailedThisTurn = true;
             session.autoCompactionBackoff = { requestBytes: requestBytes(config, prepared.request), residentBytes: residentHistoryBytes(session) };
             await persistRuntimeState(session, runtimeState());
           }
+          if (outcome.status === 'compacted') prepared = await prepareRequest();
+          await recordCompactionPressure('threshold', outcome, before, pressure(prepared));
           if (outcome.status !== 'compacted') break;
-          prepared = await prepareRequest();
+        }
+        // One opt-in recovery at the hard input boundary. Preserve output reserves,
+        // normal compaction caps, validation state and the adapter's final guard.
+        const boundary = pressure(prepared);
+        if (config.boundedContextRecovery && config.compaction === 'auto' && !session.budgetUnknown
+          && !autoCompactionFailedThisTurn && emergencyCompactions === 0
+          && boundary.inputLimit != null && boundary.estimatedInputTokens > boundary.inputLimit
+          && autoCompactionAttempts >= (config.compactionMaxPerTurn ?? Infinity)) {
+          const fingerprint = createHash('sha256').update(prepared.sentPayload).digest('hex');
+          if (!attemptedContexts.has(fingerprint)) {
+            attemptedContexts.add(fingerprint);
+            emergencyCompactions += 1;
+            failureStage = 'compaction';
+            const outcome = await summarize(runtimeState(), 'input-boundary');
+            if (outcome.status === 'compacted') prepared = await prepareRequest();
+            await recordCompactionPressure('input-boundary', outcome, boundary, pressure(prepared));
+          }
         }
         lastBudget = pressure(prepared);
         if (config.memoryGc !== 'off' && residentHistoryBytes(session) >= config.memoryGcMaxResidentBytes) {
@@ -457,7 +486,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     status = signal?.aborted ? 'cancelled' : 'failed';
     terminalError = runtimeError(error, { config, stage: failureStage,
       budget: { ...lastBudget, ...error?.budget, automaticCompactions: autoCompactionAttempts,
-        emergencyCompactions: 0 } });
+        emergencyCompactions } });
     await ledger.event({ type: 'agent_error', error: terminalError });
     await session.journal?.append('runtime_error', terminalError);
     emit({ type: 'agent_error', error: terminalError });

@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "selfAuthoredFixture": true,
+  "notOfficialTaskAcceptance": true,
+  "providerCalls": 0,
+  "relayUnitTests": {
+    "passed": 9,
+    "skipped": 0,
+    "fakeHttpsOnly": true
+  },
+  "arms": [
+    {
+      "arm": "tea",
+      "requirementReview": 0,
+      "status": "passed",
+      "providerCalls": 0,
+      "syntheticResponses": 11,
+      "realToolsExecuted": 9,
+      "requestHashesReconciled": true,
+      "usageComplete": false,
+      "syntheticNetworkFailures": 1,
+      "successfulAutomaticRetries": 1,
+      "firstNativeControls": {
+        "model": "glm-5.3-flash",
+        "max_tokens": 131072,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 8000
+        },
+        "output_config": {
+          "effort": "low"
+        },
+        "stream": true
+      },
+      "fixtureValidationPassed": true,
+      "independentPatchValidationPassed": true,
+      "patchSha256": "d7e068d199acdeb7b662c6874d4c3907380e018193cf493a519acbfcfd382998"
+    },
+    {
+      "arm": "tea",
+      "requirementReview": 0,
+      "status": "passed",
+      "providerCalls": 0,
+      "syntheticResponses": 11,
+      "realToolsExecuted": 9,
+      "requestHashesReconciled": true,
+      "usageComplete": false,
+      "syntheticNetworkFailures": 1,
+      "successfulAutomaticRetries": 1,
+      "firstNativeControls": {
+        "model": "glm-5.3-flash",
+        "max_tokens": 131072,
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 8000
+        },
+        "output_config": {
+          "effort": "low"
+        },
+        "stream": true
+      },
+      "fixtureValidationPassed": true,
+      "independentPatchValidationPassed": true,
+      "patchSha256": "d7e068d199acdeb7b662c6874d4c3907380e018193cf493a519acbfcfd382998"
+    }
+  ]
+}
