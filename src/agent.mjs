@@ -419,7 +419,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
               : observeValidation(runtimeState(), call.input?.command, output, true, error));
           }
         }
-        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, validation: isValidationCommand(call.input?.command), runnerUnavailable: effects.validatesSource && validationRunnerUnavailable(call.input?.command, output, toolError) }) : null;
+        const feedback = config.capabilityFeedback ? toolFailureFeedback({ error: toolError, output, toolName: call.name, command: call.input?.command, validation: isValidationCommand(call.input?.command), runnerUnavailable: effects.validatesSource && validationRunnerUnavailable(call.input?.command, output, toolError) }) : null;
         output = appendFailureFeedback(output, feedback);
         if ((effects.validatesSource || entryValidation) && validationFailures.length) {
           output += '\n[validation_pending] Rerun unresolved commands; a different pass does not clear them: '

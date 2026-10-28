@@ -1,12 +1,19 @@
 import { parseCommand } from './commands.mjs';
 
-export function validationSucceeded(output) {
+export function validationRanNoTests(output) {
   const text = String(output);
   const ran = text.match(/\bRan (\d+) tests?\b/), skipped = text.match(/(?:^|\n)OK \(skipped=(\d+)\)/);
-  if (ran && skipped && Number(skipped[1]) >= Number(ran[1])) return false;
-  return /^exit=0\b/.test(String(output))
-    && !/(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+(?:tests|pass)\s+0\s*(?:\n|$)/.test(String(output))
-    && !/\bRan 0 tests?\b|\bno tests ran\b|\bcollected 0 items\b/i.test(String(output));
+  const goResults = text.split(/\r?\n/).filter(line => /^(?:ok\s|\?\s)/.test(line));
+  return Boolean(ran && skipped && Number(skipped[1]) >= Number(ran[1]))
+    || /(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+(?:tests|pass)\s+0\s*(?:\n|$)/.test(text)
+    || /\bRan 0 tests?\b|\bno tests ran\b|\bcollected 0 items\b/i.test(text)
+    || goResults.some(line => /\[no tests to run\]/.test(line))
+      && goResults.every(line => /\[no tests to run\]|\[no test files\]/.test(line));
+}
+
+export function validationSucceeded(output) {
+  const text = String(output);
+  return /^exit=0\b/.test(text) && !validationRanNoTests(text);
 }
 
 export function invalidateUnavailableValidation(state) {
@@ -19,8 +26,18 @@ function runnerFamily(command) {
     const name = executable.replace(/\.exe$/i, '').toLowerCase();
     if (['python', 'python3', 'pytest'].includes(name)) return 'python';
     if (['node', 'npm'].includes(name)) return 'node';
+    if (name === 'go') return 'go';
     return null;
   } catch { return null; }
+}
+
+export function validationInvocationInvalid(command, output) {
+  if (!/^exit=4\b/.test(String(output))) return false;
+  try {
+    const { executable, args } = parseCommand(command);
+    const name = executable.split(/[\\/]/).at(-1).replace(/\.exe$/i, '');
+    return name === 'pytest' || /^python3?$/.test(name) && args[0] === '-m' && args[1] === 'pytest';
+  } catch { return false; }
 }
 
 // Only startup evidence, never an import failure inside a running test suite.
@@ -38,6 +55,7 @@ export function validationRunnerUnavailable(command, output, error) {
 function nonemptyTestPass(output) {
   const text = String(output);
   return /(?:^|\n)\s*(?:#|ℹ\uFE0F?)\s+pass\s+[1-9]\d*\s*(?:\n|$)/.test(text)
+    || /(?:^|\n)\s*--- PASS: /m.test(text)
     || /\b[1-9]\d* passed\b/.test(text)
     || /\bRan [1-9]\d* tests?\b/.test(text) && /(?:^|\n)OK(?:\s|$)/.test(text);
 }
@@ -97,8 +115,12 @@ export function observeValidation(state, command, output, failed = false, error)
   const failures = (state.validationFailures || []).filter(item => !success || item.key !== key);
   let unavailable = (state.validationUnavailable || []).filter(item => !success || item.key !== key);
   const missingRunner = !success && validationRunnerUnavailable(command, output, error);
-  if (missingRunner) {
-    const item = { key, command: String(command).trim(), family: runnerFamily(command) };
+  const invalidInvocation = !success && !failed && validationInvocationInvalid(command, output);
+  const emptySelection = !success && !failed && runnerFamily(command) === 'go'
+    && /^exit=0\b/.test(String(output)) && validationRanNoTests(output);
+  if (missingRunner || invalidInvocation || emptySelection) {
+    const item = { key, command: String(command).trim(), family: runnerFamily(command),
+      ...(invalidInvocation ? { kind: 'invalid_invocation' } : emptySelection ? { kind: 'empty_selection' } : {}) };
     unavailable = [...unavailable.filter(entry => entry.key !== key), item];
   } else if (!success && !failures.some(item => item.key === key)) {
     failures.push({ key, command: String(command).trim() });

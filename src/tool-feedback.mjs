@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { validationRanNoTests, validationInvocationInvalid } from './validation.mjs';
 
 // Versioned descriptions of existing policy. This module grants no permissions.
 export function runtimeCapabilities({ platform = process.platform, approveCommand,
@@ -43,6 +44,8 @@ const actions = {
   PATCH_AMBIGUOUS: ['unique-search-text', 'Use a unique search with more surrounding context from current evidence; read the relevant range only if needed.'],
   PATCH_OVERLAP: ['disjoint-edits', 'Merge overlapping replacements into one edit matched against the original file. No edits from this call were applied.'],
   VALIDATION_FAILED: ['passing-validation', 'Inspect the test failure, fix supported source defects, then rerun relevant validation.'],
+  VALIDATION_EMPTY: ['executed-tests', 'No executed test pass was established. Check discovery, selector and skip settings against existing tests; run a relevant nonempty test. Do not change source merely to fix an empty selection or claim this check passed.'],
+  VALIDATION_INVOCATION_INVALID: ['valid-test-invocation', 'The test invocation was rejected. Correct the command arguments or test path using the runner diagnostics and existing project entries, then rerun. This is not evidence of a source defect; do not weaken tests or bypass command policy.'],
   VALIDATION_UNAVAILABLE: ['installed-test-runner', 'The runner did not start; this is not a test assertion failure. Use an installed relevant runner with nonzero tests. Keep the original check explicitly unverified; an alternative does not prove equivalent coverage.'],
   EXECUTABLE_UNAVAILABLE: ['installed-executable', 'Check the available project validation entry; an unavailable executable is not a source-code failure.'],
   EXECUTION_FAILED: ['successful-execution', 'Inspect this command failure and its inputs; a failed diagnostic does not establish test failure or validation.'],
@@ -56,10 +59,14 @@ export class ToolFeedbackError extends Error {
   constructor(code, message) { super(message); this.name = 'ToolFeedbackError'; this.feedbackCode = code; }
 }
 
-export function toolFailureFeedback({ error, output, toolName, validation = false, runnerUnavailable = false }) {
+export function toolFailureFeedback({ error, output, toolName, command, validation = false, runnerUnavailable = false }) {
   let code = error?.feedbackCode;
   if (runnerUnavailable) code = 'VALIDATION_UNAVAILABLE';
   const text = String(output ?? error?.message ?? '');
+  // Only classify a recognized pytest invocation and its documented usage exit.
+  // Do not reinterpret assertion/import failures or host policy exceptions.
+  if (!code && validation && validationInvocationInvalid(command, text)) code = 'VALIDATION_INVOCATION_INVALID';
+  if (!code && validation && /^exit=0\b/.test(text) && validationRanNoTests(text)) code = 'VALIDATION_EMPTY';
   if (!code && /^Command denied by user\./.test(text)) code = 'APPROVAL_DENIED';
   if (!code && /^Command not approved by approval handler\./.test(text)) code = 'APPROVAL_DENIED';
   if (!code && /^exit=(?!0\b)-?\d+\b/.test(text)) code = validation ? 'VALIDATION_FAILED' : 'EXECUTION_FAILED';
