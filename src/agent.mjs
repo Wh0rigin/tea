@@ -15,6 +15,7 @@ import { attachContextArchive, collectCompactedHistory, residentHistoryBytes } f
 import { runtimeCapabilities, capabilityNotice, toolFailureFeedback, appendFailureFeedback } from './tool-feedback.mjs';
 import { runtimeError } from './runtime-error.mjs';
 import { buildSystemPrompt } from './prompts.mjs';
+import { RetrievalProgress, RETRIEVAL_NOTICE } from './retrieval-progress.mjs';
 import { observeValidation, observeEntryPoint, entryPointNeedsValidation, unresolvedValidationCommands, unavailableValidationNotice, validationRunnerUnavailable, invalidateUnavailableValidation } from './validation.mjs';
 
 const HISTORY_GUIDANCE = ` Older discovery or successful-command results may be replaced by explicit history records. A record identifies past output; it is not current source or test evidence. Repeat the original tool with its parameters if the omitted details are needed. Source reads, errors, and recent results remain available.`;
@@ -267,6 +268,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
     return { ...prepareContextRequest(activeMessages, config, requestTools, systemPrompt), fullPayload };
   };
   let autoCompactionAttempts = 0;
+  const retrievalProgress = config.retrievalProgressFeedback ? new RetrievalProgress() : null;
   const attemptedContexts = new Set();
   let autoCompactionFailedThisTurn = false;
   let terminalError, lastBudget;
@@ -370,6 +372,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
       }
 
       const toolResults = [];
+      retrievalProgress?.beginBatch(session.compaction?.id ?? null);
       for (const call of toolUses) {
         if (signal?.aborted || status === 'tool_limit_reached') {
           toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: 'Tool not executed: turn stopped. Do not assume it succeeded.', is_error: true });
@@ -427,6 +430,7 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         }
         if (effects.validatesSource && validationUnavailable.length) output += '\n[validation_unavailable] ' + unavailableValidationNotice(runtimeState());
         if (feedback) isError = true;
+        retrievalProgress?.observe(call.name, call.input || {}, output, isError);
         const commandTiming = effects.commandTiming && tools.lastCommandTiming ? { ...tools.lastCommandTiming } : {};
         await ledger.tool({ name: call.name, input: call.input, output, elapsedMs: Date.now() - started, ...commandTiming, error: isError ? output : undefined });
         const observedEvent = await session.journal?.append('tool_completed', { id: call.id, name: call.name, output: String(output), isError, ...(feedback ? { feedback } : {}) });
@@ -447,6 +451,14 @@ async function runTurn(task, config, { onText = () => {}, onDelta, onEvent = () 
         await persistRuntimeState(session, runtimeState());
         emit({ type: 'tool_end', name: call.name, input: call.input, output: String(output), elapsedMs: Date.now() - started, ...commandTiming, isError });
         toolResults.push({ type: 'tool_result', tool_use_id: call.id, content: String(output), is_error: isError });
+      }
+      const retrievalNotice = retrievalProgress?.notice();
+      if (retrievalNotice && !signal?.aborted && status === 'running') {
+        await ledger.event(retrievalNotice);
+        emit(retrievalNotice);
+        // Keep raw tool-result strings and their evidence hashes unchanged. Text
+        // follows all results, so it is neither a tool failure nor a user goal.
+        toolResults.push({ type: 'text', text: RETRIEVAL_NOTICE });
       }
       await appendSessionMessage(session, { role: 'user', content: toolResults });
       if (signal?.aborted) status = 'cancelled';
