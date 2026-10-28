@@ -1,5 +1,7 @@
 # Retrieval progress feedback experiment (priority 2)
 
+Outcome: not recommended for production. The [paid paired experiment](../benchmarks/reports/retrieval-progress-deepswe-20261028-v1/README.md) stopped under its frozen quality-futility rule after six attempts. Candidate feedback activated in zero attempts; no causal quality or token benefit was established. Keep the flag off.
+
 Default-off candidate from production `a3571e5`, with no PR24 prompt or priority-1 recovery changes. Enable only with `TEA_RETRIEVAL_PROGRESS_FEEDBACK=1` or SDK `retrievalProgressFeedback: true`. PR16 numeric settings, ordinary compaction cap, tool definitions, permissions and verification rules stay unchanged. The option is visible in profile overrides.
 
 The observer tracks SHA-256 digests of canonical tool inputs and actual returned text for structured retrieval tools: read_file, search_code, list_files, recall_context and search_history. Every lookup still executes normally. After three consecutive repeats of previously observed identical request/result text, it may append one advisory text block after the batch's unchanged tool-result blocks. A new query/result, error or any non-retrieval operation breaks the streak. A new compaction checkpoint clears comparisons. At most two notices per turn, separated by at least twelve retrieval observations; at most 64 digest entries. State is not shared across user turns, sessions or projects, and contains no retained source bodies.
