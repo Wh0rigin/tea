@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "providerCalls": 0,
+  "frozenProtocolMatched": true,
+  "runtimeArchivesMatchGit": true,
+  "adapterHashesMatched": true,
+  "allNumericPr16FieldsMatched": true,
+  "priority1Absent": true,
+  "variantFlagMatched": true,
+  "taskAndRequestHashesMatched": true,
+  "usageReconciled": true,
+  "noticeBoundsChecked": true,
+  "predeclaredFutilityChecked": true,
+  "attempted": 8,
+  "unstartedNotFailuresOrZero": true,
+  "pairedInitialRequestHashesMatched": 4,
+  "sourceDifferenceAudit": {
+    "runtimeFiles": 51,
+    "changed": [
+      "src/agent.mjs",
+      "src/tool-feedback.mjs",
+      "src/validation.mjs"
+    ],
+    "promptToolsProfileIdentical": true
+  },
+  "noRetrievalFeedback": true
+}

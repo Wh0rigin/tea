@@ -1,17 +1,29 @@
-# Actionable validation correction: paired DeepSWE experiment
+# Failure correction: DeepSWE results
 
-Status: protocol frozen before paid calls; results pending. No autonomous-quality or provider-token benefit established.
+Status: stopped; stop reason: candidate_quality_futility. No production merge. [中文结果](RESULTS.zh-CN.md).
 
-Production parent a3571e56b597ac4f3b8458e929b4621c93e76c30 vs PR27 candidate ca7a27a48f46090469b6d4368ac8ad087f4bb31a. No priority-1 recovery or priority-2 retrieval observer. Same original PR16 numeric settings, system prompt, tool definitions, permissions and source-failure obligations. Candidate classifies recognized pytest usage errors and empty Go selections as unverified checks with actionable feedback and retained coverage limitations; earlier actual source failures cannot be cleared by another passing command.
+- baseline: 3/4 attempted official passes; 4/4 planned attempted. Native completed + official pass: 2. Metered attempts: 4. Known token subtotal: 6,233,170; transport submissions: 292. Correction feedback events: 0 across 0 attempts.
+- candidate: 2/4 attempted official passes; 4/4 planned attempted. Native completed + official pass: 2. Metered attempts: 4. Known token subtotal: 3,489,889; transport submissions: 168. Correction feedback events: 0 across 0 attempts.
 
-Two previously seen DeepSWE tasks (Helm and Mnamer), two repetitions per variant, serial interleaved order: at most eight attempts. Same official GLM-5.3-flash endpoint, enabled thinking budget 8000 / low effort, streaming, output cap 131072, total context 216000, initial task source and official acceptance. Pi is not rerun. This is not a full/unseen DeepSWE score.
+Complete all-attempt token change (candidate vs baseline): -44.01%. Official acceptance change: -25.00 percentage points. Lower tokens with worse acceptance are not an optimization gain.
 
-Controls: 30 USD-equivalent per attempt, 240 suite maximum; 128 transport submissions, 4096 tools, 900s/request and 1800s/agent. These are conservative control bounds, not invoiced cost. Existing five retries only for explicit Internal Network Failure, identical payload; unknown usage and its reservations retained. Stop unrecovered unknown/infrastructure failures with no replacement attempts.
+## Every attempted run
 
-Predeclared rejection-only futility: after completed official evaluation, if all completed rewards are known and candidate accepted + candidate unstarted < baseline accepted, stop between trials. No early acceptance. Unstarted attempts are neither failures nor zero-token samples; no complete-cohort token ratio after early stopping or unknown usage. Keep native completion separate from independent official patch acceptance.
+- helm-unified-manifest-stream / baseline r1: official 5/5 new + 2/2 regression; native needs_validation; tokens 2530497; requests 103; correction feedback 0.
+- helm-unified-manifest-stream / candidate r2: official 1/5 new + 2/2 regression; native needs_validation; tokens 1267429; requests 59; correction feedback 0.
+- mnamer-daemon-watch-lifecycle / candidate r1: official 50/51 new + 319/319 regression; native completed; tokens 469740; requests 23; correction feedback 0.
+- mnamer-daemon-watch-lifecycle / baseline r2: official 51/51 new + 319/319 regression; native completed; tokens 597354; requests 31; correction feedback 0.
+- mnamer-daemon-watch-lifecycle / baseline r3: official 47/51 new + 319/319 regression; native completed; tokens 1760438; requests 97; correction feedback 0.
+- mnamer-daemon-watch-lifecycle / candidate r4: official 51/51 new + 319/319 regression; native completed; tokens 1025703; requests 47; correction feedback 0.
+- helm-unified-manifest-stream / candidate r3: official 5/5 new + 2/2 regression; native completed; tokens 727017; requests 39; correction feedback 0.
+- helm-unified-manifest-stream / baseline r4: official 5/5 new + 2/2 regression; native completed; tokens 1344881; requests 61; correction feedback 0.
 
-Primary: official whole-task acceptance alongside all-attempt usage and native completion. Secondary: comparable-completion paired results only, never replacing the full outcomes. Record actual VALIDATION_EMPTY / VALIDATION_INVOCATION_INVALID feedback and subsequent observable operations; a result without activation cannot demonstrate a causal feedback benefit. No private reasoning or hidden verifier-source inspection.
+## Interpretation and scope
 
-Offline targeted/related 74/74, full 485/485, zero failures/skips. Server preflight: both variants passed 14 synthetic responses / 12 real tools / one simulated recoverable error and independent patch validation with zero provider calls; nine relay tests passed. Direct runtime probe verifies baseline generic vs candidate invocation-specific handling. Initial preflight setup failures (Node executable path and diagnostic JavaScript escaping) were corrected before freezing and before any provider calls; product source was unchanged. Scripted preflight proves mechanics, not real model benefit.
+No candidate correction event activated; this cohort cannot establish a benefit or harm from the feedback. Outcome variation before activation is not a feedback effect.
 
-[Frozen protocol](protocol.json) · [Preflight](preflight.json)
+Direct production a3571e5 vs candidate ca7a27a; no priority-1/2 experiments, no extra review round. Same frozen PR16 numeric settings, model/effort/endpoint/streaming, prompt, tool schemas, task snapshots and acceptance. Only three runtime files differ. Two seen tasks with up to two repetitions per variant are not a full/unseen DeepSWE score. Official patch acceptance and native completion are separate; retain failures and unknown billing, and never replace primary results with a selected-success subset.
+
+Local targeted/related 74/74; full 485/485; pre-paid CI six of six. Both zero-provider server preflights passed. Source archives, adapter/config/task/request hashes and provider usage were reconciled by the accompanying audit. Scripted tests demonstrate mechanics, not autonomous agent quality.
+
+[Frozen methods](protocol.json) / [Preflight](preflight.json) / [Results](results.json) / [Observable diagnostics](diagnostics.json) / [Integrity checks](verification.json). No private reasoning or hidden verifier implementation inspected.
