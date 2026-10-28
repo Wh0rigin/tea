@@ -77,6 +77,7 @@ async function fixture(memoryPolicy,pending=false){
   assert(validToolProtocol(candidate.session.messages));
   const blocks=candidate.session.messages.flatMap(m=>Array.isArray(m.content)?m.content:[]);
   assert.equal(blocks.filter(b=>b.type==='text'&&b.text===RETRIEVAL_NOTICE).length,1);
+  assert(candidate.requests.some(req=>JSON.stringify(req.messages).includes(RETRIEVAL_NOTICE)), 'feedback must reach an assembled model request');
   assert(!collectUserRequirements(candidate.session.messages).some(m=>JSON.stringify(m).includes(RETRIEVAL_NOTICE)));
   assert(candidate.ledger.some(e=>e.type==='retrieval_progress'));
   assert.equal(candidate.result.changedFiles.length,pending?1:0);assert.equal(candidate.result.validationAttempts,0);if(pending)assert.equal(candidate.result.validationPassed,false);
