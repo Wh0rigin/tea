@@ -1,0 +1,274 @@
+{
+  "name": "failure-correction-deepswe-20261028-v1",
+  "status": "frozen_before_model_calls",
+  "teaCommit": "ca7a27a48f46090469b6d4368ac8ad087f4bb31a",
+  "piVersion": "0.87.1",
+  "tasks": [
+    {
+      "id": "helm-unified-manifest-stream",
+      "language": "go",
+      "repository": "https://github.com/helm/helm",
+      "baseCommit": "42f78ba60edf531d5161e00d9819a7c34d976343",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "2660916e53c102665b429f50173ee87dad21a319a4e6aea60900e24d4b8b3406",
+      "separateVerifier": true,
+      "instructionSha256": "c69a568df4d740e1e4c6b1e8db40d9fcb3562fafc2f2c3422daf53181b808799"
+    },
+    {
+      "id": "mnamer-daemon-watch-lifecycle",
+      "language": "python",
+      "repository": "https://github.com/jkwill87/mnamer",
+      "baseCommit": "73f5b537c8cad998e8e6d6bc40ad60e2e23bf268",
+      "image": "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1",
+      "os": "linux",
+      "agentTimeoutSec": 10800.0,
+      "taskTomlSha256": "73b6024b768f0af0a178de6de7aa59ac460c2ec96fe1ca7cc9ac35269c118916",
+      "separateVerifier": true,
+      "instructionSha256": "1759aa73299b2871d311613b6d53259f7b32dce806f6978542e5b111f5ab4649"
+    }
+  ],
+  "order": [
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "candidate",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 1,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "candidate",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 2,
+      "pairRepeat": 1,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 3,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 4,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "mnamer-daemon-watch-lifecycle",
+      "variant": "candidate",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 3,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "candidate",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    },
+    {
+      "repeat": 4,
+      "pairRepeat": 2,
+      "arm": "tea",
+      "task": "helm-unified-manifest-stream",
+      "variant": "baseline",
+      "requirementReview": 0,
+      "workingSetBytes": 24000
+    }
+  ],
+  "endpointSha256": "1e90246348f66dd206b4bcbd68e0dff9657bfda32df9ae69b9b2ee7e164251ce",
+  "archivesSha256": {
+    "baseline": "34bb95fe7e377465d9ce09c1324d2e357a74b87122cd4c9c930e007dac548a9d",
+    "candidate": "6b5d373c1ce2679deb193b06bdc68c9c7115ef275f263b7c2b515d4b302cee95",
+    "helpers": "b7433cf78d1d4f7d734fdcf5acf33c96096009ae5ba2b1959825a7fd894f6b5e"
+  },
+  "model": "glm-5.3-flash",
+  "thinkingMode": "enabled",
+  "effort": "low",
+  "stream": true,
+  "maxOutputTokens": 131072,
+  "contextWindowTokens": 216000,
+  "maxToolCalls": 4096,
+  "maxTransportCallsPerTask": 128,
+  "requestTimeoutSeconds": 900,
+  "agentWallSeconds": 1800,
+  "perTaskControlBudgetUsd": 30,
+  "suiteControlBudgetUsd": 240,
+  "attemptsPerTaskPerArm": 2,
+  "nativeAssets": {
+    "nodeVersion": "24.12.0",
+    "nodeSha256": "16143bdaa79716e871d3d9b2f50ce680bca293eba7f0c3fc1d004ed2258fc839",
+    "piArchiveSha256": "549868f43568a6c8a102e706a711a2f3a67343fd51c7d766b5929067f9ca9620",
+    "piPackageFiles": 14114
+  },
+  "adapterSha256": {
+    "tea_adapter.py": "a2bb8130ec8a6794e74f68915bb6e4e533a107ce7c87c00e33ae9a45b8381d8f",
+    "run_suite.py": "fa10f62e3611b27fab01cbfb80a45cc28a9b5e6eb81558ca0212f1e76816271d",
+    "preflight.py": "8da0bc024934f55d6573d5047c82c7094dc6b53f232057fcefc1ce006af033eb",
+    "inference_relay.py": "19c0d8fb68318ab7ed01fa064a7f3eef54aec66165c90ca4a24b87dab31bdfab",
+    "test_relay.py": "a992084b3e76da51392b064e1c3d203a63a39d4c1c388c67d9308d2dd5830231",
+    "collect.py": "729e1f9a6aa88b5236f62e704f6b67d16203ff995fd01af2af88d51fefc7d628",
+    "run-tea.mjs": "21967c7503ceacdf2baeb617e053fb3efb793a84c42d5bf0e7e4f28d542ef448",
+    "task-profiles.json": "cc29dc1bb6d7a72d86afbb8ddd6c6427c856bab61f26e60f4de4b987c4565fc1"
+  },
+  "thinkingBudgetTokens": 8000,
+  "frameworkPins": {
+    "deepSweDataset": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+    "workbuddyFramework": "625b2233093ae4f23e76be28c1f341d41cc70373",
+    "harbor": "527d50deb63a5d279e8c20593c18a2cbc7f61f9e"
+  },
+  "analysisPolicy": {
+    "primary": "Official whole-task acceptance per variant and native completion; retain all eight attempts.",
+    "tokenUnit": "provider input + output + cache read + cache creation; thinking included once in output",
+    "savingsSubset": "Primary all-attempt totals alongside acceptance; comparable-completion paired subset secondary only. No benefit if quality worsens.",
+    "missingUsage": "null, never zero; retain all request reservations plus the full30 attempt allocation. Only explicitly classified Internal Network Failure may recover through up to5 identical-payload retries; recovered unknown usage stays unknown.",
+    "scope": "Two seen DeepSWE tasks, at most two repetitions per variant, interleaved. Not full/unseen benchmark score.",
+    "stopAfter": "At most eight serial attempts. Stop after current official verification when candidate accepted + candidate unstarted < baseline accepted (all completed rewards known), conservatively reject; no full token ratio on incomplete cohort. Also stop on unrecovered unknown/infrastructure failure. No replacement/relaunch.",
+    "allAttemptTokenRatio": "Only if every submitted attempt is fully metered in both variants; unknown stays null."
+  },
+  "endpoint": "https://open.bigmodel.cn/api/anthropic",
+  "historicalReference": {
+    "piReport": "../native-pi-s0-20261022/deepswe-results.json",
+    "piReportSha256": "3f11be7d682fc4bd89f8deed1573e465b375aa76043e09119ddabccc88afbe9c",
+    "piRetested": false,
+    "sameEndpoint": false,
+    "sameSource": false,
+    "causalCodeBenefitIdentifiable": false
+  },
+  "officialDocs": [
+    "https://zcode.z.ai/en/docs/configuration",
+    "https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash",
+    "https://docs.bigmodel.cn/cn/guide/start/pricing"
+  ],
+  "pricing": {
+    "currency": "CNY",
+    "inputPerMillion": 0.8,
+    "outputPerMillion": 2.8,
+    "cacheReadPerMillion": 0.23,
+    "controlEstimate": "Retain previous conservative .8/1.6/2.8 USD-equivalent allocation arithmetic as safety bounds, not actual currency cost; report tokens separately."
+  },
+  "preflightProviderProbe": {
+    "calls": 0,
+    "includedInTaskTokens": false
+  },
+  "baselineReport": null,
+  "change": "Priority2 only: default-off bounded repeated structured retrieval feedback, all lookups still executed, original results unchanged, no PR24/PR25 changes.",
+  "variants": {
+    "baseline": {
+      "runtimeCommit": "a3571e56b597ac4f3b8458e929b4621c93e76c30",
+      "requirementReview": false,
+      "internalNetworkRetries": 5
+    },
+    "candidate": {
+      "runtimeCommit": "ca7a27a48f46090469b6d4368ac8ad087f4bb31a",
+      "requirementReview": false,
+      "internalNetworkRetries": 5
+    }
+  },
+  "mechanismAudit": "Count actual VALIDATION_EMPTY and VALIDATION_INVOCATION_INVALID feedback; inspect subsequent observable commands, resolution, official/native completion and all submitted request usage. No private reasoning or verifier-source inspection.",
+  "runtimeBudgetPolicy": "reserved-output",
+  "workingSetBytes": 24000,
+  "qualityProfile": "pr16-quality",
+  "frozenOriginalRuntimeCommit": "8ed56262b3c41d701f8a3a55834683af2e1331ef",
+  "frozenAlgorithmConfig": {
+    "editPermissions": {
+      "allow": [],
+      "ask": [],
+      "deny": []
+    },
+    "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+    "model": "glm-5.3-flash",
+    "apiVersion": "2023-06-01",
+    "maxCostUsd": 10,
+    "inputRateUsdPerMillion": 0.8,
+    "outputRateUsdPerMillion": 2.8,
+    "maxOutputTokens": 131072,
+    "maxRequestInputTokens": 2097152,
+    "maxRequestInputBytes": 2097152,
+    "contextWindowTokens": 216000,
+    "contextReserveTokens": 4096,
+    "maxToolCalls": 4096,
+    "capabilityFeedback": true,
+    "enableFileCreation": true,
+    "timeoutMs": 900000,
+    "effort": "low",
+    "thinkingMode": "enabled",
+    "contextStrategy": "v1",
+    "initialFileLimit": 8,
+    "historyStrategy": "full",
+    "historyKeepRecent": 2,
+    "memoryPolicy": "contextos",
+    "contextosTargetBytes": 32000,
+    "contextosWorkingSetBytes": 24000,
+    "contextosKeepRecent": 2,
+    "compaction": "auto",
+    "compactionTriggerRatio": 0.8,
+    "compactionKeepRecentBytes": 16000,
+    "compactionMaxPerTurn": 2,
+    "compactionReserveTokens": 16384,
+    "memoryGc": "auto",
+    "memoryCacheBytes": 262144,
+    "memoryGcMaxResidentBytes": 4194304,
+    "sessionStorageMaxBytes": 536870912,
+    "stream": true,
+    "storeRaw": false
+  },
+  "credentialSource": "Previously user-provided official GLM credential; supplied through hidden input and kept only in process memory.",
+  "priorAttempt": {
+    "cohorts": [
+      "retrieval-progress-deepswe-20261028-v1"
+    ],
+    "recordsRetained": true,
+    "newAuthorization": "User requested DeepSWE testing of failure correction PR27."
+  },
+  "internalNetworkRetries": 5,
+  "retryPolicy": {
+    "maximumRetries": 5,
+    "maximumSubmissionsPerLogicalRequest": 6,
+    "backoffSeconds": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "onlyExplicitInternalNetworkFailure": true,
+    "samePayloadRequired": true,
+    "unknownReservationRetained": true,
+    "completeTokenRatioUnavailableIfAnyUnknown": true
+  },
+  "baselineCommit": "a3571e56b597ac4f3b8458e929b4621c93e76c30",
+  "predeclaredFutility": {
+    "decision": "reject only, after a completed trial",
+    "condition": "candidateAccepted + (4 - candidateAttempted) < baselineAccepted",
+    "requiresKnownOfficialRewards": true,
+    "noUnstartedAsFailureOrZero": true
+  }
+}
